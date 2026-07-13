@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="Agent Inbox">
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <div style="margin-left: 16px; flex: 0 1 480px; background: #F8FAFC; border: 1px solid #E5E7EB; border-radius: 5px; height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 14px; font-size: 14px; color: #94A3B8;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+      Search patients, claims, payer refs…
+    </div>
+    <div style="flex: 1;"></div>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <div style="display: flex; align-items: center; gap: 10px; margin-left: 4px; cursor: pointer;">
+      <div style="width: 36px; height: 36px; border-radius: 9999px; background: linear-gradient(#7B61FF, #22C5A7); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px;">SN</div>
+      <div style="display: flex; flex-direction: column;">
+        <span style="font-weight: 700; font-size: 13px; color: #0F1B2E;">Stella Ngozi</span>
+        <span style="font-size: 11px; color: #6B7280;">Billing Clerk</span>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+    </div>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav ===== -->
+    <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700;" style-hover="background: #F1F5F9;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10H3"></path><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect></svg>
+        Schedules
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700;" style-hover="background: #F1F5F9;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path></svg>
+        Calendar
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700;" style-hover="background: #F1F5F9;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+        Workflows
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700;" style-hover="background: #F1F5F9;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        Directory
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Billing
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px; padding-left: 26px;">
+          <div style="padding: 8px 14px; border-radius: 4px; background: #F1EEFF; color: #5B46D6; font-size: 13px; font-weight: 700; cursor: pointer;">Agent Inbox</div>
+          <a href="Claim Detail.dc.html" style="padding: 8px 14px; border-radius: 4px; color: #6B7280; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;" style-hover="background: #F1F5F9;">Claims</a>
+        </div>
+      </div>
+      <div style="flex: 1;"></div>
+      <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+        <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+        Reach the billing support desk 24/7.
+      </div>
+    </div>
+
+    <!-- ===== Main content ===== -->
+    <div style="flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+
+      <!-- Page title + top bar -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <h1 style="font-size: 24px; font-weight: 700; margin: 0;">Agent Inbox</h1>
+        <span style="font-size: 13px; color: #6B7280;">Exceptions your agents could not resolve on their own</span>
+        <div style="flex: 1;"></div>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 12px; font-weight: 600;">{{ openCountText }}</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: {{ breachBg }}; color: {{ breachFg }}; font-size: 12px; font-weight: 600;">{{ breachCountText }}</span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 5px; height: 40px; padding: 0 14px; font-size: 14px; font-weight: 600; color: #0F1B2E; cursor: pointer;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          All Locations
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 5px; height: 40px; padding: 0 14px; flex: 0 1 340px; font-size: 14px; color: #94A3B8;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+          Search patient, claim ID, payer ref…
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 5px; height: 40px; padding: 0 14px; font-size: 14px; font-weight: 600; color: #0F1B2E; cursor: pointer;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg>
+          Jul 1 – Jul 7, 2026
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </div>
+      </div>
+
+      <!-- ===== EMPTY (healthy) STATE ===== -->
+      <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 16px; padding: 72px 32px; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center;">
+          <div style="width: 64px; height: 64px; border-radius: 9999px; background: #E6F7F2; display: flex; align-items: center; justify-content: center;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; max-width: 480px;">
+            <div style="font-size: 20px; font-weight: 700; color: #0F1B2E;">Nothing needs you right now.</div>
+            <div style="font-size: 14px; color: #6B7280; line-height: 21px;">Your agents handled everything overnight. New exceptions will appear here the moment an agent needs a human decision.</div>
+          </div>
+          <div style="display: flex; align-items: stretch; gap: 12px; margin-top: 8px;">
+            <div style="display: flex; flex-direction: column; gap: 4px; padding: 16px 28px; border-radius: 12px; background: #F1EEFF; min-width: 150px;">
+              <span style="font-size: 24px; font-weight: 700; color: #5B46D6;">14</span>
+              <span style="font-size: 12px; font-weight: 600; color: #5B46D6;">Claims submitted overnight</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px; padding: 16px 28px; border-radius: 12px; background: #E6F7F2; min-width: 150px;">
+              <span style="font-size: 24px; font-weight: 700; color: #109680;">9</span>
+              <span style="font-size: 12px; font-weight: 600; color: #109680;">Paid &amp; closed</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px; padding: 16px 28px; border-radius: 12px; background: #F8FAFC; border: 1px solid #E5E7EB; min-width: 150px;">
+              <span style="font-size: 24px; font-weight: 700; color: #6B7280;">0</span>
+              <span style="font-size: 12px; font-weight: 600; color: #6B7280;">Exceptions raised</span>
+            </div>
+          </div>
+          <a href="Claim Detail.dc.html" style="font-size: 13px; font-weight: 600; color: #7B61FF; text-decoration: none; margin-top: 4px;">Review last night's activity →</a>
+        </div>
+      </sc-if>
+
+      <!-- ===== SPLIT VIEW ===== -->
+      <sc-if value="{{ notEmpty }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; gap: 16px; align-items: flex-start; min-width: 0;">
+
+          <!-- ===== Work queue (left, ~55%) ===== -->
+          <div style="flex: 55 1 0; min-width: 0; display: flex; flex-direction: column; gap: 12px;">
+
+            <!-- Quick filters -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em; width: 44px;">Type</span>
+                <sc-for list="{{ typeChips }}" as="chip" hint-placeholder-count="7">
+                  <button onClick="{{ chip.onClick }}" style="padding: 5px 12px; border-radius: 9999px; border: 1px solid {{ chip.border }}; background: {{ chip.bg }}; color: {{ chip.fg }}; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 150ms ease-out;">{{ chip.label }}</button>
+                </sc-for>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em; width: 44px;">Payer</span>
+                <sc-for list="{{ payerChips }}" as="chip" hint-placeholder-count="3">
+                  <button onClick="{{ chip.onClick }}" style="padding: 5px 12px; border-radius: 9999px; border: 1px solid {{ chip.border }}; background: {{ chip.bg }}; color: {{ chip.fg }}; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 150ms ease-out;">{{ chip.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- Queue table -->
+            <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+              <div style="display: grid; grid-template-columns: 42px 92px minmax(150px, 1fr) 104px 80px 44px 96px 90px; gap: 8px; align-items: center; padding: 10px 14px; background: #7B61FF;">
+                <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Pri</span>
+                <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Type</span>
+                <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Patient / Claim</span>
+                <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Payer</span>
+                <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Value</span>
+                <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Age</span>
+                <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">SLA</span>
+                <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Assigned To</span>
+              </div>
+
+              <sc-for list="{{ rows }}" as="row" hint-placeholder-count="3">
+                <div onClick="{{ row.onClick }}" style="display: grid; grid-template-columns: 42px 92px minmax(150px, 1fr) 104px 80px 44px 96px 90px; gap: 8px; align-items: center; padding: 10px 14px 10px 11px; border-bottom: 1px solid #EEEEEE; border-left: 3px solid {{ row.barColor }}; background: {{ row.rowBg }}; cursor: pointer; transition: background 120ms ease-out;">
+                  <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; color: {{ row.priColor }};"><span style="width: 8px; height: 8px; border-radius: 9999px; background: {{ row.priColor }}; flex-shrink: 0;"></span>{{ row.pri }}</span>
+                  <span><span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: {{ row.typeBg }}; color: {{ row.typeFg }}; font-size: 11px; font-weight: 600; white-space: nowrap;">{{ row.type }}</span></span>
+                  <span style="display: flex; flex-direction: column; gap: 1px; min-width: 0;">
+                    <span style="font-size: 13px; font-weight: 600; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.patient }}</span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #6B7280;">{{ row.claim }}</span>
+                  </span>
+                  <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.payer }}</span>
+                  <span style="display: flex; flex-direction: column; align-items: flex-end; gap: 1px;">
+                    <span style="font-size: 13px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums;">{{ row.amount }}</span>
+                    <span style="font-size: 10px; font-weight: 600; color: #FF6E6C;">{{ row.amountNote }}</span>
+                  </span>
+                  <span style="font-size: 12px; color: #6B7280;">{{ row.age }}</span>
+                  <span style="display: inline-flex; padding: 3px 8px; border-radius: 9999px; background: {{ row.slaBg }}; color: {{ row.slaFg }}; font-size: 10px; font-weight: 700; white-space: nowrap; justify-self: start;">{{ row.sla }}</span>
+                  <span style="display: flex; align-items: center; gap: 6px; min-width: 0;">
+                    <span style="width: 22px; height: 22px; border-radius: 9999px; background: #F1EEFF; color: #7B61FF; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0;">{{ row.initials }}</span>
+                    <span style="font-size: 11px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.name }}</span>
+                  </span>
+                </div>
+              </sc-for>
+
+              <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+                <div style="padding: 32px; text-align: center; font-size: 13px; color: #94A3B8;">No items match the current filters.</div>
+              </sc-if>
+
+              <sc-if value="{{ showHints }}" hint-placeholder-val="{{ true }}">
+                <div style="display: flex; align-items: center; gap: 16px; padding: 10px 14px; background: #F9FAFB; border-top: 1px solid #EEEEEE; font-size: 11px; color: #94A3B8;">
+                  <span style="display: inline-flex; align-items: center; gap: 5px;"><kbd style="font-family: 'JetBrains Mono', monospace; font-size: 10px; background: #FFFFFF; border: 1px solid #D1D5DC; border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; color: #6B7280;">j</kbd><kbd style="font-family: 'JetBrains Mono', monospace; font-size: 10px; background: #FFFFFF; border: 1px solid #D1D5DC; border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; color: #6B7280;">k</kbd> navigate</span>
+                  <span style="display: inline-flex; align-items: center; gap: 5px;"><kbd style="font-family: 'JetBrains Mono', monospace; font-size: 10px; background: #FFFFFF; border: 1px solid #D1D5DC; border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; color: #6B7280;">a</kbd> approve</span>
+                  <span style="display: inline-flex; align-items: center; gap: 5px;"><kbd style="font-family: 'JetBrains Mono', monospace; font-size: 10px; background: #FFFFFF; border: 1px solid #D1D5DC; border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; color: #6B7280;">e</kbd> edit</span>
+                  <span style="display: inline-flex; align-items: center; gap: 5px;"><kbd style="font-family: 'JetBrains Mono', monospace; font-size: 10px; background: #FFFFFF; border: 1px solid #D1D5DC; border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; color: #6B7280;">x</kbd> escalate</span>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <!-- ===== Detail panel (right, ~45%) ===== -->
+          <div style="flex: 45 1 0; min-width: 0; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+
+            <!-- ITEM 1 — Validation -->
+            <sc-if value="{{ sel1 }}" hint-placeholder-val="{{ true }}">
+              <div data-screen-label="Detail: Validation — Riley">
+                <div style="padding: 20px 20px 16px; border-bottom: 1px solid #EEEEEE; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 17px; font-weight: 700; color: #0F1B2E;">RILEY, DIERDRE W.</span>
+                    <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 600;">Validation</span>
+                    <div style="flex: 1;"></div>
+                    <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 11px; font-weight: 700;">SLA · 3h 12m left</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: #6B7280;">
+                    <a href="Claim Detail.dc.html" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #7B61FF;">ENCT0000432-01</a>
+                    <span style="font-weight: 700; color: #0F1B2E; font-size: 14px;">$128.00</span>
+                    <span>Medicare (WPS J8)</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg>Raised by Claim Validation Agent</span>
+                  </div>
+                </div>
+
+                <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 16px;">
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">What happened</span>
+                    <div style="background: #F1EEFF; border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 20px; color: #0F1B2E;">I generated this claim from Dr. Ibekie's signed note but validation failed one Medicare rule: the billing provider address ZIP code is 5 digits (49120) and Medicare requires 9 (ZIP+4). I couldn't auto-fix it because two candidate ZIP+4 codes exist for this address.</div>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Evidence</span>
+                    <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden;">
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #EEEEEE;">
+                        <span style="font-size: 12px; font-weight: 600; color: #6B7280; width: 148px; flex-shrink: 0;">Billing provider ZIP</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #B91C1C; background: #FEECEC; padding: 2px 7px; border-radius: 4px;">49120</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0B7D6C; background: #E6F7F2; padding: 2px 7px; border-radius: 4px;">49120-3414</span>
+                        <span style="font-size: 11px; font-weight: 600; color: #109680;">Recommended · matches facility record</span>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #EEEEEE;">
+                        <span style="font-size: 12px; font-weight: 600; color: #6B7280; width: 148px; flex-shrink: 0;">Alternate candidate</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B7280; background: #F8FAFC; padding: 2px 7px; border-radius: 4px;">49120-9203</span>
+                        <span style="font-size: 11px; color: #94A3B8;">USPS range match only — not chosen</span>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px;">
+                        <span style="font-size: 12px; font-weight: 600; color: #6B7280; width: 148px; flex-shrink: 0;">Rule that fired</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B7280;">MCR-J8 · 214</span>
+                        <span style="font-size: 12px; color: #0F1B2E;">Billing provider ZIP must be 9-digit ZIP+4</span>
+                      </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                      <a href="#" style="font-size: 12px; font-weight: 600; color: #7B61FF; text-decoration: none;">Source note — Dr. Ibekie, signed Jun 26 ↗</a>
+                      <a href="Claim Detail.dc.html" style="font-size: 12px; font-weight: 600; color: #7B61FF; text-decoration: none;">Full validation report ↗</a>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Recommended action</span>
+                    <button onClick="{{ approve1 }}" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px 20px; border-radius: 8px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #109680;">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                      Approve fix &amp; revalidate — apply 49120-3414
+                      <kbd style="font-family: 'JetBrains Mono', monospace; font-size: 11px; background: rgba(255,255,255,0.22); border-radius: 4px; padding: 2px 7px; font-weight: 700;">a</kbd>
+                    </button>
+                    <span style="font-size: 11px; color: #94A3B8; text-align: center;">One click — logged to the claim timeline under your name.</span>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- ITEM 2 — Denial -->
+            <sc-if value="{{ sel2 }}" hint-placeholder-val="{{ false }}">
+              <div data-screen-label="Detail: Denial — Meltinos">
+                <div style="padding: 20px 20px 16px; border-bottom: 1px solid #EEEEEE; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 17px; font-weight: 700; color: #0F1B2E;">MELTINOS, MARCY</span>
+                    <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: #FEECEC; color: #DC2626; font-size: 11px; font-weight: 600;">Denial</span>
+                    <div style="flex: 1;"></div>
+                    <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 9999px; background: #FEECEC; color: #DC2626; font-size: 11px; font-weight: 700;">SLA · Breached 1h 05m ago</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: #6B7280;">
+                    <a href="#" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #7B61FF;">ENCT0000545-01</a>
+                    <span style="font-weight: 700; color: #0F1B2E; font-size: 14px;">$94.50</span>
+                    <span>Indiana Medicaid</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg>Raised by Denial Triage Agent</span>
+                  </div>
+                </div>
+
+                <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 16px;">
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">What happened</span>
+                    <div style="background: #F1EEFF; border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 20px; color: #0F1B2E;">The payer denied this claim with CO-16 (claim lacks information). The remark code MA61 points to a missing patient Medicaid RID digit. The chart RID has 11 digits; the eligibility response shows 12. I recommend correcting the member ID and submitting a replacement claim.</div>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Evidence</span>
+                    <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden;">
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #EEEEEE;">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #DC2626; background: #FEECEC; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">CO-16</span>
+                        <span style="font-size: 12px; color: #0F1B2E;">Claim lacks information or has submission errors</span>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #EEEEEE;">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #DC2626; background: #FEECEC; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">MA61</span>
+                        <span style="font-size: 12px; color: #0F1B2E;">Missing or incomplete patient Medicaid number</span>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #EEEEEE;">
+                        <span style="font-size: 12px; font-weight: 600; color: #6B7280; width: 148px; flex-shrink: 0;">Member ID (RID)</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #B91C1C; background: #FEECEC; padding: 2px 7px; border-radius: 4px;">10428835621</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0B7D6C; background: #E6F7F2; padding: 2px 7px; border-radius: 4px;">104288356212</span>
+                        <span style="font-size: 11px; font-weight: 600; color: #109680;">From eligibility (271)</span>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px;">
+                        <span style="font-size: 12px; font-weight: 600; color: #6B7280; width: 148px; flex-shrink: 0;">Payer claim #</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E;">2126IN407733</span>
+                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #109680;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Captured — required for replacement claim</span>
+                      </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                      <a href="#" style="font-size: 12px; font-weight: 600; color: #7B61FF; text-decoration: none;">Source note ↗</a>
+                      <a href="#" style="font-size: 12px; font-weight: 600; color: #7B61FF; text-decoration: none;">Payer denial response (835) ↗</a>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Recommended action</span>
+                    <button onClick="{{ approve2 }}" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px 20px; border-radius: 8px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #109680;">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                      Approve corrected claim — submit replacement
+                      <kbd style="font-family: 'JetBrains Mono', monospace; font-size: 11px; background: rgba(255,255,255,0.22); border-radius: 4px; padding: 2px 7px; font-weight: 700;">a</kbd>
+                    </button>
+                    <span style="font-size: 11px; color: #94A3B8; text-align: center;">One click — logged to the claim timeline under your name.</span>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- ITEM 3 — Variance (tier-disabled) -->
+            <sc-if value="{{ sel3 }}" hint-placeholder-val="{{ false }}">
+              <div data-screen-label="Detail: Variance — Wilson (tier state)">
+                <div style="padding: 20px 20px 16px; border-bottom: 1px solid #EEEEEE; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 17px; font-weight: 700; color: #0F1B2E;">WILSON, DANNY</span>
+                    <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 11px; font-weight: 600;">Variance</span>
+                    <div style="flex: 1;"></div>
+                    <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 9999px; background: #F1F5F9; color: #6B7280; font-size: 11px; font-weight: 700;">SLA · 1d 2h left</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: #6B7280;">
+                    <a href="#" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #7B61FF;">ENCT0000541-01</a>
+                    <span style="font-weight: 700; color: #0F1B2E; font-size: 14px;">$37.20 <span style="font-size: 11px; font-weight: 600; color: #FF6E6C;">under-paid</span></span>
+                    <span>Medicare (WPS J8)</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg>Raised by Payment Reconciliation Agent</span>
+                  </div>
+                </div>
+
+                <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 16px;">
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">What happened</span>
+                    <div style="background: #F1EEFF; border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 20px; color: #0F1B2E;">Medicare paid $71.23 against an expected $108.43. The adjustment code CO-45 (charge exceeds fee schedule) accounts for $30.00 as expected, but an additional CO-253 (sequestration) of $7.20 was not in my expectation model. This is a legitimate 2% Medicare sequestration reduction — I recommend accepting the variance.</div>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Evidence</span>
+                    <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden;">
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #EEEEEE;">
+                        <span style="font-size: 12px; font-weight: 600; color: #6B7280; width: 148px; flex-shrink: 0;">Payment vs expected</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E;">$71.23</span>
+                        <span style="font-size: 12px; color: #94A3B8;">paid of</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E;">$108.43</span>
+                        <span style="font-size: 12px; color: #94A3B8;">expected</span>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #EEEEEE;">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #6B7280; background: #F8FAFC; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">CO-45</span>
+                        <span style="font-size: 12px; color: #0F1B2E; flex: 1;">Charge exceeds fee schedule</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E;">$30.00</span>
+                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #109680;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Expected</span>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #EEEEEE;">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #B45309; background: #FEF3DF; padding: 2px 7px; border-radius: 4px; flex-shrink: 0;">CO-253</span>
+                        <span style="font-size: 12px; color: #0F1B2E; flex: 1;">Sequestration — federal 2% payment reduction</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E;">$7.20</span>
+                        <span style="font-size: 11px; font-weight: 600; color: #B45309;">Not in model — verified legitimate</span>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px;">
+                        <span style="font-size: 12px; font-weight: 600; color: #6B7280; width: 148px; flex-shrink: 0;">Remittance</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E;">EFT-4478215</span>
+                        <span style="font-size: 12px; color: #94A3B8;">received Jul 6, 6:00 AM</span>
+                      </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                      <a href="#" style="font-size: 12px; font-weight: 600; color: #7B61FF; text-decoration: none;">Payment file (835) ↗</a>
+                      <a href="#" style="font-size: 12px; font-weight: 600; color: #7B61FF; text-decoration: none;">Expectation model v3.2 ↗</a>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Recommended action</span>
+                    <button disabled="{{ true }}" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px 20px; border-radius: 8px; border: 1px solid #E5E7EB; background: #F1F5F9; color: #94A3B8; font-size: 15px; font-weight: 700; cursor: not-allowed;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                      Accept variance &amp; close
+                    </button>
+                    <div style="display: flex; align-items: center; gap: 12px; background: #FEF3DF; border: 1px solid #F5D9A8; border-radius: 8px; padding: 10px 14px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                      <span style="font-size: 12px; color: #92400E; line-height: 18px; flex: 1;"><strong>Requires admin approval</strong> — a $37.20 variance write-off exceeds your $25.00 approval limit.</span>
+                      <button onClick="{{ routeAdmin }}" style="padding: 8px 14px; border-radius: 4px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 150ms ease-out;" style-hover="background: #F1EEFF;">Route to Admin</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- ITEM 4 — Coding review -->
+            <sc-if value="{{ sel4 }}" hint-placeholder-val="{{ false }}">
+              <div data-screen-label="Detail: Coding — Holloway">
+                <div style="padding: 20px 20px 16px; border-bottom: 1px solid #EEEEEE; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 17px; font-weight: 700; color: #0F1B2E;">HOLLOWAY, ERNEST J.</span>
+                    <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: #EBF2FE; color: #1D4ED8; font-size: 11px; font-weight: 600;">Coding</span>
+                    <div style="flex: 1;"></div>
+                    <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 9999px; background: #F1F5F9; color: #6B7280; font-size: 11px; font-weight: 700;">SLA · 6h 40m left</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: #6B7280;">
+                    <a href="#" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #7B61FF;">ENCT0000552-01</a>
+                    <span style="font-weight: 700; color: #0F1B2E; font-size: 14px;">$108.43 <span style="font-size: 11px; font-weight: 600; color: #6B7280;">or $152.79</span></span>
+                    <span>Medicare (WPS J8)</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg>Raised by Claim Generation Agent</span>
+                  </div>
+                </div>
+
+                <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 16px;">
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">What happened</span>
+                    <div style="background: #F1EEFF; border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 20px; color: #0F1B2E;">I drafted this claim from Dr. Ibekie's signed note but my coding confidence is below threshold (72%). The note's detailed interval history and expanded exam support 99309, but the decision making reads as low complexity, which supports 99308. I drafted at 99308 (conservative) — confirm or upgrade before I submit.</div>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Evidence — note vs proposed code</span>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                      <div style="border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;">
+                        <span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">From the signed note</span>
+                        <div style="font-size: 12px; color: #0F1B2E; line-height: 19px; font-style: italic;">“Resident seen for worsening sacral wound with new serous drainage. Dressing regimen changed to alginate. Reviewed CBC and CMP from 06-28. Detailed interval history obtained; expanded exam of integumentary and cardiovascular systems…”</div>
+                        <a href="#" style="font-size: 11px; font-weight: 600; color: #7B61FF; text-decoration: none;">Open full note ↗</a>
+                      </div>
+                      <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden;">
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-bottom: 1px solid #EEEEEE; background: #F8FAFC;">
+                          <span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Code criteria</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid #EEEEEE; font-size: 12px; color: #0F1B2E;"><span style="width: 88px; color: #6B7280;">History</span><span>Detailed interval — supports <span style="font-family: 'JetBrains Mono', monospace;">99309</span></span></div>
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid #EEEEEE; font-size: 12px; color: #0F1B2E;"><span style="width: 88px; color: #6B7280;">Exam</span><span>Expanded, 2 systems — supports <span style="font-family: 'JetBrains Mono', monospace;">99309</span></span></div>
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid #EEEEEE; font-size: 12px; color: #0F1B2E;"><span style="width: 88px; color: #6B7280;">MDM</span><span>Low complexity — supports <span style="font-family: 'JetBrains Mono', monospace;">99308</span></span></div>
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 12px; color: #6B7280;"><span style="width: 88px;">Drafted as</span><span style="font-family: 'JetBrains Mono', monospace; color: #0F1B2E; font-weight: 700;">99308</span><span style="font-size: 11px;">$108.43 · conservative</span></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Recommended action</span>
+                    <button onClick="{{ confirm99308 }}" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px 20px; border-radius: 8px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #109680;">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                      Confirm 99308 &amp; submit — $108.43
+                      <kbd style="font-family: 'JetBrains Mono', monospace; font-size: 11px; background: rgba(255,255,255,0.22); border-radius: 4px; padding: 2px 7px; font-weight: 700;">a</kbd>
+                    </button>
+                    <button onClick="{{ upgrade99309 }}" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 11px 20px; border-radius: 8px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 13px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Upgrade to 99309 &amp; submit — $152.79</button>
+                    <span style="font-size: 11px; color: #94A3B8; text-align: center;">One click — your coding decision is logged to the claim timeline under your name.</span>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- Resolved confirmation -->
+            <sc-if value="{{ resolvedSel }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 48px 32px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;" data-screen-label="Detail: resolved confirmation">
+                <div style="width: 52px; height: 52px; border-radius: 9999px; background: #E6F7F2; display: flex; align-items: center; justify-content: center;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                </div>
+                <span style="font-size: 17px; font-weight: 700; color: #0F1B2E;">{{ resolvedTitle }}</span>
+                <span style="font-size: 13px; color: #6B7280; line-height: 20px; max-width: 400px;">{{ resolvedBody }}</span>
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
+                  <button onClick="{{ undoResolve }}" style="padding: 9px 16px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 13px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Undo</button>
+                  <a href="Claim Detail.dc.html" style="padding: 9px 16px; border-radius: 4px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 13px; font-weight: 700; text-decoration: none;" style-hover="background: #F1EEFF;">View claim timeline</a>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- Shared: secondary actions + More / Override -->
+            <sc-if value="{{ showActions }}" hint-placeholder-val="{{ true }}">
+            <div style="padding: 0 20px 20px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid #EEEEEE; padding-top: 14px;">
+                <button onClick="{{ actEdit }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Edit <kbd style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #94A3B8;">e</kbd></button>
+                <button onClick="{{ actRetry }}" style="padding: 8px 12px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Retry</button>
+                <button onClick="{{ actReject }}" style="padding: 8px 12px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Reject</button>
+                <button onClick="{{ actSendBack }}" style="padding: 8px 12px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Send back</button>
+                <button onClick="{{ actEscalate }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Escalate <kbd style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #94A3B8;">x</kbd></button>
+                <div style="flex: 1;"></div>
+                <button onClick="{{ toggleMore }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 4px; border: 1px solid transparent; background: transparent; color: #94A3B8; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">More
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                </button>
+              </div>
+
+              <sc-if value="{{ moreOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden; align-self: flex-end; width: 280px; box-shadow: 0 4px 6px -4px rgba(0,0,0,0.1), 0 10px 15px -3px rgba(0,0,0,0.1);">
+                  <button onClick="{{ noopMenu }}" style="display: block; width: 100%; text-align: left; padding: 10px 14px; border: none; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 1px solid #EEEEEE;" style-hover="background: #F1F5F9;">View raw payer payloads</button>
+                  <button onClick="{{ noopMenu }}" style="display: block; width: 100%; text-align: left; padding: 10px 14px; border: none; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 1px solid #EEEEEE;" style-hover="background: #F1F5F9;">Audit log</button>
+                  <button onClick="{{ openOverride }}" style="display: block; width: 100%; text-align: left; padding: 10px 14px; border: none; background: #FFFFFF; color: #DC2626; font-size: 12px; font-weight: 700; cursor: pointer;" style-hover="background: #FEECEC;">Override agent &amp; force submit…</button>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ overrideOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="background: #FEECEC; border: 1px solid #FCA5A5; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                    <span style="font-size: 13px; font-weight: 700; color: #DC2626;">Override agent decision</span>
+                  </div>
+                  <div style="font-size: 12px; color: #991B1B; line-height: 18px;">Overrides bypass the agent's validation and are logged to the compliance audit trail with your name. A typed reason is required.</div>
+                  <textarea value="{{ overrideReason }}" onChange="{{ onReasonChange }}" placeholder="Type the reason for this override (minimum 10 characters)…" style="width: 100%; min-height: 64px; border: 1px solid #FCA5A5; border-radius: 5px; padding: 10px 12px; font-family: 'Inter', sans-serif; font-size: 13px; color: #0F1B2E; resize: vertical; outline: none; background: #FFFFFF;"></textarea>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <button onClick="{{ confirmOverride }}" disabled="{{ overrideDisabled }}" style="padding: 10px 16px; border-radius: 4px; border: none; background: {{ overrideBtnBg }}; color: {{ overrideBtnFg }}; font-size: 13px; font-weight: 700; cursor: {{ overrideBtnCursor }};">Confirm override</button>
+                    <button onClick="{{ cancelOverride }}" style="padding: 10px 16px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 13px; font-weight: 600; cursor: pointer;">Cancel</button>
+                    <span style="font-size: 11px; color: #B91C1C;">{{ overrideHint }}</span>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+            </sc-if>
+
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <sc-if value="{{ toastVisible }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 6px -4px rgba(0,0,0,0.1), 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50;">{{ toast }}</div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;emptyState&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Inbox state&quot; },
+  &quot;showHints&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Inbox state&quot; }
+}">
+class Component extends DCLogic {
+  state = {
+    selected: 1,
+    typeFilter: 'All',
+    payerFilter: 'All payers',
+    moreOpen: false,
+    overrideOpen: false,
+    overrideReason: '',
+    resolved: {},
+    toast: '',
+  };
+
+  componentDidMount() {
+    this._onKey = (e) => {
+      const t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (this.props.emptyState) return;
+      const ids = this.visibleIds();
+      if (!ids.length) return;
+      const idx = ids.indexOf(this.state.selected);
+      if (e.key === 'j') {
+        const next = ids[Math.min(idx + 1, ids.length - 1)];
+        this.select(next);
+      } else if (e.key === 'k') {
+        const prev = ids[Math.max(idx - 1, 0)];
+        this.select(prev);
+      } else if (e.key === 'a') {
+        this.approveSelected();
+      } else if (e.key === 'e') {
+        this.showToast('Opening claim editor (demo)');
+      } else if (e.key === 'x') {
+        this.showToast('Escalated to billing lead (demo)');
+      }
+    };
+    window.addEventListener('keydown', this._onKey);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this._onKey);
+    clearTimeout(this._toastTimer);
+  }
+
+  items() {
+    return [
+      { id: 1, pri: 'HIGH', priColor: '#EF4444', type: 'Validation', typeBg: '#F1EEFF', typeFg: '#5B46D6',
+        patient: 'RILEY, DIERDRE W.', claim: 'ENCT0000432-01', payer: 'Medicare (WPS J8)',
+        amount: '$128.00', amountNote: '', age: '3h',
+        sla: '3h 12m left', slaBg: '#FEF3DF', slaFg: '#B45309',
+        initials: 'SN', name: 'Stella Ngozi' },
+      { id: 2, pri: 'HIGH', priColor: '#EF4444', type: 'Denial', typeBg: '#FEECEC', typeFg: '#DC2626',
+        patient: 'MELTINOS, MARCY', claim: 'ENCT0000545-01', payer: 'Indiana Medicaid',
+        amount: '$94.50', amountNote: '', age: '1d 4h',
+        sla: 'Breached 1h 05m', slaBg: '#FEECEC', slaFg: '#DC2626',
+        initials: 'SN', name: 'Stella Ngozi' },
+      { id: 3, pri: 'MED', priColor: '#B45309', type: 'Variance', typeBg: '#FEF3DF', typeFg: '#B45309',
+        patient: 'WILSON, DANNY', claim: 'ENCT0000541-01', payer: 'Medicare (WPS J8)',
+        amount: '$37.20', amountNote: 'under-paid', age: '6h',
+        sla: '1d 2h left', slaBg: '#F1F5F9', slaFg: '#6B7280',
+        initials: 'TO', name: 'Tunde Okafor' },
+      { id: 4, pri: 'MED', priColor: '#B45309', type: 'Coding', typeBg: '#EBF2FE', typeFg: '#1D4ED8',
+        patient: 'HOLLOWAY, ERNEST J.', claim: 'ENCT0000552-01', payer: 'Medicare (WPS J8)',
+        amount: '$108.43', amountNote: 'or $152.79', age: '1h',
+        sla: '6h 40m left', slaBg: '#F1F5F9', slaFg: '#6B7280',
+        initials: 'SN', name: 'Stella Ngozi' },
+    ];
+  }
+
+  filtered() {
+    const { typeFilter, payerFilter, resolved } = this.state;
+    return this.items().filter(it =>
+      !resolved[it.id] &&
+      (typeFilter === 'All' || it.type === typeFilter) &&
+      (payerFilter === 'All payers' || it.payer === payerFilter));
+  }
+
+  visibleIds() { return this.filtered().map(it => it.id); }
+
+  select(id) {
+    this.setState({ selected: id, moreOpen: false, overrideOpen: false, overrideReason: '' });
+  }
+
+  showToast(msg) {
+    clearTimeout(this._toastTimer);
+    this.setState({ toast: msg });
+    this._toastTimer = setTimeout(() => this.setState({ toast: '' }), 2600);
+  }
+
+  approveSelected() {
+    const sel = this.state.selected;
+    if (sel === 3) { this.showToast('Requires admin approval — use Route to Admin'); return; }
+    if (this.state.resolved[sel]) return;
+    this.setState(s => ({ resolved: Object.assign({}, s.resolved, { [sel]: true }) }));
+    const msgs = { 1: 'Fix approved — removed from your queue', 2: 'Replacement approved — removed from your queue', 4: 'Code confirmed — removed from your queue' };
+    this.showToast(msgs[sel] || 'Approved');
+  }
+
+  renderVals() {
+    const st = this.state;
+    const isEmpty = !!(this.props.emptyState ?? false);
+    const showHints = !!(this.props.showHints ?? true);
+    const rows = this.filtered().map(it => {
+      const selected = st.selected === it.id;
+      return Object.assign({}, it, {
+        rowBg: selected ? '#F1EEFF' : '#FFFFFF',
+        barColor: selected ? '#7B61FF' : 'transparent',
+        onClick: () => this.select(it.id),
+      });
+    });
+    const mkChips = (labels, current, key) => labels.map(label => {
+      const active = label === current;
+      return {
+        label,
+        bg: active ? '#7B61FF' : '#FFFFFF',
+        fg: active ? '#FFFFFF' : '#6B7280',
+        border: active ? '#7B61FF' : '#E5E7EB',
+        onClick: () => this.setState({ [key]: label }),
+      };
+    });
+    const reasonOk = st.overrideReason.trim().length >= 10;
+    const selVisible = this.visibleIds().includes(st.selected);
+    const openCount = this.items().filter(it => !st.resolved[it.id]).length;
+    const breached = !st.resolved[2];
+    const resolvedSel = !isEmpty && !!st.resolved[st.selected];
+    return {
+      isEmpty,
+      notEmpty: !isEmpty,
+      showHints: showHints && !isEmpty,
+      rows,
+      noRows: rows.length === 0,
+      openCountText: isEmpty ? '0 Open' : openCount + ' Open',
+      breachCountText: isEmpty ? 'All clear' : (breached ? '1 SLA Breached' : '0 Breached'),
+      breachBg: (isEmpty || !breached) ? '#E6F7F2' : '#FEECEC',
+      breachFg: (isEmpty || !breached) ? '#109680' : '#DC2626',
+      resolvedSel,
+      showActions: !isEmpty && !resolvedSel && selVisible,
+      resolvedTitle: st.selected === 1 ? 'Fix approved' : st.selected === 4 ? (st.coded4 === '99309' ? 'Upgraded to 99309' : 'Code confirmed — 99308') : 'Replacement claim approved',
+      resolvedBody: st.selected === 1
+        ? 'ZIP 49120-3414 applied. The Claim Validation Agent is revalidating now and will submit automatically once all rules pass. This decision is logged to the claim timeline under your name.'
+        : st.selected === 4
+        ? (st.coded4 === '99309'
+          ? 'Claim recoded to CPT 99309 at $152.79. The Claim Validation Agent is revalidating and will submit once all rules pass. Your coding decision is logged to the claim timeline under your name.'
+          : 'Claim confirmed at CPT 99308 ($108.43). The Claim Validation Agent is revalidating and will submit once all rules pass. Your coding decision is logged to the claim timeline under your name.')
+        : 'Member ID corrected to 104288356212. The Submission Agent will file the replacement claim (frequency 7) referencing payer claim #2126IN407733. This decision is logged to the claim timeline under your name.',
+      undoResolve: () => this.setState(s => {
+        const r = Object.assign({}, s.resolved);
+        delete r[s.selected];
+        return { resolved: r };
+      }),
+      typeChips: mkChips(['All', 'QA', 'Validation', 'Coding', 'Rejection', 'Variance', 'Denial', 'A/R Unmatched'], st.typeFilter, 'typeFilter'),
+      payerChips: mkChips(['All payers', 'Medicare (WPS J8)', 'Indiana Medicaid'], st.payerFilter, 'payerFilter'),
+      sel1: !isEmpty && selVisible && st.selected === 1,
+      sel2: !isEmpty && selVisible && st.selected === 2,
+      sel3: !isEmpty && selVisible && st.selected === 3,
+      sel4: !isEmpty && selVisible && st.selected === 4,
+      confirm99308: () => { this.setState({ coded4: '99308' }); this.approveSelected(); },
+      upgrade99309: () => {
+        this.setState(s => ({ coded4: '99309', resolved: Object.assign({}, s.resolved, { 4: true }) }));
+        this.showToast('Upgraded to 99309 — revalidating at $152.79');
+      },
+      approve1: () => this.approveSelected(),
+      approve2: () => this.approveSelected(),
+      routeAdmin: () => this.showToast('Routed to admin queue — Wilson variance ($37.20)'),
+      actEdit: () => this.showToast('Opening claim editor (demo)'),
+      actRetry: () => this.showToast('Agent retrying with same inputs (demo)'),
+      actReject: () => this.showToast('Agent recommendation rejected (demo)'),
+      actSendBack: () => this.showToast('Sent back to agent with note (demo)'),
+      actEscalate: () => this.showToast('Escalated to billing lead (demo)'),
+      toggleMore: () => this.setState({ moreOpen: !st.moreOpen, overrideOpen: false }),
+      noopMenu: () => this.showToast('Raw payloads viewer (demo)'),
+      openOverride: () => this.setState({ overrideOpen: true, moreOpen: false }),
+      cancelOverride: () => this.setState({ overrideOpen: false, overrideReason: '' }),
+      onReasonChange: (e) => this.setState({ overrideReason: e.target.value }),
+      overrideReason: st.overrideReason,
+      overrideDisabled: !reasonOk,
+      overrideBtnBg: reasonOk ? '#EF4444' : '#F1F5F9',
+      overrideBtnFg: reasonOk ? '#FFFFFF' : '#94A3B8',
+      overrideBtnCursor: reasonOk ? 'pointer' : 'not-allowed',
+      overrideHint: reasonOk ? 'Logged to compliance audit trail' : 'Reason required to enable',
+      confirmOverride: () => {
+        if (!reasonOk) return;
+        this.setState({ overrideOpen: false, overrideReason: '' });
+        this.showToast('Override logged — claim force-submitted under your name');
+      },
+      toast: st.toast,
+      toastVisible: !!st.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

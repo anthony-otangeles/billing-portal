@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #FFFFFF; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #22C5A7; }
+  a:hover { color: #0B7D6C; }
+  * { box-sizing: border-box; }
+  button { font-family: 'Inter', sans-serif; }
+</style>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #FFFFFF; display: flex; flex-direction: column;" data-screen-label="Ops Admin — Roles &amp; Permissions">
+
+  <x-import component-from-global-scope="ops-header" from="./ops-shell.js" hint-size="100%,76px"></x-import>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+    <x-import component-from-global-scope="ops-nav" from="./ops-shell.js" active="roles" hint-size="300px,900px"></x-import>
+
+    <div style="flex: 1; padding: 34px 44px 60px; display: flex; flex-direction: column; gap: 22px; min-width: 0; max-width: 1180px;">
+
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <h1 style="font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 700; color: #7B61FF; margin: 0;">Roles &amp; Permissions</h1>
+        <span style="font-size: 15px; color: #6B7280;">What each role can see and do across the platform. Definitions are read-only — edit requests go through Operations and are audited.</span>
+      </div>
+
+      <!-- Role cards -->
+      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;">
+        <sc-for list="{{ roleCards }}" as="r" hint-placeholder-count="5">
+          <button onClick="{{ r.onClick }}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 18px; border-radius: 14px; border: 1.5px solid {{ r.border }}; background: {{ r.bg }}; cursor: pointer; text-align: left;">
+            <span style="width: 38px; height: 38px; border-radius: 10px; background: {{ r.tileBg }}; display: inline-flex; align-items: center; justify-content: center;">
+              <span style="display: inline-flex;">{{ r.icon }}</span>
+            </span>
+            <span style="display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 700; color: #0F1B2E;">{{ r.name }}</span>
+            <sc-if value="{{ r.isNew }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size: 9px; font-weight: 700; color: #0B7D6C; background: #E6F7F2; border: 1px solid #B9E8DC; border-radius: 9999px; padding: 1px 7px; margin-top: -4px;">NEW</span>
+            </sc-if>
+            <span style="font-size: 12px; color: #6B7280; line-height: 17px;">{{ r.members }}</span>
+          </button>
+        </sc-for>
+      </div>
+
+      <!-- Selected role -->
+      <div style="border: 1px solid #E5E7EB; border-radius: 16px; overflow: hidden;">
+        <div style="padding: 20px 26px; border-bottom: 1px solid #EEF2F7; display: flex; align-items: center; gap: 14px; background: #FBFAFF;">
+          <div style="display: flex; flex-direction: column; gap: 3px; flex: 1;">
+            <span style="font-size: 17px; font-weight: 700; color: #0F1B2E;">{{ selName }}</span>
+            <span style="font-size: 13.5px; color: #6B7280; line-height: 20px;">{{ selScope }}</span>
+          </div>
+          <button onClick="{{ requestEdit }}" style="height: 42px; padding: 0 18px; border-radius: 10px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #334155; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;" style-hover="background: #F8FAFC;">Request role change</button>
+        </div>
+
+        <sc-for list="{{ groups }}" as="g" hint-placeholder-count="5">
+          <div style="display: flex; justify-content: space-between; padding: 11px 26px; background: #F8FAFC; border-bottom: 1px solid #EEF2F7; font-size: 11.5px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.07em;">
+            <span style="display: flex; align-items: center; gap: 8px;">{{ g.label }}
+              <sc-if value="{{ g.isPhi }}" hint-placeholder-val="{{ false }}">
+                <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #B45309; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 9999px; padding: 1px 8px; text-transform: none; letter-spacing: 0;">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  Tenant isolation applies
+                </span>
+              </sc-if>
+            </span>
+          </div>
+          <sc-for list="{{ g.perms }}" as="p" hint-placeholder-count="3">
+            <div style="display: flex; align-items: center; gap: 14px; padding: 13px 26px; border-bottom: 1px solid #EEF2F7;">
+              <sc-if value="{{ p.allowed }}" hint-placeholder-val="{{ true }}">
+                <span style="width: 24px; height: 24px; border-radius: 9999px; background: #E6F7F2; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C5A7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                </span>
+              </sc-if>
+              <sc-if value="{{ p.denied }}" hint-placeholder-val="{{ false }}">
+                <span style="width: 24px; height: 24px; border-radius: 9999px; background: #FEF2F2; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                </span>
+              </sc-if>
+              <sc-if value="{{ p.scoped }}" hint-placeholder-val="{{ false }}">
+                <span style="width: 24px; height: 24px; border-radius: 9999px; background: #FFFBEB; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                </span>
+              </sc-if>
+              <div style="display: flex; flex-direction: column; gap: 1px; flex: 1;">
+                <span style="font-size: 14px; font-weight: 600; color: #0F1B2E;">{{ p.label }}</span>
+                <sc-if value="{{ p.hasNote }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size: 12.5px; color: {{ p.noteColor }};">{{ p.note }}</span>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+        <div style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; z-index: 900;">{{ toastText }}</div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { sel: 'bm', toast: '' };
+
+  renderVals() {
+    const st = this.state;
+    const icon = (path, color) => React.createElement('svg', { width: 17, height: 17, viewBox: '0 0 24 24', fill: 'none', stroke: color, strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', dangerouslySetInnerHTML: { __html: path } });
+
+    const ROLES = {
+      ops: {
+        name: 'Operations Admin', members: '2 members \u00b7 Otangeles internal',
+        tileBg: '#F1F5F9', iconEl: icon('<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1 1 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>', '#6B7280'),
+        scope: 'Platform operations: onboarding tenants, monitoring health, entering portals for support. Sees no PHI anywhere — aggregates and masked identifiers only.',
+        perms: {
+          'Claims & AR': [
+            ['Aggregate AR metrics per billing company', 'allow', ''],
+            ['Claim-level detail', 'deny', 'Requires entering the company portal — audited'],
+            ['Approve agent decisions', 'deny', ''],
+          ],
+          'Team & Users': [
+            ['Invite any role, any organization', 'allow', ''],
+            ['Suspend / reactivate tenants and users', 'allow', 'Writes an audit event'],
+          ],
+          'Practices': [
+            ['Manage practice-billing assignments', 'allow', 'Guarded flow with effective date'],
+            ['Enter practice and billing portals', 'allow', 'Banner shown, session audited'],
+          ],
+          'Patient Data (PHI)': [
+            ['View patient names or clinical data', 'deny', 'Never — Ops screens are aggregate-only'],
+          ],
+          'Audit': [
+            ['View global audit log', 'allow', ''],
+            ['Configure portal settings', 'allow', ''],
+          ],
+        },
+      },
+      pa: {
+        name: 'Practice Admin', members: '2 members \u00b7 one per practice',
+        tileBg: '#FDF2F8', iconEl: icon('<path d="M11 2v2"></path><path d="M5 2v2"></path><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path><path d="M8 15a6 6 0 0 0 12 0v-3"></path><circle cx="20" cy="10" r="2"></circle>', '#EC4899'),
+        scope: 'Runs one medical practice: users, facilities, schedules. Sees their own practice\u2019s patients only.',
+        perms: {
+          'Claims & AR': [
+            ['View own practice\u2019s billing status summaries', 'allow', 'What the billing company shares — no other practice\u2019s data'],
+            ['Work claims', 'deny', 'Billing company\u2019s job'],
+          ],
+          'Team & Users': [
+            ['Invite practice staff', 'allow', ''],
+            ['Invite billing users', 'deny', ''],
+          ],
+          'Practices': [
+            ['See own billing company assignment', 'allow', 'Notified on change'],
+            ['Change billing company', 'deny', 'Operations only'],
+          ],
+          'Patient Data (PHI)': [
+            ['Own practice\u2019s patients', 'scoped', 'Full clinical access within the practice'],
+            ['Other practices\u2019 patients', 'deny', ''],
+          ],
+          'Audit': [
+            ['View own practice\u2019s audit trail', 'allow', ''],
+          ],
+        },
+      },
+      prov: {
+        name: 'Provider', members: '14 members \u00b7 across practices',
+        tileBg: '#EFF6FF', iconEl: icon('<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle>', '#3B82F6'),
+        scope: 'Clinical documentation: encounters, assessments, e-prescribing. Patient access limited to assigned facilities.',
+        perms: {
+          'Claims & AR': [
+            ['Any billing visibility', 'deny', 'Billing is fully separated from the clinical surface'],
+          ],
+          'Team & Users': [
+            ['Manage users', 'deny', ''],
+          ],
+          'Practices': [
+            ['Work across own practice\u2019s facilities', 'scoped', 'As assigned by the Practice Admin'],
+          ],
+          'Patient Data (PHI)': [
+            ['Assigned patients', 'scoped', 'Clinical access at assigned facilities'],
+          ],
+          'Audit': [
+            ['Own signing history', 'allow', ''],
+          ],
+        },
+      },
+      bm: {
+        name: 'Billing Manager', members: '1 member \u00b7 Derek Okafor (Bell Medics)', isNew: true,
+        tileBg: '#F1EEFF', iconEl: icon('<rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line>', '#7B61FF'),
+        scope: 'Runs one billing company: team, escalations, company profile. Everything is scoped to the practices their company serves — other companies and other practices are invisible.',
+        perms: {
+          'Claims & AR': [
+            ['Full claims access for served practices', 'scoped', 'IFC + Westbrook for Bell Medics — nothing else exists in their view'],
+            ['Approve agent decisions & escalations', 'allow', 'Subject to Portal Configuration autonomy setting'],
+            ['File appeals', 'allow', ''],
+          ],
+          'Team & Users': [
+            ['Invite / deactivate own company\u2019s reps', 'allow', 'From portal Settings'],
+            ['See other billing companies\u2019 teams', 'deny', 'Hard tenant boundary'],
+          ],
+          'Practices': [
+            ['See own contract practices', 'allow', ''],
+            ['Add or remove practices', 'deny', 'Contract changes go through Operations'],
+          ],
+          'Patient Data (PHI)': [
+            ['Patients of served practices', 'scoped', 'Billing-relevant data only, for claims work'],
+            ['Patients of any other practice', 'deny', 'No cross-tenant PHI, ever'],
+          ],
+          'Audit': [
+            ['Own company\u2019s activity', 'allow', 'Mirrored into the global Ops audit log'],
+          ],
+        },
+      },
+      ar: {
+        name: 'AR Rep', members: '4 members \u00b7 Bell Medics', isNew: true,
+        tileBg: '#E6F7F2', iconEl: icon('<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>', '#22C5A7'),
+        scope: 'Works the AR queue for assigned practices: follow-ups, agent approvals, escalation to their manager.',
+        perms: {
+          'Claims & AR': [
+            ['Work claims for assigned practices', 'scoped', 'Assignments set by their Billing Manager'],
+            ['Approve agent decisions', 'allow', 'Or escalate to the Billing Manager'],
+            ['See unassigned practices\u2019 claims', 'deny', ''],
+          ],
+          'Team & Users': [
+            ['Manage team', 'deny', 'Manager only'],
+          ],
+          'Practices': [
+            ['View served practice info', 'allow', 'Contact + payer context for claims work'],
+          ],
+          'Patient Data (PHI)': [
+            ['Patients on assigned claims', 'scoped', 'Billing-relevant fields only'],
+            ['Any other patient', 'deny', ''],
+          ],
+          'Audit': [
+            ['Own action history', 'allow', 'Every approval logged under their name'],
+          ],
+        },
+      },
+    };
+
+    const order = ['ops', 'pa', 'prov', 'bm', 'ar'];
+    const roleCards = order.map(id => {
+      const r = ROLES[id];
+      const sel = st.sel === id;
+      return {
+        key: id, name: r.name, members: r.members, isNew: !!r.isNew,
+        icon: r.iconEl, tileBg: r.tileBg,
+        border: sel ? '#22C5A7' : '#E5E7EB',
+        bg: sel ? '#E6F7F2' : '#FFFFFF',
+        onClick: () => this.setState({ sel: id }),
+      };
+    });
+
+    const cur = ROLES[st.sel];
+    const groups = Object.keys(cur.perms).map(gl => ({
+      key: gl, label: gl, isPhi: gl.indexOf('PHI') >= 0,
+      perms: cur.perms[gl].map((p, i) => ({
+        key: gl + i,
+        label: p[0],
+        allowed: p[1] === 'allow', denied: p[1] === 'deny', scoped: p[1] === 'scoped',
+        hasNote: !!p[2], note: p[2],
+        noteColor: p[1] === 'deny' ? '#DC2626' : p[1] === 'scoped' ? '#B45309' : '#6B7280',
+      })),
+    }));
+
+    return {
+      roleCards,
+      selName: cur.name,
+      selScope: cur.scope,
+      groups,
+      requestEdit: () => {
+        clearTimeout(this._tt);
+        this.setState({ toast: 'Role-change request drafted — requires a second Operations Admin approval (audited)' });
+        this._tt = setTimeout(() => this.setState({ toast: '' }), 3200);
+      },
+      hasToast: !!st.toast,
+      toastText: st.toast,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

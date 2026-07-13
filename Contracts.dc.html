@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button, select, input, textarea { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+<script src="./contracts-store.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="Contracts (Bell Medics)">
+
+  <x-import component-from-global-scope="ops-banner" from="./ops-banner.js" hint-size="100%,0px"></x-import>
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Billing Portal</span>
+    <x-import component-from-global-scope="search-bar" from="./search-bar.js" hint-size="480px,40px"></x-import>
+    <div style="flex: 1;"></div>
+    <x-import component-from-global-scope="practice-switcher" from="./practice-switcher.js" hint-size="260px,40px"></x-import>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <x-import component-from-global-scope="role-switcher" from="./role-switcher.js" hint-size="210px,44px"></x-import>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav ===== -->
+    <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+      <a href="Billing Home.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg>
+        Dashboard
+      </a>
+      <a href="Agent Inbox v3.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+        Agent Inbox
+      </a>
+      <a href="Coverage.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        Coverage
+      </a>
+      <a href="AR Worklist.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        AR Worklist
+      </a>
+      <a href="Claims Register.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+        Claims
+      </a>
+        <a href="Payments.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Payments
+          <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">NEW</span>
+        </a>
+      <a href="Rulebook.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+        Rulebook
+      </a>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+        Contracts
+              </div>
+      <a href="Analytics.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+        Analytics
+      </a>
+      <a href="Settings.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        Settings
+      </a>
+      <div style="flex: 1;"></div>
+      <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+        <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+        Reach the billing support desk 24/7.
+      </div>
+    </div>
+
+    <!-- ===== Main ===== -->
+    <div style="flex: 1; padding: 24px 32px 48px; display: flex; flex-direction: column; gap: 16px; min-width: 0;" data-screen-label="Contracts — fee schedules">
+
+      <!-- Title -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <h1 style="font-size: 24px; font-weight: 700; margin: 0; white-space: nowrap;">Contracts &amp; Fee Schedules</h1>
+        <span style="font-size: 13px; color: #6B7280;">Expected payment per payer · {{ practiceLabel }} · Jul 13, 2026</span>
+        <div style="flex: 1;"></div>
+        <sc-if value="{{ reviewQueued }}" hint-placeholder-val="{{ false }}">
+          <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #E7F5EF; color: #1B7F5E; font-size: 12px; font-weight: 600; white-space: nowrap;">Rate review sent to Agent Inbox</span>
+        </sc-if>
+        <sc-if value="{{ bulkLoaded }}" hint-placeholder-val="{{ false }}">
+          <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #E7F5EF; color: #1B7F5E; font-size: 12px; font-weight: 600; white-space: nowrap;">3 exhibits loaded in bulk — versioned &amp; audit-logged</span>
+        </sc-if>
+        <sc-if value="{{ showBulkBtn }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ openBulk }}" style="padding: 8px 16px; border-radius: 5px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap;" style-hover="background: #F1EEFF;">Bulk Import Exhibits (CSV)</button>
+        </sc-if>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 600; white-space: nowrap;">{{ driftChipText }}</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #E7F5EF; color: #1B7F5E; font-size: 12px; font-weight: 600; white-space: nowrap;">38 of 41 billed codes contracted</span>
+      </div>
+
+      <!-- Tabs -->
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 0; border: 1px solid #E5E7EB; border-radius: 5px; overflow: hidden;">
+          <button onClick="{{ goRates }}" style="padding: 8px 16px; border: none; background: {{ ratesTabBg }}; color: {{ ratesTabFg }}; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;">Fee Schedules</button>
+          <button onClick="{{ goEnrollment }}" style="padding: 8px 16px; border: none; background: {{ enrollTabBg }}; color: {{ enrollTabFg }}; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;">Provider Enrollment</button>
+        </div>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 12px; color: #94A3B8;">{{ mainTabSummary }}</span>
+      </div>
+
+      <!-- ===== Provider Enrollment (Phase 9 — light tracker) ===== -->
+      <sc-if value="{{ showEnrollment }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+
+          <!-- Needs attention -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+            <div style="background: #FFFFFF; border: 1px solid #FFD3D2; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 11px; font-weight: 700; color: #DC2626; text-transform: uppercase; letter-spacing: 0.06em;">Enrollment pending — claims held</span>
+              <span style="font-size: 13.5px; font-weight: 700; line-height: 19px;">Veterans Administration · Dr. Oranu Ibekie</span>
+              <span style="font-size: 12.5px; color: #6B7280; line-height: 18px;">Pending 62 days. 9 claims held at validation ($7,095) rather than submitted to deny — the hold shows in <a href="Analytics.dc.html" style="font-weight: 600; text-decoration: none;">Analytics</a> as the VA credentialing bucket. Agent re-checks payer status weekly.</span>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #F5D9A8; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 11px; font-weight: 700; color: #B45309; text-transform: uppercase; letter-spacing: 0.06em;">Revalidation due Aug 30</span>
+              <span style="font-size: 13.5px; font-weight: 700; line-height: 19px;">Medicare of Indiana · Dr. Oranu Ibekie</span>
+              <span style="font-size: 12.5px; color: #6B7280; line-height: 18px;">Medicare revalidates every 5 years; missing the date deactivates billing privileges. The agent drafted the revalidation packet — it needs the provider's signature before Aug 15.</span>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #F5D9A8; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 11px; font-weight: 700; color: #B45309; text-transform: uppercase; letter-spacing: 0.06em;">Coverage gap — prevention active</span>
+              <span style="font-size: 13.5px; font-weight: 700; line-height: 19px;">MHS HIP · Amara Osei, NP</span>
+              <span style="font-size: 12.5px; color: #6B7280; line-height: 18px;">Not enrolled. Her MHS HIP visits are held at validation with a fix proposed in the <a href="Agent Inbox v3.dc.html" style="font-weight: 600; text-decoration: none;">Agent Inbox</a> — bill under the supervising physician until the enrollment completes.</span>
+            </div>
+          </div>
+
+          <!-- Provider × payer grid -->
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 190px repeat(9, 1fr); gap: 0; font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.04em; padding: 12px 20px; border-bottom: 1px solid #E5E7EB; align-items: end;">
+              <span>Provider</span>
+              <sc-for list="{{ enrollPayers }}" as="ep" hint-placeholder-count="9">
+                <span style="text-align: center; line-height: 13px;">{{ ep }}</span>
+              </sc-for>
+            </div>
+            <sc-for list="{{ enrollRows }}" as="er" hint-placeholder-count="4">
+              <div style="display: grid; grid-template-columns: 190px repeat(9, 1fr); gap: 0; align-items: center; padding: 12px 20px; border-bottom: 1px solid #F1F5F9;">
+                <span style="display: flex; flex-direction: column; gap: 1px;">
+                  <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">{{ er.name }}</span>
+                  <span style="font-size: 11px; color: #94A3B8;">{{ er.sub }}</span>
+                </span>
+                <sc-for list="{{ er.cells }}" as="cell" hint-placeholder-count="9">
+                  <span style="text-align: center;"><span title="{{ cell.tip }}" style="display: inline-flex; padding: 3px 8px; border-radius: 9999px; background: {{ cell.bg }}; color: {{ cell.fg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ cell.label }}</span></span>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+
+          <p style="font-size: 12px; color: #94A3B8; margin: 0;">A light tracker, not a credentialing system: statuses and effective dates feed claim-level prevention — validation holds any claim whose provider × payer enrollment isn't active, before the payer can deny it. Primary-source verification, CAQH profiles, and hospital privileging stay outside this portal.</p>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showRates }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+      <!-- Stat strip -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Contracted payers</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #1B7F5E;">{{ contractedCount }}</span>
+          <span style="font-size: 12px; color: #6B7280;">exhibit loaded or public schedule — appealable rates</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Inferred-only payers</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #94A3B8;">{{ inferredCount }}</span>
+          <span style="font-size: 12px; color: #6B7280;">rates from paid-claims history — flag-only, never appeal grounds</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Billed-code coverage</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #5B46D6;">38 / 41</span>
+          <span style="font-size: 12px; color: #6B7280;">of this practice's billed CPTs have a contracted rate</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #F5D9A8; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #B45309; text-transform: uppercase; letter-spacing: 0.06em;">Drift flags</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #B45309;">{{ driftCount }}</span>
+          <span style="font-size: 12px; color: #6B7280;">payments consistently disagreeing with the loaded rate</span>
+        </div>
+      </div>
+
+      <!-- Rate lookup -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 15px; font-weight: 700;">Rate lookup</span>
+          <span style="font-size: 12px; color: #6B7280;">any code in the fee-schedule catalog ({{ catalogSizeLabel }}), across every payer</span>
+          <div style="flex: 1;"></div>
+          <div style="position: relative;">
+            <input onInput="{{ onLookupInput }}" value="{{ lookupInput }}" placeholder="Code or description — e.g. 99309, discharge…" style="width: 300px; height: 38px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 14px; font-size: 13px; font-family: 'JetBrains Mono', monospace; outline: none;">
+            <sc-if value="{{ hasSuggestions }}" hint-placeholder-val="{{ false }}">
+              <div style="position: absolute; top: 42px; right: 0; width: 380px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 10px; box-shadow: 0 14px 40px rgba(15,27,46,0.16); z-index: 40; padding: 4px; display: flex; flex-direction: column;">
+                <sc-for list="{{ suggestions }}" as="sg" hint-placeholder-count="5">
+                  <button onClick="{{ sg.onPick }}" style="display: flex; align-items: baseline; gap: 10px; padding: 8px 12px; border: none; border-radius: 7px; background: #FFFFFF; cursor: pointer; text-align: left;" style-hover="background: #F1EEFF;">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #5B46D6; width: 56px; flex-shrink: 0;">{{ sg.cpt }}</span>
+                    <span style="font-size: 12.5px; color: #0F1B2E;">{{ sg.desc }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">This practice's top codes</span>
+          <sc-for list="{{ cptChips }}" as="c" hint-placeholder-count="8">
+            <button onClick="{{ c.onClick }}" title="{{ c.desc }}" style="padding: 6px 12px; border-radius: 9999px; border: 1px solid {{ c.border }}; background: {{ c.bg }}; color: {{ c.fg }}; font-size: 12px; font-weight: 700; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: all 150ms ease-out;">{{ c.cpt }}</button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ hasLookup }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 0; border: 1px solid #EEEEEE; border-radius: 8px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 2fr); gap: 0; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 16px; border-bottom: 1px solid #EEEEEE; background: #F8FAFC;">
+              <span>{{ lookupHeader }}</span><span style="text-align: right;">Expected allowed</span><span style="padding-left: 24px;">Basis</span><span>Recent payments say</span>
+            </div>
+            <sc-for list="{{ lookupRows }}" as="lr" hint-placeholder-count="8">
+              <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 2fr); gap: 0; align-items: center; padding: 10px 16px; border-bottom: 1px solid #F1F5F9; background: {{ lr.bg }};">
+                <span style="font-size: 13px; font-weight: 600; color: #0F1B2E;">{{ lr.payer }}</span>
+                <span style="text-align: right; font-size: 13px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: {{ lr.amtFg }};">{{ lr.amount }}</span>
+                <span style="padding-left: 24px;"><span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: {{ lr.tagBg }}; color: {{ lr.tagFg }}; font-size: 10.5px; font-weight: 700; font-family: 'JetBrains Mono', monospace;">{{ lr.tag }}</span></span>
+                <span style="font-size: 12px; color: {{ lr.noteFg }}; line-height: 17px;">{{ lr.note }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ lookupEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 14px 16px; border: 1px dashed #E5E7EB; border-radius: 8px; font-size: 12.5px; color: #94A3B8;">No CPT matching "{{ lookupInput }}" in this practice's billed mix. Try one of the chips above.</div>
+        </sc-if>
+      </div>
+
+      <!-- Contracts table -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; border-bottom: 1px solid #EEEEEE;">
+          <input onInput="{{ onPayerQ }}" value="{{ payerQ }}" placeholder="Search payers…" style="width: 220px; height: 34px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 12px; font-size: 12.5px; outline: none;">
+          <sc-for list="{{ payerFilters }}" as="pf" hint-placeholder-count="4">
+            <button onClick="{{ pf.onClick }}" style="padding: 6px 13px; border-radius: 9999px; border: 1px solid {{ pf.border }}; background: {{ pf.bg }}; color: {{ pf.fg }}; font-size: 11.5px; font-weight: 700; cursor: pointer;">{{ pf.label }}</button>
+          </sc-for>
+          <div style="flex: 1;"></div>
+          <span style="font-size: 11.5px; color: #94A3B8;">{{ payerCountLabel }}</span>
+        </div>
+        <div style="display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.3fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1.2fr); gap: 0; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 20px; border-bottom: 1px solid #E5E7EB;">
+          <span>Payer</span><span>Rate basis</span><span>Effective</span><span style="text-align: right;">Timely filing</span><span style="text-align: right;">Code coverage</span><span style="text-align: right;">Payments agree</span><span style="text-align: right; padding-left: 12px;">Drift</span>
+        </div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+          <button onClick="{{ r.onClick }}" style="display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.3fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1.2fr); width: 100%; text-align: left; align-items: center; padding: 13px 20px; border: none; border-bottom: 1px solid #F1F5F9; background: {{ r.rowBg }}; cursor: pointer; transition: background 120ms ease-out;" style-hover="background: #F8F7FF;">
+            <span style="font-size: 13px; font-weight: 700; color: #0F1B2E; padding-right: 12px;">{{ r.payer }}</span>
+            <span><span style="display: inline-flex; padding: 3px 10px; border-radius: 9999px; background: {{ r.basisBg }}; color: {{ r.basisFg }}; font-size: 11px; font-weight: 700;">{{ r.basisLabel }}</span></span>
+            <span style="font-size: 12px; color: #6B7280;">{{ r.effective }}</span>
+            <span style="text-align: right; font-size: 12px; color: #6B7280; font-variant-numeric: tabular-nums;">{{ r.filing }}</span>
+            <span style="text-align: right; font-size: 12.5px; font-weight: 600; color: {{ r.covFg }}; font-variant-numeric: tabular-nums;">{{ r.coverage }}</span>
+            <span style="text-align: right; font-size: 12px; color: #6B7280; font-variant-numeric: tabular-nums;">{{ r.validation }}</span>
+            <span style="text-align: right; padding-left: 12px;"><span style="display: inline-flex; padding: 3px 10px; border-radius: 9999px; background: {{ r.driftBg }}; color: {{ r.driftFg }}; font-size: 11px; font-weight: 700; white-space: nowrap;">{{ r.driftLabel }}</span></span>
+          </button>
+        </sc-for>
+      </div>
+
+      <p style="font-size: 12px; color: #94A3B8; margin: 0;">Contracts are maintained here by the billing company (manager role); Ops sees them read-only on the company record. Every rate carries provenance — the recent payments that validated or contradicted it. When payments consistently disagree, the agent proposes a rate review as a decision in the Agent Inbox; rates never change automatically.</p>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <!-- ===== Detail panel ===== -->
+  <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePanel }}" style="position: fixed; inset: 0; background: rgba(15,27,46,0.4); z-index: 50;"></div>
+    <div style="position: fixed; top: 0; right: 0; bottom: 0; width: 600px; background: #FFFFFF; z-index: 51; box-shadow: -12px 0 40px rgba(15,27,46,0.18); display: flex; flex-direction: column; overflow-y: auto;">
+
+      <!-- Panel header -->
+      <div style="padding: 22px 24px 18px; border-bottom: 1px solid #EEEEEE; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: {{ sel.basisBg }}; color: {{ sel.basisFg }}; font-size: 12px; font-weight: 700;">{{ sel.basisLabel }}</span>
+          <sc-if value="{{ sel.hasDrift }}" hint-placeholder-val="{{ false }}">
+            <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 700;">DRIFT ON {{ sel.driftCpt }}</span>
+          </sc-if>
+          <div style="flex: 1;"></div>
+          <button onClick="{{ closePanel }}" style="width: 32px; height: 32px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          </button>
+        </div>
+        <h2 style="font-size: 19px; font-weight: 700; margin: 0; line-height: 26px;">{{ sel.payer }}</h2>
+        <span style="font-size: 13px; color: #6B7280;">Effective {{ sel.effective }} · timely filing {{ sel.filing }} · Bell Medics · {{ practiceLabel }}</span>
+        <span style="font-size: 12.5px; color: #6B7280; line-height: 18px;">{{ sel.source }}</span>
+      </div>
+
+      <div style="padding: 20px 24px; display: flex; flex-direction: column; gap: 18px;">
+
+        <!-- Drift -->
+        <sc-if value="{{ sel.hasDrift }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-size: 11px; font-weight: 700; color: #B45309; text-transform: uppercase; letter-spacing: 0.06em;">Drift — payments disagree with this rate</span>
+            <div style="background: #FFF7ED; border: 1px solid #F5D9A8; border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #0F1B2E;">{{ sel.driftCpt }}</span>
+                <span style="font-size: 12.5px; color: #6B7280;">loaded <strong style="color: #0F1B2E; font-family: 'JetBrains Mono', monospace;">{{ sel.driftContracted }}</strong></span>
+                <span style="font-size: 12.5px; color: #6B7280;">avg paid <strong style="color: #B45309; font-family: 'JetBrains Mono', monospace;">{{ sel.driftPaid }}</strong></span>
+                <span style="display: inline-flex; padding: 2px 10px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 11px; font-weight: 700;">{{ sel.driftPct }} of contract</span>
+              </div>
+              <span style="font-size: 12.5px; line-height: 19px; color: #0F1B2E;">{{ sel.driftSummary }}</span>
+              <span style="font-size: 12.5px; line-height: 19px; color: #6B7280;">{{ sel.driftProposal }}</span>
+              <sc-if value="{{ sel.driftActionable }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; gap: 10px;">
+                  <button onClick="{{ approveDrift }}" style="padding: 9px 16px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">Approve Rate Review</button>
+                  <button onClick="{{ dismissDrift }}" style="padding: 9px 16px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12.5px; font-weight: 700; cursor: pointer;" style-hover="background: #F1F5F9;">Dismiss Flag</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ sel.driftQueued }}" hint-placeholder-val="{{ false }}">
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 9999px; background: #E7F5EF; color: #1B7F5E; font-size: 12px; font-weight: 600; align-self: flex-start;">Rate review approved — decision created in the Agent Inbox</span>
+              </sc-if>
+              <sc-if value="{{ sel.driftDismissed }}" hint-placeholder-val="{{ false }}">
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 9999px; background: #F1F5F9; color: #64748B; font-size: 12px; font-weight: 600; align-self: flex-start;">Flag dismissed — agent will re-raise if the pattern persists another 30 days</span>
+              </sc-if>
+              <sc-if value="{{ sel.driftInferredNote }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size: 11.5px; color: #B45309;">Inferred rate — flag-only. No appeal or reprocess can be proposed until an exhibit is loaded.</span>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- Rates -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Rates — this practice's billed mix</span>
+            <div style="flex: 1;"></div>
+            <span style="font-size: 11px; color: #94A3B8;">sample of {{ sel.coverage }} covered codes</span>
+          </div>
+          <div style="border: 1px solid #EEEEEE; border-radius: 8px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 76px minmax(0, 1fr) 110px 110px; gap: 0; font-size: 10.5px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; padding: 9px 14px; border-bottom: 1px solid #EEEEEE; background: #F8FAFC;">
+              <span>CPT</span><span>Description</span><span style="text-align: right;">Expected</span><span style="text-align: right;">Avg paid 90d</span>
+            </div>
+            <sc-for list="{{ sel.rateRows }}" as="rr" hint-placeholder-count="10">
+              <div style="display: grid; grid-template-columns: 76px minmax(0, 1fr) 110px 110px; gap: 0; align-items: center; padding: 8px 14px; border-bottom: 1px solid #F8FAFC; background: {{ rr.bg }};">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #5B46D6;">{{ rr.cpt }}</span>
+                <span style="font-size: 12px; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 10px;">{{ rr.desc }}</span>
+                <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: {{ rr.expFg }};">{{ rr.expected }}</span>
+                <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{ rr.paidFg }};">{{ rr.paid }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Provenance -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div style="background: #F8FAFC; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Validation</span>
+            <span style="font-size: 12.5px; color: #0F1B2E; line-height: 18px;">{{ sel.validationLong }}</span>
+          </div>
+          <div style="background: #F8FAFC; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Ownership</span>
+            <span style="font-size: 12.5px; color: #0F1B2E; line-height: 18px;">Maintained by Bell Medics (manager role). Ops sees this contract read-only. Changes land in the Audit Log.</span>
+          </div>
+        </div>
+
+        <!-- Versions -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Exhibit versions</span>
+          <sc-if value="{{ sel.hasVersions }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 0;">
+              <sc-for list="{{ sel.versions }}" as="v" hint-placeholder-count="2">
+                <div style="display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid #F1F5F9; align-items: baseline;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5B46D6; white-space: nowrap; font-weight: 700;">{{ v.eff }}</span>
+                  <span style="font-size: 12.5px; line-height: 18px; color: #0F1B2E;">{{ v.note }}</span>
+                  <div style="flex: 1;"></div>
+                  <span style="font-size: 11px; color: #94A3B8; white-space: nowrap;">{{ v.by }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sel.noVersions }}" hint-placeholder-val="{{ false }}">
+            <div style="padding: 12px 14px; border: 1px dashed #E5E7EB; border-radius: 8px; font-size: 12.5px; color: #94A3B8;">No exhibit on file. Rates are inferred from paid-claims history until one is loaded.</div>
+          </sc-if>
+        </div>
+      </div>
+
+      <div style="flex: 1;"></div>
+
+      <!-- Actions -->
+      <div style="padding: 16px 24px 20px; border-top: 1px solid #EEEEEE; display: flex; gap: 10px; align-items: center; background: #FFFFFF; position: sticky; bottom: 0;">
+        <span style="flex: 1; font-size: 12px; color: #6B7280;">{{ sel.footerNote }}</span>
+        <button onClick="{{ openUpload }}" style="padding: 11px 18px; border-radius: 5px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;" style-hover="background: #F1EEFF;">{{ sel.uploadLabel }}</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===== Bulk import modal (Phase 10.5) ===== -->
+  <sc-if value="{{ bulkOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeBulk }}" style="position: fixed; inset: 0; background: rgba(15,27,46,0.4); z-index: 90;"></div>
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 620px; background: #FFFFFF; border-radius: 12px; z-index: 91; box-shadow: 0 20px 60px rgba(15,27,46,0.25); display: flex; flex-direction: column; overflow: hidden;">
+      <div style="padding: 20px 24px 14px; border-bottom: 1px solid #EEEEEE; display: flex; align-items: center; gap: 10px;">
+        <h3 style="font-size: 17px; font-weight: 700; margin: 0;">Bulk Import Exhibits</h3>
+        <span style="font-size: 12px; color: #94A3B8;">one CSV, many payers</span>
+        <div style="flex: 1;"></div>
+        <button onClick="{{ closeBulk }}" style="width: 32px; height: 32px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+      <div style="padding: 18px 24px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="border: 1.5px dashed #C9BDF7; border-radius: 8px; background: #FBFAFF; padding: 16px 22px; display: flex; align-items: center; gap: 12px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m17 8-5-5-5 5"></path><path d="M12 3v12"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 13px; font-weight: 600; color: #0F1B2E;">2026-renewals.csv</span>
+            <span style="font-size: 11.5px; color: #94A3B8;">columns: payer ID, CPT, modifier, allowed amount, effective date · 115 rows parsed</span>
+          </div>
+          <span style="margin-left: auto; display: inline-flex; padding: 3px 10px; border-radius: 9999px; background: #E7F5EF; color: #1B7F5E; font-size: 10.5px; font-weight: 700;">PARSED CLEAN</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0; border: 1px solid #EEEEEE; border-radius: 8px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) 110px 110px minmax(0, 1.4fr); gap: 0; font-size: 10.5px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; padding: 9px 14px; background: #F8FAFC; border-bottom: 1px solid #EEEEEE;">
+            <span>Payer</span><span style="text-align: right;">Rates</span><span style="text-align: right;">Effective</span><span style="padding-left: 20px;">Versus current</span>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) 110px 110px minmax(0, 1.4fr); gap: 0; align-items: center; padding: 10px 14px; border-bottom: 1px solid #F1F5F9; font-size: 12.5px;">
+            <span style="font-weight: 600;">Anthem MA</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px;">41</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px;">Aug 1</span><span style="padding-left: 20px; color: #1B7F5E; font-size: 12px;">+1.8% avg — renewal uplift</span>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) 110px 110px minmax(0, 1.4fr); gap: 0; align-items: center; padding: 10px 14px; border-bottom: 1px solid #F1F5F9; font-size: 12.5px;">
+            <span style="font-weight: 600;">Aetna MA HMO</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px;">40</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px;">Sep 1</span><span style="padding-left: 20px; color: #1B7F5E; font-size: 12px;">+1.2% avg</span>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) 110px 110px minmax(0, 1.4fr); gap: 0; align-items: center; padding: 10px 14px; font-size: 12.5px;">
+            <span style="font-weight: 600;">UHC Medicare Complete</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px;">34</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px;">Aug 1</span><span style="padding-left: 20px; color: #B45309; font-size: 12px;">−0.4% avg on 3 codes — flagged for review</span>
+          </div>
+        </div>
+        <span style="font-size: 12px; color: #94A3B8; line-height: 17px;">Each payer gets a new exhibit version from its effective date; prior versions keep pricing older dates of service. Every load is attributed and audit-logged, same as a single upload.</span>
+      </div>
+      <div style="padding: 14px 24px 18px; border-top: 1px solid #EEEEEE; display: flex; gap: 10px; justify-content: flex-end;">
+        <button onClick="{{ closeBulk }}" style="padding: 10px 18px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: #F1F5F9;">Cancel</button>
+        <button onClick="{{ confirmBulk }}" style="padding: 10px 18px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">Load 3 Exhibits · 115 rates</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===== Upload exhibit modal ===== -->
+  <sc-if value="{{ uploadOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeUpload }}" style="position: fixed; inset: 0; background: rgba(15,27,46,0.4); z-index: 90;"></div>
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 520px; background: #FFFFFF; border-radius: 12px; z-index: 91; box-shadow: 0 20px 60px rgba(15,27,46,0.25); display: flex; flex-direction: column; overflow: hidden;">
+      <div style="padding: 20px 24px 14px; border-bottom: 1px solid #EEEEEE; display: flex; align-items: center; gap: 10px;">
+        <h3 style="font-size: 17px; font-weight: 700; margin: 0;">Load Exhibit — {{ uploadPayer }}</h3>
+        <div style="flex: 1;"></div>
+        <button onClick="{{ closeUpload }}" style="width: 32px; height: 32px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+      <div style="padding: 18px 24px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="border: 1.5px dashed #C9BDF7; border-radius: 8px; background: #FBFAFF; padding: 22px; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m17 8-5-5-5 5"></path><path d="M12 3v12"></path></svg>
+          <span style="font-size: 13px; font-weight: 600; color: #0F1B2E;">Drop the per-CPT rate table (CSV) or key rates in</span>
+          <span style="font-size: 11.5px; color: #94A3B8;">Flat per-CPT exhibits only — columns: CPT, modifier, allowed amount</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Effective date</span>
+            <input onInput="{{ onUploadEff }}" value="{{ uploadEff }}" style="height: 38px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 12px; font-size: 13px; outline: none;">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Version note</span>
+            <input onInput="{{ onUploadNote }}" value="{{ uploadNote }}" placeholder="e.g. Renewal exhibit B-3" style="height: 38px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 12px; font-size: 13px; outline: none;">
+          </div>
+        </div>
+        <span style="font-size: 12px; color: #94A3B8; line-height: 17px;">The new version applies from its effective date; prior versions keep pricing older dates of service. Loading an exhibit is audit-logged.</span>
+      </div>
+      <div style="padding: 14px 24px 18px; border-top: 1px solid #EEEEEE; display: flex; gap: 10px; justify-content: flex-end;">
+        <button onClick="{{ closeUpload }}" style="padding: 10px 18px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: #F1F5F9;">Cancel</button>
+        <button onClick="{{ confirmUpload }}" style="padding: 10px 18px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">Load Exhibit</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    mainTab: 'rates',
+    lookupInput: (() => { try { return new URLSearchParams(location.search).get('cpt') || '99309'; } catch (e) { return '99309'; } })(),
+    selShort: null,
+    driftActions: {},          // payerShort -> 'queued' | 'dismissed'
+    uploadOpen: false,
+    payerQ: '',
+    payerFilter: 'all',
+    bulkOpen: false,
+    bulkLoaded: false,
+    uploadEff: 'Aug 1, 2026',
+    uploadNote: '',
+    extraVersions: {}          // payerShort -> [version, ...] prepended
+  };
+
+  componentDidMount() {
+    if (!window.ContractsStore) {
+      this._poll = setInterval(() => {
+        if (window.ContractsStore) { clearInterval(this._poll); this.forceUpdate(); }
+      }, 60);
+    }
+  }
+  componentWillUnmount() { if (this._poll) clearInterval(this._poll); }
+
+  renderVals() {
+    const S = window.ContractsStore;
+    const money = (n) => '$' + n.toFixed(2);
+    if (!S) {
+      return {
+        practiceLabel: 'Ibekie Foundation & partner facilities',
+        driftChipText: '\u2026', contractedCount: '\u2014', inferredCount: '\u2014', driftCount: '\u2014',
+        cptChips: [], lookupRows: [], rows: [], hasLookup: false, lookupEmpty: false,
+        hasSelection: false, uploadOpen: false, reviewQueued: false,
+        showRates: true, showEnrollment: false, enrollPayers: [], enrollRows: [],
+        goRates: () => {}, goEnrollment: () => this.setState({ mainTab: 'enrollment' }),
+        ratesTabBg: '#7B61FF', ratesTabFg: '#FFFFFF', enrollTabBg: '#FFFFFF', enrollTabFg: '#6B7280',
+        mainTabSummary: '',
+        lookupInput: this.state.lookupInput, lookupHeader: 'Payer',
+        onLookupInput: () => {}, sel: {}
+      };
+    }
+
+    const BASIS = {
+      EXHIBIT: ['#E7F5EF', '#1B7F5E'],
+      PUBLIC: ['#EAF3FF', '#1D4ED8'],
+      INFERRED: ['#F1F5F9', '#64748B']
+    };
+
+    const payers = S.payers();
+    const cpts = S.cpts();
+    const catalog = S.catalog ? S.catalog() : cpts;
+    const q = this.state.lookupInput.trim();
+    const qUpper = q.toUpperCase();
+    const activeCpt = catalog.find(c => c.cpt === qUpper) ? qUpper : null;
+    const activeCptRec = catalog.find(c => c.cpt === activeCpt);
+    const suggestions = (!activeCpt && q.length >= 2 && S.searchCatalog) ? S.searchCatalog(q, 7).map(sg => ({
+      cpt: sg.cpt, desc: sg.desc,
+      onPick: () => this.setState({ lookupInput: sg.cpt })
+    })) : [];
+
+    const cptChips = cpts.map(c => {
+      const on = c.cpt === activeCpt;
+      return {
+        cpt: c.cpt, desc: c.desc,
+        border: on ? '#7B61FF' : '#E5E7EB', bg: on ? '#F1EEFF' : '#FFFFFF', fg: on ? '#5B46D6' : '#6B7280',
+        onClick: () => this.setState({ lookupInput: c.cpt })
+      };
+    });
+
+    const driftState = (p) => this.state.driftActions[p.short] || (p.drift ? p.drift.status : null);
+
+    const lookupRows = activeCpt ? S.lookup(activeCpt).map(lr => {
+      const hasDrift = !!lr.drift;
+      const missing = lr.amount === null;
+      let note, noteFg = '#6B7280';
+      if (missing) { note = 'Not in this payer\u2019s exhibit \u2014 no rate on file for this code'; noteFg = '#94A3B8'; }
+      else if (hasDrift) { note = 'Averaging ' + money(lr.drift.avgPaid) + ' over the last ' + lr.drift.payments + ' payments \u2014 ' + lr.drift.pct + '% of this rate. Agent flagged drift.'; noteFg = '#B45309'; }
+      else if (lr.basis === 'INFERRED') { note = 'Inferred from paid-claims history \u2014 flag-only, never appeal grounds'; }
+      else { note = 'Recent payments match this rate'; }
+      return {
+        payer: lr.payer,
+        amount: missing ? '\u2014' : money(lr.amount),
+        amtFg: missing ? '#94A3B8' : (hasDrift ? '#B45309' : '#0F1B2E'),
+        tag: missing ? 'NO RATE' : lr.basisTag,
+        tagBg: missing ? '#F1F5F9' : (lr.basisTag === 'CONTRACTED' ? '#E7F5EF' : '#F1F5F9'),
+        tagFg: missing ? '#94A3B8' : (lr.basisTag === 'CONTRACTED' ? '#1B7F5E' : '#64748B'),
+        note, noteFg,
+        bg: hasDrift ? '#FFF7ED' : '#FFFFFF'
+      };
+    }) : [];
+
+    // ---- payer list: search + status filters + exceptions-first (10.5) ----
+    const pq = this.state.payerQ.trim().toLowerCase();
+    const pf = this.state.payerFilter;
+    const attention = (p) => p.drift ? 0 : (p.billed - p.covered > 2 ? 1 : (p.basis === 'INFERRED' ? 2 : 3));
+    const visiblePayers = payers.filter(p => {
+      if (pq && !p.names.some(n => n.toLowerCase().indexOf(pq) >= 0)) return false;
+      if (pf === 'drift' && !p.drift) return false;
+      if (pf === 'missing' && p.covered >= p.billed) return false;
+      if (pf === 'inferred' && p.basis !== 'INFERRED') return false;
+      return true;
+    }).sort((a, b) => attention(a) - attention(b));
+    const payerFilters = [
+      ['all', 'All'],
+      ['drift', 'Drift (' + payers.filter(p => p.drift).length + ')'],
+      ['missing', 'Missing codes (' + payers.filter(p => p.covered < p.billed).length + ')'],
+      ['inferred', 'Inferred-only (' + payers.filter(p => p.basis === 'INFERRED').length + ')']
+    ].map(f => {
+      const on = pf === f[0];
+      return {
+        label: f[1],
+        border: on ? '#7B61FF' : '#E5E7EB', bg: on ? '#F1EEFF' : '#FFFFFF', fg: on ? '#5B46D6' : '#6B7280',
+        onClick: () => this.setState({ payerFilter: f[0] })
+      };
+    });
+
+    const rows = visiblePayers.map(p => {
+      const b = BASIS[p.basis];
+      const ds = driftState(p);
+      let driftLabel = '\u2014', driftBg = '#FFFFFF', driftFg = '#94A3B8';
+      if (p.drift) {
+        if (ds === 'queued') { driftLabel = 'REVIEW QUEUED'; driftBg = '#E7F5EF'; driftFg = '#1B7F5E'; }
+        else if (ds === 'dismissed') { driftLabel = 'DISMISSED'; driftBg = '#F1F5F9'; driftFg = '#64748B'; }
+        else if (ds === 'proposed') { driftLabel = 'REVIEW PROPOSED'; driftBg = '#FEF3DF'; driftFg = '#B45309'; }
+        else { driftLabel = 'FLAGGED'; driftBg = '#FEF3DF'; driftFg = '#B45309'; }
+      }
+      return {
+        payer: p.short,
+        basisLabel: p.basisLabel.toUpperCase(), basisBg: b[0], basisFg: b[1],
+        effective: p.effective,
+        filing: p.timelyFiling + ' days',
+        coverage: p.covered + ' / ' + p.billed,
+        covFg: p.covered === p.billed ? '#1B7F5E' : (p.billed - p.covered > 3 ? '#B45309' : '#0F1B2E'),
+        validation: p.validation.agree + ' of ' + p.validation.payments,
+        driftLabel, driftBg, driftFg,
+        rowBg: this.state.selShort === p.short ? '#F8F7FF' : '#FFFFFF',
+        onClick: () => this.setState({ selShort: p.short })
+      };
+    });
+
+    // ---- selection ----
+    const selP = payers.find(p => p.short === this.state.selShort) || payers[0];
+    const selB = BASIS[selP.basis];
+    const selDs = driftState(selP);
+    const isInferred = selP.basis === 'INFERRED';
+    const rateRows = cpts.map(c => {
+      const r = S.rate(selP.short, c.cpt);
+      const isDriftCpt = selP.drift && selP.drift.cpt === c.cpt;
+      const paid = r === null ? null : (isDriftCpt ? selP.drift.avgPaid : r.amount * (0.985 + ((c.cpt.charCodeAt(4) % 3) * 0.005)));
+      return {
+        cpt: c.cpt, desc: c.desc,
+        expected: r === null ? '\u2014' : money(r.amount),
+        expFg: r === null ? '#94A3B8' : '#0F1B2E',
+        paid: r === null ? 'no rate on file' : money(paid),
+        paidFg: isDriftCpt ? '#B45309' : (r === null ? '#94A3B8' : '#6B7280'),
+        bg: isDriftCpt ? '#FFF7ED' : '#FFFFFF'
+      };
+    });
+    const versions = (this.state.extraVersions[selP.short] || []).concat(selP.versions);
+
+    const sel = {
+      payer: selP.payer || selP.short,
+      basisLabel: selP.basisLabel.toUpperCase(), basisBg: selB[0], basisFg: selB[1],
+      effective: versions.length ? versions[0].eff : selP.effective,
+      filing: selP.timelyFiling + ' days',
+      source: selP.source,
+      coverage: selP.covered + ' of ' + selP.billed,
+      hasDrift: !!selP.drift,
+      driftCpt: selP.drift ? selP.drift.cpt : '',
+      driftContracted: selP.drift ? money(selP.drift.contracted) : '',
+      driftPaid: selP.drift ? money(selP.drift.avgPaid) : '',
+      driftPct: selP.drift ? selP.drift.pct + '%' : '',
+      driftSummary: selP.drift ? selP.drift.summary : '',
+      driftProposal: selP.drift ? selP.drift.proposal : '',
+      driftActionable: !!selP.drift && !isInferred && selDs !== 'queued' && selDs !== 'dismissed',
+      driftQueued: selDs === 'queued',
+      driftDismissed: selDs === 'dismissed',
+      driftInferredNote: !!selP.drift && isInferred,
+      rateRows,
+      validationLong: selP.validation.agree + ' of ' + selP.validation.payments + ' payments (' + selP.validation.window + ') matched the ' + (isInferred ? 'inferred' : 'loaded') + ' rates within $1. Disagreements feed the drift detector nightly.',
+      hasVersions: versions.length > 0,
+      noVersions: versions.length === 0,
+      versions,
+      footerNote: isInferred
+        ? 'Loading an exhibit converts these rates to CONTRACTED \u2014 appealable and enforceable.'
+        : 'A new exhibit versions on top; prior versions keep pricing older dates of service.',
+      uploadLabel: isInferred ? 'Load First Exhibit' : 'Load New Exhibit'
+    };
+
+    const contractedCount = payers.filter(p => p.basis !== 'INFERRED').length;
+    const inferredCount = payers.filter(p => p.basis === 'INFERRED').length;
+    const driftCount = payers.filter(p => p.drift).length;
+    const proposedCount = payers.filter(p => p.drift && driftState(p) === 'proposed').length;
+
+    // ---- provider enrollment (light tracker) ----
+    const enrollPayers = ['Medicare', 'IN Medicaid', 'MHS HIP', 'Anthem MA', 'UHC', 'Aetna', 'Humana', 'Prov. Partners', 'VA'];
+    const CELL = {
+      A: ['Active', '#E7F5EF', '#1B7F5E'],
+      P: ['Pending', '#FEF3DF', '#B45309'],
+      D: ['Due Aug 30', '#FEF3DF', '#B45309'],
+      H: ['Pending · held', '#FEECEC', '#DC2626'],
+      N: ['\u2014', '#F1F5F9', '#94A3B8']
+    };
+    const mkCells = (states, tips) => states.map((s, i) => {
+      const c = CELL[s];
+      return { label: c[0], bg: c[1], fg: c[2], tip: tips && tips[i] ? tips[i] : (s === 'A' ? 'Active \u00b7 effective date on file' : s === 'N' ? 'Not enrolled \u2014 claims held if billed' : '') };
+    });
+    const enrollRows = [
+      { name: 'Oranu Ibekie, MD', sub: 'Attending \u00b7 NPI 1568423771', cells: mkCells(['D', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'H'], ['Revalidation due Aug 30 \u2014 packet drafted', null, null, null, null, null, null, null, 'Pending 62 days \u00b7 9 claims held ($7,095)']) },
+      { name: 'Amara Osei, NP', sub: 'NP \u00b7 NPI 1093551208', cells: mkCells(['A', 'A', 'N', 'A', 'A', 'A', 'A', 'A', 'N'], [null, null, 'Not enrolled \u2014 visits held; bill under supervising physician', null, null, null, null, null, null]) },
+      { name: 'James Whitfield, NP', sub: 'NP \u00b7 NPI 1447209866', cells: mkCells(['A', 'A', 'A', 'A', 'A', 'A', 'P', 'A', 'N'], [null, null, null, null, null, null, 'Application submitted Jul 1 \u00b7 typical 45 days', null, null]) },
+      { name: 'Sandra Ellis, MD', sub: 'Attending \u00b7 started May 2026', cells: mkCells(['A', 'A', 'P', 'A', 'P', 'P', 'A', 'N', 'N'], [null, null, 'Application submitted Jun 12', null, 'Application submitted Jun 20', 'Application submitted Jun 20', null, 'Not yet applied', null]) }
+    ];
+    const isRates = this.state.mainTab === 'rates';
+
+    return {
+      practiceLabel: 'Ibekie Foundation & partner facilities',
+      showRates: isRates,
+      showEnrollment: !isRates,
+      goRates: () => this.setState({ mainTab: 'rates' }),
+      goEnrollment: () => this.setState({ mainTab: 'enrollment' }),
+      ratesTabBg: isRates ? '#7B61FF' : '#FFFFFF', ratesTabFg: isRates ? '#FFFFFF' : '#6B7280',
+      enrollTabBg: isRates ? '#FFFFFF' : '#7B61FF', enrollTabFg: isRates ? '#6B7280' : '#FFFFFF',
+      mainTabSummary: isRates ? 'expected payment per payer \u00b7 exhibits, public schedules, inferred rates' : '4 providers \u00d7 9 payers \u00b7 statuses feed claim-level prevention',
+      enrollPayers, enrollRows,
+      driftChipText: proposedCount > 0 ? proposedCount + ' rate review proposed' : driftCount + ' drift flags',
+      reviewQueued: Object.values(this.state.driftActions).indexOf('queued') >= 0,
+      contractedCount, inferredCount, driftCount,
+      cptChips,
+      lookupInput: this.state.lookupInput,
+      onLookupInput: (e) => this.setState({ lookupInput: e.target.value }),
+      hasLookup: !!activeCpt,
+      lookupEmpty: q.length >= 4 && !activeCpt && suggestions.length === 0,
+      suggestions,
+      hasSuggestions: suggestions.length > 0,
+      catalogSizeLabel: (S.catalogSize || 2847).toLocaleString() + ' codes',
+      payerQ: this.state.payerQ,
+      onPayerQ: (e) => this.setState({ payerQ: e.target.value }),
+      payerFilters,
+      payerCountLabel: visiblePayers.length + ' of ' + payers.length + ' payers with billed volume this quarter · exceptions sort first',
+      showBulkBtn: isRates,
+      bulkOpen: this.state.bulkOpen,
+      bulkLoaded: this.state.bulkLoaded,
+      openBulk: () => this.setState({ bulkOpen: true }),
+      closeBulk: () => this.setState({ bulkOpen: false }),
+      confirmBulk: () => this.setState(s => {
+        const stamp = ' \u00b7 bulk CSV \u00b7 Angela Mensah \u00b7 Jul 13, 2026';
+        const adds = {
+          'Anthem MA': { eff: 'Aug 1, 2026', note: '2026 renewal, +1.8% avg' + stamp, by: 'Angela Mensah \u00b7 Jul 13, 2026' },
+          'Aetna MA HMO': { eff: 'Sep 1, 2026', note: '2026 renewal, +1.2% avg' + stamp, by: 'Angela Mensah \u00b7 Jul 13, 2026' },
+          'UHC Medicare Complete': { eff: 'Aug 1, 2026', note: '2026 renewal \u00b7 3 codes flagged for review' + stamp, by: 'Angela Mensah \u00b7 Jul 13, 2026' }
+        };
+        const ev = Object.assign({}, s.extraVersions);
+        Object.keys(adds).forEach(k => { ev[k] = [adds[k]].concat(ev[k] || []); });
+        return { extraVersions: ev, bulkOpen: false, bulkLoaded: true };
+      }),
+      lookupHeader: activeCptRec ? activeCpt + ' \u2014 ' + activeCptRec.desc : 'Payer',
+      lookupRows,
+      rows,
+      hasSelection: !!this.state.selShort,
+      sel,
+      closePanel: () => this.setState({ selShort: null, uploadOpen: false }),
+      approveDrift: () => this.setState(s => ({ driftActions: Object.assign({}, s.driftActions, { [selP.short]: 'queued' }) })),
+      dismissDrift: () => this.setState(s => ({ driftActions: Object.assign({}, s.driftActions, { [selP.short]: 'dismissed' }) })),
+      uploadOpen: this.state.uploadOpen,
+      uploadPayer: selP.short,
+      uploadEff: this.state.uploadEff,
+      uploadNote: this.state.uploadNote,
+      onUploadEff: (e) => this.setState({ uploadEff: e.target.value }),
+      onUploadNote: (e) => this.setState({ uploadNote: e.target.value }),
+      openUpload: () => this.setState({ uploadOpen: true }),
+      closeUpload: () => this.setState({ uploadOpen: false }),
+      confirmUpload: () => this.setState(s => {
+        const v = { eff: s.uploadEff || 'Aug 1, 2026', note: s.uploadNote || 'New exhibit loaded', by: 'Angela Mensah \u00b7 Jul 13, 2026' };
+        const cur = s.extraVersions[selP.short] || [];
+        return { extraVersions: Object.assign({}, s.extraVersions, { [selP.short]: [v].concat(cur) }), uploadOpen: false, uploadNote: '' };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

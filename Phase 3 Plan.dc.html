@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<div style="max-width: 860px; margin: 0 auto; padding: 48px 40px 80px; display: flex; flex-direction: column; gap: 26px;" data-screen-label="Phase 3 Plan">
+
+  <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 2px solid #7B61FF; padding-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 700;">PLAN — FOR YOUR APPROVAL</span>
+      <span style="font-size: 12px; color: #6B7280;">Jul 9, 2026 · follows PRD §9 Phase 3 · built on your Ops Admin portal screenshots</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 700; margin: 0;">Phase 3 — Operations Admin: Billing Companies</h1>
+    <p style="font-size: 14px; line-height: 22px; color: #6B7280; margin: 0;">Billing Companies becomes a native section of your existing Operations Admin portal — recreated faithfully from the nine screenshots you attached — so Otangeles staff can onboard, monitor, and enter billing companies the same way they already manage Medical Practices.</p>
+  </div>
+
+  <!-- 1 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">1 · Leverage — recreate your real Ops Admin shell</h2>
+    <p style="font-size: 14px; line-height: 22px; margin: 0;">From the screenshots I'll recreate the portal chrome exactly: the Otangeles Notes+ header with "Operations Admin Portal", the Ctrl-K search, the grouped left nav (Overview / People / System / Insights / Personal), teal active states and CTAs, violet page titles, the stat-card row, and the "All Systems Operational" + "Operations Admin Mode — changes are audited" footer widgets.</p>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li><strong>Billing Companies</strong> joins the Overview nav group directly under Medical Practices — same list-card pattern, same "View Info / Enter Portal" convention.</li>
+      <li><strong>Enter Portal actually works:</strong> it opens the Bell Medics Billing Portal we built in Phases 1–2, live numbers and all — a real cross-portal demo.</li>
+      <li>Existing nav items (Dashboard, Medical Practices, Users, …) render as static links so the shell feels whole; only the new Billing screens are interactive.</li>
+    </ul>
+  </div>
+
+  <!-- 2 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">2 · New screens (4)</h2>
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Billing Companies — list <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Ops Billing Companies.dc.html</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Mirrors your Medical Practices screen: stat cards (Billing Companies · Active · Onboarding · Billing Users), search, and a company card per tenant — Bell Medics (Active, 2 practices served, 5 users, live open-AR and claims-in-flight pulled from the claims store) plus one company mid-onboarding to show that state. Actions: View Info → detail, Enter Portal → Billing Home.</p>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Company detail — 4 tabs <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Ops Company Detail.dc.html</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;"><strong>Overview</strong> (profile, contract practices, health stats) · <strong>Team</strong> (the same roster the Bell Medics manager sees in Settings — read from the shared team store) · <strong>Practices</strong> (IFC + Westbrook links with per-practice AR figures) · <strong>Activity</strong> (audit-style event list in your Audit Log visual language: suspend/reactivate, practice linked, admin invited).</p>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Onboarding wizard <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Ops Onboard Company.dc.html</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">4 steps, matching your Onboarding page's step visual language: Company profile → Invite Billing Manager → Assign practices → Review &amp; create. Finishing adds the company as a pending row on the list (persisted), with the manager invite mirroring your "Email invitation → accepted" flow.</p>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Ops Dashboard — Billing tile <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Ops Dashboard.dc.html</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Your Operations Admin Dashboard recreated (stat row, Portal Activity chart, Role Distribution donut) with the new <strong>Billing Companies</strong> tile in the stat row and a Billing Manager slice in Role Distribution — showing the feature in its landing context, tagged NEW.</p>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">3 · Boundaries &amp; fidelity notes</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 6px;">
+      <li><strong>Separate surface, no role-switcher mixing:</strong> the Ops portal is its own set of pages (persona: Michael, Operations Admin). The Bell Medics portal is untouched except that Enter Portal lands on it.</li>
+      <li><strong>Fonts approximated:</strong> your portal's rounded heading face will be matched from Google Fonts (looks like Poppins/Quicksand family) — flag me if you have the exact font.</li>
+      <li>Suspend/reactivate a company is included; billing-plan/invoicing management is <strong>out</strong> (not in the PRD).</li>
+      <li>Your existing Ops screens (Users, Facilities, Notifications, …) are not rebuilt — nav links to them stay inert in the prototype.</li>
+    </ul>
+  </div>
+
+  <!-- 4 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">4 · Deliverables &amp; QA</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li>New: the 4 screens above + <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">ops-shell.js</span> (shared header/nav) and <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">companies-store.js</span> (company + onboarding state, persisted).</li>
+      <li>Reads the existing <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">team-store.js</span> / <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">claims-store.js</span> so Ops sees the same live Bell Medics numbers.</li>
+      <li>QA Checklist gains "NEW — Phase 3" (~8 steps): list → detail tabs → wizard end-to-end → dashboard tile → Enter Portal round-trip.</li>
+    </ul>
+  </div>
+
+  <div style="border-top: 1px solid #E5E7EB; padding-top: 16px; font-size: 12px; color: #94A3B8;">Otangeles Note+ · Phase 3 plan — approve, edit, or comment; build starts on your go.</div>
+
+</div>
+
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<div style="max-width: 860px; margin: 0 auto; padding: 48px 40px 80px; display: flex; flex-direction: column; gap: 26px;" data-screen-label="Phase 2 Plan">
+
+  <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 2px solid #7B61FF; padding-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #E6F7F2; color: #0B7D6C; font-size: 12px; font-weight: 700;">APPROVED &amp; DELIVERED — JUL 9</span>
+      <span style="font-size: 12px; color: #6B7280;">Jul 9, 2026 · follows PRD §5.6, §5.1, §9 · QA steps T1–T9 verified</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 700; margin: 0;">Phase 2 — Settings &amp; Team</h1>
+    <p style="font-size: 14px; line-height: 22px; color: #6B7280; margin: 0;">Bell Medics manages its own people inside the Billing Portal: a Settings screen with the team roster and invite flow, the manager/rep role difference made visible, and the manager's per-rep workload strip on the Dashboard.</p>
+  </div>
+
+  <!-- 1 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">1 · Role switching — how you'll demo both sides</h2>
+    <p style="font-size: 14px; line-height: 22px; margin: 0;">The role difference is the point of this phase, so the prototype needs a way to be both people. The avatar menu (top bar, every page) gains a <strong>"Sign in as"</strong> switcher with the two personas:</p>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li><strong>Angela Mensah</strong> — AR Rep (default, today's persona)</li>
+      <li><strong>Derek Okafor</strong> — Billing Manager (the escalation target from the Agent Inbox)</li>
+    </ul>
+    <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Persisted like the practice switcher, so every page re-scopes to the chosen role. Built as a small shared component (same pattern as practice-switcher.js) so all six pages get it with one header change.</p>
+  </div>
+
+  <!-- 2 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">2 · New screen — Settings (Settings.dc.html)</h2>
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Team tab <span style="font-size: 11px; font-weight: 700; color: #5B46D6; background: #F1EEFF; border-radius: 9999px; padding: 2px 8px; margin-left: 6px;">MANAGER ONLY</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Roster table of the real reps already in the claims data — Angela Mensah, Rob Tanaka, Priya Kapoor, Sam Osei + Derek — with role, assigned practices (IFC / Westbrook), status, last active, and live due-today load pulled from the shared claims store. Actions: <strong>Invite Rep</strong> (email + role + practice assignment → pending row until "accepted"), deactivate / reactivate, edit practice assignments. All changes persist and survive reload. As a rep, this tab shows a locked state explaining it's manager-only — the visible role boundary.</p>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Company profile tab</span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Bell Medics name, primary contact, address, and a logo slot you can drop a real logo onto. Editable by the manager; read-only for reps.</p>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Notifications tab</span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Per-user toggles, persisted per persona: SLA breaches, appeal outcomes, practice replies, weekly report ready. Both roles see this tab.</p>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">3 · Touches to existing pages</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 6px;">
+      <li><strong>Nav (all 6 pages):</strong> Settings item added last, icon rail + expanded panel, per the PRD's IA.</li>
+      <li><strong>Header (all 6 pages):</strong> avatar becomes the persona from the role switcher.</li>
+      <li><strong>Dashboard (manager only):</strong> a per-rep workload strip — each rep's due-today count for the selected practice, computed from the claims store; each chip links into the AR Worklist. Angela's rep view is unchanged.</li>
+      <li><strong>Agent Inbox escalation:</strong> when signed in as Derek, an escalated decision shows on his side as "Escalated to you" with the ability to decide it — closing the loop Angela starts.</li>
+    </ul>
+  </div>
+
+  <!-- 4 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">4 · Explicitly out (unless you say otherwise)</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li><strong>Claims list landing</strong> — PRD marks it "optional" for Phase 2; the worklist stays the primary entry. Say the word and I'll fold it in.</li>
+      <li>Real email delivery for invites (pending state simulates acceptance).</li>
+      <li>Per-payer books of business (open question §10 — assignment stays per-practice).</li>
+    </ul>
+  </div>
+
+  <!-- 5 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">5 · Deliverables &amp; QA</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li>New: <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">Settings.dc.html</span>, <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">role-switcher.js</span>, <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">team-store.js</span> (roster + invite state, shared with Dashboard).</li>
+      <li>Edited: all 6 existing pages (nav + header), Billing Home (rep strip), Agent Inbox v3 (Derek's escalation view).</li>
+      <li>QA Checklist gains a "NEW — Phase 2" section (~8 steps) covering both roles, pre-verified before handing you the walkthrough.</li>
+    </ul>
+  </div>
+
+  <div style="border-top: 1px solid #E5E7EB; padding-top: 16px; font-size: 12px; color: #94A3B8;">Otangeles Note+ · Phase 2 plan — approve, edit, or comment; build starts on your go.</div>
+
+</div>
+</x-dc>
+</body>
+</html>

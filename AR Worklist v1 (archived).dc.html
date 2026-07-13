@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button, select, input, textarea { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="AR Worklist (Bell Medics)">
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="uploads/WhatsApp Image 2026-07-03 at 12.03.08 (2).jpeg" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <div style="margin-left: 16px; flex: 0 1 480px; background: #F8FAFC; border: 1px solid #E5E7EB; border-radius: 5px; height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 14px; font-size: 14px; color: #94A3B8;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+      Search patients, claims, payer refs…
+    </div>
+    <div style="flex: 1;"></div>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <div style="display: flex; align-items: center; gap: 10px; margin-left: 4px; cursor: pointer;">
+      <div style="width: 36px; height: 36px; border-radius: 9999px; background: linear-gradient(#7B61FF, #22C5A7); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px;">AM</div>
+      <div style="display: flex; flex-direction: column;">
+        <span style="font-weight: 700; font-size: 13px; color: #0F1B2E;">Angela Mensah</span>
+        <span style="font-size: 11px; color: #6B7280;">Bell Medics · AR Rep</span>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+    </div>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav ===== -->
+    <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700;" style-hover="background: #F1F5F9;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10H3"></path><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect></svg>
+        Schedules
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700;" style-hover="background: #F1F5F9;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path></svg>
+        Calendar
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700;" style-hover="background: #F1F5F9;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+        Workflows
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700;" style-hover="background: #F1F5F9;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        Directory
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Billing
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px; padding-left: 26px;">
+          <a href="Agent Inbox v3.dc.html" style="padding: 8px 14px; border-radius: 4px; color: #6B7280; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;" style-hover="background: #F1F5F9;">Agent Inbox</a>
+          <div style="padding: 8px 14px; border-radius: 4px; background: #F1EEFF; color: #5B46D6; font-size: 13px; font-weight: 700; cursor: pointer;">AR Worklist</div>
+          <a href="Claim Detail.dc.html" style="padding: 8px 14px; border-radius: 4px; color: #6B7280; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;" style-hover="background: #F1F5F9;">Claims</a>
+          <a href="Analytics.dc.html" style="padding: 8px 14px; border-radius: 4px; color: #6B7280; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;" style-hover="background: #F1F5F9;">Analytics</a>
+        </div>
+      </div>
+      <div style="flex: 1;"></div>
+      <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+        <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+        Reach the billing support desk 24/7.
+      </div>
+    </div>
+
+    <!-- ===== Main content ===== -->
+    <div style="flex: 1; padding: 24px 28px; display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+
+      <!-- Title -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <h1 style="font-size: 24px; font-weight: 700; margin: 0;">AR Worklist</h1>
+        <span style="font-size: 13px; color: #6B7280;">AR assigned to Bell Medics · synced from Prognosis EHR, updated hourly · Tue, Jul 7 2026</span>
+        <div style="flex: 1;"></div>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 600;">{{ dueChipText }}</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 12px; font-weight: 600;">{{ totalArChipText }}</span>
+      </div>
+
+      <!-- ===== Weekly report strip ===== -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; gap: 28px;">
+        <div style="display: flex; flex-direction: column; gap: 2px; min-width: 150px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Weekly report to the practice</span>
+          <span style="font-size: 12px; color: #6B7280;">Compiled automatically from logged touches — replaces the Excel report</span>
+        </div>
+        <div style="width: 1px; align-self: stretch; background: #EEEEEE;"></div>
+        <div style="display: flex; flex-direction: column; gap: 1px;">
+          <span style="font-size: 20px; font-weight: 700; color: #0F1B2E;">{{ touchesWeekText }}</span>
+          <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Touches this week</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 1px;">
+          <span style="font-size: 20px; font-weight: 700; color: #0F1B2E;">{{ accountsWorkedText }}</span>
+          <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Claims worked</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 1px;">
+          <span style="font-size: 20px; font-weight: 700; color: #109680;">{{ collectedText }}</span>
+          <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Collected MTD</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 1px;">
+          <span style="font-size: 20px; font-weight: 700; color: #DC2626;">{{ oldestText }}</span>
+          <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Oldest open AR</span>
+        </div>
+        <div style="flex: 1;"></div>
+        <a href="Analytics.dc.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 5px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: background 150ms ease-out;" style-hover="background: #F1EEFF;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+          View Analytics
+        </a>
+      </div>
+
+      <!-- ===== Group tiles ===== -->
+      <div style="display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap;">
+        <sc-for list="{{ buckets }}" as="bk" hint-placeholder-count="5">
+          <button onClick="{{ bk.onClick }}" style="flex: 1 1 120px; min-width: 120px; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; background: {{ bk.bg }}; border: 1px solid {{ bk.border }}; border-radius: 12px; padding: 12px 16px; cursor: pointer; text-align: left; transition: border-color 150ms ease-out;">
+          <span style="font-size: 11px; font-weight: 700; color: {{ bk.labelFg }}; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">{{ bk.label }}</span>
+          <span style="font-size: 20px; font-weight: 700; color: {{ bk.countFg }};">{{ bk.count }}</span>
+          <span style="font-size: 11px; font-weight: 600; color: #6B7280; font-variant-numeric: tabular-nums;">{{ bk.total }}</span>
+          </button>
+        </sc-for>
+      </div>
+
+      <!-- Group-by + scope chips -->
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Group by</span>
+        <div style="display: flex; align-items: center; gap: 0; border: 1px solid #E5E7EB; border-radius: 5px; overflow: hidden;">
+          <sc-for list="{{ groupTabs }}" as="g" hint-placeholder-count="3">
+            <button onClick="{{ g.onClick }}" style="padding: 7px 14px; border: none; background: {{ g.bg }}; color: {{ g.fg }}; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;">{{ g.label }}</button>
+          </sc-for>
+        </div>
+        <div style="width: 1px; height: 22px; background: #E5E7EB; margin: 0 4px;"></div>
+        <sc-for list="{{ scopeChips }}" as="chip" hint-placeholder-count="3">
+          <button onClick="{{ chip.onClick }}" style="padding: 6px 14px; border-radius: 9999px; border: 1px solid {{ chip.border }}; background: {{ chip.bg }}; color: {{ chip.fg }}; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 150ms ease-out;">{{ chip.label }}</button>
+        </sc-for>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 12px; color: #94A3B8;">{{ listSummary }}</span>
+      </div>
+
+      <!-- ===== Split: worklist + account workspace ===== -->
+      <div style="display: flex; gap: 16px; align-items: flex-start; min-width: 0;">
+
+        <!-- Worklist table -->
+        <div style="flex: 54 1 0; min-width: 0; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: minmax(145px, 1fr) 110px 78px 58px minmax(115px, 1fr) 80px 34px; gap: 8px; align-items: center; padding: 9px 14px; background: #7B61FF;">
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Patient / Claim</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Payer</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Balance</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Age</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Status</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Next FU</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Rep</span>
+          </div>
+          <div style="max-height: 720px; overflow-y: auto;">
+            <sc-for list="{{ rows }}" as="row" hint-placeholder-count="8">
+              <div onClick="{{ row.onClick }}" style="display: grid; grid-template-columns: minmax(145px, 1fr) 110px 78px 58px minmax(115px, 1fr) 80px 34px; gap: 8px; align-items: center; padding: 8px 14px 8px 11px; border-bottom: 1px solid #EEEEEE; border-left: 3px solid {{ row.barColor }}; background: {{ row.rowBg }}; cursor: pointer; transition: background 120ms ease-out;">
+                <span style="display: flex; flex-direction: column; gap: 1px; min-width: 0;">
+                  <span style="font-size: 13px; font-weight: 600; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.patient }}</span>
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #6B7280;">{{ row.claim }} · DOS {{ row.dos }}</span>
+                </span>
+                <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.payer }}</span>
+                <span style="font-size: 13px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums; text-align: right;">{{ row.balanceStr }}</span>
+                <span><span style="display: inline-flex; padding: 2px 7px; border-radius: 9999px; background: {{ row.ageBg }}; color: {{ row.ageFg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ row.ageText }}</span></span>
+                <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.status }}</span>
+                <span style="font-size: 11px; font-weight: 700; color: {{ row.fuFg }}; white-space: nowrap;">{{ row.nextFu }}</span>
+                <span style="width: 24px; height: 24px; border-radius: 9999px; background: #F1EEFF; color: #7B61FF; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700;">{{ row.repInitials }}</span>
+              </div>
+            </sc-for>
+            <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 28px; text-align: center; font-size: 13px; color: #94A3B8;">No accounts match the current filters.</div>
+            </sc-if>
+          </div>
+        </div>
+
+        <!-- Account workspace -->
+        <div style="flex: 46 1 0; min-width: 0; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden; position: sticky; top: 16px;">
+
+          <!-- Account header -->
+          <div style="padding: 18px 20px 14px; border-bottom: 1px solid #EEEEEE; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 16px; font-weight: 700; color: #0F1B2E;">{{ acc.patient }}</span>
+              <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: {{ acc.ageBg }}; color: {{ acc.ageFg }}; font-size: 10px; font-weight: 700;">{{ acc.bucketLabel }}</span>
+              <div style="flex: 1;"></div>
+              <span style="font-size: 18px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums;">{{ acc.balanceStr }}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: #6B7280;">
+              <a href="Claim Detail.dc.html" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #7B61FF;">{{ acc.claim }}</a>
+              <span>{{ acc.payer }}</span>
+              <span>{{ acc.status }}</span>
+              <div style="flex: 1;"></div>
+              <span style="display: inline-flex; align-items: center; gap: 5px;"><span style="width: 20px; height: 20px; border-radius: 9999px; background: #F1EEFF; color: #7B61FF; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">{{ acc.repInitials }}</span>{{ acc.rep }}</span>
+            </div>
+          </div>
+
+          <div style="padding: 14px 20px 20px; display: flex; flex-direction: column; gap: 16px;">
+
+            <!-- Call prep -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg>
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Call prep — assembled by A/R Follow-up Agent</span>
+              </div>
+              <div style="background: #F1EEFF; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; color: #0F1B2E;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <span style="font-family: 'JetBrains Mono', monospace;">{{ acc.payerPhone }}</span>
+                  </span>
+                  <span style="font-size: 11px; color: #5B46D6;">{{ acc.payerHours }}</span>
+                  <span style="font-size: 11px; color: #5B46D6;">{{ acc.ivr }}</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; font-size: 12px; color: #0F1B2E;">
+                  <span><span style="color: #6B7280;">Payer claim #</span> <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700;">{{ acc.payerRef }}</span></span>
+                  <span><span style="color: #6B7280;">DOS</span> <span style="font-family: 'JetBrains Mono', monospace;">{{ acc.dos }}</span></span>
+                  <span><span style="color: #6B7280;">Billed</span> <span style="font-family: 'JetBrains Mono', monospace;">{{ acc.billedStr }}</span></span>
+                  <span><span style="color: #6B7280;">Paid to date</span> <span style="font-family: 'JetBrains Mono', monospace;">{{ acc.paidStr }}</span></span>
+                </div>
+                <sc-if value="{{ askEditing }}" hint-placeholder-val="{{ false }}">
+                  <div style="border-top: 1px solid #E0D8FA; padding-top: 8px; display: flex; flex-direction: column; gap: 8px;">
+                    <textarea value="{{ askDraft }}" onChange="{{ onAskDraft }}" style="min-height: 56px; border: 1px solid #C9BCF5; border-radius: 5px; padding: 8px 10px; font-size: 12px; line-height: 18px; color: #0F1B2E; resize: vertical; outline: none; background: #FFFFFF;"></textarea>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <button onClick="{{ saveAsk }}" style="padding: 7px 14px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 12px; font-weight: 700; cursor: pointer;">Save ask</button>
+                      <button onClick="{{ cancelAsk }}" style="padding: 7px 14px; border-radius: 5px; border: 1px solid #C9BCF5; background: #FFFFFF; color: #5B46D6; font-size: 12px; font-weight: 700; cursor: pointer;">Cancel</button>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ askNotEditing }}" hint-placeholder-val="{{ true }}">
+                  <div style="border-top: 1px solid #E0D8FA; padding-top: 8px; display: flex; flex-direction: column; gap: 4px;">
+                    <div style="font-size: 12px; line-height: 18px; color: #0F1B2E;"><strong>Ask:</strong> {{ acc.ask }}</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-size: 11px; color: #94A3B8;">{{ askSourceNote }}</span>
+                      <button onClick="{{ editAsk }}" style="padding: 2px 8px; border-radius: 4px; border: 1px solid #C9BCF5; background: #FFFFFF; color: #5B46D6; font-size: 11px; font-weight: 700; cursor: pointer;">Edit ask</button>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+
+            <!-- Appeal draft (agent-prepared, rep files) -->
+            <sc-if value="{{ showDraft }}" hint-placeholder-val="{{ false }}">
+              <div style="border: 1px solid #7B61FF; background: #F8F6FF; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 11px; font-weight: 700; color: #5B46D6; text-transform: uppercase; letter-spacing: 0.06em;">Appeal drafted by Denial Triage Agent</span>
+                  <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 10px; font-weight: 700;">Ready to file</span>
+                </div>
+                <div style="font-size: 12px; line-height: 18px; color: #0F1B2E;">{{ draftText }}</div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <button onClick="{{ fileAppeal }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                    Approve &amp; file appeal
+                  </button>
+                  <span style="font-size: 11px; color: #94A3B8;">You file directly — no practice sign-off. Logged to the claim timeline.</span>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ showFiled }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; align-items: center; gap: 10px; background: #E6F7F2; border-radius: 8px; padding: 10px 14px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B7D6C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span style="font-size: 12px; color: #0B7D6C; font-weight: 600;">Appeal filed — the Denial Triage Agent is tracking the payer's response.</span>
+              </div>
+            </sc-if>
+
+            <!-- DocuHub request -->
+            <div style="border: 1px solid #E5E7EB; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 .8-1.6l8-6a2 2 0 0 1 2.4 0l8 6Z"></path><path d="m22 10-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 10"></path></svg>
+              <span style="font-size: 12px; color: #6B7280; white-space: nowrap;">Missing info from the practice?</span>
+              <select value="{{ reqType }}" onChange="{{ onReqType }}" style="flex: 1; height: 32px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 8px; font-size: 12px; color: #0F1B2E; background: #FFFFFF; outline: none; cursor: pointer; min-width: 0;">
+                <sc-for list="{{ reqOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+              <button onClick="{{ openTicket }}" style="padding: 8px 14px; border-radius: 5px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 150ms ease-out;" style-hover="background: #F1EEFF;">Open DocuHub ticket</button>
+            </div>
+
+            <!-- Log a touch -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Log a touch</span>
+              <div style="border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px;">
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Method</span>
+                    <select value="{{ fMethod }}" onChange="{{ onFMethod }}" style="height: 34px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 8px; font-size: 12px; color: #0F1B2E; background: #FFFFFF; outline: none; cursor: pointer;">
+                      <sc-for list="{{ methodOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o }}">{{ o }}</option></sc-for>
+                    </select>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Payer rep name</span>
+                    <input value="{{ fRep }}" onChange="{{ onFRep }}" placeholder="e.g. Jacqueline G." style="height: 34px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 10px; font-size: 12px; color: #0F1B2E; outline: none;">
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Call reference #</span>
+                    <input value="{{ fRef }}" onChange="{{ onFRef }}" placeholder="e.g. C-4471820" style="height: 34px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E; outline: none;">
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Case #</span>
+                    <input value="{{ fCase }}" onChange="{{ onFCase }}" placeholder="e.g. CLIEX-2976485" style="height: 34px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E; outline: none;">
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Outcome</span>
+                    <select value="{{ fOutcome }}" onChange="{{ onFOutcome }}" style="height: 34px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 8px; font-size: 12px; color: #0F1B2E; background: #FFFFFF; outline: none; cursor: pointer;">
+                      <sc-for list="{{ outcomeOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for>
+                    </select>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Next follow-up</span>
+                    <input value="{{ fNext }}" onChange="{{ onFNext }}" placeholder="e.g. Jul 17" style="height: 34px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 10px; font-size: 12px; color: #0F1B2E; outline: none;">
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Detail remarks — documented for the practice</span>
+                  <textarea value="{{ fNote }}" onChange="{{ onFNote }}" placeholder="Who you spoke to, what they said, what was agreed, timeline given…" style="min-height: 64px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 8px 10px; font-size: 12px; line-height: 18px; color: #0F1B2E; resize: vertical; outline: none;"></textarea>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <button onClick="{{ saveTouch }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">Save touch</button>
+                  <span style="font-size: 11px; color: #94A3B8;">{{ formHint }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Activity timeline -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Account activity</span>
+                <span style="font-size: 11px; color: #94A3B8;">agent actions + your touches, newest first</span>
+              </div>
+              <div style="border: 1px solid #E5E7EB; border-radius: 8px; max-height: 260px; overflow-y: auto;">
+                <sc-for list="{{ timeline }}" as="tl" hint-placeholder-count="3">
+                  <div style="display: flex; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #EEEEEE;">
+                    <span style="width: 8px; height: 8px; border-radius: 9999px; background: {{ tl.dot }}; margin-top: 5px; flex-shrink: 0;"></span>
+                    <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 12px; font-weight: 700; color: #0F1B2E;">{{ tl.who }}</span>
+                        <span style="display: inline-flex; padding: 1px 7px; border-radius: 9999px; background: {{ tl.tagBg }}; color: {{ tl.tagFg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ tl.tag }}</span>
+                        <div style="flex: 1;"></div>
+                        <span style="font-size: 11px; color: #94A3B8; white-space: nowrap;">{{ tl.when }}</span>
+                      </div>
+                      <span style="font-size: 12px; color: #0F1B2E; line-height: 18px;">{{ tl.text }}</span>
+                      <sc-if value="{{ tl.hasMeta }}" hint-placeholder-val="{{ false }}">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #6B7280;">{{ tl.meta }}</span>
+                      </sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <sc-if value="{{ toastVisible }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 6px -4px rgba(0,0,0,0.1), 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50;">{{ toast }}</div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;arVolume&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 120, &quot;min&quot;: 40, &quot;max&quot;: 200, &quot;step&quot;: 10, &quot;unit&quot;: &quot; accounts&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Stress test&quot; },
+  &quot;startingScope&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;due&quot;, &quot;options&quot;: [&quot;due&quot;, &quot;mine&quot;, &quot;all&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;View&quot; }
+}">
+class Component extends DCLogic {
+  state = {
+    selected: null,
+    groupBy: 'aging',
+    groupKey: 'all',
+    scope: null,
+    touches: {},
+    overrides: {},
+    sessionTouches: 0,
+    askEditing: false, askDraft: '',
+    reqType: 'Updated patient / insurance information',
+    fMethod: 'Phone call',
+    fRep: '', fRef: '', fCase: '', fOutcome: 'Resubmitted for review', fNote: '', fNext: '',
+    toast: '',
+  };
+
+  componentDidMount() {
+    const first = this.visible()[0];
+    if (this.state.selected === null && first) this.setState({ selected: first.id });
+  }
+
+  componentWillUnmount() { clearTimeout(this._toastTimer); }
+
+  money(n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  moneyK(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+
+  data() {
+    const vol = this.props.arVolume ?? 120;
+    if (this._data && this._vol === vol) return this._data;
+    let seed = 5678;
+    const rnd = () => {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+    const pick = a => a[Math.floor(rnd() * a.length)];
+    const LAST = ['OWENS','STRYCKER','STOREY','JOHNSON','SCHULER','HUTTON','WARNER','WILLIAMS','VOREIS','SAUNDERS','GILLESPY','MARQUEZ','ALLEN','DUNCAN','MORGAN','GLOVER','LORD','PARE','RAMIREZ','WEDER','SCHEERINGA','USMANMANGA','FOLEY','HOWARD','FOX','CRIPE','BURKS','CORLEY','HOYT','WARD','MOORE','MASON','HARPER','BREAUX','WEATHERSPOON','WEBBS','BROCKWAY'];
+    const FIRST = ['STEVE','JAMES','DAVID','DEBRA','CAROLYN','BOSHIRLE','ANN','CARMEN','KENT','KAREN','DENISE','ERNEST','ED','MITCHELL','JACK','TERRI','HUGO','VINCENZA','DOREEN','CARLI','BRIDGET','LEON','KELLEY','SCOTT','JEFFREY','CRAIG','WALTER','ERIC','CHARLES','RHONDA','ELMA','NANNIE','JACQUELINE','MARVIN','JOHN'];
+    // [name, phone, ivr, hours, category] — weighted roughly like the real aging summary
+    const PAYERS = [
+      ['Medicare of Indiana', '1-866-518-3285', 'IVR: 1 → 3 → claim status', '8 AM – 4 PM CT', 'Medicare'],
+      ['Medicare of Indiana', '1-866-518-3285', 'IVR: 1 → 3 → claim status', '8 AM – 4 PM CT', 'Medicare'],
+      ['Medicare of Indiana', '1-866-518-3285', 'IVR: 1 → 3 → claim status', '8 AM – 4 PM CT', 'Medicare'],
+      ['Medicare of Michigan', '1-866-234-7331', 'IVR: 1 → 3 → claim status', '8 AM – 4 PM CT', 'Medicare'],
+      ['Provider Partners Health Plan of Indiana', '1-800-405-9681', 'IVR: 2 → claim inquiry', '8 AM – 5 PM ET', 'Provider Partners'],
+      ['Provider Partners Health Plan of Indiana', '1-800-405-9681', 'IVR: 2 → claim inquiry', '8 AM – 5 PM ET', 'Provider Partners'],
+      ['Provider Partners Health Plan of Indiana', '1-800-405-9681', 'IVR: 2 → claim inquiry', '8 AM – 5 PM ET', 'Provider Partners'],
+      ['Anthem Blue Cross Blue Shield Indiana', '1-800-676-2583', 'IVR: 3 → 1 → status', '8 AM – 6 PM ET', 'Anthem BCBS'],
+      ['Anthem HIP', '1-844-533-1995', 'IVR: provider → claims', '8 AM – 6 PM ET', 'Anthem BCBS'],
+      ['MHS (Managed Health Services)', '1-877-647-4848', 'IVR: provider → 2 → claims', '8 AM – 8 PM ET', 'MHS'],
+      ['UHC Medicare Complete', '1-877-842-3210', 'Say \u201cclaims\u201d twice', '7 AM – 7 PM CT', 'UHC'],
+      ['Humana MA PPO', '1-800-457-4708', 'IVR: provider → claim inquiry', '8 AM – 8 PM ET', 'Humana'],
+      ['Indiana Medicaid', '1-800-457-4584', 'IVR: 2 → provider → claims', '8 AM – 6 PM ET', 'Medicaid'],
+      ['Aetna MA HMO', '1-800-624-0756', 'IVR: 2 → claim status', '8 AM – 5 PM ET', 'Aetna'],
+      ['Veterans Administration', '1-877-881-7618', 'IVR: 1 → claim status', '8 AM – 6 PM ET', 'Veterans Administration'],
+    ];
+    const REPS = [['Angela Mensah', 'AM'], ['Rob Tanaka', 'RT'], ['Priya Kapoor', 'PK'], ['Sam Osei', 'SO']];
+
+    const ARCH = [
+      {
+        status: 'No payer response', reason: 'In Process',
+        ask: 'Claim status and why no 835 after 45+ days. Get a reference number and a specific adjudication date before ending the call.',
+        seedTl: (c) => [
+          { who: 'A/R Follow-up Agent', tag: 'Status check', tagBg: '#F1EEFF', tagFg: '#5B46D6', dot: '#7B61FF', when: c.ago(4), text: 'Ran automated claim status (276/277) — payer returned "in process," no adjudication date. Flagged for a live call since it exceeds the payer\u2019s 30-day norm.', meta: '' },
+          { who: 'Submission Agent', tag: 'Submitted', tagBg: '#F1F5F9', tagFg: '#6B7280', dot: '#94A3B8', when: c.ago(0), text: 'Claim accepted by clearinghouse; 277CA clean. No payer response since.', meta: '' },
+        ],
+      },
+      {
+        status: 'Denied — COB', reason: 'Coordination of Benefits',
+        ask: 'Denied per COB — verify which coverage was active on the DOS and confirm the other policy termed. Ask the rep to resubmit for review and get a case number.',
+        seedTl: (c) => [
+          { who: 'Denial Triage Agent', tag: 'COB denial', tagBg: '#FEF3DF', tagFg: '#B45309', dot: '#E9C05F', when: c.ago(3), text: 'Denied CO-22 — \u201cmay be covered by another payer per coordination of benefits.\u201d Eligibility cross-check suggests the other policy termed before the DOS. Needs a live call to sort primacy.', meta: '' },
+        ],
+      },
+      {
+        status: 'Denied — appeal drafted', reason: 'Timely Filing', hasDraft: true,
+        ask: 'If calling before filing: confirm the appeal address/fax and the review turnaround for timely-filing appeals with proof of submission.',
+        draft: 'Denied CO-29 (timely filing), but the clearinghouse acceptance report shows the original submission was accepted inside the 90-day window. Appeal letter + acceptance report are bundled and ready to send.',
+        seedTl: (c) => [
+          { who: 'Denial Triage Agent', tag: 'Appeal drafted', tagBg: '#F1EEFF', tagFg: '#5B46D6', dot: '#7B61FF', when: c.ago(2), text: 'Denied CO-29 (timely filing). Located clearinghouse acceptance proving on-time filing — appeal packet drafted with the acceptance report attached. Ready for your approval.', meta: '' },
+        ],
+      },
+      {
+        status: 'Underpaid — dispute open', reason: 'Underpayment',
+        ask: 'Why the allowed amount is below the contracted fee schedule for this CPT. Request reprocessing; get the adjustment reference and completion date.',
+        seedTl: (c) => [
+          { who: 'Payment Reconciliation Agent', tag: 'Variance flagged', tagBg: '#FEF3DF', tagFg: '#B45309', dot: '#E9C05F', when: c.ago(3), text: 'Payment posted below the contracted rate. Variance does not match any standard adjustment code pattern — dispute recommended.', meta: '' },
+        ],
+      },
+      {
+        status: 'Prior auth required', reason: 'Prior Authorization',
+        ask: 'Ask whether retro-authorization is accepted for this service and the submission window. Get the auth request fax/portal and reference number.',
+        seedTl: (c) => [
+          { who: 'Denial Triage Agent', tag: 'Auth denial', tagBg: '#FEF3DF', tagFg: '#B45309', dot: '#E9C05F', when: c.ago(2), text: 'Denied CO-197 — no prior authorization on file. The practice must request retro-auth; recommend opening a DocuHub ticket to Front Office with the payer\u2019s auth requirements.', meta: '' },
+        ],
+      },
+      {
+        status: 'Coverage terminated', reason: 'Coverage Terminated',
+        ask: 'Confirm the exact term date and whether the payer shows any other active coverage on file for the DOS.',
+        seedTl: (c) => [
+          { who: 'A/R Follow-up Agent', tag: 'Eligibility', tagBg: '#FEF3DF', tagFg: '#B45309', dot: '#E9C05F', when: c.ago(5), text: 'Eligibility (271) shows coverage terminated before the DOS. No replacement coverage in the chart — updated insurance needed from the practice.', meta: '' },
+        ],
+      },
+      {
+        status: 'Reprocessing promised', reason: 'In Process',
+        ask: 'Confirm reprocessing completed as promised on the last call. If not finished, escalate to a supervisor and get a firm date.',
+        seedTl: (c) => [
+          { who: 'Priya Kapoor', tag: 'Phone call', tagBg: '#E6F7F2', tagFg: '#0B7D6C', dot: '#22C5A7', when: c.ago(10), text: 'Payer acknowledged processing error on their end. Rep initiated reprocessing, quoted 10 business days. Follow up if no payment by then.', meta: 'Rep: Marcus · Ref #C-88' + (20000 + c.id) },
+          { who: 'Payment Reconciliation Agent', tag: 'Underpayment', tagBg: '#FEF3DF', tagFg: '#B45309', dot: '#E9C05F', when: c.ago(14), text: 'Remittance posted at 40% of expected. No matching adjustment codes — flagged for payer contact.', meta: '' },
+        ],
+      },
+      {
+        status: 'Claim not on file', reason: 'Claim Not on File',
+        ask: 'Confirm whether the claim is on file. If not, get the correct EDI payer ID or fax, and a name for the receipt confirmation.',
+        seedTl: (c) => [
+          { who: 'A/R Follow-up Agent', tag: 'Status check', tagBg: '#F1EEFF', tagFg: '#5B46D6', dot: '#7B61FF', when: c.ago(2), text: 'Automated status inquiry returned "claim not found" despite a clean clearinghouse acceptance. Possible payer intake issue — needs a live call.', meta: '' },
+        ],
+      },
+      {
+        status: 'VA claim — on hold', reason: 'VA Claims (On Hold)', vaHold: true,
+        ask: 'On hold per practice guidance — do not call. Awaiting VA credentialing to complete.',
+        seedTl: (c) => [
+          { who: 'A/R Follow-up Agent', tag: 'On hold', tagBg: '#F1F5F9', tagFg: '#6B7280', dot: '#94A3B8', when: c.ago(8), text: 'VA claims remain on hold per practice guidance until credentialing completes. Excluded from the calling queue; will resume automatically.', meta: '' },
+        ],
+      },
+    ];
+
+    const BALS = [12.97, 18.79, 21.76, 75.06, 90.54, 97.35, 100, 108.82, 135.13];
+    const BILLED = [100, 120, 125, 140, 240];
+    const accounts = [];
+    for (let i = 0; i < vol; i++) {
+      const r = rnd();
+      const age = r < 0.35 ? Math.floor(5 + rnd() * 25) : r < 0.65 ? Math.floor(31 + rnd() * 29) : r < 0.85 ? Math.floor(61 + rnd() * 29) : Math.floor(91 + rnd() * 120);
+      const billed = pick(BILLED);
+      const partial = rnd() < 0.45;
+      const balance = partial ? pick(BALS.filter(b => b < billed)) : billed;
+      const paid = partial ? Math.round((billed - balance) * 100) / 100 : 0;
+      const arch = ARCH[i % ARCH.length];
+      const pi = arch.vaHold ? PAYERS[14] : pick(PAYERS.slice(0, 14));
+      const rep = i % 3 === 0 ? REPS[0] : pick(REPS);
+      const dueToday = !arch.vaHold && rnd() < 0.18;
+      const fuDay = Math.floor(8 + rnd() * 20);
+      const id = i + 1;
+      const ago = (d) => { const day = 7 - d; return day > 0 ? 'Jul ' + day : 'Jun ' + (30 + day); };
+      accounts.push({
+        id,
+        claim: String(60000 + id * 37 + Math.floor(rnd() * 30)),
+        patient: pick(LAST) + ', ' + pick(FIRST),
+        payer: pi[0], payerPhone: pi[1], ivr: pi[2], payerHours: pi[3], payerCat: pi[4],
+        payerRef: (pi[4] === 'Medicare' ? '2126MC' : '2126PR') + (40000 + id * 7),
+        billed, paid, balance,
+        billedStr: this.money(billed), paidStr: paid > 0 ? this.money(paid) : '$0.00',
+        balanceStr: this.money(balance),
+        age,
+        bucket: age <= 30 ? '0-30' : age <= 60 ? '31-60' : age <= 90 ? '61-90' : '90+',
+        dos: (age > 90 ? '2/' : age > 60 ? '4/' : age > 30 ? '5/' : '6/') + Math.floor(1 + rnd() * 27),
+        status: arch.status, reason: arch.reason, ask: arch.ask,
+        hasDraft: !!arch.hasDraft, draft: arch.draft || '',
+        rep: rep[0], repInitials: rep[1],
+        mine: rep[1] === 'AM',
+        dueToday,
+        nextFu: arch.vaHold ? '—' : (dueToday ? 'Today' : 'Jul ' + fuDay),
+        ago,
+        seedTimeline: arch.seedTl({ id, ago }),
+      });
+    }
+    accounts.sort((a, b) => (b.dueToday ? 1 : 0) - (a.dueToday ? 1 : 0) || b.age - a.age);
+
+    const totalAr = accounts.reduce((s, a) => s + a.balance, 0);
+    const oldest = accounts.reduce((m, a) => Math.max(m, a.age), 0);
+
+    this._vol = vol;
+    this._data = { vol, accounts, totalAr, oldest };
+    return this._data;
+  }
+
+  scope() { return this.state.scope ?? (this.props.startingScope ?? 'due'); }
+
+  matchGroup(a) {
+    const st = this.state;
+    if (st.groupKey === 'all') return true;
+    if (st.groupBy === 'aging') return a.bucket === st.groupKey;
+    if (st.groupBy === 'payer') return a.payerCat === st.groupKey;
+    return a.reason === st.groupKey;
+  }
+
+  visible() {
+    const d = this.data();
+    const scope = this.scope();
+    return d.accounts.filter(a =>
+      this.matchGroup(a) &&
+      (scope === 'all' || (scope === 'mine' ? a.mine : a.dueToday)));
+  }
+
+  showToast(msg) {
+    clearTimeout(this._toastTimer);
+    this.setState({ toast: msg });
+    this._toastTimer = setTimeout(() => this.setState({ toast: '' }), 2800);
+  }
+
+  ageColors(bucket) {
+    if (bucket === '0-30') return ['#F1F5F9', '#6B7280'];
+    if (bucket === '31-60') return ['#FEF3DF', '#B45309'];
+    if (bucket === '61-90') return ['#FFE9E0', '#C2410C'];
+    return ['#FEECEC', '#DC2626'];
+  }
+
+  groupDefs() {
+    const d = this.data();
+    const gb = this.state.groupBy;
+    if (gb === 'aging') {
+      return [
+        { key: 'all', label: 'All open' },
+        { key: '0-30', label: '0–30 days' },
+        { key: '31-60', label: '31–60 days' },
+        { key: '61-90', label: '61–90 days' },
+        { key: '90+', label: '90+ days' },
+      ];
+    }
+    const field = gb === 'payer' ? 'payerCat' : 'reason';
+    const totals = {};
+    d.accounts.forEach(a => { totals[a[field]] = (totals[a[field]] || 0) + a.balance; });
+    const keys = Object.keys(totals).sort((x, y) => totals[y] - totals[x]);
+    return [{ key: 'all', label: 'All open' }].concat(keys.map(k => ({ key: k, label: k })));
+  }
+
+  renderVals() {
+    const st = this.state;
+    const d = this.data();
+    const visible = this.visible();
+    const selId = st.selected ?? (visible[0] ? visible[0].id : null);
+    const selAcc = d.accounts.find(a => a.id === selId) || d.accounts[0];
+    const selOv = st.overrides[selAcc.id] || {};
+
+    const dueCount = d.accounts.filter(a => a.dueToday).length;
+
+    const buckets = this.groupDefs().map(b => {
+      const set = b.key === 'all' ? d.accounts : d.accounts.filter(a => (st.groupBy === 'aging' ? a.bucket : st.groupBy === 'payer' ? a.payerCat : a.reason) === b.key);
+      const active = st.groupKey === b.key;
+      const hot = st.groupBy === 'aging' && (b.key === '90+' || b.key === '61-90');
+      return {
+        label: b.label,
+        labelFg: active ? '#5B46D6' : (hot ? '#DC2626' : '#94A3B8'),
+        count: String(set.length),
+        countFg: '#0F1B2E',
+        total: this.moneyK(set.reduce((s, a) => s + a.balance, 0)),
+        bg: active ? '#F1EEFF' : '#FFFFFF',
+        border: active ? '#7B61FF' : '#E5E7EB',
+        onClick: () => this.setState({ groupKey: b.key }),
+      };
+    });
+
+    const groupTabs = [
+      { key: 'aging', label: 'Aging' },
+      { key: 'payer', label: 'Payer' },
+      { key: 'reason', label: 'Denial reason' },
+    ].map(g => ({
+      label: g.label,
+      bg: st.groupBy === g.key ? '#7B61FF' : '#FFFFFF',
+      fg: st.groupBy === g.key ? '#FFFFFF' : '#6B7280',
+      onClick: () => this.setState({ groupBy: g.key, groupKey: 'all' }),
+    }));
+
+    const curScope = this.scope();
+    const scopeChips = [
+      { key: 'due', label: 'Due today (' + dueCount + ')' },
+      { key: 'mine', label: 'My accounts' },
+      { key: 'all', label: 'All accounts' },
+    ].map(s => ({
+      label: s.label,
+      bg: curScope === s.key ? '#7B61FF' : '#FFFFFF',
+      fg: curScope === s.key ? '#FFFFFF' : '#6B7280',
+      border: curScope === s.key ? '#7B61FF' : '#E5E7EB',
+      onClick: () => this.setState({ scope: s.key }),
+    }));
+
+    const rows = visible.map(a => {
+      const ov = st.overrides[a.id] || {};
+      const selected = a.id === selId;
+      const [ageBg, ageFg] = this.ageColors(a.bucket);
+      const nextFu = ov.nextFu || a.nextFu;
+      return {
+        patient: a.patient, claim: a.claim, dos: a.dos + '/26', payer: a.payer, balanceStr: a.balanceStr,
+        ageText: a.age + 'd', ageBg, ageFg,
+        status: ov.status || a.status,
+        nextFu,
+        fuFg: nextFu === 'Today' ? '#B45309' : '#6B7280',
+        repInitials: a.repInitials,
+        rowBg: selected ? '#F1EEFF' : '#FFFFFF',
+        barColor: selected ? '#7B61FF' : 'transparent',
+        onClick: () => this.setState({ selected: a.id, askEditing: false, fRep: '', fRef: '', fCase: '', fNote: '', fNext: '' }),
+      };
+    });
+
+    const [selAgeBg, selAgeFg] = this.ageColors(selAcc.bucket);
+    const acc = {
+      patient: selAcc.patient, claim: 'Claim ' + selAcc.claim, payer: selAcc.payer,
+      balanceStr: selAcc.balanceStr,
+      bucketLabel: selAcc.age + ' days · ' + selAcc.bucket,
+      ageBg: selAgeBg, ageFg: selAgeFg,
+      status: selOv.status || selAcc.status,
+      rep: selAcc.rep, repInitials: selAcc.repInitials,
+      payerPhone: selAcc.payerPhone, payerHours: selAcc.payerHours, ivr: selAcc.ivr,
+      payerRef: selAcc.payerRef, dos: selAcc.dos + '/2026',
+      billedStr: selAcc.billedStr, paidStr: selAcc.paidStr,
+      ask: selOv.ask || selAcc.ask,
+    };
+
+    const logged = st.touches[selAcc.id] || [];
+    const timeline = logged.concat(selAcc.seedTimeline).map(t => Object.assign({}, t, { hasMeta: !!t.meta }));
+
+    const noteOk = st.fNote.trim().length >= 10;
+
+    return {
+      dueChipText: dueCount + ' Follow-ups Due Today',
+      totalArChipText: this.moneyK(d.totalAr) + ' Open AR · ' + d.accounts.length + ' claims',
+
+      touchesWeekText: String(214 + st.sessionTouches),
+      accountsWorkedText: String(Math.round(d.vol * 0.55)),
+      collectedText: this.moneyK(d.vol * 152.4),
+      oldestText: d.oldest + ' days',
+
+      buckets, groupTabs, scopeChips,
+      listSummary: visible.length + ' claims shown · follow-ups due first, then oldest',
+      rows,
+      noRows: rows.length === 0,
+
+      acc,
+      timeline,
+
+      askEditing: st.askEditing,
+      askNotEditing: !st.askEditing,
+      askDraft: st.askDraft,
+      askSourceNote: selOv.ask ? 'Edited by you — the agent\u2019s suggestion is replaced for this account.' : 'Suggested by the agent — edit to use your own script.',
+      onAskDraft: (e) => this.setState({ askDraft: e.target.value }),
+      editAsk: () => this.setState({ askEditing: true, askDraft: selOv.ask || selAcc.ask }),
+      cancelAsk: () => this.setState({ askEditing: false }),
+      saveAsk: () => {
+        const v = st.askDraft.trim();
+        if (!v) { this.showToast('Ask cannot be empty'); return; }
+        this.setState(prev => ({
+          askEditing: false,
+          overrides: Object.assign({}, prev.overrides, { [selAcc.id]: Object.assign({}, prev.overrides[selAcc.id], { ask: v }) }),
+        }));
+        this.showToast('Ask updated for this account');
+      },
+
+      showDraft: selAcc.hasDraft && !selOv.appealFiled,
+      showFiled: selAcc.hasDraft && !!selOv.appealFiled,
+      draftText: selAcc.draft,
+      fileAppeal: () => {
+        const entry = {
+          who: 'Angela Mensah (you)', tag: 'Appeal filed', tagBg: '#F1EEFF', tagFg: '#5B46D6', dot: '#7B61FF',
+          when: 'Today', text: 'Approved and filed the agent-drafted timely-filing appeal with the clearinghouse acceptance report attached.', meta: '',
+        };
+        this.setState(prev => ({
+          touches: Object.assign({}, prev.touches, { [selAcc.id]: [entry].concat(prev.touches[selAcc.id] || []) }),
+          overrides: Object.assign({}, prev.overrides, { [selAcc.id]: Object.assign({}, prev.overrides[selAcc.id], { appealFiled: true, status: 'Appeal sent — in review' }) }),
+        }));
+        this.showToast('Appeal filed — logged to the claim timeline');
+      },
+
+      reqType: st.reqType,
+      onReqType: (e) => this.setState({ reqType: e.target.value }),
+      reqOpts: [
+        'Updated patient / insurance information',
+        'Coordination of Benefits confirmation',
+        'Prior Authorization request',
+        'Medical records / documentation',
+        'Missing SSN / Date of injury',
+        'Corrected provider information',
+      ],
+      openTicket: () => {
+        const tick = 'i-1886' + String(10000 + selAcc.id * 13).slice(-5);
+        const entry = {
+          who: 'Angela Mensah (you)', tag: 'DocuHub ticket', tagBg: '#EAF3FF', tagFg: '#1D4ED8', dot: '#0081CF',
+          when: 'Today', text: 'Opened DocuHub ticket — ' + st.reqType + '. Routed to the practice Front Office; the claim stays in your queue until answered.', meta: 'Ticket ' + tick,
+        };
+        this.setState(prev => ({
+          touches: Object.assign({}, prev.touches, { [selAcc.id]: [entry].concat(prev.touches[selAcc.id] || []) }),
+        }));
+        this.showToast('Ticket ' + tick + ' opened — Front Office notified');
+      },
+
+      methodOpts: ['Phone call', 'Payer portal', 'Fax', 'Email'],
+      outcomeOpts: ['Resubmitted for review', 'Reprocessing initiated', 'Paid — billed to patient', 'Deductible — patient responsibility', 'Billed to secondary', 'Payment promised', 'Escalated to supervisor', 'Info needed from practice', 'No resolution — call back'],
+      fMethod: st.fMethod, onFMethod: (e) => this.setState({ fMethod: e.target.value }),
+      fRep: st.fRep, onFRep: (e) => this.setState({ fRep: e.target.value }),
+      fRef: st.fRef, onFRef: (e) => this.setState({ fRef: e.target.value }),
+      fCase: st.fCase, onFCase: (e) => this.setState({ fCase: e.target.value }),
+      fOutcome: st.fOutcome, onFOutcome: (e) => this.setState({ fOutcome: e.target.value }),
+      fNote: st.fNote, onFNote: (e) => this.setState({ fNote: e.target.value }),
+      fNext: st.fNext, onFNext: (e) => this.setState({ fNext: e.target.value }),
+      formHint: noteOk ? 'Saved to the account timeline and this week\u2019s report.' : 'Detail remarks required (10+ characters) — this is the practice\u2019s proof of effort.',
+      saveTouch: () => {
+        if (!noteOk) { this.showToast('Add detail remarks before saving — required for the weekly report'); return; }
+        const metaParts = [];
+        if (st.fRep.trim()) metaParts.push('Rep: ' + st.fRep.trim());
+        if (st.fRef.trim()) metaParts.push('Ref #' + st.fRef.trim());
+        if (st.fCase.trim()) metaParts.push('Case #' + st.fCase.trim());
+        const entry = {
+          who: 'Angela Mensah (you)',
+          tag: st.fOutcome,
+          tagBg: '#E6F7F2', tagFg: '#0B7D6C', dot: '#22C5A7',
+          when: 'Today',
+          text: st.fMethod + ' — ' + st.fNote.trim(),
+          meta: metaParts.join(' · '),
+        };
+        this.setState(prev => ({
+          touches: Object.assign({}, prev.touches, { [selAcc.id]: [entry].concat(prev.touches[selAcc.id] || []) }),
+          overrides: Object.assign({}, prev.overrides, { [selAcc.id]: Object.assign({}, prev.overrides[selAcc.id], { status: prev.fOutcome, nextFu: prev.fNext.trim() || '—' }) }),
+          sessionTouches: prev.sessionTouches + 1,
+          fRep: '', fRef: '', fCase: '', fNote: '', fNext: '',
+        }));
+        this.showToast('Touch logged — timeline updated, follow-up ' + (st.fNext.trim() ? 'set for ' + st.fNext.trim() : 'cleared'));
+      },
+
+      toast: st.toast,
+      toastVisible: !!st.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<div style="max-width: 860px; margin: 0 auto; padding: 48px 40px 80px; display: flex; flex-direction: column; gap: 26px;" data-screen-label="Phase 6 Plan">
+
+  <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 2px solid #7B61FF; padding-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 700;">PLAN — FOR YOUR APPROVAL</span>
+      <span style="font-size: 12px; color: #6B7280;">Jul 12, 2026 · scoped from the portal assessment (six gaps identified)</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 700; margin: 0;">Phase 6 — Closing the Gaps</h1>
+    <p style="font-size: 14px; line-height: 22px; color: #6B7280; margin: 0;">The portal's loop is complete for primary-claim work: prevent → submit → track → work denials → supervise → measure → govern. This plan closes what keeps it from being a billing company's whole system, ordered so each step compounds the value of the ones already shipped. Nothing builds until you approve the sequence.</p>
+  </div>
+
+  <!-- 1 · The gaps -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">1 · The six gaps, ranked</h2>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 1.3fr 90px 90px 1.6fr; gap: 0; font-size: 12px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 20px; border-bottom: 1px solid #E5E7EB;">
+        <span>Gap</span><span>Effort</span><span>Impact</span><span style="padding-left: 16px;">Why it matters to the goal</span>
+      </div>
+      <sc-for list="{{ gaps }}" as="g" hint-placeholder-count="6">
+        <div style="display: grid; grid-template-columns: 1.3fr 90px 90px 1.6fr; padding: 10px 20px; border-bottom: 1px solid #F1F5F9; font-size: 13px; line-height: 19px; align-items: center;">
+          <span style="font-weight: 600;">{{ g.name }}</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">{{ g.effort }}</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: {{ g.impactColor }};">{{ g.impact }}</span>
+          <span style="padding-left: 16px; color: #6B7280;">{{ g.why }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="background: #F1EEFF; border: 1px solid #D6CCFF; border-radius: 12px; padding: 14px 20px; font-size: 13.5px; line-height: 21px; color: #0F1B2E;"><strong style="color: #5B46D6;">Sequencing logic:</strong> the first three are cheap because their data already exists in the prototype — they surface and govern what the agent already does, and they compound (better rules → fewer denials; QA evidence → higher autonomy tiers → more leverage). The last two are the big builds and depend on each other: posting must exist before secondary billing can trigger off a primary 835.</div>
+  </div>
+
+  <!-- 2 · 6a Rulebook -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">2 · Phase 6a — Payer Rulebook</h2>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0;">The compounding asset made visible and governable. Every rule the agent has learned — per payer, per practice — with provenance and controls.</p>
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Rulebook — new top-level screen <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Rulebook.dc.html</span></span>
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li>Rules table scoped by payer × practice: the rule, category (coding, COB, auth, enrollment…), status (<strong>Proposed / Active / Retired</strong>), hit count, $ prevented since adoption.</li>
+        <li><strong>Provenance panel</strong> per rule: the denials that taught it (linked to Claim Detail), who approved it, when it last fired.</li>
+        <li>Manager actions: approve a proposed rule, edit its condition, retire it. Proposed rules also surface in the Agent Inbox as a task type, so approval happens where supervision already lives.</li>
+        <li>Example seeded from the AR report: the MHS HIP coding rule (84 denials, $11.8K) shown as the flagship Active rule.</li>
+      </ul>
+    </div>
+    <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;"><strong style="color: #0F1B2E;">Follow-on edits:</strong> rule chips on AR Worklist denials and Coverage checks become links into the Rulebook; Analytics "rules learned" tile links here; Rulebook added to side nav.</p>
+  </div>
+
+  <!-- 3 · 6b Agent QA -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">3 · Phase 6b — Agent QA &amp; autonomy evidence</h2>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0;">Today humans see only what the agent escalates. QA adds systematic spot-checks of what it <em>didn't</em> escalate — the evidence a manager needs to raise autonomy tiers with confidence.</p>
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">QA tab inside Agent Inbox <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Agent Inbox v3.dc.html — new tab</span></span>
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Sample queue:</strong> a random N% of auto-approved actions per tier per week, presented for agree/disagree review with the same detail panel supervision already uses.</li>
+        <li><strong>Agent scorecard:</strong> agreement rate by action type and tier, trend over time, disagreements linked to the action.</li>
+        <li><strong>Tier recommendation:</strong> when agreement on a tier-gated action type stays above threshold for N weeks, the system proposes raising the tier — manager approves in one click; the change lands in the Audit Log.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4 · 6c Practice window -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">4 · Phase 6c — Practice window</h2>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0;">Closes PRD §10. The practice is the ultimate customer; the "weekly report relationship" moves into the product as a read-only live view — and the queue of things billing needs <em>from</em> the practice (insurance cards, COB forms, redetermination assists) becomes actionable instead of an email thread.</p>
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Billing Status — read-only view in the Clerk Portal <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Practice Billing View.dc.html</span></span>
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li>AR summary for the practice: collected MTD, balance by aging bucket, claims in flight — the weekly report, live.</li>
+        <li>Denials prevented this month (the Coverage layer's value, made visible to the customer who pays for it).</li>
+        <li><strong>Action queue:</strong> "billing needs from you" — each Coverage exception's <em>needs</em> line routed to the practice with a done/attach flow. This is the piece that shortens every timeline on the Coverage board.</li>
+      </ul>
+    </div>
+    <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;"><strong style="color: #0F1B2E;">Open question folded in:</strong> this answers "do clerks keep a billing view" with <em>yes, read-only + action queue</em>. Confirm that's your intent before build.</p>
+  </div>
+
+  <!-- 5 · Phase 7 posting -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">5 · Phase 7 — Payment posting &amp; reconciliation</h2>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0;">The daily-bread workflow the portal currently skips. Agent auto-posts clean 835s; humans handle variances — same supervision model as everywhere else.</p>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Payments — new top-level screen <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Payments.dc.html</span></span>
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Deposits view:</strong> ERA batches vs. bank deposits, matched / unmatched, by practice.</li>
+        <li><strong>Variance queue:</strong> paid ≠ expected (allowed-amount variances, takebacks, interest) — agent proposes disposition (post, appeal, write off), manager approves above a $ threshold.</li>
+        <li><strong>Write-off governance:</strong> approval thresholds per company in Settings; every write-off in the Audit Log.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6 · Phase 8 secondary -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">6 · Phase 8 — Secondary billing &amp; patient responsibility</h2>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0;">The AR report's 409 "normal outcome" claims ($17.0K) moved to secondary or patient — today the portal loses sight of them there. Phase 8 keeps the balance owned until it's zero.</p>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Extends Claims Register, Claim Detail, AR Worklist <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">no new top-level screen</span></span>
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Auto-crossover tracking + agent-generated secondary claims</strong> off the primary 835, using the COB stack the Coverage layer already maintains — this is where Phase 5's payer-stack work pays off twice.</li>
+        <li>Claim Detail timeline extends through secondary adjudication; balance ledger shows primary → secondary → patient movement.</li>
+        <li><strong>Patient responsibility:</strong> tracked as a balance state with statement status. Statement <em>generation/mailing</em> stays out — likely a vendor integration; decision needed (§8).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 7 · Data workstream -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">7 · Parallel workstream — data feasibility doc</h2>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0;">Not a screen: the per-screen data source map we discussed (native / clearinghouse 837·835·270/271·276/277 / operationally maintained / agent-worked), plus the three honest flags (prior auth, COB primacy, legacy-AR backfill) and what each phase above adds to the integration surface. Ships as <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">Data Feasibility.dc.html</span> alongside this plan — it can be written first, independent of any build order.</p>
+  </div>
+
+  <!-- 8 · Decisions -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">8 · Decisions I need from you</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 6px;">
+      <li><strong>Approve the order?</strong> 6a Rulebook → 6b Agent QA → 6c Practice window → 7 Posting → 8 Secondary. Or reorder — e.g. if the practice relationship is under pressure, 6c can jump the queue.</li>
+      <li><strong>Practice window placement:</strong> a read-only tab in the Clerk Portal (as scoped), or a standalone emailed/report surface?</li>
+      <li><strong>Patient statements:</strong> in-product later, or permanently a vendor hand-off?</li>
+      <li><strong>Scope per approval:</strong> I'll build one sub-phase at a time and stop for review, same as Phases 2–5.</li>
+    </ul>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      gaps: [
+        { name: '6a · Payer rulebook surface', effort: 'S', impact: 'HIGH', impactColor: '#1B7F5E', why: 'The compounding asset — rules already exist in the design but can\u2019t be seen, audited, or retired' },
+        { name: '6b · Agent QA / sampling', effort: 'S', impact: 'HIGH', impactColor: '#1B7F5E', why: 'Evidence to raise autonomy tiers — the lever that multiplies agent leverage' },
+        { name: '6c · Practice-facing window', effort: 'M', impact: 'HIGH', impactColor: '#1B7F5E', why: 'The customer relationship (weekly report + \u201cneeds from facility\u201d) still lives outside the product' },
+        { name: '7 · Payment posting & reconciliation', effort: 'L', impact: 'HIGH', impactColor: '#1B7F5E', why: 'Daily bread for billing companies; portal currently stops at viewing 835s' },
+        { name: '8 · Secondary & patient responsibility', effort: 'L', impact: 'MED', impactColor: '#B45309', why: '$17.0K of the AR report moved there and out of the portal\u2019s sight' },
+        { name: '\u2016 · Data layer design (doc)', effort: 'S', impact: 'MED', impactColor: '#B45309', why: 'Execution risk, not a screen — the feasibility map we discussed, written down' }
+      ]
+    };
+  }
+}
+
+</script>
+</body>
+</html>

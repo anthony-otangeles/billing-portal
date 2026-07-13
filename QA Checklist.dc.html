@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button, input { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+</helmet>
+
+<div style="min-height: 100vh; background: #F8FAFC; padding: 32px; display: flex; flex-direction: column; gap: 20px; max-width: 1180px; margin: 0 auto;" data-screen-label="QA Checklist">
+
+  <div style="display: flex; align-items: center; gap: 14px;">
+    <h1 style="font-size: 24px; font-weight: 700; margin: 0;">QA Checklist — Billing Agent Supervision</h1>
+    <span style="font-size: 13px; color: #6B7280;">Pass 3 · your walkthrough · progress saves automatically</span>
+  </div>
+
+  <!-- Progress -->
+  <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; gap: 28px;">
+    <div style="display: flex; flex-direction: column; gap: 1px;">
+      <span style="font-size: 20px; font-weight: 700; color: #0F1B2E;">{{ doneCount }} / {{ totalCount }}</span>
+      <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Steps reviewed</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 1px;">
+      <span style="font-size: 20px; font-weight: 700; color: #109680;">{{ passCount }}</span>
+      <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Passed</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 1px;">
+      <span style="font-size: 20px; font-weight: 700; color: #DC2626;">{{ failCount }}</span>
+      <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Failed</span>
+    </div>
+    <div style="flex: 1;"></div>
+    <div style="display: flex; align-items: center; gap: 0; border: 1px solid #E5E7EB; border-radius: 5px; overflow: hidden;">
+      <sc-for list="{{ filterTabs }}" as="f" hint-placeholder-count="3">
+        <button onClick="{{ f.onClick }}" style="padding: 7px 14px; border: none; background: {{ f.bg }}; color: {{ f.fg }}; font-size: 12px; font-weight: 700; cursor: pointer;">{{ f.label }}</button>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 11px; color: #6B7280;">
+    <span style="font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">My pre-check</span>
+    <span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: #E6F7F2; color: #0B7D6C; font-weight: 700;">VERIFIED</span> works as designed, confirmed by automated pass
+    <span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-weight: 700;">FIXED IN QA</span> found broken, already fixed
+    <span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-weight: 700;">DEMO STUB</span> shows a placeholder — needs a decision
+    <span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: #F1F5F9; color: #6B7280; font-weight: 700;">OUT OF SCOPE</span> intentionally decorative in this prototype
+  </div>
+
+  <!-- Sections -->
+  <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="3">
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 14px 20px; background: #7B61FF;">
+        <span style="font-size: 14px; font-weight: 700; color: #FFFFFF;">{{ sec.title }}</span>
+        <span style="font-size: 12px; color: #E0D8FA;">{{ sec.progress }}</span>
+        <div style="flex: 1;"></div>
+        <a href="{{ sec.href }}" style="font-size: 12px; font-weight: 700; color: #FFFFFF; text-decoration: underline;">Open page →</a>
+      </div>
+      <sc-for list="{{ sec.steps }}" as="s" hint-placeholder-count="4">
+        <div style="display: grid; grid-template-columns: 44px minmax(0, 1.2fr) minmax(0, 1fr) 128px 150px; gap: 14px; align-items: center; padding: 11px 20px; border-bottom: 1px solid #EEEEEE; background: {{ s.rowBg }};">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #94A3B8;">{{ s.id }}</span>
+          <span style="font-size: 13px; color: #0F1B2E; line-height: 18px;">{{ s.action }}</span>
+          <span style="font-size: 12px; color: #6B7280; line-height: 17px;">{{ s.expected }}</span>
+          <span><span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: {{ s.badgeBg }}; color: {{ s.badgeFg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ s.badge }}</span></span>
+          <span style="display: flex; align-items: center; gap: 6px; justify-content: flex-end;">
+            <button onClick="{{ s.onPass }}" style="padding: 6px 12px; border-radius: 5px; border: 1px solid {{ s.passBorder }}; background: {{ s.passBg }}; color: {{ s.passFg }}; font-size: 11px; font-weight: 700; cursor: pointer;">Pass</button>
+            <button onClick="{{ s.onFail }}" style="padding: 6px 12px; border-radius: 5px; border: 1px solid {{ s.failBorder }}; background: {{ s.failBg }}; color: {{ s.failFg }}; font-size: 11px; font-weight: 700; cursor: pointer;">Fail</button>
+          </span>
+        </div>
+        <sc-if value="{{ s.showNote }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 8px 20px 12px 78px; border-bottom: 1px solid #EEEEEE; background: #FEECEC;">
+            <input value="{{ s.note }}" onChange="{{ s.onNote }}" placeholder="What went wrong? I'll pick these up in the fix cycle." style="width: 100%; height: 34px; border: 1px solid #F5C2C2; border-radius: 5px; padding: 0 12px; font-size: 12px; color: #0F1B2E; outline: none; background: #FFFFFF;">
+          </div>
+        </sc-if>
+      </sc-for>
+    </div>
+  </sc-for>
+
+  <div style="font-size: 12px; color: #94A3B8; padding-bottom: 20px;">When you're done (or partway through), tell me — I'll read your fails and notes from here and start the fix cycle.</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    results: (() => { try { return JSON.parse(localStorage.getItem('onb-qa-v1') || '{}'); } catch (e) { return {}; } })(),
+    filter: 'all',
+  };
+
+  persist(results) {
+    try { localStorage.setItem('onb-qa-v1', JSON.stringify(results)); } catch (e) {}
+  }
+
+  setResult(id, patch) {
+    this.setState(prev => {
+      const results = Object.assign({}, prev.results, { [id]: Object.assign({}, prev.results[id], patch) });
+      this.persist(results);
+      return { results };
+    });
+  }
+
+  data() {
+    if (this._data) return this._data;
+    const V = 'verified', X = 'fixed', D = 'stub', O = 'scope';
+    this._data = [
+      { title: 'Global — header + side navigation (test from any page)', href: 'Billing Home.dc.html', steps: [
+        ['G1', 'Click the » expand button on the icon rail', 'Nav expands to the full panel — and stays expanded as you move between pages and after refresh', V],
+        ['G2', 'Click the « collapse button on the expanded panel', 'Nav collapses to the icon rail, also persistent', V],
+        ['G3', 'Click the purple Billing icon (rail) or Billing header (expanded)', 'Lands on Billing Home from any page', V],
+        ['G4', 'Click each sub-link: Dashboard, Agent Inbox, AR Worklist, Claims, Analytics', 'Each opens its page; the current page is highlighted', V],
+        ['G5', 'Confirm the side nav shows ONLY billing items', 'Schedules, Calendar, Workflows and Directory are gone — this is the standalone Billing Portal, not the Clerk Portal', V],
+        ['G6', 'Search bar, notification bell, profile menu (top bar)', 'Decorative in this prototype — no behavior', O],
+      ]},
+      { title: 'Billing Home (Overview)', href: 'Billing Home.dc.html', steps: [
+        ['B1', 'Click each of the 4 stat tiles (Decisions waiting, Follow-ups due, Claims in flight, Collected MTD)', 'Each navigates to its workspace (Agent Inbox, AR Worklist, Claims, Analytics)', V],
+        ['B2', 'Click each of the 4 "Needs you now" rows', 'Each opens the page where that item lives', V],
+        ['B3', 'Click each of the 4 workspace cards at the bottom', 'Each opens its workspace', V],
+      ]},
+      { title: 'Agent Inbox', href: 'Agent Inbox v3.dc.html', steps: [
+        ['A1', 'Click a pipeline stage tile (e.g. Coding & Validation)', 'A panel opens listing the claims at that stage; blocked ones highlighted', V],
+        ['A2', 'Click Close on the stage panel', 'Panel closes', V],
+        ['A3', 'Click "Go to decision" on a blocked claim in the stage panel', 'Panel closes and the matching decision card expands', V],
+        ['A4', 'Click a decision card header', 'Card expands / collapses', V],
+        ['A5', 'Click the green approve button on a decision', 'Card marks done with a summary line; decision count updates', V],
+        ['A6', 'Click Undo on a completed decision', 'Decision returns to the open state', V],
+        ['A7', 'Click "Edit first" on an expanded decision, change the field/add a note, then "Approve with edits"', 'Inline editor opens pre-filled with the agent\u2019s proposed fix; approving records the delta ("Approved with your edits — …") on the decision and resolves it', V],
+        ['A8', 'Click "Escalate", pick/enter a reason, then "Send to Derek"', 'Escalation form opens (recipient Derek Okafor, Billing Manager); sending pins the decision to the top with an amber "Escalated" state; Recall returns it to you', V],
+        ['A9', 'Click an ENCT claim number in the affected-claims list', 'Opens Claim Detail — note: always opens the one sample claim (RILEY), a known prototype boundary', V],
+      ]},
+      { title: 'AR Worklist — list mode', href: 'AR Worklist.dc.html', steps: [
+        ['W1', 'Click the group tiles (All open, 0–30, 31–60, 61–90, 90+)', 'Table filters to that bucket; tile highlights', V],
+        ['W2', 'Switch Group by: Aging / Payer / Denial reason', 'Tiles re-group and the filter resets to All open', V],
+        ['W3', 'Click scope chips: Due today / My accounts / All accounts', 'Table re-filters; count in the summary updates', V],
+        ['W4', 'Click "Work this list (N)"', 'Enters the focused work view on the first claim, queue counter shows 1 of N', V],
+        ['W5', 'Click any table row', 'Enters the focused work view on that claim', V],
+        ['W6', 'Click "View Analytics" on the weekly report strip', 'Opens Analytics', V],
+      ]},
+      { title: 'NEW — Filing deadlines & priority queue (items 1+2)', href: 'AR Worklist.dc.html', steps: [
+        ['P1', 'Look at the Deadline column in the worklist', 'Every claim shows days left to its payer\u2019s timely-filing deadline (Medicare 365d, Medicaid/Anthem/UHC/MHS 90d, Aetna 120d, Humana/PPHP/VA 180d from DOS); red = \u226414d or breached, amber = \u226430d', 'verified'],
+        ['P2', 'Check the list order', 'P1 filing-risk claims first (most urgent deadline first), then high-value/aged and due-today (P2), then routine (P3), low balance/on hold last (P4)', 'verified'],
+        ['P3', 'Click the red "Filing risk (N)" chip', 'List filters to only claims within 30 days of deadline or past it; click again to clear', 'verified'],
+        ['P4', 'Enter the work view on any claim', 'Queue bar shows the claim\u2019s priority and why, e.g. "P1 \u00b7 filing breached Mar 25" or "P2 \u00b7 due today"', 'verified'],
+        ['P5', 'Open a P1 claim and read the ask', 'The ask leads with the deadline: file/refile today, or for breached claims, appeal with clearinghouse proof \u2014 no routine status call', 'verified'],
+        ['P6', 'Check DOS vs deadline on any row', 'Deadline = DOS + the payer\u2019s filing limit, consistent everywhere (header chip, column, ask)', 'verified'],
+      ]},
+      { title: 'AR Worklist — focused work view', href: 'AR Worklist.dc.html', steps: [
+        ['W7', 'Click "Worklist" (back button)', 'Returns to the list, filters intact', V],
+        ['W8', 'Click Next claim / prev arrow repeatedly', 'Moves through the queue; counter updates; end of queue shows a toast', V],
+        ['W9', 'Click the claim number link in the claim header', 'Opens Claim Detail (sample claim — prototype boundary)', V],
+        ['W10', 'Read "Your ask for this call"', 'Read-only by design — no edit button (agent keeps it current)', V],
+        ['W11', 'Click the method chips (Phone call / Payer portal / Fax / Email)', 'Selected chip highlights', V],
+        ['W12', 'Type in the touch note, e.g. "Spoke to Jacqueline, ref C-4471820 — reprocessing initiated, quoted 10 business days"', 'Captured chips appear live: Rep, Ref #, Follow up date, and the Outcome updates', V],
+        ['W13', 'Tap a captured chip', 'Chip becomes an inline input to correct the value', V],
+        ['W14', 'Change the Outcome dropdown chip', 'Overrides the auto-detected outcome', V],
+        ['W15', 'Click Save touch (with a note)', 'Timeline gets your entry with the captured details; claim status + next follow-up update; toast confirms', V],
+        ['W16', 'Click Save touch with an empty/short note', 'Blocked with a toast asking for a note', V],
+        ['W17', 'Pick a category chip, add optional detail, click Send request', 'Toast with a REQ number; request logged to the account timeline', V],
+        ['W18', 'Pick "Other" without a description, click Send request', 'Blocked with a toast asking you to describe it', V],
+        ['W19', 'On a claim with status "Denied — appeal drafted": click Approve & file appeal', 'Card becomes a green "Appeal filed" banner; timeline + status update', V],
+      ]},
+      { title: 'Claims (Claim Detail)', href: 'Claim Detail.dc.html', steps: [
+        ['C1', 'Click "Billing" in the breadcrumb', 'Was pointing at Agent Inbox — now opens Billing Home', X],
+        ['C2', 'Click "Claims" in the breadcrumb', 'Was pointing at Agent Inbox — now stays on the Claims page', X],
+        ['C3', 'Toggle Claim version: v1 · superseded / v2 · current', 'v1 shows the superseded warning banner and the old ZIP; v2 shows the corrected claim', V],
+        ['C4', 'Click "Source encounter note" (header button)', 'Modal opens with the signed note and the coded fields extracted from it', V],
+        ['C5', 'Close the modal (X or clicking the dark backdrop)', 'Modal closes', V],
+        ['C6', 'On the Claim tab, click "View source note ↗"', 'Same modal opens', V],
+        ['C7', 'Click the copy icons next to Claim / Payer claim numbers', 'Toast confirms the copied value', V],
+        ['C8', 'Switch tabs: Timeline / Claim / Payer Responses / Payments', 'Each tab shows its content', V],
+        ['C9', 'On the Timeline, click agent rows and "raw 837/835" toggles', 'Rows expand with agent detail; raw payloads toggle', V],
+        ['C10', 'Click "Agent Inbox" links in the variance banners', 'Opens the Agent Inbox', V],
+      ]},
+      { title: 'Analytics', href: 'Analytics.dc.html', steps: [
+        ['N1', 'Toggle Monthly / Weekly', 'KPIs, chart, and subtitles switch period', V],
+        ['N2', 'Scan the page for rendering issues', 'Charts, aging table, comparison render cleanly — no console errors in my pass', V],
+      ]},
+      { title: 'NEW — Agent-polished notes', href: 'AR Worklist.dc.html', steps: [
+        ['G8', 'Save a shorthand touch note, e.g. "spoke jacqueline reprocessing 10 business days"', 'The timeline shows a documentation-grade note composed by the agent (method, payer, outcome, quoted days, follow-up), with a "Polished by the agent" line and your original underneath', 'verified'],
+        ['G9', 'Save a well-written, punctuated note', 'Saved exactly as written — no polishing, no tag', 'verified'],
+        ['G10', 'Quick logs', 'Unaffected — they already save templated notes', 'verified'],
+      ]},
+      { title: 'NEW — Smart-prefill practice requests', href: 'AR Worklist.dc.html', steps: [
+        ['R1', 'Open a claim with a COB, coverage-terminated, or prior-auth denial', 'The request card leads with one suggested action (e.g. "Request COB confirmation") plus a line explaining why the agent suggested it', 'verified'],
+        ['R2', 'Click the suggested request', 'Sent in one click, pre-filled with patient, DOS and denial reason — toast + timeline entry, no category picking', 'verified'],
+        ['R3', 'Click "Or request something else…"', 'The full category chips + detail field expand below; toggle hides them again', 'verified'],
+        ['R4', 'Open a claim where nothing is inferable (e.g. "No payer response")', 'No fake suggestion — the card shows the normal chips + detail field', 'verified'],
+      ]},
+      { title: 'NEW — Faster touch capture: voice, quick log, auto-advance', href: 'AR Worklist.dc.html', steps: [
+        ['F1', 'In the work view, tap the mic ("Dictate") next to the note field and speak', 'Live transcript appears in the note with details captured as chips; button pulses red while listening; tap again to stop. (Chrome/Edge only — hidden in unsupported browsers; if mic permission is blocked you get a toast to type instead)', 'verified'],
+        ['F2', 'With an empty note, tap a Quick log chip (e.g. "In process — call back 2 wks")', 'A complete touch is saved (templated note + outcome + auto-set follow-up shown in the toast) and you move to the next claim automatically', 'verified'],
+        ['F3', 'Click "Stay on this claim" in the toast within 5 seconds', 'Returns to the claim you just logged — the touch stays saved either way', 'verified'],
+        ['F4', 'Type anything in the note', 'Quick log chips hide (they are for empty-note routine calls only)', 'verified'],
+        ['F5', 'Save a typed/dictated touch', 'Also auto-advances to the next claim with the same undo toast; end of queue returns you to the list', 'verified'],
+        ['F6', 'Try the keyboard: N / P to move, 1–5 for quick logs, Ctrl+Enter (or Cmd+Enter) to save', 'Shortcuts work in the work view but never fire while typing in a field; hint line sits in the queue bar', 'verified'],
+      ]},
+      { title: 'NEW — Payer performance scorecard (item 5)', href: 'Analytics.dc.html', steps: [
+        ['S1', 'Scroll to "Payer Performance" on Analytics (below the aging table)', 'One row per payer: avg days to pay, denial rate, AR past 90d (computed from the aging table above), color-coded green/amber/red', 'verified'],
+        ['S2', 'Read the flags and insight line', 'Indiana Medicaid flagged as escalation candidate (52d, 16% denials, 44% past 90d); Anthem/MHS/Humana on watch; VA marked on hold for credentialing', 'verified'],
+      ]},
+      { title: 'NEW — Low-balance write-off policy (item 3)', href: 'AR Worklist.dc.html', steps: [
+        ['L1', 'Look above the worklist table', 'An amber banner: "14 claims ($264 total) are below the ~$25 cost of a touch" with Request write-off approval / Dismiss buttons', 'verified'],
+        ['L2', 'Click "Request write-off approval"', 'Toast confirms WOB-2261 sent; banner flips to a blue "pending practice approval" state — claims stay in the queue', 'verified'],
+        ['L3', 'Open a low-balance claim (switch to All accounts, bottom of the queue)', 'Queue bar shows "P4 · low balance — write-off recommended" and the ask says no payer call is needed', 'verified'],
+        ['L4', 'Check priority interplay', 'Low balance trumps deadlines: a $13 claim past its filing deadline is a write-off candidate (P4), not an appeal (P1) — found and fixed during QA', 'fixed'],
+      ]},
+      { title: 'NEW — Denial prevention loop (item 6)', href: 'Analytics.dc.html', steps: [
+        ['V1', 'Scroll to "Denial Prevention — Recurring Root Causes" at the bottom of Analytics', 'Four patterns with root cause, claims + dollars (matching the denial-reason counts), trend, status chip (Fixed upstream / Practice notified / Recurring), and the action taken', 'verified'],
+        ['V2', 'In the Agent Inbox, expand decision 3 (the ZIP+4 fix)', 'A purple pattern note appears: "2nd address-quality pattern this quarter" with a "View in Prevention →" link', 'verified'],
+        ['V3', 'Click "View in Prevention →"', 'Opens Analytics anchored at the Prevention card', 'verified'],
+        ['V4', 'Expand the sequestration decision (Accept small variances)', 'Its pattern note explains that accepting updates the expectation model so future CO-253 variances stop reaching the inbox', 'verified'],
+      ]},
+      { title: 'NEW — Industry benchmarks on Analytics (item 4)', href: 'Analytics.dc.html', steps: [
+        ['B4a', 'Look at the PC Ratio, DSO, and Denial Rate KPI cards', 'Each shows its industry target with a green (met) or amber (just missed) dot — e.g. DSO 41 vs target < 40', 'verified'],
+        ['B4b', 'Read the "Against industry benchmarks" strip under the KPIs', 'Four metrics vs targets: Days in AR 41 (<40), Net collection 96.2% (≥95%), Clean claims 94.1% (≥95%), AR past 90 days 18.9% (≤15%) — red where missed, with the MGMA/HFMA source note', 'verified'],
+        ['B4c', 'Scroll to the bottom of the aging table', 'A "% of open AR" row shows each bucket\u2019s share; 90+ share (18.9%) is red against the ≤15% target, with a footnote attributing it to the VA credentialing hold (14.6% excluding it)', 'verified'],
+        ['B4d', 'Toggle Monthly / Weekly', 'Benchmark lines and strip stay consistent in both periods', 'verified'],
+      ]},
+      { title: 'PHASE 1b — Claims Register (raw all-claims data)', href: 'Claims Register.dc.html', steps: [
+        ['CR1', 'Click "Claims" in the nav', 'Opens the Claims Register — a full list of every claim on file (all statuses), not the single Claim Detail; the old nav pointed at one claim', 'verified'],
+        ['CR2', 'Read the summary strip', 'Claims in view, Total billed, Total paid, Open AR in view — recalculates as you filter (IFC ~2,400 claims)', 'verified'],
+        ['CR3', 'Type in the search box (patient, claim #, or payer ref)', 'List filters live; count updates; no-match shows an empty state', 'verified'],
+        ['CR4', 'Use the Status / Payer / Facility / Ages dropdowns', 'Each filters the list; combine them; "Clear filters" resets everything', 'verified'],
+        ['CR5', 'Click a column header (e.g. Balance)', 'Sorts by that column; click again to flip direction; arrow shows the active sort', 'verified'],
+        ['CR6', 'Use Previous / Next pagination', '50 rows per page; "Showing X–Y of N" and page number update; buttons disable at the ends', 'verified'],
+        ['CR7', 'Click any claim row', 'Opens Claim Detail (the drill-in) — note: the prototype opens the one sample claim, a known boundary', 'verified'],
+        ['CR8', 'Click "Export CSV"', 'Confirmation toast (indicated, not a real file in the prototype)', 'verified'],
+        ['CR9', 'Switch practice to Westbrook', 'Register re-scopes to ~480 claims, Westbrook Main Office only, and persists', 'verified'],
+      ]},
+      { title: 'PHASE 1 — Standalone Billing Portal + practice scoping', href: 'Billing Home.dc.html', steps: [
+        ['H1', 'Look at the top bar on every page', 'Otangeles mark + "Billing Portal" label; nav is billing-only (no clinical/scheduling items)', 'verified'],
+        ['H2', 'Open the Practice switcher (top bar) and pick Westbrook Family Medicine', 'Whole portal re-scopes to that practice and the choice persists across pages and refresh', 'verified'],
+        ['H3', 'With Westbrook selected, check Dashboard, Agent Inbox, AR Worklist, Analytics', 'Every page shows Westbrook\u2019s smaller numbers and subtitle — Dashboard 2/8/12, worklist 8 open ($886), inbox 90-claim pipeline w/ 2 decisions, Analytics $27,512 open AR', 'verified'],
+        ['H4', 'Switch back to Ibekie Foundation Clinics', 'All pages return to the full IFC dataset — the two practices never bleed into each other', 'verified'],
+        ['H5', 'On the AR Worklist work view, read the header; on Claim Detail, read the header meta', 'Each claim shows its facility (e.g. Niles Care Center) — IFC bills for care delivered at its facilities', 'verified'],
+        ['H6', 'Confirm the practice switcher lists only Bell Medics\u2019 contracted practices', 'IFC (primary) + Westbrook — the tenant boundary; onboarding new practices/companies comes in Phase 4 (Operations Admin)', 'verified'],
+      ]},
+      { title: 'NEW — Phase 1 · re-home to the external persona (PRD approved)', href: 'Agent Inbox v3.dc.html', steps: [
+        ['P1', 'Check the avatar in the top bar on every page', 'Signed-in user is Angela Mensah · Bell Medics · AR Rep everywhere — no internal clerk persona remains', V],
+        ['P2', 'Agent Inbox — expand "The practice replied with updated insurance"', 'Framed from Bell Medics\u2019 side: request REQ-2214 answered by the front office; approve applies the Humana coverage and rebills', V],
+        ['P3', 'AR Worklist — open the work view and send a practice request', 'Copy reads "Request info from the practice" / "lands in the practice\u2019s inbox"; the logged touch says "Requested from the practice" — direction matches the external persona', V],
+        ['P4', 'Analytics — read the header and section subtitles', '"Shared with the practice"; Payer Performance is "your claims"; Worked AR is "by your team\u2019s action"', V],
+        ['P5', 'Claim Detail — read the Jun 26 timeline entry', 'The ZIP-fix approval is attributed to Angela Mensah (AM), consistent with the signed-in persona', V],
+      ]},
+      { title: 'NEW — Phase 2 · Settings & Team (PRD §5.6, approved plan)', href: 'Settings.dc.html', steps: [
+        ['T1', 'Open the avatar menu (top bar, any page) and use "Sign in as" to pick Derek Okafor', 'Whole portal re-scopes to the Billing Manager persona; the choice persists across pages and refresh', V],
+        ['T2', 'As Derek, open Settings → Team', 'Roster shows Angela, Rob, Priya, Sam + Derek with role, practice chips, status, last active, and live due-today loads that link to the AR Worklist', V],
+        ['T3', 'Click Invite Rep and send an invite', 'A pending row appears; "Mark accepted" flips it to Active; "Revoke" removes it; everything survives reload', V],
+        ['T4', 'Deactivate a rep, then reactivate', 'Status chip flips Inactive/Active and persists; Derek himself has no deactivate action', V],
+        ['T5', 'Use "Edit practices" on a rep', 'IFC / Westbrook toggles update the assignment; a member always keeps at least one practice', V],
+        ['T6', 'Switch to Angela and open Settings → Team and Company Profile', 'Team shows the manager-only locked state; Company Profile is read-only — the visible role boundary', V],
+        ['T7', 'As Derek, check the Dashboard', 'A "Team workload" strip shows each rep\u2019s due-today count for the selected practice; Angela\u2019s rep view has no strip', V],
+        ['T8', 'As Angela, escalate an Agent Inbox decision to Derek, then sign in as Derek', 'The card is pinned with "Escalated to you" + Angela\u2019s reason and stays actionable — Derek\u2019s approval closes the loop Angela started', V],
+        ['T9', 'Flip Notification toggles as both personas', 'Preferences save per person — Angela\u2019s and Derek\u2019s settings don\u2019t affect each other', V],
+      ]},
+      { title: 'NEW — Phase 3 · Operations Admin: Billing Companies (PRD §9, approved plan)', href: 'Ops Billing Companies.dc.html', steps: [
+        ['O1', 'Open Ops Billing Companies (Otangeles-internal persona: Michael, Operations Admin)', 'Your real Ops Admin shell is recreated — header, grouped nav (Billing Companies sits under Medical Practices with a NEW tag), teal active states, footer widgets', V],
+        ['O2', 'Read the Bell Medics card', 'Active chip, masked manager email, and live stats — Open AR from the shared claims store, 5 users from the team store, 2 practices, 50 in flight — consistent with the Billing Portal dashboards', V],
+        ['O3', 'Click Enter Portal on Bell Medics', 'Lands in the Bell Medics Billing Portal (Billing Home) — the cross-portal round trip', V],
+        ['O4', 'View Info → walk the 4 tabs', 'Overview (live health cards + read-only profile), Team (live roster from team-store), Practices (per-practice AR from claims-store), Activity (audit-style events)', V],
+        ['O5', 'Suspend Company, reload, then Reactivate', 'Red suspended banner + chip persist across reload; list page shows the state too', V],
+        ['O6', 'Run the Onboard Billing Company wizard end-to-end', 'Validation on steps 1–2; review step summarizes; Create adds a pending Onboarding card on the list, persisted across reload', V],
+        ['O7', 'Revoke Invite on an onboarding company', 'Wizard-added companies are removed; Meridian flips to Suspended', V],
+        ['O8', 'Open Ops Dashboard', 'Stat row gains the NEW Billing Companies tile (live count, links to the list); Role Distribution gains Billing Manager + AR Rep slices; activity chart gains the teal Billing Portal line', V],
+      ]},
+      { title: 'NEW — Phase 4a · Ops ripple effects + tenant isolation (approved plan)', href: 'Ops Users.dc.html', steps: [
+        ['R1', 'Ops Users — scan the table', 'Billing users (managers + reps, live from the team store) join Practice Admins and Ops Admins with an Organization column, role chips, masked emails, and 2FA status; org-type filter works', V],
+        ['R2', 'Ops Users — Invite User with role = Billing Manager or AR Rep', 'The form swaps Medical Practice for a Billing Company picker; sending a Bell Medics invite appears in Bell Medics Settings AND Ops Onboarding, and writes an audit event', V],
+        ['R3', 'Ops Onboarding', 'Billing Manager and billing-team invitations sit in the same 7-step flow as Practice Admins, with org chips; Meridian shows stuck-at-step-1 with a reminder action', V],
+        ['R4', 'Ops Medical Practices — read a card', 'Practice cards gain a "Billed by Bell Medics" row; View Info opens the slide-over recreated from your screenshot with a NEW Billing section', V],
+        ['R5', 'Change billing company on a practice', 'Guarded flow: pick new company, effective date, isolation warning (in-flight claims settle with outgoing company); confirming persists, marks the transition, and writes an audit event', V],
+        ['R6', 'Ops Analytics — Revenue Cycle section', 'One aggregate row per billing company (live open AR, aging mix, PC ratio, SLA) — no claim- or patient-level data on the Ops side', V],
+        ['R7', 'Ops Audit Log', 'Billing event types (company lifecycle, reassignment, portal entry) with filters; actions taken in the prototype appear live at the top', V],
+        ['R8', 'Ops Notifications', 'Billing events added to the Operations Admin matrix + a NEW Billing Manager role tab; toggles persist', V],
+        ['R9', 'Enter Portal from Ops, then browse Bell Medics pages', 'A purple "Viewing as Operations · access is audited" banner rides every billing page; End ops view dismisses it; entering normally (direct link) shows no banner', V],
+        ['R10', 'Isolation spot-check', 'No patient names anywhere on Ops screens; emails masked; Meridian sees no Bell Medics data; reassignment warning states no cross-company visibility', V],
+      ]},
+      { title: 'NEW — Phase 4b · Roles & Portal Configuration (approved plan — completes the PRD)', href: 'Ops Roles.dc.html', steps: [
+        ['G1', 'Open Ops Roles & Permissions', 'Five role cards (Billing Manager + AR Rep tagged NEW); selecting one shows its permission matrix grouped by domain with allow / deny / scoped marks', V],
+        ['G2', 'Read the Patient Data (PHI) group for each role', 'The isolation rule is explicit: Ops = deny everywhere; billing roles = scoped to served practices, deny for everything else', V],
+        ['G3', 'Click "Request role change"', 'Read-only affordance: a toast explains edits need a second Ops Admin approval and are audited', V],
+        ['G4', 'Open Ops Portal Configuration', 'Four portal columns; Billing is marked LIVE with autonomy radio, SLA hours, appeals toggle, report cadence, 2FA toggle — all persisted', V],
+        ['G5', 'Set Agent autonomy to draft-only, then open the Bell Medics Agent Inbox', 'A purple notice explains approvals are disabled by Operations; Approve buttons show a toast instead of acting; Escalate still works; setting it back re-enables approvals', V],
+        ['G6', 'Check the Audit Log after config changes', 'Each Portal Configuration change appears as an audited access event at the top', V],
+      ]},
+      { title: 'NEW — Phase 7a · Contracts & Fee Schedules', href: 'Contracts.dc.html', steps: [
+        ['C1', 'Open Contracts from the nav', '8 payer contracts with rate basis (exhibit / public schedule / inferred), effective dates, timely filing, code coverage, payments-agree counts', V],
+        ['C2', 'Type 99309 in the rate lookup (or click the chip)', 'Expected allowed for all 8 payers side by side; MHS row highlighted amber with the drift note; CONTRACTED vs INFERRED tags on each', V],
+        ['C3', 'Open the MHS HIP contract', 'Drift panel: loaded $141.20 vs avg paid $125.70 (89%), 30 payments since Jun 14, with Approve Rate Review / Dismiss Flag actions', V],
+        ['C4', 'Approve the rate review', 'Chip flips to REVIEW QUEUED; header shows "Rate review sent to Agent Inbox"', V],
+        ['C5', 'Open Humana (inferred)', 'Drift is flag-only: no appeal actions, note explains inferred rates can never ground an appeal; footer offers Load First Exhibit', V],
+        ['C6', 'Load New Exhibit on any payer', 'Modal with effective date + version note; confirming prepends the version to the history, attributed and dated', V],
+        ['C7', 'Agent Inbox — expand the E/M coding decision', 'Evidence now shows Expected payment for 99308 and the upgrade delta from the contracts store', V],
+        ['C8', 'Analytics — Payer Performance', 'Yield vs contract column: MHS 94.2% red-flagged; inferred payers starred; insight line links to Contracts', V],
+      ]},
+      { title: 'NEW — Phase 7 · Payments: posting & reconciliation', href: 'Payments.dc.html', steps: [
+        ['Y1', 'Open Payments → Deposits', 'Three day-groups: Jul 11 reconciled, Jul 12 with the $100-short Anthem check (partial, inquiry drafted), Jul 13 with the ERA-less UHC deposit (unmatched, polling)', V],
+        ['Y2', 'Posting runs tab', '6 runs with paid/contractual/transferred, automation bar per run; MHS run at 43% with 12 exceptions linking to the variance queue', V],
+        ['Y3', 'Variance queue — open the MHS underpayment', 'Expected/paid/variance trio, narrative, 3 affected claims + 9 more, disposition options with AGENT PROPOSED tag; approve files the batch reprocess', V],
+        ['Y4', 'Review the other categories', 'Takeback (PLB WO, post & reopen), duplicate payment (hold as unapplied), zero-pay PR-1 (transfer to patient), interest auto-posted at Tier 3', V],
+        ['Y5', 'Claim Detail → Payments tab', 'Real ledger: charge \u2192 payment \u2192 CO-45 \u2192 CO-253 pending, balance column summing to $0.00', V],
+        ['Y6', 'Settings → Write-off Governance (as Derek)', 'Threshold ladder (rep/manager/dual sign-off), reason codes, MTD rollup; changes audit-logged; as Angela the tab shows the locked card with the role hint', V],
+        ['Y7', 'Ops Portal Config → Billing', 'Write-off ceiling row ($1,000/$2,500/$5,000); Settings shows "cannot exceed" the chosen ceiling', V],
+      ]},
+      { title: 'NEW — Phase 8 · Balance lifecycle & secondary billing', href: 'Claims Register.dc.html', steps: [
+        ['B1', 'Claims Register — Owner column', 'Every claim shows PRIMARY / SECONDARY / TERTIARY / PATIENT / ZERO (or UNCOLLECTIBLE-REQ); hover reveals the transition trigger', V],
+        ['B2', 'Filter by Balance owner: Secondary payer', 'Register narrows to claims sitting with secondary payers; count updates; owner column is sortable', V],
+        ['B3', 'Agent Inbox — secondary claim review', 'Agent-generated secondary claim from the primary 835 + COB stack; approve submits and the balance stays SECONDARY until their remittance', V],
+        ['B4', 'Agent Inbox — stalled crossover', 'MA18 tracked 14 days silent; approve submits direct with duplicate-void protection', V],
+        ['B5', 'Claim Detail — Balance ownership strip', 'PRIMARY \u2192 skipped SECONDARY/PATIENT \u2192 ZERO path with per-step notes', V],
+        ['B6', 'Analytics — Open AR by Balance Owner', 'Stacked bar computed live from the claims store; AR Worklist carries the secondary-balances strip', V],
+      ]},
+      { title: 'NEW — Phase 10 · Scale & intuitiveness', href: 'Billing Home.dc.html', steps: [
+        ['X1', 'Press / on any billing screen and type "stor"', 'Global search focuses and returns grouped results (Claims); arrow keys + Enter navigate; Escape closes', V],
+        ['X2', 'Search "99309", "MHS", and "4881"', 'CPT results deep-link to Contracts with the lookup pre-filled; payers link to Contracts; the Anthem check trace links to Payments', V],
+        ['X3', 'Search a broad term and click "Show all N in the Claims Register"', 'Register opens pre-filtered via ?q= and shows the matching population', V],
+        ['X4', 'Agent Inbox — click "Simulate a busy morning"', '~45+ decisions; view flips to grouped rows sorted by count; quiet day stays on cards with the first decision expanded', V],
+        ['X5', 'Batch-approve a group (e.g. small-balance write-offs)', 'One click resolves all members; toast notes each is logged individually; non-batchable groups explain why and open item-by-item', V],
+        ['X6', 'Read the routing rule under "Your decisions"', 'States that all approvals live in the Inbox; Payments/Worklist queues are working views of the same decisions', V],
+        ['X7', 'Claims Register — apply the "Secondary balances" starter view, then save a custom view', 'Chips apply filter sets in one click; custom views persist and are deletable; active view highlights', V],
+        ['X8', 'Select rows via checkboxes', 'Bulk bar shows count + open dollars; Assign/Worklist stamp each claim; Export CSV downloads a real file; write-off batch routes to the Inbox', V],
+        ['X9', 'Billing Home — first visit', '"How this portal thinks" card with the 5-sentence mental model; Got it dismisses permanently', V],
+        ['X10', 'Hover dotted terms (835, CO-45, PLB) on Payments / Claim Detail', 'Plain-language tooltip appears; empty Inbox states what the agents are still watching', V],
+        ['X11', 'Contracts — type "discharge" in the rate lookup', 'Type-ahead searches the full catalog by code or description; picking a code prices it across all payers', V],
+        ['X12', 'Contracts — payer search, filter chips, Bulk Import', 'Drift/Missing/Inferred filters with counts; exceptions sort first; bulk CSV preview shows 3 payers/115 rates with deltas, confirm versions all three', V],
+      ]},
+      { title: 'NEW — Phase 9 · Statements & collections', href: 'Payments.dc.html', steps: [
+        ['S1', 'Payments → Statements tab', '8-row population: cycle (1st/2nd/final), status chips (pending batch / sent / plan / returned / final notice), next step per row', V],
+        ['S2', 'Approve the weekly batch', 'Card flips to sent; pending rows become SENT with vendor refs stamped on the ledger', V],
+        ['S3', 'Agent Inbox — returned mail', 'Address request to the facility clerk; cycle clock explicitly paused', V],
+        ['S4', 'Agent Inbox — payment plan', '4 \u00d7 $85 policy-checked (\u2264 6 months); approval activates the plan and pauses the collections clock', V],
+        ['S5', 'Agent Inbox — collections proposal', 'Contact history as evidence (3 statements, 0 replies, 128d \u2265 120d policy); approval holds export for the practice veto window', V],
+        ['S6', 'Practice window — collections review', 'Two proposed residents; Keep With Us pulls one off the list, No Objection lets it export at window close; silence = export is stated', V],
+        ['S7', 'Claims Register — UNCOLLECTIBLE-REQ', 'A slice of exhausted patient balances shows the magenta handed-off chip; balance stays on the books', V],
+      ]},
+    ];
+    return this._data;
+  }
+
+  renderVals() {
+    const st = this.state;
+    const BADGES = {
+      verified: ['VERIFIED', '#E6F7F2', '#0B7D6C'],
+      fixed: ['FIXED IN QA', '#F1EEFF', '#5B46D6'],
+      stub: ['DEMO STUB', '#FEF3DF', '#B45309'],
+      scope: ['OUT OF SCOPE', '#F1F5F9', '#6B7280'],
+    };
+
+    let total = 0, pass = 0, fail = 0;
+    this.data().forEach(sec => sec.steps.forEach(s => {
+      total++;
+      const r = st.results[s[0]];
+      if (r && r.r === 'pass') pass++;
+      if (r && r.r === 'fail') fail++;
+    }));
+
+    const sections = this.data().map(sec => {
+      let secDone = 0;
+      const steps = sec.steps
+        .filter(s => {
+          const r = st.results[s[0]];
+          if (st.filter === 'fail') return r && r.r === 'fail';
+          if (st.filter === 'todo') return !r || !r.r;
+          return true;
+        })
+        .map(s => {
+          const [id, action, expected, pre] = s;
+          const r = st.results[id] || {};
+          const b = BADGES[pre === 'verified' ? 'verified' : pre === 'fixed' ? 'fixed' : pre === 'stub' ? 'stub' : 'scope'];
+          const isPass = r.r === 'pass', isFail = r.r === 'fail';
+          return {
+            id, action, expected,
+            badge: b[0], badgeBg: b[1], badgeFg: b[2],
+            rowBg: isPass ? '#F7FDFB' : isFail ? '#FFFBFB' : '#FFFFFF',
+            passBg: isPass ? '#22C5A7' : '#FFFFFF', passFg: isPass ? '#FFFFFF' : '#0B7D6C', passBorder: isPass ? '#22C5A7' : '#B9E8DC',
+            failBg: isFail ? '#DC2626' : '#FFFFFF', failFg: isFail ? '#FFFFFF' : '#DC2626', failBorder: isFail ? '#DC2626' : '#F5C2C2',
+            onPass: () => this.setResult(id, { r: isPass ? null : 'pass' }),
+            onFail: () => this.setResult(id, { r: isFail ? null : 'fail' }),
+            showNote: isFail,
+            note: r.n || '',
+            onNote: (e) => this.setResult(id, { n: e.target.value }),
+          };
+        });
+      sec.steps.forEach(s => { const r = st.results[s[0]]; if (r && r.r) secDone++; });
+      return { title: sec.title, href: sec.href, progress: secDone + ' of ' + sec.steps.length + ' reviewed', steps };
+    }).filter(sec => sec.steps.length > 0);
+
+    const filterTabs = [
+      { key: 'all', label: 'All steps' },
+      { key: 'todo', label: 'Untested' },
+      { key: 'fail', label: 'Failed' },
+    ].map(f => ({
+      label: f.label,
+      bg: st.filter === f.key ? '#7B61FF' : '#FFFFFF',
+      fg: st.filter === f.key ? '#FFFFFF' : '#6B7280',
+      onClick: () => this.setState({ filter: f.key }),
+    }));
+
+    return {
+      totalCount: String(total),
+      doneCount: String(pass + fail),
+      passCount: String(pass),
+      failCount: String(fail),
+      filterTabs,
+      sections,
+    };
+  }
+}
+</script>
+</body>
+</html>

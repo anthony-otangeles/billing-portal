@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #FFFFFF; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #22C5A7; }
+  a:hover { color: #0B7D6C; }
+  * { box-sizing: border-box; }
+  button { font-family: 'Inter', sans-serif; }
+</style>
+<script src="./claims-store.js"></script>
+<script src="./team-store.js"></script>
+<script src="./companies-store.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #FFFFFF; display: flex; flex-direction: column;" data-screen-label="Ops Admin — Onboarding">
+
+  <x-import component-from-global-scope="ops-header" from="./ops-shell.js" hint-size="100%,76px"></x-import>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+    <x-import component-from-global-scope="ops-nav" from="./ops-shell.js" active="onboarding" hint-size="300px,900px"></x-import>
+
+    <div style="flex: 1; padding: 34px 44px 60px; display: flex; flex-direction: column; gap: 24px; min-width: 0; max-width: 1200px;">
+
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <h1 style="font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 700; color: #7B61FF; margin: 0;">Onboarding</h1>
+        <span style="font-size: 15px; color: #6B7280;">Monitor invitations against the 7-step onboarding flow — Practice Admins and Billing Managers follow the same sequence.</span>
+      </div>
+
+      <!-- The 7-step flow -->
+      <div style="border: 1px solid #E5E7EB; border-radius: 16px; padding: 22px 26px; display: flex; flex-direction: column; gap: 16px;">
+        <span style="font-size: 15px; font-weight: 700; color: #0F1B2E;">Onboarding sequence</span>
+        <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+          <sc-for list="{{ flowSteps }}" as="s" hint-placeholder-count="7">
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 8px 13px; border-radius: 9px; background: #F8FAFC;">
+                <span style="width: 22px; height: 22px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">{{ s.n }}</span>
+                <span style="font-size: 12.5px; font-weight: 600; color: #334155; white-space: nowrap;">{{ s.label }}</span>
+              </div>
+              <sc-if value="{{ s.hasArrow }}" hint-placeholder-val="{{ true }}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <span style="font-size: 12.5px; color: #94A3B8;">Billing Managers replace "Practice profile" and "Link facilities" with "Company profile" and "Confirm practices served" — same numbered sequence.</span>
+      </div>
+
+      <!-- In-progress invitations -->
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: baseline; gap: 10px;">
+          <span style="font-size: 16px; font-weight: 700; color: #0F1B2E;">In-progress invitations</span>
+          <span style="font-size: 13px; color: #6B7280;">{{ invCount }}</span>
+        </div>
+        <div style="border: 1px solid #E5E7EB; border-radius: 14px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: 2.2fr 1.4fr 1.8fr 2.4fr 1.4fr; gap: 12px; padding: 12px 22px; border-bottom: 1px solid #EEF2F7; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.07em;">
+            <span>Invitee</span><span>Role</span><span>Organization</span><span>Progress</span><span style="text-align: right;">Action</span>
+          </div>
+          <sc-for list="{{ invites }}" as="iv" hint-placeholder-count="3">
+            <div style="display: grid; grid-template-columns: 2.2fr 1.4fr 1.8fr 2.4fr 1.4fr; gap: 12px; padding: 15px 22px; border-bottom: 1px solid #EEF2F7; align-items: center;">
+              <div style="display: flex; flex-direction: column; gap: 1px; min-width: 0;">
+                <span style="font-size: 14px; font-weight: 700; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ iv.name }}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #94A3B8;">{{ iv.sent }}</span>
+              </div>
+              <span style="display: inline-flex; width: fit-content; padding: 3px 11px; border-radius: 9999px; background: {{ iv.roleBg }}; color: {{ iv.roleFg }}; font-size: 11.5px; font-weight: 700; white-space: nowrap;">{{ iv.role }}</span>
+              <div style="display: flex; align-items: center; gap: 7px; min-width: 0;">
+                <span style="display: inline-flex; flex-shrink: 0;">{{ iv.orgIcon }}</span>
+                <span style="font-size: 13px; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ iv.org }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="flex: 1; height: 7px; border-radius: 9999px; background: #F1F5F9; overflow: hidden;">
+                    <div style="height: 100%; width: {{ iv.pct }}; border-radius: 9999px; background: {{ iv.barColor }};"></div>
+                  </div>
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #6B7280; white-space: nowrap;">{{ iv.stepLabel }}</span>
+                </div>
+                <span style="font-size: 12px; color: {{ iv.noteColor }}; font-weight: 600;">{{ iv.note }}</span>
+              </div>
+              <div style="display: flex; justify-content: flex-end;">
+                <button onClick="{{ iv.onNudge }}" style="height: 38px; padding: 0 16px; border-radius: 9px; border: 1px solid {{ iv.btnBorder }}; background: #FFFFFF; color: {{ iv.btnColor }}; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap;" style-hover="background: #F8FAFC;">{{ iv.btnLabel }}</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <span style="font-size: 12.5px; color: #94A3B8;">Billing-company invitations are live from the companies and team stores — invites created in the onboarding wizard or Bell Medics Settings appear here.</span>
+      </div>
+
+      <!-- Recently completed -->
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <span style="font-size: 16px; font-weight: 700; color: #0F1B2E;">Recently completed</span>
+        <div style="border: 1px solid #E5E7EB; border-radius: 14px; overflow: hidden;">
+          <sc-for list="{{ completed }}" as="c" hint-placeholder-count="3">
+            <div style="display: flex; align-items: center; gap: 14px; padding: 14px 22px; border-bottom: 1px solid #EEF2F7;">
+              <span style="width: 32px; height: 32px; border-radius: 9999px; background: #E6F7F2; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22C5A7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+              </span>
+              <div style="display: flex; flex-direction: column; gap: 1px; flex: 1;">
+                <span style="font-size: 14px; font-weight: 700; color: #0F1B2E;">{{ c.name }}</span>
+                <span style="font-size: 12.5px; color: #6B7280;">{{ c.detail }}</span>
+              </div>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B7280;">{{ c.when }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1); z-index: 900; display: flex; align-items: center; gap: 10px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22C5A7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+      {{ toastText }}
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { ready: false, toast: '', nudged: {} };
+
+  componentDidMount() {
+    const check = () => {
+      if (window.CompaniesStore && window.TeamStore) this.setState({ ready: true });
+      else setTimeout(check, 60);
+    };
+    check();
+  }
+
+  showToast(msg) {
+    clearTimeout(this._tt);
+    this.setState({ toast: msg });
+    this._tt = setTimeout(() => this.setState({ toast: '' }), 2800);
+  }
+
+  renderVals() {
+    const st = this.state;
+    const ready = st.ready;
+
+    const flowLabels = ['Email invitation', 'Account + 2FA', 'Profile review', 'Org profile', 'Link facilities / practices', 'Team setup', 'Guided tour'];
+    const flowSteps = flowLabels.map((label, i) => ({ key: 'f' + i, n: String(i + 1), label, hasArrow: i < 6 }));
+
+    const PRACTICE_ICON = React.createElement('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: '#22C5A7', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', dangerouslySetInnerHTML: { __html: '<path d="M11 2v2"></path><path d="M5 2v2"></path><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path><path d="M8 15a6 6 0 0 0 12 0v-3"></path><circle cx="20" cy="10" r="2"></circle>' } });
+    const BILLING_ICON = React.createElement('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: '#7B61FF', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', dangerouslySetInnerHTML: { __html: '<rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line>' } });
+
+    let invites = [];
+    if (ready) {
+      const rows = [];
+      // Billing companies still onboarding (manager invitations)
+      window.CompaniesStore.getCompanies().filter(c => c.status === 'Onboarding').forEach(c => {
+        rows.push({
+          name: c.managerEmail, sent: c.id === 'meridian' ? 'sent Jul 7' : 'sent Jul 9',
+          role: 'Billing Manager', roleBg: '#F1EEFF', roleFg: '#5B46D6',
+          org: c.name, orgIcon: BILLING_ICON,
+          step: c.id === 'meridian' ? 1 : 0, stuck: c.id === 'meridian',
+          id: 'co-' + c.id,
+        });
+      });
+      // Pending billing team invites (from Bell Medics Settings / Ops Users)
+      window.TeamStore.getRoster().filter(m => m.pending).forEach(m => {
+        rows.push({
+          name: m.email, sent: 'sent Jul 9',
+          role: m.role, roleBg: m.role === 'Billing Manager' ? '#F1EEFF' : '#E6F7F2', roleFg: m.role === 'Billing Manager' ? '#5B46D6' : '#0B7D6C',
+          org: 'Bell Medics', orgIcon: BILLING_ICON,
+          step: 0, stuck: false,
+          id: 'tm-' + m.id,
+        });
+      });
+      // One practice-side invitation for contrast
+      rows.push({
+        name: 'avery.stone@westbrookfm.com', sent: 'sent Jul 8',
+        role: 'Practice Admin', roleBg: '#FDF2F8', roleFg: '#BE185D',
+        org: 'Westbrook Family Medicine', orgIcon: PRACTICE_ICON,
+        step: 4, stuck: false,
+        id: 'pa-1',
+      });
+
+      invites = rows.map(r => {
+        const pct = Math.round(r.step / 7 * 100);
+        const nudged = !!st.nudged[r.id];
+        return {
+          key: r.id,
+          name: r.name, sent: r.sent, role: r.role, roleBg: r.roleBg, roleFg: r.roleFg,
+          org: r.org, orgIcon: r.orgIcon,
+          pct: pct + '%',
+          barColor: r.stuck ? '#F59E0B' : '#22C5A7',
+          stepLabel: r.step + ' / 7',
+          note: r.stuck ? 'Stuck at step 1 for 3 days' : (r.step === 0 ? 'Awaiting acceptance' : 'On track'),
+          noteColor: r.stuck ? '#B45309' : '#6B7280',
+          btnLabel: nudged ? 'Reminder sent' : 'Send reminder',
+          btnColor: nudged ? '#94A3B8' : (r.stuck ? '#B45309' : '#334155'),
+          btnBorder: nudged ? '#EEF2F7' : (r.stuck ? '#FDE68A' : '#E5E7EB'),
+          onNudge: () => {
+            if (nudged) return;
+            this.setState(prev => ({ nudged: Object.assign({}, prev.nudged, { [r.id]: true }) }));
+            this.showToast('Reminder sent to ' + r.name);
+          },
+        };
+      });
+    }
+
+    const completed = [
+      { key: 'c1', name: 'Derek Okafor', detail: 'Billing Manager \u00b7 Bell Medics \u00b7 completed all 7 steps', when: 'Mar 14, 2026' },
+      { key: 'c2', name: 'IFC Admin', detail: 'Practice Admin \u00b7 Ibekie Foundation Clinics', when: 'Jan 22, 2026' },
+      { key: 'c3', name: 'Angela Mensah', detail: 'AR Rep \u00b7 Bell Medics \u00b7 invited by Derek Okafor', when: 'Mar 20, 2026' },
+    ];
+
+    return {
+      flowSteps,
+      invites,
+      invCount: ready ? invites.length + ' open' : '',
+      completed,
+      hasToast: !!st.toast,
+      toastText: st.toast,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

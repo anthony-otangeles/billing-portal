@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button, select, input, textarea { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+<script src="./team-store.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="Rulebook (Bell Medics)">
+
+  <x-import component-from-global-scope="ops-banner" from="./ops-banner.js" hint-size="100%,0px"></x-import>
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Billing Portal</span>
+    <x-import component-from-global-scope="search-bar" from="./search-bar.js" hint-size="480px,40px"></x-import>
+    <div style="flex: 1;"></div>
+    <x-import component-from-global-scope="practice-switcher" from="./practice-switcher.js" hint-size="260px,40px"></x-import>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <x-import component-from-global-scope="role-switcher" from="./role-switcher.js" hint-size="210px,44px"></x-import>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav ===== -->
+    <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+      <a href="Billing Home.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg>
+        Dashboard
+      </a>
+      <a href="Agent Inbox v3.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+        Agent Inbox
+      </a>
+      <a href="Coverage.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        Coverage
+      </a>
+      <a href="AR Worklist.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        AR Worklist
+      </a>
+      <a href="Claims Register.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+        Claims
+      </a>
+        <a href="Payments.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Payments
+          <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">NEW</span>
+        </a>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+        Rulebook
+        
+      </div>
+      <a href="Contracts.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+          Contracts
+                  </a>
+      <a href="Analytics.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+        Analytics
+      </a>
+      <a href="Settings.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        Settings
+      </a>
+      <div style="flex: 1;"></div>
+      <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+        <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+        Reach the billing support desk 24/7.
+      </div>
+    </div>
+
+    <!-- ===== Main ===== -->
+    <div style="flex: 1; padding: 24px 32px 48px; display: flex; flex-direction: column; gap: 16px; min-width: 0;" data-screen-label="Rulebook — payer rules">
+
+      <!-- Title -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <h1 style="font-size: 24px; font-weight: 700; margin: 0; white-space: nowrap;">Payer Rulebook</h1>
+        <span style="font-size: 13px; color: #6B7280;">Rules learned from this practice's denials · {{ practiceLabel }} · Jul 12, 2026</span>
+        <div style="flex: 1;"></div>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 600; white-space: nowrap;">{{ proposedChipText }}</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #E7F5EF; color: #1B7F5E; font-size: 12px; font-weight: 600; white-space: nowrap;">{{ preventedChipText }}</span>
+      </div>
+
+      <!-- Stat strip -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Active rules</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #1B7F5E;">{{ activeCount }}</span>
+          <span style="font-size: 12px; color: #6B7280;">enforced on every claim and pre-visit check</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #F5D9A8; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #B45309; text-transform: uppercase; letter-spacing: 0.06em;">Proposed — needs review</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #B45309;">{{ proposedCount }}</span>
+          <span style="font-size: 12px; color: #6B7280;">learned from new denial patterns; not enforced yet</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Denials prevented</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #5B46D6;">{{ preventedTotal }}</span>
+          <span style="font-size: 12px; color: #6B7280;">claims corrected before submission since adoption</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Retired</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #94A3B8;">{{ retiredCount }}</span>
+          <span style="font-size: 12px; color: #6B7280;">superseded or no longer applicable</span>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 0; border: 1px solid #E5E7EB; border-radius: 5px; overflow: hidden;">
+          <sc-for list="{{ statusTabs }}" as="t" hint-placeholder-count="4">
+            <button onClick="{{ t.onClick }}" style="padding: 7px 14px; border: none; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;">{{ t.label }}</button>
+          </sc-for>
+        </div>
+        <div style="width: 1px; height: 22px; background: #E5E7EB; margin: 0 4px;"></div>
+        <div style="position: relative;">
+          <button onClick="{{ togglePayerMenu }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px 7px 14px; border-radius: 5px; border: 1px solid {{ payerBtnBorder }}; background: {{ payerBtnBg }}; color: {{ payerBtnFg }}; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+            {{ payerBtnLabel }}
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <sc-if value="{{ payerMenuOpen }}" hint-placeholder-val="{{ false }}">
+            <div onClick="{{ closePayerMenu }}" style="position: fixed; inset: 0; z-index: 500;"></div>
+            <div style="position: absolute; top: 38px; left: 0; width: 360px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 10px; box-shadow: 0 10px 30px rgba(15,27,46,0.14); z-index: 600; display: flex; flex-direction: column; overflow: hidden;">
+              <div style="padding: 10px 12px; border-bottom: 1px solid #EEEEEE;">
+                <input onInput="{{ onPayerSearch }}" placeholder="{{ payerSearchPlaceholder }}" style="width: 100%; height: 34px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 12px; font-size: 12.5px; outline: none;">
+              </div>
+              <div style="max-height: 330px; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 1px;">
+                <button onClick="{{ selectAllPayers }}" style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: none; border-radius: 6px; background: {{ allPayersBg }}; cursor: pointer; text-align: left; font-size: 12.5px; font-weight: 700; color: #0F1B2E;" style-hover="background: #F8FAFC;">All payers<span style="margin-left: auto; font-size: 11px; font-weight: 700; color: #94A3B8;">{{ totalRuleCount }} rules</span></button>
+                <sc-if value="{{ hasMenuWithRules }}" hint-placeholder-val="{{ true }}">
+                  <div style="padding: 8px 10px 4px; font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.07em;">With rules</div>
+                  <sc-for list="{{ payerMenuRules }}" as="pm" hint-placeholder-count="6">
+                    <button onClick="{{ pm.onClick }}" style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: none; border-radius: 6px; background: {{ pm.bg }}; cursor: pointer; text-align: left; font-size: 12.5px; font-weight: 600; color: #0F1B2E; width: 100%;" style-hover="background: #F8FAFC;">
+                      {{ pm.name }}
+                      <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 10.5px; font-weight: 700;">{{ pm.count }}</span>
+                    </button>
+                  </sc-for>
+                </sc-if>
+                <sc-if value="{{ hasMenuNoRules }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding: 8px 10px 4px; font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.07em;">No rules yet</div>
+                  <sc-for list="{{ payerMenuNoRules }}" as="pm" hint-placeholder-count="3">
+                    <button onClick="{{ pm.onClick }}" style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: none; border-radius: 6px; background: {{ pm.bg }}; cursor: pointer; text-align: left; font-size: 12.5px; color: #6B7280; width: 100%;" style-hover="background: #F8FAFC;">{{ pm.name }}</button>
+                  </sc-for>
+                </sc-if>
+                <sc-if value="{{ menuEmpty }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding: 14px 10px; font-size: 12.5px; color: #94A3B8;">No payers match "{{ payerSearch }}"</div>
+                </sc-if>
+              </div>
+              <div style="padding: 9px 14px; border-top: 1px solid #EEEEEE; font-size: 11px; color: #94A3B8; line-height: 16px;">Payers sync from the contract directory — new payers appear here automatically.</div>
+            </div>
+          </sc-if>
+        </div>
+        <sc-for list="{{ topPayerChips }}" as="p" hint-placeholder-count="3">
+          <button onClick="{{ p.onClick }}" style="padding: 6px 14px; border-radius: 9999px; border: 1px solid {{ p.border }}; background: {{ p.bg }}; color: {{ p.fg }}; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 150ms ease-out; white-space: nowrap;">{{ p.label }}</button>
+        </sc-for>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 12px; color: #94A3B8;">{{ listSummary }}</span>
+      </div>
+
+      <!-- Rules table -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+        <div style="display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1.1fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1.1fr) minmax(0, 0.8fr) minmax(0, 0.9fr); gap: 0; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 20px; border-bottom: 1px solid #E5E7EB;">
+          <span>Rule</span><span>Payer</span><span>Category</span><span>Status</span><span style="text-align: right;">Learned from</span><span style="text-align: right;">$ prevented</span><span style="text-align: right; padding-left: 12px;">Last fired</span>
+        </div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+          <button onClick="{{ r.onClick }}" style="display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1.1fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1.1fr) minmax(0, 0.8fr) minmax(0, 0.9fr); width: 100%; text-align: left; align-items: center; padding: 13px 20px; border: none; border-bottom: 1px solid #F1F5F9; background: {{ r.rowBg }}; cursor: pointer; transition: background 120ms ease-out;" style-hover="background: #F8F7FF;">
+            <span style="display: flex; flex-direction: column; gap: 2px; padding-right: 16px; min-width: 0;">
+              <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">{{ r.name }}</span>
+              <span style="font-size: 12px; color: #6B7280; line-height: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ r.preview }}</span>
+            </span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #0F1B2E;">{{ r.payer }}</span>
+            <span><span style="display: inline-flex; padding: 3px 10px; border-radius: 9999px; background: {{ r.catBg }}; color: {{ r.catFg }}; font-size: 11px; font-weight: 700;">{{ r.category }}</span></span>
+            <span><span style="display: inline-flex; padding: 3px 10px; border-radius: 9999px; background: {{ r.stBg }}; color: {{ r.stFg }}; font-size: 11px; font-weight: 700;">{{ r.statusLabel }}</span></span>
+            <span style="text-align: right; font-size: 12px; color: #6B7280; font-variant-numeric: tabular-nums;">{{ r.learnedFrom }}</span>
+            <span style="text-align: right; font-size: 12.5px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: {{ r.prevFg }};">{{ r.prevented }}</span>
+            <span style="text-align: right; font-size: 12px; color: #6B7280; padding-left: 12px;">{{ r.lastFired }}</span>
+          </button>
+        </sc-for>
+      </div>
+
+      <p style="font-size: 12px; color: #94A3B8; margin: 0;">Every rule was learned from this practice's own denial history. Active rules run in three places: the pre-visit Coverage check, the pre-submission claim scrub, and the follow-up scheduler. Proposed rules are drafted by the agent and enforce nothing until a manager approves them.</p>
+    </div>
+  </div>
+
+  <!-- ===== Detail panel ===== -->
+  <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePanel }}" style="position: fixed; inset: 0; background: rgba(15,27,46,0.4); z-index: 50;"></div>
+    <div style="position: fixed; top: 0; right: 0; bottom: 0; width: 560px; background: #FFFFFF; z-index: 51; box-shadow: -12px 0 40px rgba(15,27,46,0.18); display: flex; flex-direction: column; overflow-y: auto;">
+
+      <!-- Panel header -->
+      <div style="padding: 22px 24px 18px; border-bottom: 1px solid #EEEEEE; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: {{ sel.stBg }}; color: {{ sel.stFg }}; font-size: 12px; font-weight: 700;">{{ sel.statusLabel }}</span>
+          <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: {{ sel.catBg }}; color: {{ sel.catFg }}; font-size: 12px; font-weight: 700;">{{ sel.category }}</span>
+          <div style="flex: 1;"></div>
+          <button onClick="{{ closePanel }}" style="width: 32px; height: 32px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          </button>
+        </div>
+        <h2 style="font-size: 19px; font-weight: 700; margin: 0; line-height: 26px;">{{ sel.name }}</h2>
+        <span style="font-size: 13px; color: #6B7280;">{{ sel.payer }} · Bell Medics · {{ practiceLabel }}</span>
+      </div>
+
+      <div style="padding: 20px 24px; display: flex; flex-direction: column; gap: 18px;">
+
+        <!-- Condition -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Rule condition</span>
+          <div style="background: #F1EEFF; border-radius: 8px; padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 20px; color: #0F1B2E; white-space: pre-wrap;">{{ sel.condition }}</div>
+        </div>
+
+        <!-- Where it runs -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Where it runs</span>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <sc-for list="{{ sel.runsIn }}" as="loc" hint-placeholder-count="2">
+              <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #F8FAFC; border: 1px solid #E5E7EB; color: #0F1B2E; font-size: 12px; font-weight: 600;">{{ loc }}</span>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Provenance -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Provenance — what taught this rule</span>
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-size: 13px; line-height: 19px; color: #0F1B2E;">{{ sel.origin }}</span>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <sc-for list="{{ sel.claims }}" as="c" hint-placeholder-count="3">
+                <a href="Claim Detail.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 5px; background: #F8FAFC; text-decoration: none; transition: background 120ms ease-out;" style-hover="background: #F1EEFF;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #5B46D6; font-weight: 700;">{{ c.id }}</span>
+                  <span style="font-size: 12px; color: #0F1B2E; font-weight: 600;">{{ c.patient }}</span>
+                  <div style="flex: 1;"></div>
+                  <span style="font-size: 12px; color: #6B7280; font-family: 'JetBrains Mono', monospace;">{{ c.amt }}</span>
+                  <span style="font-size: 11px; color: #94A3B8;">{{ c.code }}</span>
+                </a>
+              </sc-for>
+            </div>
+            <span style="font-size: 12px; color: #94A3B8;">{{ sel.claimsNote }}</span>
+          </div>
+        </div>
+
+        <!-- Adoption + performance -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div style="background: #F8FAFC; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Adoption</span>
+            <span style="font-size: 12.5px; color: #0F1B2E; line-height: 18px;">{{ sel.adoption }}</span>
+          </div>
+          <div style="background: #F8FAFC; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Since adoption</span>
+            <span style="font-size: 12.5px; color: #0F1B2E; line-height: 18px;">{{ sel.performance }}</span>
+          </div>
+        </div>
+
+        <!-- Activity log -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Activity</span>
+          <div style="display: flex; flex-direction: column; gap: 0;">
+            <sc-for list="{{ sel.log }}" as="e" hint-placeholder-count="3">
+              <div style="display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid #F1F5F9;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; white-space: nowrap; padding-top: 1px;">{{ e.time }}</span>
+                <span style="font-size: 12.5px; line-height: 18px; color: #0F1B2E;">{{ e.text }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex: 1;"></div>
+
+      <!-- Actions -->
+      <div style="padding: 16px 24px 20px; border-top: 1px solid #EEEEEE; display: flex; gap: 10px; align-items: center; background: #FFFFFF; position: sticky; bottom: 0;">
+        <sc-if value="{{ sel.isProposed }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ approveSel }}" style="flex: 1; padding: 11px 18px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">Approve &amp; Activate</button>
+          <button onClick="{{ dismissSel }}" style="padding: 11px 18px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: #F1F5F9;">Dismiss Proposal</button>
+        </sc-if>
+        <sc-if value="{{ sel.isActive }}" hint-placeholder-val="{{ false }}">
+          <span style="flex: 1; font-size: 12px; color: #6B7280;">Enforced since {{ sel.adoptedShort }}. Retiring stops all three enforcement points immediately.</span>
+          <button onClick="{{ retireSel }}" style="padding: 11px 18px; border-radius: 5px; border: 1px solid #FFD3D2; background: #FFFFFF; color: #DC2626; font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: #FFF6F5;">Retire Rule</button>
+        </sc-if>
+        <sc-if value="{{ sel.isRetired }}" hint-placeholder-val="{{ false }}">
+          <span style="flex: 1; font-size: 12px; color: #6B7280;">This rule is not enforced anywhere.</span>
+          <button onClick="{{ reactivateSel }}" style="padding: 11px 18px; border-radius: 5px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: #F1EEFF;">Reactivate</button>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { statusFilter: 'All', payerFilter: 'All payers', selId: null, overrides: {}, payerMenuOpen: false, payerSearch: '' };
+
+  // Contracted payers beyond the ones with rules — the directory scales to hundreds;
+  // this sample stands in for the full list (312 total in the demo narrative).
+  payerDirectory() {
+    return ['Humana MA PPO', 'UHC Medicare Complete', 'Aetna MA HMO', 'Cigna Medicare Advantage', 'CareSource Indiana', 'Michigan Medicaid', 'Meridian Health Plan', 'Wellcare of Indiana', 'Ambetter from MHS', 'BCBS of Michigan', 'Priority Health MA', 'Provider Partners Health Plan', 'Veterans Administration', 'Tricare East', 'Devoted Health', 'Clover Health', 'SCAN Health Plan', 'Alignment Health Plan', 'Ohio Medicaid', 'Illinois Medicaid', 'Kentucky Medicaid', 'Zing Health', 'Longevity Health Plan', 'AgeWell New York'];
+  }
+
+  rules() {
+    return [
+      {
+        id: 'r1', name: 'MHS HIP — subsequent NF visit coding', payer: 'MHS Healthy Indiana Plan', payerShort: 'MHS HIP',
+        category: 'Coding', status: 'Active',
+        preview: '99307\u201399310 must bill POS 31 with attending NPI, not the group NPI',
+        condition: 'IF payer = MHS Healthy Indiana Plan\nAND CPT \u2208 {99307\u201399310}\nTHEN require POS 31\nAND rendering NPI = attending provider (not group)\nAND DX pointer 1 = primary chronic condition',
+        origin: 'Learned from 84 denials (CO-16 / M51), Mar 12 \u2013 Jun 28 2026 \u2014 $11,842 in denied balance across 61 patients. The single largest denial pattern in the AR report.',
+        claims: [
+          { id: 'ENCT0000612-01', patient: 'Okafor, Denise', amt: '$212.40', code: 'CO-16 · M51' },
+          { id: 'ENCT0000647-01', patient: 'Bravo, Miguel', amt: '$188.10', code: 'CO-16 · M51' },
+          { id: 'ENCT0000701-01', patient: 'Lindqvist, Harold', amt: '$212.40', code: 'CO-16 · M51' }
+        ],
+        claimsNote: '+ 81 more denials linked to this rule',
+        adoption: 'Proposed by agent Jun 29 \u00b7 approved by Angela Mensah Jul 2, 2026',
+        adoptedShort: 'Jul 2',
+        performance: 'Fired on 61 claims \u00b7 $8,940 corrected before submission \u00b7 0 recurrences of this denial since',
+        prevented: '$8,940', preventedNum: 8940, learnedFrom: '84 denials \u00b7 $11.8K', lastFired: 'Today 6:14 AM',
+        log: [
+          { time: 'Jul 12 06:14', text: 'Fired on 3 claims in this morning\u2019s pre-submission scrub \u2014 all corrected automatically' },
+          { time: 'Jul 02 09:20', text: 'Approved and activated by Angela Mensah' },
+          { time: 'Jun 29 07:02', text: 'Agent proposed rule after clustering 84 denials with identical CARC/RARC signature' }
+        ]
+      },
+      {
+        id: 'r2', name: 'Medicare FFS — hospice GV/GW modifiers', payer: 'Medicare FFS', payerShort: 'Medicare FFS',
+        category: 'Coding', status: 'Active',
+        preview: 'Patients with hospice election require GV (attending) or GW (unrelated) modifier',
+        condition: 'IF payer = Medicare FFS\nAND patient has active hospice election on DOS\nTHEN require modifier GV (attending physician)\nOR modifier GW (service unrelated to terminal condition)',
+        origin: 'Learned from 22 denials (CO-B9), Apr \u2013 Jun 2026 \u2014 $3,610 across 9 hospice-elected patients.',
+        claims: [
+          { id: 'ENCT0000633-01', patient: 'Whitfield, Rosa', amt: '$164.20', code: 'CO-B9' },
+          { id: 'ENCT0000668-01', patient: 'Duran, Estelle', amt: '$164.20', code: 'CO-B9' }
+        ],
+        claimsNote: '+ 20 more denials linked to this rule',
+        adoption: 'Proposed by agent May 30 \u00b7 approved by Angela Mensah Jun 1, 2026',
+        adoptedShort: 'Jun 1',
+        performance: 'Fired on 17 claims \u00b7 $2,788 corrected \u00b7 hospice elections now pulled nightly from 271',
+        prevented: '$2,788', preventedNum: 2788, learnedFrom: '22 denials \u00b7 $3.6K', lastFired: 'Jul 10',
+        log: [
+          { time: 'Jul 10 06:05', text: 'Fired on 1 claim \u2014 GV modifier added for hospice-elected patient' },
+          { time: 'Jun 01 11:44', text: 'Approved and activated by Angela Mensah' }
+        ]
+      },
+      {
+        id: 'r3', name: 'UHC Community — annual COB form pre-check', payer: 'UHC Community Plan', payerShort: 'UHC Community',
+        category: 'COB', status: 'Active',
+        preview: 'Hold submission if the annual COB form is not on file with the payer',
+        condition: 'IF payer = UHC Community Plan\nAND 271 returns COB-investigation flag\nOR annual COB form older than 12 months\nTHEN flag pre-visit + hold submission\nAND create facility social-worker task',
+        origin: 'Learned from 31 denials (CO-22), Feb \u2013 May 2026 \u2014 $4,987. Claims were held payer-side for months while COB forms sat unreturned.',
+        claims: [
+          { id: 'ENCT0000598-01', patient: 'Toussaint, Marie', amt: '$212.40', code: 'CO-22' },
+          { id: 'ENCT0000624-01', patient: 'Grabowski, Peter', amt: '$146.80', code: 'CO-22' }
+        ],
+        claimsNote: '+ 29 more denials linked to this rule',
+        adoption: 'Proposed by agent May 12 \u00b7 approved by Angela Mensah May 14, 2026',
+        adoptedShort: 'May 14',
+        performance: 'Fired on 11 patients \u00b7 $3,120 protected \u00b7 avg COB resolution now 9 days (was 54)',
+        prevented: '$3,120', preventedNum: 3120, learnedFrom: '31 denials \u00b7 $5.0K', lastFired: 'Jul 11',
+        log: [
+          { time: 'Jul 11 06:02', text: 'Fired pre-visit for R. Alvarez \u2014 COB investigation flag on 271; submission held' },
+          { time: 'May 14 10:12', text: 'Approved and activated by Angela Mensah' }
+        ]
+      },
+      {
+        id: 'r4', name: 'IN Medicaid — 90-day timely filing guard', payer: 'Indiana Medicaid', payerShort: 'IN Medicaid',
+        category: 'Filing', status: 'Active',
+        preview: 'Follow-up auto-scheduled at day 45; escalate to manager at day 75',
+        condition: 'IF payer = Indiana Medicaid\nAND claim unpaid at DOS + 45 days\nTHEN schedule agent follow-up\nAND escalate to manager queue at DOS + 75 days\n(filing limit = 90 days from DOS)',
+        origin: 'Learned from 14 claims ($1,960) that aged past the 90-day filing limit while awaiting payer response, Jan \u2013 Apr 2026.',
+        claims: [
+          { id: 'ENCT0000571-01', patient: 'Nakamura, Grace', amt: '$140.00', code: 'CO-29' }
+        ],
+        claimsNote: '+ 13 more expired claims linked to this rule',
+        adoption: 'Proposed by agent Apr 20 \u00b7 approved by Angela Mensah Apr 22, 2026',
+        adoptedShort: 'Apr 22',
+        performance: '12 claims rescued before the limit \u00b7 $1,684 \u00b7 0 filing-limit expirations since adoption',
+        prevented: '$1,684', preventedNum: 1684, learnedFrom: '14 expired \u00b7 $2.0K', lastFired: 'Jul 9',
+        log: [
+          { time: 'Jul 09 06:00', text: 'Scheduled day-45 follow-ups on 4 claims' },
+          { time: 'Apr 22 14:31', text: 'Approved and activated by Angela Mensah' }
+        ]
+      },
+      {
+        id: 'r5', name: 'Anthem MA — SNF consolidated billing auth', payer: 'Anthem MA', payerShort: 'Anthem MA',
+        category: 'Auth', status: 'Active',
+        preview: 'Part B services during a Part A stay require the SNF auth number on the claim',
+        condition: 'IF payer = Anthem MA\nAND patient in Part A SNF stay on DOS\nTHEN claim must carry the facility\u2019s SNF auth number\nAND bill under consolidated billing rules',
+        origin: 'Learned from 19 denials (CO-97 / N538), Mar \u2013 May 2026 \u2014 $2,890.',
+        claims: [
+          { id: 'ENCT0000655-01', patient: 'Reyes, Consuelo', amt: '$152.20', code: 'CO-97 · N538' }
+        ],
+        claimsNote: '+ 18 more denials linked to this rule',
+        adoption: 'Proposed by agent May 26 \u00b7 approved by Angela Mensah May 27, 2026',
+        adoptedShort: 'May 27',
+        performance: 'Fired on 9 claims \u00b7 $1,370 corrected \u00b7 auth numbers now pulled from facility census feed',
+        prevented: '$1,370', preventedNum: 1370, learnedFrom: '19 denials \u00b7 $2.9K', lastFired: 'Jul 8',
+        log: [
+          { time: 'Jul 08 06:10', text: 'Fired on 2 claims \u2014 SNF auth numbers appended' },
+          { time: 'May 27 09:05', text: 'Approved and activated by Angela Mensah' }
+        ]
+      },
+      {
+        id: 'r6', name: 'MHS HIP — capitation assignment check', payer: 'MHS Healthy Indiana Plan', payerShort: 'MHS HIP',
+        category: 'Status', status: 'Proposed',
+        preview: 'Route claims for capitated-assigned patients to review instead of FFS submission',
+        condition: 'IF payer = MHS Healthy Indiana Plan\nAND 271 shows patient assigned to capitated MCO panel\nTHEN do not submit FFS claim\nAND route to capitation review queue',
+        origin: 'Drafted from 9 new denials (CO-24), Jun 20 \u2013 Jul 10 2026 \u2014 $1,204. Pattern is new; agent needs manager approval to enforce.',
+        claims: [
+          { id: 'ENCT0000712-01', patient: 'Beaumont, Cyril', amt: '$134.00', code: 'CO-24' },
+          { id: 'ENCT0000719-01', patient: 'Ashford, Lena', amt: '$134.00', code: 'CO-24' }
+        ],
+        claimsNote: '+ 7 more denials in this cluster',
+        adoption: 'Proposed by agent Jul 10, 2026 \u00b7 awaiting manager review',
+        adoptedShort: '\u2014',
+        performance: 'Not enforced \u2014 projected to prevent ~$400/mo based on cluster rate',
+        prevented: '\u2014', preventedNum: 0, learnedFrom: '9 denials \u00b7 $1.2K', lastFired: '\u2014',
+        log: [
+          { time: 'Jul 10 06:08', text: 'Agent proposed rule after 9 CO-24 denials clustered on capitated-assigned patients' }
+        ]
+      },
+      {
+        id: 'r7', name: 'Aetna BH — modifier 25 with same-day assessment', payer: 'Aetna Better Health', payerShort: 'Aetna BH',
+        category: 'Coding', status: 'Proposed',
+        preview: 'E/M billed same day as a standardized assessment needs modifier 25',
+        condition: 'IF payer = Aetna Better Health\nAND E/M CPT billed on same DOS as assessment CPT\nTHEN append modifier 25 to the E/M line',
+        origin: 'Drafted from 6 denials (CO-97), Jun 2026 \u2014 $812.',
+        claims: [
+          { id: 'ENCT0000704-01', patient: 'Ferreira, Alda', amt: '$135.30', code: 'CO-97' }
+        ],
+        claimsNote: '+ 5 more denials in this cluster',
+        adoption: 'Proposed by agent Jul 8, 2026 \u00b7 awaiting manager review',
+        adoptedShort: '\u2014',
+        performance: 'Not enforced \u2014 low volume; verify against payer policy before approving',
+        prevented: '\u2014', preventedNum: 0, learnedFrom: '6 denials \u00b7 $0.8K', lastFired: '\u2014',
+        log: [
+          { time: 'Jul 08 06:12', text: 'Agent proposed rule; flagged payer policy doc for manager verification' }
+        ]
+      },
+      {
+        id: 'r8', name: 'Molina — paper COB fax requirement', payer: 'Molina Healthcare', payerShort: 'Molina',
+        category: 'COB', status: 'Retired',
+        preview: 'COB forms had to be faxed \u2014 superseded by portal upload April 2026',
+        condition: 'IF payer = Molina Healthcare\nAND COB form required\nTHEN fax form to payer COB unit\n(superseded: portal upload accepted since Apr 2026)',
+        origin: 'Learned from 8 denials, Nov 2025 \u2014 Molina rejected mailed COB forms; fax was the only accepted channel at the time.',
+        claims: [
+          { id: 'ENCT0000502-01', patient: 'Sandoval, Rita', amt: '$118.60', code: 'CO-22' }
+        ],
+        claimsNote: '+ 7 more historical denials',
+        adoption: 'Approved Dec 2025 \u00b7 retired by Angela Mensah Apr 9, 2026 (payer opened portal upload)',
+        adoptedShort: 'Dec 4',
+        performance: 'Prevented $940 while active \u00b7 retired when the payer channel changed',
+        prevented: '$940', preventedNum: 940, learnedFrom: '8 denials \u00b7 $1.1K', lastFired: 'Apr 2',
+        log: [
+          { time: 'Apr 09 15:20', text: 'Retired by Angela Mensah \u2014 Molina now accepts COB portal upload; replacement workflow live' },
+          { time: 'Dec 04 10:00', text: 'Approved and activated' }
+        ]
+      }
+    ];
+  }
+
+  effectiveStatus(r) {
+    return this.state.overrides[r.id] || r.status;
+  }
+
+  renderVals() {
+    const CAT = {
+      Coding: ['#F1EEFF', '#5B46D6'],
+      COB: ['#FEF3DF', '#B45309'],
+      Auth: ['#EAF3FF', '#1D4ED8'],
+      Filing: ['#FFF3EF', '#C2410C'],
+      Status: ['#FDEEF5', '#C34A7D']
+    };
+    const ST = {
+      Active: ['#E7F5EF', '#1B7F5E'],
+      Proposed: ['#FEF3DF', '#B45309'],
+      Retired: ['#F1F5F9', '#64748B']
+    };
+
+    const all = this.rules().map(r => {
+      const status = this.effectiveStatus(r);
+      const cat = CAT[r.category] || CAT.Coding;
+      const st = ST[status];
+      return Object.assign({}, r, {
+        statusLabel: status.toUpperCase(),
+        isProposed: status === 'Proposed', isActive: status === 'Active', isRetired: status === 'Retired',
+        catBg: cat[0], catFg: cat[1], stBg: st[0], stFg: st[1],
+        prevFg: r.preventedNum > 0 ? '#1B7F5E' : '#94A3B8',
+        runsIn: r.category === 'Filing' ? ['Follow-up scheduler'] : (r.category === 'COB' || r.category === 'Status') ? ['Pre-visit Coverage check', 'Pre-submission scrub'] : ['Pre-submission scrub', 'Pre-visit Coverage check']
+      });
+    });
+
+    const activeCount = all.filter(r => r.isActive).length;
+    const proposedCount = all.filter(r => r.isProposed).length;
+    const retiredCount = all.filter(r => r.isRetired).length;
+    const preventedSum = all.reduce((s, r) => s + (r.isRetired || r.isActive ? r.preventedNum : 0), 0);
+
+    const sf = this.state.statusFilter, pf = this.state.payerFilter;
+    const statusTabs = ['All', 'Active', 'Proposed', 'Retired'].map(sv => {
+      const n = sv === 'All' ? all.length : all.filter(r => this.effectiveStatus(r) === sv).length;
+      const on = sf === sv;
+      return { label: sv + ' (' + n + ')', bg: on ? '#7B61FF' : '#FFFFFF', fg: on ? '#FFFFFF' : '#6B7280', onClick: () => this.setState({ statusFilter: sv }) };
+    });
+
+    // ---- payer picker (scales to hundreds of payers) ----
+    const TOTAL_PAYERS = 312;
+    const ruleCounts = {};
+    all.forEach(r => { ruleCounts[r.payerShort] = (ruleCounts[r.payerShort] || 0) + 1; });
+    const withRules = Object.keys(ruleCounts).sort((a, b) => ruleCounts[b] - ruleCounts[a]);
+    const q = this.state.payerSearch.trim().toLowerCase();
+    const match = (n) => !q || n.toLowerCase().includes(q);
+    const pick = (pn) => () => this.setState({ payerFilter: pn, payerMenuOpen: false, payerSearch: '' });
+    const menuRow = (n) => ({ name: n, count: String(ruleCounts[n] || 0), bg: pf === n ? '#F1EEFF' : '#FFFFFF', onClick: pick(n) });
+    const payerMenuRules = withRules.filter(match).map(menuRow);
+    const payerMenuNoRules = this.payerDirectory().filter(n => !ruleCounts[n]).filter(match).slice(0, q ? 50 : 8).map(menuRow);
+    const isAll = pf === 'All payers';
+    const topPayers = withRules.slice(0, 3);
+    if (!isAll && !topPayers.includes(pf)) topPayers.push(pf);
+    const topPayerChips = topPayers.map(pn => {
+      const on = pf === pn;
+      const c = ruleCounts[pn] || 0;
+      return { label: pn + (c ? ' (' + c + ')' : ''), border: on ? '#7B61FF' : '#E5E7EB', bg: on ? '#F1EEFF' : '#FFFFFF', fg: on ? '#5B46D6' : '#6B7280', onClick: () => this.setState({ payerFilter: on ? 'All payers' : pn }) };
+    });
+
+    const rows = all
+      .filter(r => (sf === 'All' || this.effectiveStatus(r) === sf) && (pf === 'All payers' || r.payerShort === pf))
+      .map(r => Object.assign({}, r, {
+        payer: r.payerShort,
+        rowBg: this.state.selId === r.id ? '#F8F7FF' : '#FFFFFF',
+        onClick: () => this.setState({ selId: r.id })
+      }));
+
+    const sel = all.find(r => r.id === this.state.selId) || all[0];
+
+    const addLog = (r, text) => Object.assign({}, r, { log: [{ time: 'Jul 12 ' + new Date().toTimeString().slice(0, 5), text }].concat(r.log) });
+
+    return {
+      practiceLabel: 'Ibekie Foundation & partner facilities',
+      proposedChipText: proposedCount + ' proposed need review',
+      preventedChipText: '$' + preventedSum.toLocaleString() + ' prevented',
+      activeCount, proposedCount, retiredCount,
+      preventedTotal: '$' + (preventedSum / 1000).toFixed(1) + 'K',
+      statusTabs,
+      topPayerChips,
+      payerMenuOpen: this.state.payerMenuOpen,
+      togglePayerMenu: () => this.setState(s => ({ payerMenuOpen: !s.payerMenuOpen, payerSearch: '' })),
+      closePayerMenu: () => this.setState({ payerMenuOpen: false }),
+      onPayerSearch: (e) => this.setState({ payerSearch: e.target.value }),
+      payerSearch: this.state.payerSearch,
+      payerSearchPlaceholder: 'Search ' + TOTAL_PAYERS + ' contracted payers\u2026',
+      payerBtnLabel: isAll ? 'Payer: All (' + TOTAL_PAYERS + ')' : 'Payer: ' + pf,
+      payerBtnBg: isAll ? '#FFFFFF' : '#F1EEFF',
+      payerBtnFg: isAll ? '#6B7280' : '#5B46D6',
+      payerBtnBorder: isAll ? '#E5E7EB' : '#7B61FF',
+      allPayersBg: isAll ? '#F1EEFF' : '#FFFFFF',
+      totalRuleCount: String(all.length),
+      payerMenuRules,
+      payerMenuNoRules,
+      hasMenuWithRules: payerMenuRules.length > 0,
+      hasMenuNoRules: payerMenuNoRules.length > 0,
+      menuEmpty: payerMenuRules.length === 0 && payerMenuNoRules.length === 0,
+      listSummary: rows.length + ' of ' + all.length + ' rules',
+      rows,
+      hasSelection: !!this.state.selId,
+      sel: Object.assign({}, sel, { payer: sel.payer }),
+      closePanel: () => this.setState({ selId: null }),
+      approveSel: () => this.setState(s => ({ overrides: Object.assign({}, s.overrides, { [sel.id]: 'Active' }) })),
+      dismissSel: () => this.setState(s => ({ overrides: Object.assign({}, s.overrides, { [sel.id]: 'Retired' }) })),
+      retireSel: () => this.setState(s => ({ overrides: Object.assign({}, s.overrides, { [sel.id]: 'Retired' }) })),
+      reactivateSel: () => this.setState(s => ({ overrides: Object.assign({}, s.overrides, { [sel.id]: 'Active' }) }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

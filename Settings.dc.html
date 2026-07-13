@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button, select, input, textarea { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+<script src="./claims-store.js"></script>
+<script src="./team-store.js"></script>
+<script src="./companies-store.js"></script>
+<script src="./portal-config-store.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="Settings (Bell Medics)">
+
+  <x-import component-from-global-scope="ops-banner" from="./ops-banner.js" hint-size="100%,0px"></x-import>
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Billing Portal</span>
+    <x-import component-from-global-scope="search-bar" from="./search-bar.js" hint-size="480px,40px"></x-import>
+    <div style="flex: 1;"></div>
+    <x-import component-from-global-scope="practice-switcher" from="./practice-switcher.js" hint-size="260px,40px"></x-import>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <x-import component-from-global-scope="role-switcher" from="./role-switcher.js" hint-size="210px,44px"></x-import>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav — collapsed icon rail ===== -->
+    <sc-if value="{{ navClosed }}" hint-placeholder-val="{{ true }}">
+      <div style="width: 64px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 12px 10px; display: flex; flex-direction: column; gap: 6px; align-items: center; flex-shrink: 0;">
+        <button onClick="{{ toggleNav }}" title="Expand navigation" style="width: 40px; height: 36px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 5 5-5 5"></path><path d="m13 7 5 5-5 5"></path></svg>
+        </button>
+        <div style="height: 1px; width: 36px; background: #EEEEEE; margin: 4px 0;"></div>
+        <a href="Billing Home.dc.html" title="Dashboard" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg></a>
+        <a href="Agent Inbox v3.dc.html" title="Agent Inbox" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></a>
+        <a href="Coverage.dc.html" title="Coverage" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg></a>
+        <a href="AR Worklist.dc.html" title="AR Worklist" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+        <a href="Claims Register.dc.html" title="Claims" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg></a>
+        <a href="Payments.dc.html" title="Payments" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg></a>
+        <a href="Rulebook.dc.html" title="Rulebook" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></a>
+        <a href="Contracts.dc.html" title="Contracts" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></a>
+        <a href="Analytics.dc.html" title="Analytics" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg></a>
+        <a href="Settings.dc.html" title="Settings" style="width: 40px; height: 40px; border-radius: 4px; background: #7B61FF; display: flex; align-items: center; justify-content: center; text-decoration: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
+      </div>
+    </sc-if>
+
+    <!-- ===== Side nav — expanded ===== -->
+    <sc-if value="{{ navOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+        <div style="display: flex; justify-content: flex-end;">
+          <button onClick="{{ toggleNav }}" title="Collapse navigation" style="width: 32px; height: 28px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 17-5-5 5-5"></path><path d="m11 17-5-5 5-5"></path></svg>
+          </button>
+        </div>
+        <a href="Billing Home.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg>
+          Dashboard
+        </a>
+        <a href="Agent Inbox v3.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+          Agent Inbox
+        </a>
+        <a href="Coverage.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+          Coverage
+        </a>
+        <a href="AR Worklist.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          AR Worklist
+        </a>
+        <a href="Claims Register.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+          Claims
+        </a>
+        <a href="Payments.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Payments
+          <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">NEW</span>
+        </a>
+        <a href="Rulebook.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+          Rulebook
+        </a>
+        <a href="Contracts.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+          Contracts
+                  </a>
+        <a href="Analytics.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+          Analytics
+        </a>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Settings
+        </div>
+        <div style="flex: 1;"></div>
+        <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+          <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+          Reach the billing support desk 24/7.
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ===== Main content ===== -->
+    <div style="flex: 1; padding: 24px 32px; display: flex; flex-direction: column; gap: 20px; min-width: 0; max-width: 1120px;">
+
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <h1 style="font-size: 24px; font-weight: 700; margin: 0;">Settings</h1>
+        <span style="font-size: 13px; color: #6B7280;">Bell Medics · signed in as {{ personaName }} · {{ personaTitle }}</span>
+      </div>
+
+      <!-- Tabs -->
+      <div style="display: flex; gap: 4px; border-bottom: 1px solid #E5E7EB;">
+        <button onClick="{{ goTeam }}" style="padding: 10px 16px; border: none; background: transparent; cursor: pointer; font-size: 13px; font-weight: 700; color: {{ teamTabFg }}; border-bottom: 2px solid {{ teamTabLine }}; margin-bottom: -1px; display: inline-flex; align-items: center; gap: 7px;">
+          Team
+          <span style="display: inline-flex; padding: 1px 7px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 10px; font-weight: 700;">MANAGER</span>
+        </button>
+        <button onClick="{{ goCompany }}" style="padding: 10px 16px; border: none; background: transparent; cursor: pointer; font-size: 13px; font-weight: 700; color: {{ companyTabFg }}; border-bottom: 2px solid {{ companyTabLine }}; margin-bottom: -1px;">Company Profile</button>
+        <button onClick="{{ goNotifs }}" style="padding: 10px 16px; border: none; background: transparent; cursor: pointer; font-size: 13px; font-weight: 700; color: {{ notifsTabFg }}; border-bottom: 2px solid {{ notifsTabLine }}; margin-bottom: -1px;">Notifications</button>
+        <button onClick="{{ goWriteoffs }}" style="padding: 10px 16px; border: none; background: transparent; cursor: pointer; font-size: 13px; font-weight: 700; color: {{ woTabFg }}; border-bottom: 2px solid {{ woTabLine }}; margin-bottom: -1px; display: inline-flex; align-items: center; gap: 7px;">
+          Write-off Governance
+          <span style="display: inline-flex; padding: 1px 7px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 10px; font-weight: 700;">NEW</span>
+        </button>
+      </div>
+
+      <!-- ===== TEAM — locked (rep) ===== -->
+      <sc-if value="{{ showTeamLocked }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 48px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;">
+          <span style="width: 48px; height: 48px; border-radius: 9999px; background: #F1F5F9; display: inline-flex; align-items: center; justify-content: center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </span>
+          <span style="font-size: 15px; font-weight: 700;">Team management is manager-only</span>
+          <span style="font-size: 13px; color: #6B7280; max-width: 420px; line-height: 20px;">Inviting reps, changing practice assignments, and deactivating accounts require the Billing Manager role. Ask Derek Okafor for changes to the roster.</span>
+          <span style="display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; padding: 8px 14px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 12px; font-weight: 600;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg>
+            Viewing as Angela Mensah (AR Rep) — switch to Derek Okafor via the account menu, top-right, to manage the team
+          </span>
+        </div>
+      </sc-if>
+
+      <!-- ===== TEAM — roster (manager) ===== -->
+      <sc-if value="{{ showTeam }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 13px; color: #6B7280;">{{ rosterSummary }}</span>
+            <div style="flex: 1;"></div>
+            <button onClick="{{ toggleInvite }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: #5B46D6;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21a8 8 0 0 1 13.292-6"></path><circle cx="10" cy="8" r="5"></circle><path d="M19 16v6"></path><path d="M22 19h-6"></path></svg>
+              Invite Rep
+            </button>
+          </div>
+
+          <!-- Invite panel -->
+          <sc-if value="{{ inviteOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="background: #F8F6FF; border: 1px solid #C9BCF5; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px;">
+              <span style="font-size: 14px; font-weight: 700;">Invite a team member</span>
+              <div style="display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;">
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <span style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em;">Email</span>
+                  <input value="{{ invEmail }}" onChange="{{ onInvEmail }}" placeholder="name@bellmedics.com" style="width: 260px; height: 38px; padding: 0 12px; border-radius: 5px; border: 1px solid #D1D5DC; font-size: 13px; background: #FFFFFF;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <span style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em;">Role</span>
+                  <div style="display: flex; gap: 6px;">
+                    <button onClick="{{ setInvRoleRep }}" style="height: 38px; padding: 0 14px; border-radius: 5px; border: 1px solid {{ invRepBorder }}; background: {{ invRepBg }}; color: {{ invRepFg }}; font-size: 13px; font-weight: 700; cursor: pointer;">AR Rep</button>
+                    <button onClick="{{ setInvRoleMgr }}" style="height: 38px; padding: 0 14px; border-radius: 5px; border: 1px solid {{ invMgrBorder }}; background: {{ invMgrBg }}; color: {{ invMgrFg }}; font-size: 13px; font-weight: 700; cursor: pointer;">Billing Manager</button>
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <span style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em;">Practices</span>
+                  <div style="display: flex; gap: 6px;">
+                    <button onClick="{{ toggleInvIfc }}" style="height: 38px; padding: 0 14px; border-radius: 5px; border: 1px solid {{ invIfcBorder }}; background: {{ invIfcBg }}; color: {{ invIfcFg }}; font-size: 13px; font-weight: 700; cursor: pointer;">IFC</button>
+                    <button onClick="{{ toggleInvWfm }}" style="height: 38px; padding: 0 14px; border-radius: 5px; border: 1px solid {{ invWfmBorder }}; background: {{ invWfmBg }}; color: {{ invWfmFg }}; font-size: 13px; font-weight: 700; cursor: pointer;">Westbrook</button>
+                  </div>
+                </div>
+                <div style="flex: 1;"></div>
+                <div style="display: flex; gap: 8px;">
+                  <button onClick="{{ sendInvite }}" style="height: 38px; padding: 0 18px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: #5B46D6;">Send Invite</button>
+                  <button onClick="{{ toggleInvite }}" style="height: 38px; padding: 0 14px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 13px; font-weight: 600; cursor: pointer;">Cancel</button>
+                </div>
+              </div>
+              <span style="font-size: 12px; color: #6B7280;">The invite shows as a pending row until accepted — no email is sent in this prototype; use "Mark accepted" to simulate.</span>
+            </div>
+          </sc-if>
+
+          <!-- Roster table -->
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 2.1fr 1.2fr 1.7fr 1fr 1.3fr 1fr 1.9fr; gap: 12px; padding: 10px 20px; border-bottom: 1px solid #EEEEEE; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; align-items: center;">
+              <span>Member</span><span>Role</span><span>Practices</span><span>Status</span><span>Last Active</span><span>Due Today</span><span style="text-align: right;">Actions</span>
+            </div>
+            <sc-for list="{{ roster }}" as="m" hint-placeholder-count="5">
+              <div style="display: grid; grid-template-columns: 2.1fr 1.2fr 1.7fr 1fr 1.3fr 1fr 1.9fr; gap: 12px; padding: 13px 20px; border-bottom: 1px solid #EEEEEE; align-items: center; background: {{ m.rowBg }};">
+                <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                  <span style="width: 32px; height: 32px; border-radius: 9999px; background: {{ m.avBg }}; color: {{ m.avFg }}; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; flex-shrink: 0;">{{ m.initials }}</span>
+                  <div style="display: flex; flex-direction: column; min-width: 0;">
+                    <span style="font-size: 13px; font-weight: 700; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ m.name }}</span>
+                    <sc-if value="{{ m.youBadge }}" hint-placeholder-val="{{ false }}"><span style="font-size: 10px; font-weight: 700; color: #5B46D6;">YOU</span></sc-if>
+                  </div>
+                </div>
+                <span style="font-size: 13px; color: #0F1B2E;">{{ m.role }}</span>
+                <sc-if value="{{ m.notEditingPractices }}" hint-placeholder-val="{{ true }}">
+                  <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                    <sc-for list="{{ m.practiceChips }}" as="p" hint-placeholder-count="1">
+                      <span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: #F1F5F9; color: #6B7280; font-size: 11px; font-weight: 700;">{{ p.label }}</span>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ m.editingPractices }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                    <button onClick="{{ m.toggleIfc }}" style="display: inline-flex; padding: 3px 10px; border-radius: 9999px; border: 1px solid {{ m.ifcBorder }}; background: {{ m.ifcBg }}; color: {{ m.ifcFg }}; font-size: 11px; font-weight: 700; cursor: pointer;">IFC</button>
+                    <button onClick="{{ m.toggleWfm }}" style="display: inline-flex; padding: 3px 10px; border-radius: 9999px; border: 1px solid {{ m.wfmBorder }}; background: {{ m.wfmBg }}; color: {{ m.wfmFg }}; font-size: 11px; font-weight: 700; cursor: pointer;">Westbrook</button>
+                  </div>
+                </sc-if>
+                <span style="display: inline-flex; width: fit-content; padding: 2px 9px; border-radius: 9999px; background: {{ m.statusBg }}; color: {{ m.statusFg }}; font-size: 11px; font-weight: 700;">{{ m.status }}</span>
+                <span style="font-size: 12px; color: #6B7280;">{{ m.lastActive }}</span>
+                <sc-if value="{{ m.hasDue }}" hint-placeholder-val="{{ true }}">
+                  <a href="AR Worklist.dc.html" style="font-size: 13px; font-weight: 700; color: #7B61FF; text-decoration: none;">{{ m.due }}</a>
+                </sc-if>
+                <sc-if value="{{ m.noDue }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size: 13px; color: #94A3B8;">—</span>
+                </sc-if>
+                <div style="display: flex; gap: 6px; justify-content: flex-end;">
+                  <sc-for list="{{ m.actions }}" as="act" hint-placeholder-count="1">
+                    <button onClick="{{ act.onClick }}" style="padding: 6px 12px; border-radius: 5px; border: 1px solid {{ act.border }}; background: #FFFFFF; color: {{ act.color }}; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;" style-hover="background: #F8FAFC;">{{ act.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <span style="font-size: 12px; color: #94A3B8;">Due-today counts are live from the claims store for {{ practiceLabel }}. Changes here persist and survive reload.</span>
+        </div>
+      </sc-if>
+
+      <!-- ===== COMPANY PROFILE ===== -->
+      <sc-if value="{{ showCompany }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 24px; display: flex; gap: 32px;">
+          <div style="display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;">
+            <span style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em;">Company Logo</span>
+            <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="company-logo" shape="rounded" radius="12" placeholder="Drop the Bell Medics logo" style="width: 140px; height: 140px;" hint-size="140px,140px"></x-import>
+          </div>
+          <sc-if value="{{ isManager }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 16px; flex: 1; max-width: 520px;">
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <span style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em;">Company Name</span>
+                <input value="{{ coName }}" onChange="{{ onCoName }}" style="height: 38px; padding: 0 12px; border-radius: 5px; border: 1px solid #D1D5DC; font-size: 13px;">
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <span style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em;">Primary Contact</span>
+                  <input value="{{ coContact }}" onChange="{{ onCoContact }}" style="height: 38px; padding: 0 12px; border-radius: 5px; border: 1px solid #D1D5DC; font-size: 13px;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <span style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em;">Phone</span>
+                  <input value="{{ coPhone }}" onChange="{{ onCoPhone }}" style="height: 38px; padding: 0 12px; border-radius: 5px; border: 1px solid #D1D5DC; font-size: 13px;">
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <span style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em;">Billing Email</span>
+                <input value="{{ coEmail }}" onChange="{{ onCoEmail }}" style="height: 38px; padding: 0 12px; border-radius: 5px; border: 1px solid #D1D5DC; font-size: 13px;">
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <span style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em;">Address</span>
+                <input value="{{ coAddress }}" onChange="{{ onCoAddress }}" style="height: 38px; padding: 0 12px; border-radius: 5px; border: 1px solid #D1D5DC; font-size: 13px;">
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <button onClick="{{ saveCompany }}" style="width: fit-content; height: 38px; padding: 0 20px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: #5B46D6;">Save Changes</button>
+                <span style="font-size: 12px; color: #94A3B8;">Shown to practices on shared reports and requests.</span>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ isRep }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; gap: 14px; flex: 1; max-width: 520px;">
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">Company Name</span>
+                <span style="font-size: 14px; color: #0F1B2E;">{{ coName }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">Primary Contact</span>
+                <span style="font-size: 14px; color: #0F1B2E;">{{ coContact }} · {{ coPhone }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">Billing Email</span>
+                <span style="font-size: 14px; color: #0F1B2E;">{{ coEmail }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">Address</span>
+                <span style="font-size: 14px; color: #0F1B2E;">{{ coAddress }}</span>
+              </div>
+              <span style="font-size: 12px; color: #94A3B8; display: inline-flex; align-items: center; gap: 6px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Editable by the Billing Manager only.
+              </span>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ===== WRITE-OFF GOVERNANCE — locked (rep) ===== -->
+      <sc-if value="{{ showWriteoffsLocked }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 48px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;">
+          <span style="width: 48px; height: 48px; border-radius: 9999px; background: #F1F5F9; display: inline-flex; align-items: center; justify-content: center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </span>
+          <span style="font-size: 15px; font-weight: 700;">Write-off governance is manager-only</span>
+          <span style="font-size: 13px; color: #6B7280; max-width: 440px; line-height: 20px;">Your approval limit is $50 per write-off. Anything larger routes to Derek Okafor automatically — you'll see it leave your queue in the Agent Inbox.</span>
+          <span style="display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; padding: 8px 14px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 12px; font-weight: 600;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg>
+            Viewing as Angela Mensah (AR Rep) — switch to Derek Okafor via the account menu, top-right, to edit thresholds
+          </span>
+        </div>
+      </sc-if>
+
+      <!-- ===== WRITE-OFF GOVERNANCE (manager) ===== -->
+      <sc-if value="{{ showWriteoffs }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 980px;">
+
+          <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 14px; align-items: start;">
+
+            <!-- Thresholds -->
+            <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 15px; font-weight: 700;">Approval thresholds</span>
+                <span style="font-size: 12.5px; color: #6B7280;">Who can approve a write-off, by amount — enforced in the Agent Inbox and the Payments variance queue</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #F1F5F9;">
+                <span style="font-size: 13px; font-weight: 700; width: 150px;">AR Rep</span>
+                <span style="font-size: 12px; color: #6B7280;">up to</span>
+                <div style="display: flex; gap: 6px;">
+                  <sc-for list="{{ repOptions }}" as="o" hint-placeholder-count="3">
+                    <button onClick="{{ o.onClick }}" style="height: 34px; padding: 0 14px; border-radius: 5px; border: 1px solid {{ o.border }}; background: {{ o.bg }}; color: {{ o.fg }}; font-size: 12.5px; font-weight: 700; font-family: 'JetBrains Mono', monospace; cursor: pointer;">{{ o.label }}</button>
+                  </sc-for>
+                </div>
+                <span style="font-size: 11.5px; color: #94A3B8; margin-left: auto;">per write-off</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px; padding: 0 0 12px; border-bottom: 1px solid #F1F5F9;">
+                <span style="font-size: 13px; font-weight: 700; width: 150px;">Billing Manager</span>
+                <span style="font-size: 12px; color: #6B7280;">up to</span>
+                <div style="display: flex; gap: 6px;">
+                  <sc-for list="{{ mgrOptions }}" as="o" hint-placeholder-count="3">
+                    <button onClick="{{ o.onClick }}" style="height: 34px; padding: 0 14px; border-radius: 5px; border: 1px solid {{ o.border }}; background: {{ o.bg }}; color: {{ o.fg }}; font-size: 12.5px; font-weight: 700; font-family: 'JetBrains Mono', monospace; cursor: pointer;">{{ o.label }}</button>
+                  </sc-for>
+                </div>
+                <span style="font-size: 11.5px; color: #94A3B8; margin-left: auto;">per write-off</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 13px; font-weight: 700; width: 150px;">Above manager limit</span>
+                <span style="display: inline-flex; padding: 3px 10px; border-radius: 9999px; background: #FDEEF5; color: #C34A7D; font-size: 11px; font-weight: 700;">DUAL SIGN-OFF</span>
+                <span style="font-size: 12px; color: #6B7280;">manager + company owner, both recorded</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; background: #F8FAFC; border: 1px solid #E5E7EB; border-radius: 8px; padding: 10px 14px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <span style="font-size: 12px; color: #6B7280; line-height: 17px;">Platform ceiling: <strong style="color: #0F1B2E; font-family: 'JetBrains Mono', monospace;">{{ ceilingText }}</strong> — set by Otangeles Operations. Thresholds here cannot exceed it, and every change is audit-logged.</span>
+              </div>
+              <sc-if value="{{ hasWoSaved }}" hint-placeholder-val="{{ false }}">
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 9999px; background: #E7F5EF; color: #1B7F5E; font-size: 12px; font-weight: 600; align-self: flex-start;">{{ woSaved }}</span>
+              </sc-if>
+            </div>
+
+            <!-- Reason codes -->
+            <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 15px; font-weight: 700;">Reason codes</span>
+                <span style="font-size: 12.5px; color: #6B7280;">Required on every write-off — no code, no post</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0;">
+                <div style="display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #F1F5F9; align-items: baseline;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #5B46D6; width: 34px;">SB</span><span style="font-size: 12.5px; color: #0F1B2E;">Small balance — below cost to pursue</span></div>
+                <div style="display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #F1F5F9; align-items: baseline;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #5B46D6; width: 34px;">TF</span><span style="font-size: 12.5px; color: #0F1B2E;">Timely filing missed — root cause reviewed</span></div>
+                <div style="display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #F1F5F9; align-items: baseline;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #5B46D6; width: 34px;">UC</span><span style="font-size: 12.5px; color: #0F1B2E;">Uncollectible — practice sign-off attached</span></div>
+                <div style="display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #F1F5F9; align-items: baseline;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #5B46D6; width: 34px;">GW</span><span style="font-size: 12.5px; color: #0F1B2E;">Goodwill — service recovery, manager only</span></div>
+                <div style="display: flex; gap: 10px; padding: 8px 0; align-items: baseline;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #94A3B8; width: 34px;">CA</span><span style="font-size: 12.5px; color: #6B7280;">Contractual — auto-posts with the 835; not a governed write-off</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MTD rollup -->
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px 10px;">
+              <span style="font-size: 15px; font-weight: 700;">Write-offs this month</span>
+              <span style="font-size: 12.5px; color: #6B7280;">every one carries a reason code and an approver</span>
+              <div style="flex: 1;"></div>
+              <span style="font-size: 12px; color: #94A3B8;">rolls up in <a href="Analytics.dc.html" style="font-weight: 600; text-decoration: none;">Analytics</a> · logged in the Ops <a href="Ops Audit Log.dc.html" style="font-weight: 600; text-decoration: none;">Audit Log</a></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 90px 1fr 100px 130px 1fr; gap: 12px; padding: 9px 20px; border-bottom: 1px solid #EEEEEE; font-size: 10.5px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">
+              <span>Reason</span><span>Description</span><span style="text-align: right;">Count</span><span style="text-align: right;">Amount</span><span style="padding-left: 24px;">Approved by</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 90px 1fr 100px 130px 1fr; gap: 12px; padding: 10px 20px; border-bottom: 1px solid #F1F5F9; font-size: 12.5px; align-items: center;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #5B46D6;">SB</span><span style="color: #6B7280;">Small balances after corrected remits</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">6</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">$58.10</span><span style="color: #6B7280; padding-left: 24px;">Angela Mensah (rep, ≤$50 each)</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 90px 1fr 100px 130px 1fr; gap: 12px; padding: 10px 20px; border-bottom: 1px solid #F1F5F9; font-size: 12.5px; align-items: center;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #5B46D6;">TF</span><span style="color: #6B7280;">Two claims aged past filing limits in May</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">2</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">$268.00</span><span style="color: #6B7280; padding-left: 24px;">Derek Okafor (manager)</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 90px 1fr 100px 130px 1fr; gap: 12px; padding: 10px 20px; border-bottom: 1px solid #F1F5F9; font-size: 12.5px; align-items: center;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #5B46D6;">UC</span><span style="color: #6B7280;">Deceased patient, estate closed — practice signed off</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">2</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">$76.70</span><span style="color: #6B7280; padding-left: 24px;">Derek Okafor (manager)</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 90px 1fr 100px 130px 1fr; gap: 12px; padding: 10px 20px; border-bottom: 1px solid #EEEEEE; font-size: 12.5px; align-items: center;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #5B46D6;">GW</span><span style="color: #6B7280;">Duplicate statement sent to a family member</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">1</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">$9.20</span><span style="color: #6B7280; padding-left: 24px;">Derek Okafor (manager)</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 90px 1fr 100px 130px 1fr; gap: 12px; padding: 11px 20px; font-size: 12.5px; align-items: center; background: #F8FAFC;">
+              <span style="font-weight: 700;">Total</span><span style="color: #94A3B8; font-size: 11.5px;">0.9% of MTD collections — target ≤ 2%</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">11</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">$412.00</span><span></span>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== NOTIFICATIONS ===== -->
+      <sc-if value="{{ showNotifs }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden; max-width: 720px;">
+          <div style="padding: 14px 20px; border-bottom: 1px solid #EEEEEE; display: flex; align-items: baseline; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 700;">Email notifications</span>
+            <span style="font-size: 11px; color: #94A3B8;">saved per person — these are {{ personaFirstName }}'s preferences</span>
+          </div>
+          <sc-for list="{{ notifRows }}" as="n" hint-placeholder-count="4">
+            <div style="display: flex; align-items: center; gap: 14px; padding: 14px 20px; border-bottom: 1px solid #EEEEEE;">
+              <div style="display: flex; flex-direction: column; gap: 2px; flex: 1;">
+                <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">{{ n.label }}</span>
+                <span style="font-size: 12px; color: #6B7280;">{{ n.desc }}</span>
+              </div>
+              <button onClick="{{ n.onToggle }}" title="Toggle" style="width: 38px; height: 22px; border-radius: 9999px; border: none; background: {{ n.trackBg }}; position: relative; cursor: pointer; transition: background 150ms ease-out; flex-shrink: 0;">
+                <span style="position: absolute; top: 3px; left: {{ n.knobLeft }}; width: 16px; height: 16px; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: left 150ms ease-out;"></span>
+              </button>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; box-shadow: 0 10px 30px rgba(15,27,46,0.3); z-index: 900; display: flex; align-items: center; gap: 10px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22C5A7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+      {{ toastText }}
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    navExpanded: (() => { try { return localStorage.getItem('onb-nav-expanded') === '1'; } catch (e) { return false; } })(),
+    tab: 'team',
+    woRep: 50, woMgr: 500, woSaved: '',
+    inviteOpen: false,
+    invEmail: '', invRole: 'AR Rep', invPractices: { ifc: true, wfm: false },
+    editingPractices: null,
+    company: null,
+    toast: '',
+    storesReady: false,
+    tick: 0,
+  };
+
+  componentDidMount() {
+    const check = () => {
+      if (window.TeamStore && window.ClaimsStore && window.RoleStore) {
+        this.setState({ storesReady: true, company: window.TeamStore.getCompany() });
+      } else {
+        setTimeout(check, 60);
+      }
+    };
+    check();
+  }
+
+  showToast(msg) {
+    clearTimeout(this._tt);
+    this.setState({ toast: msg });
+    this._tt = setTimeout(() => this.setState({ toast: '' }), 2600);
+  }
+
+  renderVals() {
+    const st = this.state;
+    const TS = window.TeamStore;
+    const RS = window.RoleStore;
+    const isManager = RS ? RS.isManager() : false;
+    const persona = RS ? RS.persona() : { name: 'Angela Mensah', title: 'AR Rep', id: 'am' };
+
+    let practice = 'ifc';
+    try { if (localStorage.getItem('onb-practice') === 'wfm') practice = 'wfm'; } catch (e) {}
+    const practiceLabel = practice === 'wfm' ? 'Westbrook Family Medicine' : 'Ibekie Foundation Clinics';
+
+    const tab = st.tab;
+    const tabStyle = (t) => ({ fg: tab === t ? '#7B61FF' : '#6B7280', line: tab === t ? '#7B61FF' : 'transparent' });
+
+    // ---- roster ----
+    const due = TS && st.storesReady ? TS.dueTodayScaled(practice) : {};
+    const rawRoster = TS && st.storesReady ? TS.getRoster() : [];
+    const roster = rawRoster.map((m) => {
+      const active = m.status === 'Active';
+      const pending = m.pending;
+      const editing = st.editingPractices === m.id;
+      const hasP = (p) => m.practices.indexOf(p) >= 0;
+      const inPractice = hasP(practice);
+      const dueN = active && !pending && m.role === 'AR Rep' && inPractice ? (due[m.initials] || 0) : null;
+      const actions = [];
+      if (pending) {
+        actions.push({ label: 'Mark accepted', color: '#0B7D6C', border: '#B9E8DC', onClick: () => { TS.setInviteAccepted(m.id, true); this.showToast(m.email + ' accepted the invite'); this.forceUpdate(); } });
+        actions.push({ label: 'Revoke', color: '#DC2626', border: '#F3C9C9', onClick: () => { TS.revokeInvite(m.id); this.showToast('Invite revoked'); this.forceUpdate(); } });
+      } else {
+        actions.push(editing
+          ? { label: 'Done', color: '#0B7D6C', border: '#B9E8DC', onClick: () => this.setState({ editingPractices: null }) }
+          : { label: 'Edit practices', color: '#6B7280', border: '#E5E7EB', onClick: () => this.setState({ editingPractices: m.id }) });
+        if (m.id !== 'do') {
+          actions.push(active
+            ? { label: 'Deactivate', color: '#DC2626', border: '#F3C9C9', onClick: () => { TS.editMember(m.id, { status: 'Inactive' }); this.showToast(m.name + ' deactivated'); this.forceUpdate(); } }
+            : { label: 'Reactivate', color: '#0B7D6C', border: '#B9E8DC', onClick: () => { TS.editMember(m.id, { status: 'Active' }); this.showToast(m.name + ' reactivated'); this.forceUpdate(); } });
+        }
+      }
+      const togglePractice = (p) => {
+        const cur = m.practices.slice();
+        const i = cur.indexOf(p);
+        if (i >= 0) { if (cur.length === 1) { this.showToast('A member needs at least one practice'); return; } cur.splice(i, 1); }
+        else cur.push(p);
+        TS.editMember(m.id, { practices: cur });
+        this.forceUpdate();
+      };
+      const chipOn = { bg: '#F1EEFF', fg: '#5B46D6', border: '#C9BCF5' };
+      const chipOff = { bg: '#FFFFFF', fg: '#94A3B8', border: '#E5E7EB' };
+      const ifcS = hasP('ifc') ? chipOn : chipOff;
+      const wfmS = hasP('wfm') ? chipOn : chipOff;
+      return {
+        key: m.id,
+        name: m.name, initials: m.initials, role: m.role,
+        youBadge: m.id === persona.id,
+        avBg: pending ? '#F1F5F9' : 'linear-gradient(#7B61FF, #22C5A7)',
+        avFg: pending ? '#94A3B8' : '#FFFFFF',
+        rowBg: active || pending ? '#FFFFFF' : '#FAFAFA',
+        practiceChips: m.practices.map((p) => ({ label: TS.PRACTICE_SHORT[p] || p })),
+        editingPractices: editing, notEditingPractices: !editing,
+        ifcBg: ifcS.bg, ifcFg: ifcS.fg, ifcBorder: ifcS.border,
+        wfmBg: wfmS.bg, wfmFg: wfmS.fg, wfmBorder: wfmS.border,
+        toggleIfc: () => togglePractice('ifc'),
+        toggleWfm: () => togglePractice('wfm'),
+        status: m.status,
+        statusBg: pending ? '#FEF3DF' : active ? '#E6F7F2' : '#F1F5F9',
+        statusFg: pending ? '#B45309' : active ? '#0B7D6C' : '#6B7280',
+        lastActive: m.lastActive,
+        hasDue: dueN !== null, noDue: dueN === null,
+        due: dueN !== null ? (dueN + ' due') : '',
+        actions,
+      };
+    });
+    const activeN = rawRoster.filter((m) => m.status === 'Active' && !m.pending).length;
+    const pendingN = rawRoster.filter((m) => m.pending).length;
+
+    // ---- invite panel ----
+    const segOn = { bg: '#F1EEFF', fg: '#5B46D6', border: '#C9BCF5' };
+    const segOff = { bg: '#FFFFFF', fg: '#6B7280', border: '#E5E7EB' };
+    const repSel = st.invRole === 'AR Rep' ? segOn : segOff;
+    const mgrSel = st.invRole === 'Billing Manager' ? segOn : segOff;
+    const ifcSel = st.invPractices.ifc ? segOn : segOff;
+    const wfmSel = st.invPractices.wfm ? segOn : segOff;
+
+    // ---- company ----
+    const co = st.company || (TS ? TS.getCompany() : { name: 'Bell Medics', contact: '', email: '', phone: '', address: '' });
+
+    // ---- notifications ----
+    const notifDefs = [
+      { key: 'sla', label: 'SLA breaches', desc: 'A decision in the Agent Inbox passes its SLA without action' },
+      { key: 'appeals', label: 'Appeal outcomes', desc: 'A filed appeal is overturned, upheld, or returned for more info' },
+      { key: 'practiceReplies', label: 'Practice replies', desc: 'A practice answers one of your information requests' },
+      { key: 'weeklyReport', label: 'Weekly report ready', desc: 'The Monday collections summary is compiled in Analytics' },
+    ];
+    const prefs = TS && st.storesReady ? TS.getNotifs(persona.id) : {};
+    const notifRows = notifDefs.map((n) => {
+      const on = !!prefs[n.key];
+      return {
+        key: n.key, label: n.label, desc: n.desc,
+        trackBg: on ? '#7B61FF' : '#D1D5DC',
+        knobLeft: on ? '19px' : '3px',
+        onToggle: () => { TS.setNotif(persona.id, n.key, !on); this.forceUpdate(); },
+      };
+    });
+
+    return {
+      navClosed: !st.navExpanded,
+      navOpen: st.navExpanded,
+      toggleNav: () => this.setState((p) => { const v = !p.navExpanded; try { localStorage.setItem('onb-nav-expanded', v ? '1' : '0'); } catch (e) {} return { navExpanded: v }; }),
+
+      personaName: persona.name,
+      personaTitle: persona.title,
+      personaFirstName: persona.name.split(' ')[0],
+      practiceLabel,
+      isManager, isRep: !isManager,
+
+      goTeam: () => this.setState({ tab: 'team' }),
+      goCompany: () => this.setState({ tab: 'company' }),
+      goNotifs: () => this.setState({ tab: 'notifs' }),
+      goWriteoffs: () => this.setState({ tab: 'writeoffs' }),
+      woTabFg: tabStyle('writeoffs').fg, woTabLine: tabStyle('writeoffs').line,
+      teamTabFg: tabStyle('team').fg, teamTabLine: tabStyle('team').line,
+      companyTabFg: tabStyle('company').fg, companyTabLine: tabStyle('company').line,
+      notifsTabFg: tabStyle('notifs').fg, notifsTabLine: tabStyle('notifs').line,
+
+      showTeam: tab === 'team' && isManager,
+      showTeamLocked: tab === 'team' && !isManager,
+      showCompany: tab === 'company',
+      showNotifs: tab === 'notifs',
+      showWriteoffs: tab === 'writeoffs' && isManager,
+      showWriteoffsLocked: tab === 'writeoffs' && !isManager,
+      repOptions: [25, 50, 100].map(v => {
+        const on = st.woRep === v;
+        return {
+          label: '$' + v, border: on ? '#7B61FF' : '#E5E7EB', bg: on ? '#F1EEFF' : '#FFFFFF', fg: on ? '#5B46D6' : '#6B7280',
+          onClick: () => {
+            this.setState({ woRep: v, woSaved: 'AR Rep limit set to $' + v + ' — audit-logged' });
+            try { if (window.CompaniesStore) CompaniesStore.addAudit({ ts: 'Jul 13', type: 'company', who: 'Derek Okafor', what: 'Changed write-off thresholds', detail: 'Bell Medics \u00b7 rep $' + v + ' \u00b7 manager $' + st.woMgr }); } catch (e) {}
+          }
+        };
+      }),
+      mgrOptions: [250, 500, 1000].map(v => {
+        const on = st.woMgr === v;
+        return {
+          label: '$' + v.toLocaleString(), border: on ? '#7B61FF' : '#E5E7EB', bg: on ? '#F1EEFF' : '#FFFFFF', fg: on ? '#5B46D6' : '#6B7280',
+          onClick: () => {
+            this.setState({ woMgr: v, woSaved: 'Billing Manager limit set to $' + v.toLocaleString() + ' — audit-logged' });
+            try { if (window.CompaniesStore) CompaniesStore.addAudit({ ts: 'Jul 13', type: 'company', who: 'Derek Okafor', what: 'Changed write-off thresholds', detail: 'Bell Medics \u00b7 rep $' + st.woRep + ' \u00b7 manager $' + v.toLocaleString() }); } catch (e) {}
+          }
+        };
+      }),
+      ceilingText: '$' + (((window.PortalConfig && window.PortalConfig.get('billing.writeoffCeiling')) || 2500)).toLocaleString(),
+      hasWoSaved: !!st.woSaved,
+      woSaved: st.woSaved,
+
+      roster,
+      rosterSummary: activeN + ' active member' + (activeN === 1 ? '' : 's') + (pendingN ? ' · ' + pendingN + ' pending invite' + (pendingN === 1 ? '' : 's') : ''),
+
+      inviteOpen: st.inviteOpen,
+      toggleInvite: () => this.setState((p) => ({ inviteOpen: !p.inviteOpen })),
+      invEmail: st.invEmail,
+      onInvEmail: (e) => this.setState({ invEmail: e.target.value }),
+      setInvRoleRep: () => this.setState({ invRole: 'AR Rep' }),
+      setInvRoleMgr: () => this.setState({ invRole: 'Billing Manager' }),
+      invRepBg: repSel.bg, invRepFg: repSel.fg, invRepBorder: repSel.border,
+      invMgrBg: mgrSel.bg, invMgrFg: mgrSel.fg, invMgrBorder: mgrSel.border,
+      toggleInvIfc: () => this.setState((p) => ({ invPractices: Object.assign({}, p.invPractices, { ifc: !p.invPractices.ifc }) })),
+      toggleInvWfm: () => this.setState((p) => ({ invPractices: Object.assign({}, p.invPractices, { wfm: !p.invPractices.wfm }) })),
+      invIfcBg: ifcSel.bg, invIfcFg: ifcSel.fg, invIfcBorder: ifcSel.border,
+      invWfmBg: wfmSel.bg, invWfmFg: wfmSel.fg, invWfmBorder: wfmSel.border,
+      sendInvite: () => {
+        const email = st.invEmail.trim();
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { this.showToast('Enter a valid email address'); return; }
+        const prax = ['ifc', 'wfm'].filter((p) => st.invPractices[p]);
+        if (!prax.length) { this.showToast('Pick at least one practice'); return; }
+        TS.invite(email, st.invRole, prax);
+        this.setState({ inviteOpen: false, invEmail: '', invRole: 'AR Rep', invPractices: { ifc: true, wfm: false } });
+        this.showToast('Invite sent to ' + email + ' — pending until accepted');
+      },
+
+      coName: co.name, coContact: co.contact, coEmail: co.email, coPhone: co.phone, coAddress: co.address,
+      onCoName: (e) => this.setState({ company: Object.assign({}, co, { name: e.target.value }) }),
+      onCoContact: (e) => this.setState({ company: Object.assign({}, co, { contact: e.target.value }) }),
+      onCoEmail: (e) => this.setState({ company: Object.assign({}, co, { email: e.target.value }) }),
+      onCoPhone: (e) => this.setState({ company: Object.assign({}, co, { phone: e.target.value }) }),
+      onCoAddress: (e) => this.setState({ company: Object.assign({}, co, { address: e.target.value }) }),
+      saveCompany: () => { TS.saveCompany(co); this.showToast('Company profile saved'); },
+
+      notifRows,
+
+      hasToast: !!st.toast,
+      toastText: st.toast,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

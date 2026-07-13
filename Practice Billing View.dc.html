@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button, select, input, textarea { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+<script src="./claims-store.js"></script>
+<script src="./documents-store.js"></script>
+</helmet>
+
+<div style="min-height: 100vh; background: #F7F7F7; display: flex; flex-direction: column;" data-screen-label="Practice Billing View">
+
+  <!-- ===== Top bar — lightweight practice shell ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 28px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Practice Billing</span>
+    <div style="flex: 1;"></div>
+    <span style="display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 9999px; background: #F1EEFF; border: 1px solid #D6CCFF; font-size: 12px; font-weight: 700; color: #5B46D6;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+      Billing by Bell Medics
+    </span>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="width: 36px; height: 36px; border-radius: 9999px; background: linear-gradient(#845EC2, #00C9A7); color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px;">{{ adminInitials }}</span>
+      <span style="display: flex; flex-direction: column; line-height: 1.25;">
+        <span style="font-size: 13px; font-weight: 700;">{{ adminName }}</span>
+        <span style="font-size: 11px; color: #6B7280;">Practice Administrator</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ===== Main ===== -->
+  <div style="width: 100%; max-width: 1180px; margin: 0 auto; padding: 28px 32px 72px; display: flex; flex-direction: column; gap: 22px;">
+
+    <!-- Title -->
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <h1 style="font-size: 24px; font-weight: 700; margin: 0;">Billing at {{ practiceLabel }}</h1>
+      <span style="font-size: 13px; color: #6B7280;">Mon, Jul 13 2026 · live view · read-only except the queue below</span>
+    </div>
+
+    <!-- ===== Headline numbers ===== -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 3px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 18px;">
+        <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Collected this month</span>
+        <span style="font-size: 26px; font-weight: 700; color: #109680;">{{ collectedMTD }}</span>
+        <span style="font-size: 11px; color: #6B7280;">{{ collectedSub }}</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 3px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 18px;">
+        <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Claims in flight</span>
+        <span style="font-size: 26px; font-weight: 700;">{{ inFlight }}</span>
+        <span style="font-size: 11px; color: #6B7280;">submitted, awaiting the insurance company</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 3px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 18px;">
+        <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Outstanding balance</span>
+        <span style="font-size: 26px; font-weight: 700;">{{ openAr }}</span>
+        <span style="font-size: 11px; color: #6B7280;">{{ agingSub }}</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 3px; background: #E7F5EF; border: 1px solid #BFE8DC; border-radius: 12px; padding: 16px 18px;">
+        <span style="font-size: 11px; font-weight: 700; color: #0B7D6C; text-transform: uppercase; letter-spacing: 0.06em;">Caught before the visit</span>
+        <span style="font-size: 26px; font-weight: 700; color: #0B7D6C;">{{ preventedLabel }}</span>
+        <span style="font-size: 11px; color: #6B7280;">{{ preventedSub }}</span>
+      </div>
+    </div>
+
+    <!-- ===== Needs-from-you queue ===== -->
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: baseline; gap: 10px;">
+        <h2 style="font-size: 17px; font-weight: 700; margin: 0;">Billing needs from you</h2>
+        <span style="display: inline-flex; padding: 2px 10px; border-radius: 9999px; background: #FEECEC; color: #DC2626; font-size: 11px; font-weight: 700;">{{ openNeedsCount }} waiting</span>
+        <span style="font-size: 12px; color: #6B7280;">each item is blocking payment — uploads go straight to Bell Medics' agent</span>
+      </div>
+
+      <sc-for list="{{ needs }}" as="n" hint-placeholder-count="4">
+        <div style="background: #FFFFFF; border: 1px solid {{ n.border }}; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: flex-start; gap: 14px;">
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span style="font-size: 14px; font-weight: 700;">{{ n.title }}</span>
+                <span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: {{ n.chipBg }}; color: {{ n.chipFg }}; font-size: 10px; font-weight: 700; letter-spacing: 0.04em;">{{ n.chip }}</span>
+              </div>
+              <span style="font-size: 12.5px; color: #6B7280;">{{ n.patient }} · {{ n.facility }} · <span style="font-weight: 700; color: {{ n.dueColor }};">{{ n.due }}</span> · <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #B45309;">{{ n.atRisk }}</span> held until resolved</span>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 10.5px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Why this is needed</span>
+              <span style="font-size: 12.5px; line-height: 19px; color: #6B7280;">{{ n.why }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 10.5px; font-weight: 700; color: #5B46D6; text-transform: uppercase; letter-spacing: 0.06em;">What Bell Medics already did</span>
+              <span style="font-size: 12.5px; line-height: 19px; color: #6B7280;">{{ n.agent }}</span>
+            </div>
+          </div>
+
+          <sc-if value="{{ n.hasDocs }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <sc-for list="{{ n.docs }}" as="d" hint-placeholder-count="1">
+                <span style="display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 8px; background: {{ d.bg }}; border: 1px solid {{ d.border }}; font-size: 12px; font-weight: 600; color: #0F1B2E;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="{{ d.iconColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path></svg>
+                  {{ d.name }}
+                  <span style="font-size: 10.5px; color: #94A3B8; font-weight: 400;">{{ d.meta }}</span>
+                </span>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ n.isOpen }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; align-items: center; gap: 8px; border-top: 1px solid #F1F5F9; padding-top: 10px;">
+              <button onClick="{{ n.onUpload }}" style="display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 12.5px; font-weight: 700; cursor: pointer;" style-hover="background: #5B46D6;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m17 8-5-5-5 5"></path><path d="M12 3v12"></path></svg>
+                {{ n.uploadLabel }}
+              </button>
+              <button onClick="{{ n.onDone }}" style="padding: 8px 16px; border-radius: 5px; border: 1px solid #BFE8DC; background: #E7F5EF; color: #0B7D6C; font-size: 12.5px; font-weight: 700; cursor: pointer;" style-hover="background: #D5EEE2;">Mark Handled</button>
+              <button onClick="{{ n.onCant }}" style="padding: 8px 16px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12.5px; font-weight: 700; cursor: pointer;" style-hover="background: #F8FAFC;">Can't Provide</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ n.showNote }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; gap: 8px; align-items: flex-start;">
+              <textarea onInput="{{ n.onNoteInput }}" placeholder="Tell Bell Medics why this can't be provided — the agent will find another path." style="flex: 1; min-height: 56px; border: 1px solid #E5E7EB; border-radius: 8px; padding: 10px 12px; font-size: 12.5px; line-height: 18px; resize: vertical; outline: none;"></textarea>
+              <button onClick="{{ n.onSendNote }}" style="padding: 8px 16px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 12.5px; font-weight: 700; cursor: pointer;" style-hover="background: #5B46D6;">Send</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ n.isResolved }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; align-items: center; gap: 10px; border-top: 1px solid #F1F5F9; padding-top: 10px;">
+              <span style="font-size: 12.5px; color: {{ n.resolvedColor }}; font-weight: 600;">{{ n.resolvedText }}</span>
+              <button onClick="{{ n.onReopen }}" style="padding: 4px 10px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 11.5px; font-weight: 700; cursor: pointer;" style-hover="background: #F8FAFC;">Reopen</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+
+      <input type="file" ref="{{ fileRef }}" onChange="{{ onFileChange }}" style="display: none;">
+    </div>
+
+    <!-- ===== Collections review (Phase 9 — practice veto) ===== -->
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: baseline; gap: 10px;">
+        <h2 style="font-size: 17px; font-weight: 700; margin: 0;">Before collections — your review</h2>
+        <span style="display: inline-flex; padding: 2px 10px; border-radius: 9999px; background: #FDEEF5; color: #C34A7D; font-size: 11px; font-weight: 700;">{{ vetoCount }}</span>
+        <span style="font-size: 12px; color: #6B7280;">residents Bell Medics proposes sending to the collections agency — you can pull anyone off the list until the window closes</span>
+      </div>
+
+      <sc-for list="{{ vetoRows }}" as="v" hint-placeholder-count="2">
+        <div style="background: #FFFFFF; border: 1px solid {{ v.border }}; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 16px;">
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <span style="font-size: 14px; font-weight: 700;">{{ v.patient }}</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #B45309;">{{ v.amount }}</span>
+              <span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: {{ v.chipBg }}; color: {{ v.chipFg }}; font-size: 10px; font-weight: 700; letter-spacing: 0.04em;">{{ v.chip }}</span>
+            </div>
+            <span style="font-size: 12.5px; color: #6B7280; line-height: 18px;">{{ v.detail }}</span>
+          </div>
+          <sc-if value="{{ v.isOpen }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; gap: 8px; flex-shrink: 0;">
+              <button onClick="{{ v.onVeto }}" style="padding: 9px 16px; border-radius: 5px; border: 1px solid #C34A7D; background: #FFFFFF; color: #C34A7D; font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap;" style-hover="background: #FDEEF5;">Keep With Us — Don't Send</button>
+              <button onClick="{{ v.onOk }}" style="padding: 9px 16px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap;" style-hover="background: #F8FAFC;">No Objection</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ v.isDecided }}" hint-placeholder-val="{{ false }}">
+            <span style="font-size: 12.5px; font-weight: 600; color: {{ v.decidedColor }}; flex-shrink: 0; max-width: 320px; text-align: right; line-height: 18px;">{{ v.decidedText }}</span>
+          </sc-if>
+        </div>
+      </sc-for>
+      <span style="font-size: 11.5px; color: #94A3B8;">Nothing goes to the agency while its review window is open. If you do nothing, accounts export when the window closes; the balance is then marked as handed off — it stays on the books, and any later payment is still posted normally.</span>
+    </div>
+
+    <!-- ===== Two-column: reports + claims ===== -->
+    <div style="display: grid; grid-template-columns: 380px 1fr; gap: 16px; align-items: start;">
+
+      <!-- Weekly reports -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+        <div style="padding: 14px 20px; border-bottom: 1px solid #EEEEEE; display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 13px; font-weight: 700;">Weekly reports</span>
+          <span style="font-size: 11px; color: #94A3B8;">what used to arrive by email, kept here</span>
+        </div>
+        <sc-for list="{{ reports }}" as="r" hint-placeholder-count="4">
+          <div style="border-bottom: 1px solid #F1F5F9;">
+            <button onClick="{{ r.onToggle }}" style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 12px 20px; border: none; background: #FFFFFF; cursor: pointer; text-align: left;" style-hover="background: #F8FAFC;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+              <span style="flex: 1; display: flex; flex-direction: column; gap: 1px;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #0F1B2E;">{{ r.week }}</span>
+                <span style="font-size: 11px; color: #94A3B8;">{{ r.sent }}</span>
+              </span>
+              <span style="font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #109680;">{{ r.collected }}</span>
+            </button>
+            <sc-if value="{{ r.open }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 4px 20px 14px 45px; display: flex; flex-direction: column; gap: 5px;">
+                <sc-for list="{{ r.lines }}" as="ln" hint-placeholder-count="3">
+                  <div style="display: flex; justify-content: space-between; gap: 10px; font-size: 12px; line-height: 17px;">
+                    <span style="color: #6B7280;">{{ ln.k }}</span>
+                    <span style="font-weight: 700; color: #0F1B2E; white-space: nowrap;">{{ ln.v }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- Claims — read-only, plain language -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+        <div style="padding: 14px 20px; border-bottom: 1px solid #EEEEEE; display: flex; align-items: baseline; gap: 8px;">
+          <span style="font-size: 13px; font-weight: 700;">Your claims</span>
+          <span style="font-size: 11px; color: #94A3B8;">{{ claimsSub }}</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1.2fr 110px 1fr 120px 110px; gap: 12px; padding: 10px 20px; border-bottom: 1px solid #E5E7EB; font-size: 10.5px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">
+          <span>Patient</span><span>Visit date</span><span>Insurance</span><span>Status</span><span style="text-align: right;">Balance</span>
+        </div>
+        <sc-for list="{{ claims }}" as="c" hint-placeholder-count="10">
+          <div style="display: grid; grid-template-columns: 1.2fr 110px 1fr 120px 110px; gap: 12px; padding: 11px 20px; border-bottom: 1px solid #F1F5F9; font-size: 12.5px; align-items: center;">
+            <span style="font-weight: 600;">{{ c.patient }}</span>
+            <span style="color: #6B7280; font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">{{ c.dos }}</span>
+            <span style="color: #6B7280;">{{ c.payer }}</span>
+            <span><span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: {{ c.stBg }}; color: {{ c.stFg }}; font-size: 10.5px; font-weight: 700;">{{ c.st }}</span></span>
+            <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">{{ c.bal }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="font-size: 12px; color: #94A3B8; line-height: 18px;">This is a read-only window into the billing work Bell Medics runs for {{ practiceLabel }}. Questions about a specific claim? Your billing contact sees the same numbers — reference the patient and visit date.</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { rev: 0, noteFor: null, reportOpen: 'Week of Jul 6 – Jul 10', pendingNeed: null, vetoDecisions: {} };
+
+  vetoVals() {
+    const base = [
+      {
+        id: 'col1', patient: 'Baptiste, Renee', amount: '$58.20',
+        chip: 'WINDOW CLOSES JUL 20', chipBg: '#FDEEF5', chipFg: '#C34A7D', border: '#F3CBDD',
+        detail: '128 days outstanding \u00b7 3 statements (Apr 30, May 28, Jun 28 final) \u00b7 no contact, address confirmed good. Bell Medics proposes the collections agency.',
+        vetoText: 'Kept with the practice \u2014 Bell Medics notified; the account moves to a facility-managed arrangement instead of the agency.',
+        okText: 'No objection recorded \u2014 exports to the agency when the window closes Jul 20.'
+      },
+      {
+        id: 'col2', patient: 'Truong, Han', amount: '$114.75',
+        chip: 'WINDOW CLOSES JUL 24', chipBg: '#FDEEF5', chipFg: '#C34A7D', border: '#F3CBDD',
+        detail: '134 days outstanding \u00b7 3 statements \u00b7 one call answered in May (promised payment, none received). Bell Medics proposes the collections agency.',
+        vetoText: 'Kept with the practice \u2014 Bell Medics notified; the account moves to a facility-managed arrangement instead of the agency.',
+        okText: 'No objection recorded \u2014 exports to the agency when the window closes Jul 24.'
+      }
+    ];
+    const rows = base.map(b => {
+      const d = this.state.vetoDecisions[b.id];
+      return Object.assign({}, b, {
+        isOpen: !d, isDecided: !!d,
+        decidedColor: d === 'veto' ? '#C34A7D' : '#0B7D6C',
+        decidedText: d === 'veto' ? b.vetoText : b.okText,
+        onVeto: () => this.setState(s => ({ vetoDecisions: Object.assign({}, s.vetoDecisions, { [b.id]: 'veto' }) })),
+        onOk: () => this.setState(s => ({ vetoDecisions: Object.assign({}, s.vetoDecisions, { [b.id]: 'ok' }) }))
+      });
+    });
+    const open = rows.filter(r => r.isOpen).length;
+    return { vetoRows: rows, vetoCount: open > 0 ? open + ' awaiting your review' : 'all reviewed' };
+  }
+
+  needsData(isWFM) {
+    if (isWFM) {
+      return [
+        { id: 'wfm-card', title: 'Updated insurance card — front and back', patient: 'PETERSEN, GRACE', facility: 'Westbrook Main Office', due: 'By Tue, Jul 14', overdue: false, atRisk: '$460', uploadLabel: 'Upload Card Photo',
+          why: 'Aetna shows the plan on file termed Jun 30 — new plan unknown, three visits held.',
+          agent: 'Ran eligibility against Aetna and 3 likely successor plans — no active match found.' },
+        { id: 'wfm-abn', title: 'Signed ABN for Thursday\u2019s visit', patient: 'GALLAGHER, WALTER', facility: 'Westbrook Main Office', due: 'By Thu, Jul 16', overdue: false, atRisk: '$185', uploadLabel: 'Upload Signed ABN',
+          why: 'Medicare benefit for this service exhausts mid-plan — without an ABN the practice absorbs the cost.',
+          agent: 'Prepared the ABN with the estimated amount pre-filled; flagged the visit on the schedule.' }
+      ];
+    }
+    return [
+      { id: 'fox', title: 'Get the COB form signed at Monday\u2019s visit', patient: 'FOX, KELLEY', facility: 'IFC Merrillville', due: 'Due today, Jul 13', overdue: true, atRisk: '$1,320', uploadLabel: 'Upload Signed Form',
+        why: 'MHS HIP is denying everything: "investigating existence of other coverage." The annual COB form was never returned.',
+        agent: 'Called MHS HIP (rep Mary B), confirmed the denial reason, pre-filled the COB form — it\u2019s attached below, ready for a signature.' },
+      { id: 'ward', title: 'Updated insurance card / plan info', patient: 'WARD, ERIC', facility: 'Niles Care Center', due: 'Due today, Jul 13', overdue: true, atRisk: '$750', uploadLabel: 'Upload Card Photo',
+        why: 'Michigan Medicaid rejects every claim — the patient appears to have changed plans and no active plan can be found.',
+        agent: 'Ran eligibility against MI Medicaid plus 4 likely MCOs — no active match. A resubmission already failed once.' },
+      { id: 'allen', title: 'Provider co-sign on the medical-necessity note', patient: 'ALLEN, GENE', facility: 'CASA of Hobart', due: 'By Tue, Jul 14', overdue: false, atRisk: '$1,725', uploadLabel: 'Upload Signed Note',
+        why: 'Anthem BCBS requires precertification for this service — 17 past claims denied for missing auth.',
+        agent: 'Drafted the auth request with clinicals and submitted via Availity — it only needs the provider\u2019s signature to finalize.' },
+      { id: 'pare', title: 'Confirm attending vs. hospice-related care for the Jul 14 visit', patient: 'PARE, TERRI', facility: 'Brickyard Healthcare', due: 'By Tue, Jul 14', overdue: false, atRisk: '$1,000', uploadLabel: 'Upload Determination',
+        why: 'Medicare shows hospice enrollment since Jun 12 — visits must carry a GW/GV modifier or bill to the hospice.',
+        agent: 'Applied the hospice billing rule to upcoming claims; holding them pending the attending-physician determination.' },
+      { id: 'storey', title: 'Provider decision — spread remaining visits or request extension', patient: 'STOREY, DAVID', facility: 'IFC Merrillville', due: 'By Tue, Jul 14', overdue: false, atRisk: '$0', uploadLabel: 'Upload Care Plan Note',
+        why: '21 of 24 covered visits used — at the current weekly cadence, benefits exhaust Aug 4, mid-care-plan.',
+        agent: 'Projected exhaustion from the visit cadence, confirmed the remaining count with MHS HIP, and drafted a benefit-extension request.' },
+      { id: 'moore', title: 'Social worker assist with Medicaid redetermination', patient: 'MOORE, CHARLES', facility: 'IFC Merrillville', due: 'By Wed, Jul 15', overdue: false, atRisk: '$640', uploadLabel: 'Upload Submitted Packet',
+        why: 'Indiana Health Coverage ended before recent visits and no other insurance exists — redetermination is the only path to payment.',
+        agent: 'Verified the termination, searched for successor coverage (none), and prepared the redetermination packet attached below.' },
+      { id: 'rivera', title: 'Confirm the correct medical member ID (2 candidates found)', patient: 'RIVERA, BERNARDO', facility: 'IFC Merrillville', due: 'By Thu, Jul 16', overdue: false, atRisk: '$240', uploadLabel: 'Upload Card Photo',
+        why: 'The ID on file belongs to a vision plan (per payer rep Tasha, ref 5033905mov7x3) — the medical plan is unknown.',
+        agent: 'Searched eligibility by demographics and found 2 candidate medical plans — a card photo settles it in one step.' },
+      { id: 'gentry', title: 'New insurance card at Friday\u2019s visit', patient: 'GENTRY, MELODY', facility: 'Brickyard Healthcare — Elkhart', due: 'By Fri, Jul 17', overdue: false, atRisk: '$51', uploadLabel: 'Upload Card Photo',
+        why: 'The Medicare Advantage plan disenrolled the patient Jun 30 — the successor plan is unknown.',
+        agent: 'Confirmed the disenrollment; Medicare FFS shows active, but the history suggests a new MA plan exists.' }
+    ];
+  }
+
+  refresh() { this.setState(s => ({ rev: s.rev + 1 })); }
+
+  triggerUpload(id) {
+    this.setState({ pendingNeed: id }, () => {
+      const inp = this._fileRef && this._fileRef.current;
+      if (inp) { inp.value = ''; inp.click(); }
+    });
+  }
+
+  handleFile(e) {
+    const f = e.target.files && e.target.files[0];
+    const id = this.state.pendingNeed;
+    if (!f || !id) return;
+    const kb = Math.max(1, Math.round(f.size / 1024));
+    DocumentsStore.add({
+      entityType: 'need', entityId: id, name: f.name,
+      docType: 'Practice upload', source: 'practice', by: this.adminName(), size: kb + ' KB'
+    });
+    DocumentsStore.setNeedStatus(id, 'sent');
+    this.setState({ pendingNeed: null, noteFor: null });
+  }
+
+  adminName() {
+    const isWFM = ClaimsStore.currentPractice() === 'wfm';
+    return isWFM ? 'Dana Westbrook' : 'Nkechi Ibekie';
+  }
+
+  renderVals() {
+    if (!this._fileRef) this._fileRef = React.createRef();
+    const practice = ClaimsStore.currentPractice();
+    const isWFM = practice === 'wfm';
+    const metaP = ClaimsStore.meta(practice);
+    const agg = ClaimsStore.aggregate(practice);
+    const all = ClaimsStore.getAllClaims(practice);
+
+    // ---- headline numbers ----
+    const collected = Math.round(agg.paidAll * 0.14);
+    const inFlight = all.filter(c => c.status === 'Submitted' || c.status === 'Accepted (277CA)' || c.status === 'Ready to submit').length;
+    const b = agg.buckets;
+    const pct90 = Math.round(agg.past90Pct);
+
+    // ---- needs queue ----
+    const chipFor = {
+      open:  { chip: 'NEEDED', bg: '#FEECEC', fg: '#DC2626', border: '#FFD3D2' },
+      sent:  { chip: 'SENT TO BELL MEDICS', bg: '#E7F5EF', fg: '#0B7D6C', border: '#E5E7EB' },
+      done:  { chip: 'HANDLED', bg: '#E7F5EF', fg: '#0B7D6C', border: '#E5E7EB' },
+      cant:  { chip: 'CAN\u2019T PROVIDE', bg: '#FEF3DF', fg: '#B45309', border: '#E5E7EB' }
+    };
+    const resolvedTextFor = {
+      sent: 'Sent — Bell Medics\u2019 agent has been notified and will pick this up within the hour.',
+      done: 'Marked handled at the facility — Bell Medics\u2019 agent has been notified.',
+      cant: 'Noted — the agent will look for another path and may escalate to your billing contact.'
+    };
+    const base = this.needsData(isWFM);
+    let openCount = 0;
+    const needs = base.map(item => {
+      const st = DocumentsStore.needStatus(item.id);
+      const status = st.status || 'open';
+      if (status === 'open') openCount++;
+      const c = chipFor[status] || chipFor.open;
+      const docs = DocumentsStore.forEntity('need', item.id).map(d => ({
+        name: d.name,
+        meta: (d.source === 'agent' ? 'prepared by Bell Medics · ' : 'uploaded by ' + (d.by || 'you') + ' · ') + d.when + (d.size ? ' · ' + d.size : ''),
+        bg: d.source === 'agent' ? '#F1EEFF' : '#E7F5EF',
+        border: d.source === 'agent' ? '#D6CCFF' : '#BFE8DC',
+        iconColor: d.source === 'agent' ? '#5B46D6' : '#0B7D6C'
+      }));
+      let resolvedText = resolvedTextFor[status] || '';
+      if (status === 'cant' && st.note) resolvedText = 'Noted: \u201c' + st.note + '\u201d — the agent will look for another path.';
+      return {
+        ...item,
+        chip: c.chip, chipBg: c.bg, chipFg: c.fg, border: status === 'open' ? c.border : '#E5E7EB',
+        dueColor: item.overdue ? '#DC2626' : '#6B7280',
+        isOpen: status === 'open',
+        isResolved: status !== 'open',
+        resolvedText,
+        resolvedColor: status === 'cant' ? '#B45309' : '#0B7D6C',
+        showNote: this.state.noteFor === item.id && status === 'open',
+        hasDocs: docs.length > 0,
+        docs,
+        onUpload: () => this.triggerUpload(item.id),
+        onDone: () => { DocumentsStore.setNeedStatus(item.id, 'done'); this.refresh(); },
+        onCant: () => this.setState({ noteFor: this.state.noteFor === item.id ? null : item.id }),
+        onNoteInput: (e) => { this._note = e.target.value; },
+        onSendNote: () => { DocumentsStore.setNeedStatus(item.id, 'cant', { note: (this._note || '').trim() }); this._note = ''; this.setState({ noteFor: null }); },
+        onReopen: () => { DocumentsStore.setNeedStatus(item.id, 'open'); this.refresh(); }
+      };
+    });
+
+    // ---- weekly reports ----
+    const reportsBase = isWFM ? [
+      { week: 'Week of Jul 6 \u2013 Jul 10', sent: 'Prepared Fri, Jul 10', collected: '$4.2K', lines: [
+        { k: 'Collected this week', v: '$4,180' }, { k: 'Claims submitted', v: '31' }, { k: 'Denials worked', v: '3' }, { k: 'Caught before the visit', v: '2 issues · $645' } ] },
+      { week: 'Week of Jun 29 \u2013 Jul 3', sent: 'Prepared Fri, Jul 3', collected: '$3.8K', lines: [
+        { k: 'Collected this week', v: '$3,790' }, { k: 'Claims submitted', v: '27' }, { k: 'Denials worked', v: '4' }, { k: 'Caught before the visit', v: '1 issue · $185' } ] },
+      { week: 'Week of Jun 22 \u2013 Jun 26', sent: 'Prepared Fri, Jun 26', collected: '$4.5K', lines: [
+        { k: 'Collected this week', v: '$4,510' }, { k: 'Claims submitted', v: '33' }, { k: 'Denials worked', v: '2' }, { k: 'Caught before the visit', v: '3 issues · $920' } ] }
+    ] : [
+      { week: 'Week of Jul 6 \u2013 Jul 10', sent: 'Prepared Fri, Jul 10', collected: '$18.4K', lines: [
+        { k: 'Collected this week', v: '$18,406' }, { k: 'Claims submitted', v: '112' }, { k: 'Denials worked', v: '17 (9 resolved)' }, { k: 'Appeals filed', v: '4' }, { k: 'Caught before the visit', v: '8 issues · $5,726' }, { k: 'Waiting on the practice', v: '8 items (queue above)' } ] },
+      { week: 'Week of Jun 29 \u2013 Jul 3', sent: 'Prepared Fri, Jul 3', collected: '$16.9K', lines: [
+        { k: 'Collected this week', v: '$16,882' }, { k: 'Claims submitted', v: '104' }, { k: 'Denials worked', v: '21 (11 resolved)' }, { k: 'Appeals filed', v: '6' }, { k: 'Caught before the visit', v: '6 issues · $3,140' } ] },
+      { week: 'Week of Jun 22 \u2013 Jun 26', sent: 'Prepared Fri, Jun 26', collected: '$17.6K', lines: [
+        { k: 'Collected this week', v: '$17,590' }, { k: 'Claims submitted', v: '109' }, { k: 'Denials worked', v: '19 (12 resolved)' }, { k: 'Appeals filed', v: '3' }, { k: 'Caught before the visit', v: '7 issues · $4,010' } ] },
+      { week: 'Week of Jun 15 \u2013 Jun 19', sent: 'Prepared Fri, Jun 19', collected: '$15.1K', lines: [
+        { k: 'Collected this week', v: '$15,077' }, { k: 'Claims submitted', v: '98' }, { k: 'Denials worked', v: '24 (13 resolved)' }, { k: 'Appeals filed', v: '5' }, { k: 'Caught before the visit', v: '5 issues · $2,655' } ] }
+    ];
+    const reports = reportsBase.map(r => ({
+      ...r,
+      open: this.state.reportOpen === r.week,
+      onToggle: () => this.setState({ reportOpen: this.state.reportOpen === r.week ? null : r.week })
+    }));
+
+    // ---- claims, plain language ----
+    const simplify = (c) => {
+      if (c.status === 'Paid') return ['Paid', '#E6F7F2', '#0B7D6C'];
+      if (c.statusCat === 'void') return ['Closed', '#F1F5F9', '#6B7280'];
+      const own = window.ClaimsStore && window.ClaimsStore.balanceOwner ? window.ClaimsStore.balanceOwner(c) : null;
+      if (own && own.owner === 'PATIENT') return ['With patient', '#FEF3DF', '#B45309'];
+      if (own && (own.owner === 'SECONDARY' || own.owner === 'TERTIARY')) return ['With secondary insurance', '#EBF2FE', '#1D4ED8'];
+      if (c.status === 'Submitted' || c.status === 'Accepted (277CA)' || c.status === 'Ready to submit' || c.status === 'Draft') return ['With insurance', '#EBF2FE', '#1D4ED8'];
+      return ['Being resolved', '#F1EEFF', '#5B46D6'];
+    };
+    const open = all.filter(c => c.statusCat === 'open').sort((x, y) => y.balance - x.balance).slice(0, 10);
+    const claims = open.map(c => {
+      const s = simplify(c);
+      return { patient: c.patient, dos: c.dos, payer: c.payer, st: s[0], stBg: s[1], stFg: s[2], bal: c.balanceStr };
+    });
+
+    const admin = this.adminName();
+    return {
+      practiceLabel: metaP.practiceLabel,
+      adminName: admin,
+      adminInitials: admin.split(' ').map(w => w[0]).join(''),
+      collectedMTD: '$' + collected.toLocaleString(),
+      collectedSub: 'posted by Bell Medics from insurance payments',
+      inFlight,
+      ...this.vetoVals(),
+      openAr: '$' + Math.round(agg.openAr).toLocaleString(),
+      agingSub: pct90 + '% older than 90 days \u00b7 ' + (() => {
+        let sec = 0, pat = 0;
+        try {
+          all.filter(c => c.statusCat === 'open').forEach(c => {
+            const o = window.ClaimsStore.balanceOwner(c);
+            if (o.owner === 'PATIENT') pat += c.balance;
+            else if (o.owner === 'SECONDARY' || o.owner === 'TERTIARY') sec += c.balance;
+          });
+        } catch (e) {}
+        return '$' + Math.round(sec).toLocaleString() + ' with secondary insurers \u00b7 $' + Math.round(pat).toLocaleString() + ' with patients';
+      })(),
+      preventedLabel: isWFM ? '2 issues' : '8 issues',
+      preventedSub: isWFM ? '$645 protected before visits this month' : '$5,726 protected before visits this month',
+      openNeedsCount: openCount,
+      needs,
+      fileRef: this._fileRef,
+      onFileChange: (e) => this.handleFile(e),
+      reports,
+      claims,
+      claimsSub: agg.totalClaims + ' claims total \u00b7 showing the 10 largest open balances \u00b7 read-only'
+    };
+  }
+}
+</script>
+</body>
+</html>

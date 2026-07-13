@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<div style="max-width: 880px; margin: 0 auto; padding: 48px 40px 80px; display: flex; flex-direction: column; gap: 30px;" data-screen-label="Phase 9 Plan">
+
+  <!-- Header -->
+  <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 2px solid #7B61FF; padding-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 700;">PLAN — FOR YOUR APPROVAL</span>
+      <span style="font-size: 12px; color: #6B7280;">Jul 13, 2026 · everything from the <a href="Phase 6c-7-8 Plan.dc.html">6c–8 plan</a> plus the enrollment tracker has shipped</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 700; margin: 0;">Phase 9 — Statements, Collections Handoff &amp; Wrap-up</h1>
+    <p style="font-size: 14px; line-height: 22px; color: #6B7280; margin: 0;">The last unbuilt items from the locked decisions. Phase 8 shipped the statement <em>state machine</em> (pending / sent / paid / plan / uncollectible-requested on the ledger); this phase ships the workflows around it — the vendor handoff for statements and the governed handoff for collections — then refreshes the demo materials to cover everything built since.</p>
+  </div>
+
+  <!-- 9.1 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #7B61FF;">9.1</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Patient Statements — vendor handoff</h2>
+      <span style="font-size: 12px; color: #6B7280;">effort S–M</span>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px;">
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Statements tab on Payments:</strong> every PATIENT-owned balance with its statement status, cycle (1st / 2nd / final notice), and dollar amount — the population Phase 8 made visible, now workable.</li>
+        <li><strong>Vendor batch export:</strong> agent assembles the weekly statement file (print/mail + text-to-pay vendor, simulated); manager approves the batch; statuses flip to <em>sent</em> with the vendor reference on each ledger.</li>
+        <li><strong>Returned-mail &amp; payment-plan handling:</strong> exceptions come back as Agent Inbox decisions (bad address → practice queue; plan requested → approve terms).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9.2 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #7B61FF;">9.2</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Collections — governed handoff</h2>
+      <span style="font-size: 12px; color: #6B7280;">effort S</span>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px;">
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Agent proposes, manager approves:</strong> after the final notice ages out (e.g. 120 days patient-owned, 3 statements, no contact), the agent proposes the account for collections — a decision with the full contact history as evidence.</li>
+        <li><strong>Export + status:</strong> approved accounts land in an agency export file; balance status becomes <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">UNCOLLECTIBLE-REQUESTED</span> on the ledger, visible in the Register and the Practice window.</li>
+        <li><strong>Practice veto:</strong> the practice sees proposed collections accounts in their window before export — they can pull any resident off the list. This is post-acute care; the practice owns that relationship.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9.3 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #7B61FF;">9.3</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Demo Script &amp; QA Checklist refresh</h2>
+      <span style="font-size: 12px; color: #6B7280;">effort S · closes the loop</span>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px;">
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li>The <a href="Demo Script.dc.html">Demo Script</a> predates Contracts, Payments, secondary billing, and enrollment. Add the four new demo stories: rate drift → reprocess batch; deposit → posting run → variance queue; primary 835 → secondary claim → patient balance; enrollment hold preventing VA denials.</li>
+        <li>Extend the <a href="QA Checklist.dc.html">QA Checklist</a> with the new screens and cross-screen flows (owner filter, thresholds, ceiling, role-gated Settings).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Decisions -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">Decisions I need from you</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 6px;">
+      <li><strong>Approve the scope and order?</strong> 9.1 → 9.2 → 9.3, one step at a time with review stops, same as before.</li>
+      <li><strong>Statement cadence:</strong> scoped as a weekly vendor batch with a 3-statement cycle before collections review. Different cadence?</li>
+      <li><strong>Practice veto on collections:</strong> scoped as a hold-before-export review in the Practice window. If you'd rather keep the practice out of it, 9.2 gets simpler.</li>
+      <li>Anything else you want in this phase — or items you'd rather cut?</li>
+    </ul>
+  </div>
+
+</div>
+
+</x-dc>
+</body>
+</html>

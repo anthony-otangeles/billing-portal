@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<div style="max-width: 860px; margin: 0 auto; padding: 48px 40px 80px; display: flex; flex-direction: column; gap: 26px;" data-screen-label="Phase 4 Plan">
+
+  <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 2px solid #7B61FF; padding-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 700;">PLAN — FOR YOUR APPROVAL</span>
+      <span style="font-size: 12px; color: #6B7280;">Jul 10, 2026 · scoped from your ripple-effect answers + 2 new screenshots</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 700; margin: 0;">Phase 4a — Ops Portal Ripple Effects</h1>
+    <p style="font-size: 14px; line-height: 22px; color: #6B7280; margin: 0;">Billing companies become a first-class tenant everywhere the Ops portal already touches people and organizations — Users, Onboarding, Medical Practices, Analytics, Audit Log, Notifications — with hard tenant isolation as the governing rule. I recommend splitting Phase 4: <strong>4a (this plan)</strong> = the ripples you confirmed; <strong>4b (next)</strong> = the PRD's platform-admin touches (portal configuration, role definitions). One phase would be too large to review well.</p>
+  </div>
+
+  <!-- 1 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">1 · Governing rule — tenant isolation</h2>
+    <div style="background: #FFF8F0; border: 1px solid #F5D9A8; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-size: 14px; font-weight: 700; color: #B45309;">No cross-contamination — patient or company</span>
+      <p style="font-size: 13.5px; line-height: 21px; margin: 0; color: #0F1B2E;">Per your note, the future is multiple billing companies serving different practices. Every screen in this phase is built to demonstrate the boundary:</p>
+      <ul style="margin: 0; padding-left: 22px; font-size: 13.5px; line-height: 21px; display: flex; flex-direction: column; gap: 4px;">
+        <li>A billing company's users, claims, AR, and settings are visible only inside its own portal and to Operations — never to another billing company or to practices it doesn't serve.</li>
+        <li>Ops screens show <strong>no PHI</strong>: patient names never appear in Ops Users, Analytics, Audit Log, or company pages — only aggregates and masked references (matching your masked-email convention).</li>
+        <li>Practice detail shows only the <em>name</em> of its billing company and contract facts — no other company's data.</li>
+        <li>The Audit Log + "Viewing as Operations" banner make Ops access itself visible and accountable.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">2 · Screens (5 new/extended)</h2>
+
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Ops Users — all billing users included <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Ops Users.dc.html</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Rebuilt from your Users screenshot: stat row, search, user table. New <strong>Organization</strong> column (practice or billing company, with type icon), role chips gain Billing Manager + AR Rep, an organization-type filter, and 2FA status covering billing users (live from the team store — invites made in Bell Medics Settings appear here). <strong>Invite User modal</strong> recreated from your Bulk Invite screenshot with Billing Manager as a role option: picking it swaps "Medical Practice + Linked Facilities" for "Billing Company + Practices served."</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Ops Onboarding — billing invitations in the same flow <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Ops Onboarding.dc.html</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Per your answer, Billing Managers follow the same 7-step sequence as Practice Admins. In-progress invitations list both types with an org-type chip; the Meridian invite (and any wizard-created ones, live from the companies store) appears with its current step. Stuck invitations surface a nudge action.</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Medical Practices — "Billed by" link, managed from practice detail <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Ops Medical Practices.dc.html</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Your Medical Practices screen + slide-over detail recreated. Practice cards gain a <strong>Billed by Bell Medics</strong> row; the detail panel gains a Billing section (company, since-date, status) with <strong>Change billing company</strong> — a guarded reassignment flow (pick new company → effective date → confirm) that writes an audit event and demonstrates the clean handoff, with in-flight claims staying with the outgoing company until settled.</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Ops Analytics — Billing section <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Ops Analytics.dc.html</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">A "Revenue Cycle" section: AR health per billing company (open AR, aging mix, PC ratio, SLA compliance — live from the claims store), one row per company, no patient-level data. Deliberately aggregate-only: the drill-down lives in each company's own portal Analytics, keeping the isolation rule visible.</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Ops Audit Log + Notifications <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Ops Audit Log.dc.html · Ops Notifications.dc.html</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;"><strong>Audit Log:</strong> global log gains billing event types (company created / suspended / reactivated, manager invited, practice reassigned, Ops portal entry) with an event-type filter. <strong>Notifications (my call, as requested):</strong> billing events added to the Operations Admin matrix <em>and</em> a third role tab for Billing Manager defaults — cheap to show, and it settles where billing notification policy lives.</p>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">3 · Billing Portal edit (1)</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li><strong>"Viewing as Operations · access is audited" banner</strong> across all Bell Medics pages when entered via Enter Portal (URL-flagged, dismiss reverts to normal persona view) — mirroring your Operations Admin Mode widget.</li>
+    </ul>
+  </div>
+
+  <!-- 4 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">4 · Out of scope (Phase 4b or later)</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li>Portal configuration / role-definition management (PRD Phase 4 platform-admin touches) — next plan.</li>
+      <li>Facilities and personal Settings — unaffected, untouched.</li>
+      <li>Global search behavior — noted as impacted, but header search stays decorative in this prototype.</li>
+      <li>A second live billing company with its own portal (multi-tenant demo) — worth discussing as its own phase if you want to show isolation from the tenant side.</li>
+    </ul>
+  </div>
+
+  <!-- 5 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">5 · Deliverables &amp; QA</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li>6 Ops screens (Users, Onboarding, Medical Practices, Analytics, Audit Log, Notifications) joining the shared ops shell — nav links go live as each ships.</li>
+      <li>Practice-billing assignment state added to <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">companies-store.js</span>; audited events recorded there too.</li>
+      <li>Ops-view banner wired into the 7 Bell Medics pages (small shared component).</li>
+      <li>QA Checklist gains "NEW — Phase 4a" (~9 steps), including explicit isolation checks (no PHI on Ops screens; reassignment keeps in-flight claims with the outgoing company).</li>
+    </ul>
+  </div>
+
+  <div style="border-top: 1px solid #E5E7EB; padding-top: 16px; font-size: 12px; color: #94A3B8;">Otangeles Note+ · Phase 4a plan — approve, edit, or comment; build starts on your go.</div>
+
+</div>
+
+</x-dc>
+</body>
+</html>

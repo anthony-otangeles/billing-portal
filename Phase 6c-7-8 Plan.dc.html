@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<div style="max-width: 880px; margin: 0 auto; padding: 48px 40px 80px; display: flex; flex-direction: column; gap: 30px;" data-screen-label="Phase 6c-7-8 Plan">
+
+  <!-- Header -->
+  <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 2px solid #7B61FF; padding-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 700;">DETAILED PLAN — FOR YOUR APPROVAL</span>
+      <span style="font-size: 12px; color: #6B7280;">Jul 13, 2026 · expands the <a href="Phase 6 Plan.dc.html">Phase 6 Plan</a> outline into buildable scope</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 700; margin: 0;">Phases 6c · 7 · 8 — Detailed Build Plans</h1>
+    <p style="font-size: 14px; line-height: 22px; color: #6B7280; margin: 0;">The three planned gaps from the <a href="Capability Assessment.dc.html">Capability Assessment</a>, taken from one-paragraph outlines to full screen-and-workflow specs. Each phase ships real screens in this prototype plus the product features behind them (agent behaviors, decision types, store extensions), following the same supervision model as everything already built. Build order: <strong>6c → 7 → 8</strong> — 7 must exist before 8 can trigger off a posted primary 835.</p>
+  </div>
+
+  <!-- ═══════════ PHASE 6C ═══════════ -->
+  <div style="display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #7B61FF;">PHASE 6C</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Practice Window</h2>
+      <span style="font-size: 12px; color: #6B7280;">effort M · builds first</span>
+    </div>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0;">The practice — the paying customer — finally sees the work. The weekly report becomes a live view, and the "billing needs from you" email thread becomes an in-product queue with uploads. This phase also carries the first slice of <strong>real documents &amp; attachments</strong>, because the practice window is where most documents enter the system.</p>
+
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 14px; font-weight: 700;">Screen 1 — Practice Billing View <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Practice Billing View.dc.html · new</span></span>
+        <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+          <li><strong>Header strip:</strong> collected MTD vs same point last month, claims in flight, balance by aging bucket, denials prevented this month — the weekly report's four headline numbers, live.</li>
+          <li><strong>Needs-from-you queue (the core):</strong> every Coverage exception whose <em>needs</em> line points at the practice — updated insurance card, COB confirmation, demographic fix, redetermination assist — as actionable cards with due date, dollar at risk, and an <strong>upload / mark done / can't provide</strong> flow.</li>
+          <li><strong>Report archive:</strong> the weekly reports the AR Worklist already generates, listed by week, viewable in place.</li>
+          <li><strong>Claims for this practice:</strong> read-only, simplified status language (no payer jargon) — "with insurance," "needs your help," "paid."</li>
+          <li>Strictly read-only outside the queue: no approvals, no agent supervision, no other tenants visible.</li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 14px; font-weight: 700;">Feature — Documents &amp; attachments, slice 1 <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">documents-store.js · new shared store</span></span>
+        <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+          <li>A document record: type (insurance card, COB form, appeal attachment, EOB, contract), linked entity (patient / claim / exception), uploader, timestamp, preview.</li>
+          <li>Practice uploads via the needs-queue land as documents attached to the exception; the answered exception flows back to the Agent Inbox as the existing "practice replied" decision — now with the actual attachment on it.</li>
+          <li>Billing-side surfaces read the same store: Claim Detail gains a Documents section; AR Worklist appeal drafts show their attachments for real.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 20px; font-size: 13px; line-height: 20px; color: #6B7280;">
+      <strong style="color: #0F1B2E;">Placement decision (from the Phase 6 plan, still open):</strong> scoped as a standalone practice-facing screen reachable from the practice switcher, styled as its own lightweight portal — not a Clerk Portal tab. Rationale: the audience is the practice administrator, not the clerk persona, and a separate surface keeps the tenancy story clean. Say the word if you want it inside the Clerk Portal instead.
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <div style="background: #F1EEFF; border: 1px solid #D6CCFF; border-radius: 12px; padding: 12px 16px; font-size: 12.5px; line-height: 19px;"><strong style="color: #5B46D6;">Cross-screen edits:</strong> Coverage exceptions gain "sent to practice" status; Agent Inbox "practice replied" decisions carry attachments; Billing Home follow-ups link into the queue; Ops Audit Log records practice-side actions.</div>
+      <div style="background: #E6F7F2; border: 1px solid #BFE8DC; border-radius: 12px; padding: 12px 16px; font-size: 12.5px; line-height: 19px;"><strong style="color: #0B7D6C;">Demo story unlocked:</strong> a termed-coverage exception raised on the Coverage board → appears in the practice queue → practice uploads the new card → decision closes in the Inbox with the document attached — the full loop, no email.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PHASE 7A ═══════════ -->
+  <div style="display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #7B61FF;">PHASE 7A</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Contracts &amp; Fee Schedules</h2>
+      <span style="font-size: 12px; color: #6B7280;">effort M · builds between 6c and 7 · decisions locked Jul 13</span>
+    </div>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0;">The rate data everything downstream consumes: expected-payment forecasting per visit, Coverage's revenue-at-risk, Analytics yield per payer, and Phase 7's underpayment detection. Decisions locked with you: commercial contracts load as <strong>flat per-CPT exhibits</strong>; inferred rates are <strong>flag-only</strong> (never grounds for an appeal); the <strong>billing company maintains</strong> contracts, visible read-only in Ops.</p>
+
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 14px; font-weight: 700;">Screen — Contracts &amp; Fee Schedules <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Contracts.dc.html · new top-level</span></span>
+        <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+          <li><strong>Contract list per payer:</strong> effective dates, timely-filing limit, rate basis (<em>exhibit loaded / public schedule / inferred from payments</em>), coverage of the practice's CPT mix ("38 of 41 billed codes have a contracted rate").</li>
+          <li><strong>Exhibit upload:</strong> per-CPT rate table loaded from CSV or keyed in; versioned by effective date. Medicare/Medicaid ship pre-loaded as public reference schedules.</li>
+          <li><strong>Rate lookup:</strong> type a CPT, see expected allowed across payers side by side — the forecasting answer at a glance.</li>
+          <li><strong>Provenance + drift:</strong> per rate, the recent payments that validated or contradicted it. When payments consistently disagree, the agent proposes a rate review — a decision in the Inbox, never an automatic change.</li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 14px; font-weight: 700;">Feature — Expected-payment engine <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">contracts-store.js · new shared store</span></span>
+        <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+          <li>Lookup: payer × CPT × effective date → expected allowed, tagged <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">CONTRACTED</span> or <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">INFERRED</span>. Inferred rates come from paid-claims history and never justify an appeal — flag-only.</li>
+          <li><strong>Consumers:</strong> Agent Inbox shows expected payment at claim generation; Coverage revenue-at-risk becomes CPT-mix × expected allowed; Analytics adds contracted-vs-collected yield per payer; Phase 7 variance queue gets its "expected" side.</li>
+          <li><strong>Ownership:</strong> billing company edits (manager role); Ops sees contracts read-only on Company Detail; changes land in the Audit Log.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background: #E6F7F2; border: 1px solid #BFE8DC; border-radius: 12px; padding: 12px 16px; font-size: 12.5px; line-height: 19px;"><strong style="color: #0B7D6C;">Demo story unlocked:</strong> open Contracts, look up 99309 across payers → see MHS HIP paying 89% of its loaded rate over the last 30 payments → agent has flagged the drift → approve the rate review, and the underpayment population is queued for Phase 7's variance work.</div>
+  </div>
+
+  <!-- ═══════════ PHASE 7 ═══════════ -->
+  <div style="display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #7B61FF;">PHASE 7</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Payment Posting &amp; Reconciliation</h2>
+      <span style="font-size: 12px; color: #6B7280;">effort L · builds second</span>
+    </div>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0;">The daily bread. The agent posts clean remits automatically; humans see deposits reconcile and work only the variances — the same supervise-by-exception model, applied to cash. The portal stops saying "835 received" and starts saying "posted, balanced, banked."</p>
+
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 14px; font-weight: 700;">Screen — Payments <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Payments.dc.html · new top-level, 3 tabs</span></span>
+        <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+          <li><strong>Tab 1 · Deposits:</strong> ERA batches matched to bank deposits — date, payer, check/EFT trace, ERA total vs bank total, matched / unmatched / partial. Agent auto-matches on trace number; unmatched items become worklist rows. A day is "reconciled" when every deposit ties out.</li>
+          <li><strong>Tab 2 · Posting runs:</strong> each 835's line-level posting — paid, contractual adjustment (CARC/RARC coded), transferred to secondary/patient — with the agent's automation rate per run. Clean lines post at Tier 3 (autonomous, QA-sampled); exceptions drop to Tab 3.</li>
+          <li><strong>Tab 3 · Variance queue:</strong> paid ≠ expected. Categories: underpayment vs contracted rate, takeback/recoupment, interest, duplicate, zero-pay with patient-responsibility shift. Agent proposes a disposition — <em>post as-is / appeal underpayment / request reprocess / write off</em> — with evidence; manager approves above threshold.</li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 14px; font-weight: 700;">Feature — Write-off governance</span>
+        <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+          <li>Per-company thresholds in Settings (e.g. rep approves ≤$50, manager ≤$500, above that dual sign-off); Ops Portal Config can cap the ceiling platform-wide.</li>
+          <li>Every write-off carries reason code + approver and lands in the Audit Log and Analytics adjustments rollup.</li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 14px; font-weight: 700;">Feature — Ledger becomes real <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">claims-store.js extension</span></span>
+        <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+          <li>Per-claim transaction ledger: charge → payments → adjustments → transfers → balance, always summing. Claim Detail's Payments section renders it; this ledger is the substrate Phase 8 extends.</li>
+          <li>New Agent Inbox decision types: <em>variance disposition</em>, <em>write-off request</em>, <em>unmatched deposit</em>. New Analytics tiles: posting automation rate, days deposit-to-posted, net collection rate (now computable for real).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background: #E6F7F2; border: 1px solid #BFE8DC; border-radius: 12px; padding: 14px 20px; font-size: 13px; line-height: 20px;">
+      <strong style="color: #0B7D6C;">Dependency resolved:</strong> the variance queue's "expected" side comes from Phase 7a's expected-payment engine — <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">CONTRACTED</span> rates can drive appeal/reprocess proposals; <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">INFERRED</span> rates only flag for human review.
+    </div>
+
+    <div style="background: #E6F7F2; border: 1px solid #BFE8DC; border-radius: 12px; padding: 12px 16px; font-size: 12.5px; line-height: 19px;"><strong style="color: #0B7D6C;">Demo story unlocked:</strong> Tuesday's Medicare deposit lands → 96% of lines auto-post → three variances queue up → agent flags one as a $41/visit underpayment against the contracted rate across 12 claims → manager approves the reprocess request batch → net collection rate ticks up in Analytics.</div>
+  </div>
+
+  <!-- ═══════════ PHASE 8 ═══════════ -->
+  <div style="display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #7B61FF;">PHASE 8</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Secondary Billing &amp; Patient Responsibility</h2>
+      <span style="font-size: 12px; color: #6B7280;">effort L · builds third (needs Phase 7 ledger)</span>
+    </div>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0;">A balance is owned until it is zero. When the primary 835 posts, the remaining balance doesn't vanish — it moves to the next payer in the COB stack (which Coverage already maintains) or to the patient, and stays visible and worked the whole way.</p>
+
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 14px; font-weight: 700;">Feature — Balance lifecycle <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">extends the Phase 7 ledger · no new top-level screen</span></span>
+        <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+          <li>Balance owner as a first-class state: <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">PRIMARY → SECONDARY → TERTIARY → PATIENT → ZERO</span>, each transition on the ledger with its trigger (835 posted, crossover confirmed, secondary EOB, statement sent).</li>
+          <li><strong>Crossover detection:</strong> when the primary indicates auto-crossover (Medicare → Medigap), the agent tracks it and only intervenes if no secondary response arrives in N days. Otherwise the agent <strong>generates the secondary claim</strong> from the primary 835 + COB stack — a new pipeline stage in the Agent Inbox, tier-gated like primary generation.</li>
+          <li><strong>Patient responsibility:</strong> after the last payer, balance moves to PATIENT with a statement status (<em>pending / sent / paid / plan / uncollectible-requested</em>). Statement generation itself is the vendor decision (§Decisions) — the state machine ships regardless, so the portal never loses the balance.</li>
+        </ul>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 14px; font-weight: 700;">Screen extensions</span>
+        <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+          <li><strong>Claims Register:</strong> balance-owner column + filter ("show me everything sitting with secondary payers &gt;30 days").</li>
+          <li><strong>Claim Detail:</strong> timeline extends through secondary adjudication; ledger shows the full primary → secondary → patient movement.</li>
+          <li><strong>AR Worklist:</strong> secondary denials and stalled crossovers enter the same priority queue with COB-specific call prep.</li>
+          <li><strong>Analytics + Practice Window:</strong> aging split by balance owner; the practice sees "with patient" balances honestly for the first time.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background: #E6F7F2; border: 1px solid #BFE8DC; border-radius: 12px; padding: 12px 16px; font-size: 12.5px; line-height: 19px;"><strong style="color: #0B7D6C;">Demo story unlocked:</strong> the AR report's 409 "moved to secondary/patient" claims ($17.0K) — today invisible — become a filterable population: crossovers tracked, agent-generated secondary claims in the pipeline, patient balances with statement status.</div>
+  </div>
+
+  <!-- ═══════════ SEQUENCE ═══════════ -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">Build sequence &amp; checkpoints</h2>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+      <sc-for list="{{ steps }}" as="st" hint-placeholder-count="5">
+        <div style="display: grid; grid-template-columns: 60px 1.1fr 2fr; gap: 14px; padding: 12px 20px; border-bottom: 1px solid #F1F5F9; font-size: 13px; line-height: 19px; align-items: start;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #7B61FF;">{{ st.id }}</span>
+          <span style="font-weight: 600;">{{ st.name }}</span>
+          <span style="color: #6B7280;">{{ st.what }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Same cadence as Phases 2–6b: one step at a time, stop for your review after each. 7a is inserted pending the fee-schedule discussion below.</p>
+  </div>
+
+  <!-- ═══════════ DECISIONS ═══════════ -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">Decisions — locked Jul 13</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 6px;">
+      <li><strong>Build order:</strong> 6c → 7a → 7 → 8, one step at a time with review stops.</li>
+      <li><strong>Contracts &amp; fee schedules:</strong> in scope as Phase 7a. Flat per-CPT exhibits; inferred rates flag-only; billing company maintains, Ops sees read-only.</li>
+      <li><strong>Patient statements &amp; collections:</strong> hybrid — balance lifecycle and statement status in-product (Phase 8); print/mail/text-to-pay via vendor; collections as a governed handoff (agent proposes, manager approves, export + status).</li>
+      <li><strong>Provider credentialing / enrollment:</strong> light enrollment tracker (provider × payer grid, effective dates, expirables) feeding claim-level prevention. Full credentialing stays out. Scheduled after Phase 8.</li>
+      <li><strong>Documents slice 1 (in 6c):</strong> practice uploads via needs-queue + billing-side uploads on Claim Detail/appeals + simulated agent-fetched payer EOBs — one shared document store.</li>
+    </ul>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      steps: [
+        { id: '6c.1', name: 'Practice Billing View', what: 'New screen: header numbers, needs-from-you queue, report archive, read-only claims.' },
+        { id: '6c.2', name: 'Documents slice 1', what: 'documents-store.js; uploads in the practice queue; Documents section on Claim Detail; attachments on Inbox decisions.' },
+        { id: '7a.1', name: 'Contracts screen + store', what: 'Contract list, exhibit upload, rate lookup, drift flags; contracts-store.js with CONTRACTED/INFERRED lookup.' },
+        { id: '7a.2', name: 'Forecasting wiring', what: 'Expected payment in Agent Inbox at generation; Coverage revenue-at-risk and Analytics yield recomputed from rates.' },
+        { id: '7.1', name: 'Payments screen', what: 'Deposits, posting runs, variance queue; ledger extension in claims-store; new Inbox decision types.' },
+        { id: '7.2', name: 'Write-off governance', what: 'Thresholds in Settings + Ops cap; Audit Log + Analytics wiring.' },
+        { id: '8.1', name: 'Balance lifecycle + secondary pipeline', what: 'Owner states on the ledger, crossover tracking, agent-generated secondary claims stage.' },
+        { id: '8.2', name: 'Screen extensions', what: 'Register filter, Claim Detail ledger view, Worklist secondary queue, Analytics + Practice Window aging by owner.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

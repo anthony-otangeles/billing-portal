@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button, select, input, textarea { font-family: 'Inter', sans-serif; }
+</style>
+<script src="./contracts-store.js"></script>
+<script src="./claims-store.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="Billing Analytics">
+
+  <x-import component-from-global-scope="ops-banner" from="./ops-banner.js" hint-size="100%,0px"></x-import>
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Billing Portal</span>
+    <x-import component-from-global-scope="search-bar" from="./search-bar.js" hint-size="480px,40px"></x-import>
+    <div style="flex: 1;"></div>
+    <x-import component-from-global-scope="practice-switcher" from="./practice-switcher.js" hint-size="260px,40px"></x-import>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <x-import component-from-global-scope="role-switcher" from="./role-switcher.js" hint-size="210px,44px"></x-import>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav — collapsed icon rail ===== -->
+    <sc-if value="{{ navClosed }}" hint-placeholder-val="{{ true }}">
+      <div style="width: 64px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 12px 10px; display: flex; flex-direction: column; gap: 6px; align-items: center; flex-shrink: 0;">
+        <button onClick="{{ toggleNav }}" title="Expand navigation" style="width: 40px; height: 36px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 5 5-5 5"></path><path d="m13 7 5 5-5 5"></path></svg>
+        </button>
+        <div style="height: 1px; width: 36px; background: #EEEEEE; margin: 4px 0;"></div>
+        <a href="Billing Home.dc.html" title="Dashboard" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg></a>
+        <a href="Agent Inbox v3.dc.html" title="Agent Inbox" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></a>
+        <a href="Coverage.dc.html" title="Coverage" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg></a>
+        <a href="AR Worklist.dc.html" title="AR Worklist" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+        <a href="Claims Register.dc.html" title="Claims" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg></a>
+        <a href="Payments.dc.html" title="Payments" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg></a>
+        <a href="Rulebook.dc.html" title="Rulebook" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></a>
+        <a href="Contracts.dc.html" title="Contracts" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></a>
+        <a href="Analytics.dc.html" title="Analytics" style="width: 40px; height: 40px; border-radius: 4px; background: #7B61FF; display: flex; align-items: center; justify-content: center; text-decoration: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg></a>
+        <a href="Settings.dc.html" title="Settings" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
+      </div>
+    </sc-if>
+    <!-- ===== Side nav — expanded ===== -->
+    <sc-if value="{{ navOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+      <div style="display: flex; justify-content: flex-end;">
+        <button onClick="{{ toggleNav }}" title="Collapse navigation" style="width: 32px; height: 28px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 17-5-5 5-5"></path><path d="m11 17-5-5 5-5"></path></svg>
+        </button>
+      </div>
+        <a href="Billing Home.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg>
+          Dashboard
+        </a>
+        <a href="Agent Inbox v3.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+          Agent Inbox
+        </a>
+        <a href="Coverage.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+          Coverage
+        </a>
+        <a href="AR Worklist.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          AR Worklist
+        </a>
+        <a href="Claims Register.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+          Claims
+        </a>
+        <a href="Payments.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Payments
+          <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">NEW</span>
+        </a>
+        <a href="Rulebook.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+          Rulebook
+        </a>
+        <a href="Contracts.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+          Contracts
+                  </a>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+          Analytics
+        </div>
+        <a href="Settings.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Settings
+        </a>
+        <div style="flex: 1;"></div>
+      <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+        <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+        Reach the billing support desk 24/7.
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===== Main content ===== -->
+    <div style="flex: 1; padding: 24px 28px; display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+
+      <!-- Title -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <h1 style="font-size: 24px; font-weight: 700; margin: 0;">Analytics</h1>
+        <span style="font-size: 13px; color: #6B7280;">Shared with the practice · {{ practiceLabel }} · compiled live from claim activity — replaces the emailed Excel report · as of Tue, Jul 7 2026</span>
+        <div style="flex: 1;"></div>
+        <div style="display: flex; align-items: center; gap: 0; border: 1px solid #E5E7EB; border-radius: 5px; overflow: hidden;">
+          <sc-for list="{{ periodTabs }}" as="p" hint-placeholder-count="2">
+            <button onClick="{{ p.onClick }}" style="padding: 8px 18px; border: none; background: {{ p.bg }}; color: {{ p.fg }}; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;">{{ p.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- ===== KPI row ===== -->
+      <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px;">
+        <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="6">
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;">{{ k.label }}</span>
+            <span style="font-size: 22px; font-weight: 700; color: {{ k.valueFg }}; font-variant-numeric: tabular-nums;">{{ k.value }}</span>
+            <span style="font-size: 11px; font-weight: 600; color: {{ k.subFg }};">{{ k.sub }}</span>
+            <sc-if value="{{ k.hasBench }}" hint-placeholder-val="{{ false }}">
+              <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; color: {{ k.benchFg }};"><span style="width: 6px; height: 6px; border-radius: 9999px; background: {{ k.benchFg }};"></span>{{ k.bench }}</span>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- ===== Benchmark scorecard ===== -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 12px 20px; display: flex; align-items: center; gap: 26px; flex-wrap: wrap;">
+        <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Against industry benchmarks</span>
+        <sc-for list="{{ benches }}" as="bm" hint-placeholder-count="4">
+          <span style="display: inline-flex; align-items: center; gap: 8px;">
+            <span style="width: 8px; height: 8px; border-radius: 9999px; background: {{ bm.dot }};"></span>
+            <span style="font-size: 12px; font-weight: 600; color: #6B7280;">{{ bm.label }}</span>
+            <span style="font-size: 14px; font-weight: 700; color: {{ bm.valueFg }}; font-variant-numeric: tabular-nums;">{{ bm.value }}</span>
+            <span style="font-size: 11px; color: #94A3B8;">{{ bm.target }}</span>
+          </span>
+        </sc-for>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 11px; color: #94A3B8;">Targets per MGMA / HFMA industry benchmarks</span>
+      </div>
+
+      <!-- ===== Charges vs Payments + Appeals ===== -->
+      <div style="display: flex; gap: 16px; align-items: stretch;">
+
+        <!-- CPA chart -->
+        <div style="flex: 2 1 0; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 16px; font-weight: 700;">Charges &amp; Payment Analysis</span>
+            <span style="font-size: 12px; color: #6B7280;">{{ chartSubtitle }}</span>
+            <div style="flex: 1;"></div>
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: #6B7280;"><span style="width: 10px; height: 10px; border-radius: 3px; background: #7B61FF;"></span>Charges</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: #6B7280;"><span style="width: 10px; height: 10px; border-radius: 3px; background: #22C5A7;"></span>Payments</span>
+          </div>
+          <div style="display: flex; align-items: flex-end; gap: 0; height: 190px; border-bottom: 1px solid #E5E7EB;">
+            <sc-for list="{{ chart }}" as="m" hint-placeholder-count="6">
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 0; height: 100%;">
+                <span style="font-size: 10px; font-weight: 700; color: #94A3B8; margin-bottom: 4px;">{{ m.pc }}</span>
+                <div style="display: flex; align-items: flex-end; gap: 4px;">
+                  <div style="width: 26px; border-radius: 4px 4px 0 0; background: #7B61FF; height: {{ m.chH }};"></div>
+                  <div style="width: 26px; border-radius: 4px 4px 0 0; background: #22C5A7; height: {{ m.pmH }};"></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 0;">
+            <sc-for list="{{ chart }}" as="m" hint-placeholder-count="6">
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1px;">
+                <span style="font-size: 11px; font-weight: 700; color: #0F1B2E;">{{ m.label }}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #94A3B8;">{{ m.amounts }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; background: #F8FAFC; border-radius: 8px; padding: 10px 14px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+            <span style="font-size: 12px; color: #6B7280; line-height: 18px;">{{ chartInsight }}</span>
+          </div>
+        </div>
+
+        <!-- Appeal outcomes -->
+        <div style="flex: 1 1 0; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0;">
+          <span style="font-size: 16px; font-weight: 700;">Appeal Outcomes</span>
+          <div style="display: flex; align-items: baseline; gap: 10px;">
+            <span style="font-size: 34px; font-weight: 700; color: #109680;">62%</span>
+            <span style="font-size: 12px; color: #6B7280;">win rate · 24 appeals filed QTD</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <sc-for list="{{ appeals }}" as="a" hint-placeholder-count="3">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: {{ a.bg }}; color: {{ a.fg }}; font-size: 10px; font-weight: 700; width: 92px; justify-content: center;">{{ a.label }}</span>
+                <div style="flex: 1; height: 8px; border-radius: 9999px; background: #F1F5F9; overflow: hidden;"><div style="height: 100%; border-radius: 9999px; background: {{ a.barColor }}; width: {{ a.barW }};"></div></div>
+                <span style="font-size: 12px; font-weight: 700; color: #0F1B2E; width: 24px; text-align: right;">{{ a.count }}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280; width: 56px; text-align: right;">{{ a.amt }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="border-top: 1px solid #EEEEEE; padding-top: 10px; font-size: 12px; color: #6B7280; line-height: 18px;">Most overturned denials were timely-filing (CO-29) reversed with clearinghouse acceptance proof attached by the Denial Triage Agent.</div>
+        </div>
+      </div>
+
+      <!-- ===== Aging by payer ===== -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 16px 20px 12px;">
+          <span style="font-size: 16px; font-weight: 700;">Overall Aging Summary by Payer</span>
+          <span style="font-size: 12px; color: #6B7280;">open claims · balance $ per bucket</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 200px repeat(5, 1fr) 1.1fr; gap: 0; padding: 8px 20px; background: #7B61FF; align-items: center;">
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Payer</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">0–30</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">31–60</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">61–90</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">91–120</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">120+</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Grand Total</span>
+        </div>
+        <sc-for list="{{ agingRows }}" as="r" hint-placeholder-count="6">
+          <div style="display: grid; grid-template-columns: 200px repeat(5, 1fr) 1.1fr; gap: 0; padding: 8px 20px; border-bottom: 1px solid #EEEEEE; align-items: center; background: {{ r.bg }};">
+            <span style="font-size: 12px; font-weight: {{ r.nameWeight }}; color: #0F1B2E;">{{ r.payer }}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280; text-align: right;">{{ r.b1 }}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280; text-align: right;">{{ r.b2 }}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #C2410C; text-align: right;">{{ r.b3 }}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #C2410C; text-align: right;">{{ r.b4 }}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #DC2626; text-align: right;">{{ r.b5 }}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #0F1B2E; text-align: right;">{{ r.total }}</span>
+          </div>
+        </sc-for>
+        <div style="display: grid; grid-template-columns: 200px repeat(5, 1fr) 1.1fr; gap: 0; padding: 8px 20px; align-items: center; background: #F8FAFC;">
+          <span style="font-size: 11px; font-weight: 700; color: #6B7280;">% of open AR</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6B7280; text-align: right;">58.1%</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6B7280; text-align: right;">12.8%</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #6B7280; text-align: right;">10.2%</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #DC2626; text-align: right;">4.6%</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #DC2626; text-align: right;">14.3%</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #DC2626; text-align: right;">90+ = 18.9%</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-top: 1px solid #EEEEEE;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+          <span style="font-size: 12px; color: #6B7280;">AR past 90 days is <strong style="color: #DC2626;">18.9%</strong> against the ≤15% industry target — driven by VA claims on credentialing hold ($7,095) and Medicare 120+ ($2,158). Excluding the VA hold, 90+ share is 14.6% (within target).</span>
+        </div>
+      </div>
+
+      <!-- ===== Open AR by balance owner (Phase 8) ===== -->
+      <sc-if value="{{ hasOwnerSplit }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: baseline; gap: 10px;">
+            <span style="font-size: 16px; font-weight: 700;">Open AR by Balance Owner</span>
+            <span style="font-size: 12px; color: #6B7280;">a balance is owned until it is zero — transfers ride the claim ledger</span>
+            <div style="flex: 1;"></div>
+            <span style="font-size: 12px; color: #94A3B8; font-family: 'JetBrains Mono', monospace;">{{ ownerTotal }}</span>
+          </div>
+          <div style="display: flex; height: 14px; border-radius: 9999px; overflow: hidden; background: #F1F5F9;">
+            <sc-for list="{{ ownerSplit }}" as="os" hint-placeholder-count="3">
+              <span title="{{ os.tip }}" style="display: block; height: 100%; width: {{ os.w }}; background: {{ os.color }};"></span>
+            </sc-for>
+          </div>
+          <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <sc-for list="{{ ownerSplit }}" as="os" hint-placeholder-count="3">
+              <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: #6B7280;">
+                <span style="width: 9px; height: 9px; border-radius: 2px; background: {{ os.color }};"></span>
+                <strong style="color: #0F1B2E;">{{ os.label }}</strong> {{ os.detail }}
+              </span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== Payer performance scorecard ===== -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 16px 20px 12px;">
+          <span style="font-size: 16px; font-weight: 700;">Payer Performance</span>
+          <span style="font-size: 12px; color: #6B7280;">how each payer treats your claims · trailing 90 days</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 220px 1fr 1fr 1fr 1fr 170px; gap: 12px; align-items: center; padding: 8px 20px; background: #7B61FF;">
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Payer</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Avg days to pay</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Denial rate</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">AR past 90d</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Yield vs contract</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Flag</span>
+        </div>
+        <sc-for list="{{ payerRows }}" as="pp" hint-placeholder-count="6">
+          <div style="display: grid; grid-template-columns: 220px 1fr 1fr 1fr 1fr 170px; gap: 12px; align-items: center; padding: 8px 20px; border-bottom: 1px solid #EEEEEE; background: {{ pp.bg }};">
+            <span style="font-size: 12px; font-weight: 600; color: #0F1B2E;">{{ pp.payer }}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: {{ pp.daysFg }}; text-align: right;">{{ pp.days }}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: {{ pp.denialFg }}; text-align: right;">{{ pp.denial }}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: {{ pp.oldFg }}; text-align: right;">{{ pp.old }}</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: {{ pp.yieldFg }}; text-align: right;">{{ pp.yield }}</span>
+            <span><sc-if value="{{ pp.hasFlag }}" hint-placeholder-val="{{ false }}"><span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: {{ pp.flagBg }}; color: {{ pp.flagFg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ pp.flag }}</span></sc-if></span>
+          </div>
+        </sc-for>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 20px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+          <span style="font-size: 12px; color: #6B7280;"><strong style="color: #0F1B2E;">Indiana Medicaid is this month's escalation candidate</strong> — slowest to pay (52d avg), highest denial rate (16%), and 44% of its AR is past 90 days. Recommend raising it at the monthly practice review.</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 0 20px 12px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M12 17.5v-11"></path></svg>
+          <span style="font-size: 12px; color: #6B7280;">{{ yieldInsight }} <a href="Contracts.dc.html" style="color: #7B61FF; text-decoration: none; font-weight: 600;">Contracts &amp; Fee Schedules</a>. Yields marked * are against inferred rates — flag-only, never appeal grounds.</span>
+        </div>
+      </div>
+
+      <!-- ===== Worked AR + comparison + reasons ===== -->
+      <div style="display: flex; gap: 16px; align-items: stretch;">
+
+        <!-- Worked AR summary -->
+        <div style="flex: 1.2 1 0; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 16px; font-weight: 700;">Worked AR Summary</span>
+            <span style="font-size: 12px; color: #6B7280;">by your team's action · MTD</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <sc-for list="{{ worked }}" as="w" hint-placeholder-count="6">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 12px; font-weight: 600; color: #0F1B2E; width: 158px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ w.label }}</span>
+                <div style="flex: 1; height: 10px; border-radius: 9999px; background: #F1F5F9; overflow: hidden;"><div style="height: 100%; border-radius: 9999px; background: {{ w.barColor }}; width: {{ w.barW }};"></div></div>
+                <span style="font-size: 12px; font-weight: 700; color: #0F1B2E; width: 32px; text-align: right;">{{ w.claims }}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280; width: 62px; text-align: right;">{{ w.bal }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="border-top: 1px solid #EEEEEE; padding-top: 10px; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 12px; font-weight: 700; color: #0F1B2E;">542 claims worked</span>
+            <span style="font-size: 12px; color: #6B7280;">· $43,147 balance touched</span>
+          </div>
+        </div>
+
+        <!-- AR comparison -->
+        <div style="flex: 1 1 0; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 16px; font-weight: 700;">AR Comparison</span>
+            <span style="font-size: 12px; color: #6B7280;">last month → current</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 64px 1fr 1fr 1fr; gap: 0; padding: 6px 0; border-bottom: 1px solid #E5E7EB;">
+            <span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase;">Bucket</span>
+            <span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; text-align: right;">Last</span>
+            <span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; text-align: right;">Current</span>
+            <span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; text-align: right;">Δ Balance</span>
+          </div>
+          <sc-for list="{{ comparison }}" as="c" hint-placeholder-count="6">
+            <div style="display: grid; grid-template-columns: 64px 1fr 1fr 1fr; gap: 0; padding: 5px 0; border-bottom: 1px solid #F1F5F9; align-items: center;">
+              <span style="font-size: 12px; font-weight: {{ c.weight }}; color: #0F1B2E;">{{ c.bucket }}</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280; text-align: right;">{{ c.last }}</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #0F1B2E; text-align: right;">{{ c.cur }}</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: {{ c.deltaFg }}; text-align: right;">{{ c.delta }}</span>
+            </div>
+          </sc-for>
+          <div style="display: flex; align-items: center; gap: 10px; background: #E6F7F2; border-radius: 8px; padding: 8px 12px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0B7D6C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M16 17h6v-6"></path><path d="m22 17-8.5-8.5-5 5L2 7"></path></svg>
+            <span style="font-size: 12px; color: #0B7D6C; font-weight: 600;">Total open AR down $31,691 month over month.</span>
+          </div>
+        </div>
+
+        <!-- Top reasons -->
+        <div style="flex: 1 1 0; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 16px; font-weight: 700;">Top Denial / Hold Reasons</span>
+            <span style="font-size: 12px; color: #6B7280;">claims · MTD</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <sc-for list="{{ reasons }}" as="rr" hint-placeholder-count="7">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 12px; font-weight: 600; color: #0F1B2E; width: 168px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ rr.label }}</span>
+                <div style="flex: 1; height: 10px; border-radius: 9999px; background: #F1F5F9; overflow: hidden;"><div style="height: 100%; border-radius: 9999px; background: #FF6E6C; width: {{ rr.barW }};"></div></div>
+                <span style="font-size: 12px; font-weight: 700; color: #0F1B2E; width: 24px; text-align: right;">{{ rr.count }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="border-top: 1px solid #EEEEEE; padding-top: 10px; font-size: 12px; color: #6B7280; line-height: 18px;">VA claims stay on hold until credentialing completes. DX/CPT coding gaps are the top actionable reason — most originate before submission.</div>
+        </div>
+      </div>
+
+      <!-- ===== Denial Prevention ===== -->
+      <div id="prevention" style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 16px 20px 12px;">
+          <span style="font-size: 16px; font-weight: 700;">Denial Prevention — Recurring Root Causes</span>
+          <span style="font-size: 12px; color: #6B7280;">patterns found by the Denial Triage Agent · fixes routed upstream so the same denial stops recurring</span>
+        </div>
+        <div style="display: grid; grid-template-columns: minmax(250px, 1.4fr) 118px 108px 168px minmax(220px, 1.2fr); gap: 14px; align-items: center; padding: 8px 20px; background: #7B61FF;">
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Root cause</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Claims · MTD</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Trend</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Status</span>
+          <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Action taken</span>
+        </div>
+        <sc-for list="{{ prevRows }}" as="pv" hint-placeholder-count="4">
+          <div style="display: grid; grid-template-columns: minmax(250px, 1.4fr) 118px 108px 168px minmax(220px, 1.2fr); gap: 14px; align-items: center; padding: 11px 20px; border-bottom: 1px solid #EEEEEE;">
+            <span style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 13px; font-weight: 600; color: #0F1B2E;">{{ pv.cause }}</span>
+              <span style="font-size: 11px; color: #6B7280; line-height: 16px;">{{ pv.detail }}</span>
+            </span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E; text-align: right; font-variant-numeric: tabular-nums;">{{ pv.claimsStr }}</span>
+            <span style="font-size: 11px; font-weight: 700; color: {{ pv.trendFg }};">{{ pv.trend }}</span>
+            <span><span style="display: inline-flex; padding: 3px 10px; border-radius: 9999px; background: {{ pv.statusBg }}; color: {{ pv.statusFg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ pv.status }}</span></span>
+            <span style="font-size: 11px; color: #6B7280; line-height: 16px;">{{ pv.action }}</span>
+          </div>
+        </sc-for>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 20px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0B7D6C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M16 17h6v-6"></path><path d="m22 17-8.5-8.5-5 5L2 7"></path></svg>
+          <span style="font-size: 12px; color: #6B7280;">Two root causes fixed upstream this quarter — ZIP+4 denials went from 12/week to zero after the validator rule was added.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { period: 'monthly', navExpanded: (() => { try { return localStorage.getItem('onb-nav-expanded') === '1'; } catch (e) { return false; } })() };
+
+  componentDidMount() {
+    // claims-store loads from the helmet; nudge a re-render once it's available
+    if (!window.ClaimsStore) {
+      this._poll = setInterval(() => {
+        if (window.ClaimsStore) { clearInterval(this._poll); this.forceUpdate(); }
+      }, 60);
+    }
+  }
+  componentWillUnmount() { if (this._poll) clearInterval(this._poll); }
+
+  renderVals() {
+    const st = this.state;
+    const monthly = st.period === 'monthly';
+    let practice = 'ifc';
+    try { const v = localStorage.getItem('onb-practice'); if (v === 'wfm') practice = 'wfm'; } catch (e) {}
+    const isWFM = practice === 'wfm';
+    const practiceLabel = isWFM ? 'Westbrook Family Medicine' : 'Ibekie Foundation Clinics';
+
+    const periodTabs = [
+      { key: 'weekly', label: 'Weekly' },
+      { key: 'monthly', label: 'Monthly' },
+    ].map(p => ({
+      label: p.label,
+      bg: st.period === p.key ? '#7B61FF' : '#FFFFFF',
+      fg: st.period === p.key ? '#FFFFFF' : '#6B7280',
+      onClick: () => this.setState({ period: p.key }),
+    }));
+
+    const kpis = (isWFM ? (monthly ? [
+      ['Charges — Jun', '$31,480', '#0F1B2E', 'vs $32,700 in May', '#94A3B8'],
+      ['Payments — Jun', '$29,760', '#109680', 'vs $30,100 in May', '#94A3B8'],
+      ['PC Ratio', '95%', '#109680', '↑ from 92% in May', '#109680'],
+      ['DSO', '37 days', '#0F1B2E', '↓ 2 days vs May', '#109680'],
+      ['Denial Rate', '6.9%', '#0F1B2E', '↓ 0.8 pts vs May', '#109680'],
+      ['Open AR', '$27,512', '#0F1B2E', '358 claims · ↓ $4,180', '#109680'],
+    ] : [
+      ['Charges — wk Jun 29', '$7,620', '#0F1B2E', 'vs $8,100 prior week', '#94A3B8'],
+      ['Payments — wk Jun 29', '$7,130', '#109680', 'vs $7,600 prior week', '#94A3B8'],
+      ['PC Ratio', '95%', '#109680', 'steady 4 weeks running', '#109680'],
+      ['DSO', '37 days', '#0F1B2E', '↓ 1 day week over week', '#109680'],
+      ['Denial Rate', '6.6%', '#0F1B2E', '↓ 0.3 pts week over week', '#109680'],
+      ['Open AR', '$27,512', '#0F1B2E', '358 claims · ↓ $1,240 wk', '#109680'],
+    ]) : (monthly ? [
+      ['Charges — Jun', '$148,904', '#0F1B2E', 'vs $155,633 in May', '#94A3B8'],
+      ['Payments — Jun', '$139,377', '#109680', 'vs $141,191 in May', '#94A3B8'],
+      ['PC Ratio', '94%', '#109680', '↑ from 91% in May', '#109680'],
+      ['DSO', '41 days', '#0F1B2E', '↓ 3 days vs May', '#109680'],
+      ['Denial Rate', '8.6%', '#0F1B2E', '↓ 1.2 pts vs May', '#109680'],
+      ['Open AR', '$140,399', '#0F1B2E', '1,783 claims · ↓ $31,691', '#109680'],
+    ] : [
+      ['Charges — wk Jun 29', '$36,214', '#0F1B2E', 'vs $39,058 prior week', '#94A3B8'],
+      ['Payments — wk Jun 29', '$33,927', '#109680', 'vs $36,842 prior week', '#94A3B8'],
+      ['PC Ratio', '94%', '#109680', 'steady 4 weeks running', '#109680'],
+      ['DSO', '41 days', '#0F1B2E', '↓ 1 day week over week', '#109680'],
+      ['Denial Rate', '8.1%', '#0F1B2E', '↓ 0.4 pts week over week', '#109680'],
+      ['Open AR', '$140,399', '#0F1B2E', '1,783 claims · ↓ $6,180 wk', '#109680'],
+    ])).map((k, i) => {
+      // Benchmarks: PC ratio ≥95%, DSO <40d, denial rate ≤10%
+      const met = isWFM ? { 2: ['target ≥ 95%', true], 3: ['target < 40 days', true], 4: ['target ≤ 10%', true] }
+                        : { 2: ['target ≥ 95%', false], 3: ['target < 40 days', false], 4: ['target ≤ 10%', true] };
+      const BENCH = met;
+      const b = BENCH[i];
+      return {
+        label: k[0], value: k[1], valueFg: k[2], sub: k[3], subFg: k[4],
+        hasBench: !!b,
+        bench: b ? b[0] + (b[1] ? ' · met' : ' · just missed') : '',
+        benchFg: b ? (b[1] ? '#109680' : '#B45309') : '#94A3B8',
+      };
+    });
+
+    const benches = (isWFM ? [
+      { label: 'Days in AR', value: '37', target: 'target < 40', ok: true },
+      { label: 'Net collection rate', value: '96.8%', target: 'target ≥ 95%', ok: true },
+      { label: 'Clean claims rate', value: '95.4%', target: 'target ≥ 95%', ok: true },
+      { label: 'AR past 90 days', value: '12.1%', target: 'target ≤ 15%', ok: true },
+      { label: 'Posting automation', value: '95.1%', target: 'target ≥ 90%', ok: true },
+      { label: 'Deposit to posted', value: '0.6d', target: 'target < 2d', ok: true },
+    ] : [
+      { label: 'Days in AR', value: '41', target: 'target < 40', ok: false },
+      { label: 'Net collection rate', value: '96.2%', target: 'target ≥ 95%', ok: true },
+      { label: 'Clean claims rate', value: '94.1%', target: 'target ≥ 95%', ok: false },
+      { label: 'AR past 90 days', value: '18.9%', target: 'target ≤ 15%', ok: false },
+      { label: 'Posting automation', value: '94.2%', target: 'target ≥ 90%', ok: true },
+      { label: 'Deposit to posted', value: '0.8d', target: 'target < 2d', ok: true },
+    ]).map(b => ({
+      label: b.label, value: b.value, target: b.target,
+      dot: b.ok ? '#22C5A7' : '#FF6E6C',
+      valueFg: b.ok ? '#109680' : '#DC2626',
+    }));
+
+    // [label, charges, payments]
+    const M = isWFM ? [
+      ['Jan-26', 44200, 26800], ['Feb-26', 37000, 33500], ['Mar-26', 55600, 41000],
+      ['Apr-26', 33400, 31200], ['May-26', 32700, 30100], ['Jun-26', 31480, 29760],
+    ] : [
+      ['Jan-26', 210675, 124797], ['Feb-26', 176318, 153057], ['Mar-26', 264353, 184604],
+      ['Apr-26', 159015, 147721], ['May-26', 155633, 141191], ['Jun-26', 148904, 139377],
+    ];
+    const W = isWFM ? [
+      ['May 11', 8000, 6600], ['May 18', 7700, 7100], ['May 25', 8800, 7600], ['Jun 1', 7300, 6800],
+      ['Jun 8', 7900, 7300], ['Jun 15', 8200, 7700], ['Jun 22', 8100, 7600], ['Jun 29', 7620, 7130],
+    ] : [
+      ['May 11', 38200, 31400], ['May 18', 36500, 33800], ['May 25', 41900, 36200], ['Jun 1', 34700, 32500],
+      ['Jun 8', 37400, 34900], ['Jun 15', 39100, 36800], ['Jun 22', 39058, 36842], ['Jun 29', 36214, 33927],
+    ];
+    const src = monthly ? M : W;
+    const max = src.reduce((m, r) => Math.max(m, r[1]), 0);
+    const chart = src.map(r => ({
+      label: r[0],
+      chH: Math.round(r[1] / max * 150) + 'px',
+      pmH: Math.round(r[2] / max * 150) + 'px',
+      pc: Math.round(r[2] / r[1] * 100) + '%',
+      amounts: monthly
+        ? Math.round(r[1] / 1000) + 'k / ' + Math.round(r[2] / 1000) + 'k'
+        : (r[1] / 1000).toFixed(1) + 'k / ' + (r[2] / 1000).toFixed(1) + 'k',
+    }));
+
+    const appeals = isWFM ? [
+      { label: 'Overturned', count: '4', amt: '$1,020', bg: '#E6F7F2', fg: '#0B7D6C', barColor: '#22C5A7', barW: '58%' },
+      { label: 'Pending', count: '2', amt: '$410', bg: '#FEF3DF', fg: '#B45309', barColor: '#E9C05F', barW: '26%' },
+      { label: 'Upheld', count: '1', amt: '$240', bg: '#FEECEC', fg: '#DC2626', barColor: '#FF6E6C', barW: '16%' },
+    ] : [
+      { label: 'Overturned', count: '15', amt: '$4,210', bg: '#E6F7F2', fg: '#0B7D6C', barColor: '#22C5A7', barW: '62%' },
+      { label: 'Pending', count: '5', amt: '$1,380', bg: '#FEF3DF', fg: '#B45309', barColor: '#E9C05F', barW: '21%' },
+      { label: 'Upheld', count: '4', amt: '$905', bg: '#FEECEC', fg: '#DC2626', barColor: '#FF6E6C', barW: '17%' },
+    ];
+
+    // Exact figures from the Bell Medics aging summary
+    const A = isWFM ? [
+      ['Aetna', '20 · 1,500', '3 · 180', '1 · 90', '—', '2 · 150', '26 · $1,920'],
+      ['Anthem BCBS', '38 · 3,600', '10 · 720', '4 · 380', '3 · 260', '6 · 540', '61 · $5,500'],
+      ['Humana', '12 · 1,050', '3 · 240', '2 · 180', '1 · 90', '4 · 360', '22 · $1,920'],
+      ['Medicaid', '10 · 780', '4 · 300', '3 · 240', '2 · 160', '3 · 220', '22 · $1,700'],
+      ['Medicare', '120 · 8,900', '40 · 1,200', '6 · 380', '4 · 250', '8 · 460', '178 · $11,190'],
+      ['UHC', '18 · 1,350', '5 · 420', '3 · 260', '2 · 160', '3 · 240', '31 · $2,430'],
+      ['Others', '10 · 1,420', '3 · 400', '2 · 260', '1 · 90', '2 · 682', '18 · $2,852'],
+      ['Grand Total', '228 · 18,600', '68 · 3,460', '21 · 1,790', '13 · 1,010', '28 · 2,652', '358 · $27,512'],
+    ] : [
+      ['Aetna', '23 · 1,720', '2 · 127', '—', '—', '—', '25 · $1,847'],
+      ['Anthem BCBS', '100 · 12,873', '16 · 1,361', '7 · 1,120', '8 · 885', '32 · 3,020', '163 · $19,258'],
+      ['Humana', '19 · 2,475', '4 · 385', '5 · 570', '1 · 125', '18 · 2,275', '47 · $5,830'],
+      ['Medicaid', '16 · 2,415', '6 · 675', '9 · 1,125', '11 · 1,300', '17 · 2,015', '59 · $7,530'],
+      ['Medicare', '310 · 23,286', '245 · 5,327', '26 · 1,086', '32 · 1,362', '60 · 2,158', '673 · $33,220'],
+      ['MHS', '44 · 5,680', '35 · 4,745', '36 · 4,990', '10 · 1,305', '4 · 660', '129 · $17,380'],
+      ['Provider Partners', '205 · 23,271', '159 · 2,919', '96 · 2,078', '8 · 572', '2 · 130', '470 · $28,970'],
+      ['UHC', '61 · 7,187', '13 · 1,467', '10 · 1,300', '6 · 704', '13 · 1,226', '103 · $11,883'],
+      ['Veterans Administration', '—', '—', '—', '—', '60 · 7,095', '60 · $7,095'],
+      ['Others', '19 · 2,720', '7 · 915', '16 · 2,065', '1 · 140', '11 · 1,545', '54 · $7,385'],
+      ['Grand Total', '797 · 81,627', '487 · 17,921', '205 · 14,334', '77 · 6,393', '217 · 20,124', '1,783 · $140,399'],
+    ];
+    const agingRows = A.map((r, i) => ({
+      payer: r[0], b1: r[1], b2: r[2], b3: r[3], b4: r[4], b5: r[5], total: r[6],
+      bg: r[0] === 'Grand Total' ? '#F1EEFF' : (i % 2 ? '#FAFAFC' : '#FFFFFF'),
+      nameWeight: r[0] === 'Grand Total' ? '700' : '600',
+    }));
+
+    // Worked AR summary — real category totals
+    const WK = isWFM ? [
+      ['Provider Task', 31, 3420, '#7B61FF'],
+      ['In Process', 26, 2610, '#0081CF'],
+      ['Resubmitted', 14, 1215, '#22C5A7'],
+      ['Paid & posted', 14, 340, '#22C5A7'],
+      ['Team underworking', 8, 640, '#94A3B8'],
+      ['Patient responsibility', 9, 285, '#E9C05F'],
+      ['Write-offs (governed)', 4, 96, '#FF9671'],
+      ['Sent via fax for review', 6, 150, '#94A3B8'],
+    ] : [
+      ['Provider Task', 149, 16626, '#7B61FF'],
+      ['In Process', 126, 12760, '#0081CF'],
+      ['Resubmitted', 68, 5929, '#22C5A7'],
+      ['Paid & posted', 68, 1662, '#22C5A7'],
+      ['Team underworking', 51, 4048, '#94A3B8'],
+      ['Patient responsibility', 42, 1389, '#E9C05F'],
+      ['Write-offs (governed)', 11, 412, '#FF9671'],
+      ['Sent via fax for review', 38, 733, '#94A3B8'],
+    ];
+    const wkMax = isWFM ? 31 : 149;
+    const worked = WK.map(w => ({
+      label: w[0], claims: String(w[1]),
+      bal: '$' + w[2].toLocaleString('en-US'),
+      barW: Math.round(w[1] / wkMax * 100) + '%',
+      barColor: w[3],
+    }));
+
+    const CMP = isWFM ? [
+      ['0–30', '196 · 21,400', '228 · 18,600', '−$2,800', true, '600'],
+      ['31–60', '82 · 5,100', '68 · 3,460', '−$1,640', true, '600'],
+      ['61–90', '18 · 1,320', '21 · 1,790', '+$470', false, '600'],
+      ['91–120', '22 · 1,610', '13 · 1,010', '−$600', true, '600'],
+      ['120+', '26 · 2,262', '28 · 2,652', '+$390', false, '600'],
+      ['Total', '344 · 31,692', '358 · 27,512', '−$4,180', true, '700'],
+    ] : [
+      ['0–30', '869 · 103,133', '797 · 81,627', '−$21,507', true, '600'],
+      ['31–60', '466 · 30,789', '487 · 17,921', '−$12,868', true, '600'],
+      ['61–90', '149 · 9,032', '205 · 14,334', '+$5,302', false, '600'],
+      ['91–120', '136 · 10,362', '77 · 6,393', '−$3,969', true, '600'],
+      ['120+', '206 · 18,773', '217 · 20,124', '+$1,350', false, '600'],
+      ['Total', '1,826 · 172,090', '1,783 · 140,399', '−$31,691', true, '700'],
+    ];
+    const comparison = CMP.map(c => ({
+      bucket: c[0], last: c[1], cur: c[2], delta: c[3],
+      deltaFg: c[4] ? '#109680' : '#DC2626',
+      weight: c[5],
+    }));
+
+    const RS = isWFM ? [
+      ['Missing/Invalid DX/CPT', 9], ['Not on file', 7], ['Prior authorization', 6],
+      ['Coordination of Benefits', 5], ['Invalid provider info', 4], ['Invalid filing code', 3],
+    ] : [
+      ['VA Claims (On Hold)', 60], ['Missing/Invalid DX/CPT', 42], ['Invalid/Missing taxonomy', 49],
+      ['Not on file', 34], ['Prior authorization', 33], ['Invalid provider info', 24],
+      ['Coordination of Benefits', 22], ['Invalid filing code', 22], ['Maximum benefits reached', 17],
+    ];
+    const rsMax = isWFM ? 9 : 60;
+    const reasons = RS.map(r => ({ label: r[0], count: String(r[1]), barW: Math.round(r[1] / rsMax * 100) + '%' }));
+
+    // [payer, avg days to pay, denial rate %, AR past 90d % (from the aging table), flag,
+    //  contracted-vs-collected yield % (7a — from posted 835s vs contracts-store rates; null = no contract basis)]
+    const PP = isWFM ? [
+      ['Medicare', '20', '5%', '5.4%', null, 99.7],
+      ['Aetna', '23', '7%', '5.8%', null, 99.0],
+      ['UHC', '31', '8%', '12.9%', null, 98.2],
+      ['Anthem BCBS', '36', '10%', '18.0%', 'watch', 99.2],
+      ['Humana', '45', '11%', '40.9%', 'watch', 97.0],
+      ['Indiana Medicaid', '50', '15%', '27.3%', 'escalate', 98.1],
+    ] : [
+      ['Medicare', '21', '6%', '10.6%', null, 99.6],
+      ['Aetna', '24', '8%', '0%', null, 98.9],
+      ['Provider Partners', '28', '7%', '2.4%', null, 97.1],
+      ['UHC', '33', '9%', '16.2%', null, 98.4],
+      ['Anthem BCBS', '38', '11%', '20.3%', 'watch', 99.1],
+      ['MHS', '44', '14%', '11.3%', 'watch', 94.2],
+      ['Humana', '47', '12%', '41.2%', 'watch', 96.8],
+      ['Indiana Medicaid', '52', '16%', '44.0%', 'escalate', 98.0],
+      ['Veterans Administration', '—', '—', '100%', 'hold', null],
+    ];
+    // Inferred-rate payers (from contracts-store) get a * — their yield is flag-only.
+    const CS = window.ContractsStore;
+    const inferredSet = CS ? CS.payers().filter(p => p.basis === 'INFERRED').map(p => p.short) : ['Humana MA PPO', 'Provider Partners'];
+    const isInferred = (name) => inferredSet.some(s => s.indexOf(name) === 0 || name.indexOf(s) === 0);
+    const payerRows = PP.map(p => {
+      const days = parseInt(p[1], 10);
+      const den = parseInt(p[2], 10);
+      const old90 = parseFloat(p[3]);
+      const y = p[5];
+      return {
+        payer: p[0],
+        days: p[1] === '—' ? '—' : p[1] + 'd',
+        daysFg: isNaN(days) ? '#94A3B8' : days > 40 ? '#DC2626' : days > 30 ? '#B45309' : '#109680',
+        denial: p[2],
+        denialFg: isNaN(den) ? '#94A3B8' : den > 12 ? '#DC2626' : den > 9 ? '#B45309' : '#109680',
+        old: p[3],
+        oldFg: isNaN(old90) ? '#94A3B8' : old90 > 15 ? '#DC2626' : '#6B7280',
+        yield: y === null ? '—' : y.toFixed(1) + '%' + (isInferred(p[0]) ? '*' : ''),
+        yieldFg: y === null ? '#94A3B8' : y < 96 ? '#DC2626' : y < 98 ? '#B45309' : '#109680',
+        hasFlag: !!p[4],
+        flag: p[4] === 'escalate' ? 'Escalation candidate' : p[4] === 'hold' ? 'On hold — credentialing' : 'Watch',
+        flagBg: p[4] === 'escalate' ? '#FEECEC' : p[4] === 'hold' ? '#F1F5F9' : '#FEF3DF',
+        flagFg: p[4] === 'escalate' ? '#DC2626' : p[4] === 'hold' ? '#6B7280' : '#B45309',
+        bg: p[4] === 'escalate' ? '#FFFBFB' : '#FFFFFF',
+      };
+    });
+
+    const PREV_STATUS = {
+      fixed: ['Fixed upstream', '#E6F7F2', '#0B7D6C'],
+      notified: ['Practice notified', '#EAF3FF', '#1D4ED8'],
+      recurring: ['Recurring — needs attention', '#FEECEC', '#DC2626'],
+    };
+    const prevRows = (isWFM ? [
+      {
+        cause: 'Billing address missing ZIP+4 for Medicare (WPS J8)',
+        detail: 'Rule MCR-J8 · 214 — same office address across all affected claims',
+        claims: '5 · $612', trend: '↓ zero since fix', ok: true, status: 'fixed',
+        action: 'One approval in the Agent Inbox fixed all 5; rule added pre-submission Jun 27',
+      },
+      {
+        cause: 'Updated insurance not collected at intake',
+        detail: 'COB denials where the other policy termed before the DOS — registration miss',
+        claims: '5 · $520', trend: '↑ 2nd month', ok: false, status: 'notified',
+        action: 'Practice request sent Jul 5 — intake checklist update proposed to the front office',
+      },
+    ] : [
+      {
+        cause: 'Rendering provider taxonomy outdated on one provider record',
+        detail: 'All 49 taxonomy holds trace to a single stale record synced from the EHR',
+        claims: '49 · $5,410', trend: '↓ stopping', ok: true, status: 'fixed',
+        action: 'Record corrected Jun 30; validator now blocks submissions against stale taxonomy',
+      },
+      {
+        cause: 'Billing address missing ZIP+4 for Medicare (WPS J8)',
+        detail: 'Rule MCR-J8 · 214 — same facility address across all affected claims',
+        claims: '12 · $2,146', trend: '↓ zero since fix', ok: true, status: 'fixed',
+        action: 'One approval in the Agent Inbox fixed all 12; rule added pre-submission Jun 27',
+      },
+      {
+        cause: 'Updated insurance not collected at intake',
+        detail: 'COB denials where the other policy termed before the DOS — registration miss',
+        claims: '22 · $2,730', trend: '↑ 3rd month', ok: false, status: 'notified',
+        action: 'Practice request REQ-10341 sent Jul 5 — intake checklist update proposed to Front Office',
+      },
+      {
+        cause: 'Prior auth not requested before RPM services',
+        detail: 'CO-197 denials cluster on RPM CPTs; retro-auth window is 14 days',
+        claims: '33 · $4,120', trend: '↑ growing', ok: false, status: 'recurring',
+        action: 'Retro-auths filed per claim; needs an intake rule before this stops recurring',
+      },
+    ]).map(p => {
+      const s = PREV_STATUS[p.status];
+      return {
+        cause: p.cause, detail: p.detail, claimsStr: p.claims,
+        trend: p.trend, trendFg: p.ok ? '#109680' : '#DC2626',
+        status: s[0], statusBg: s[1], statusFg: s[2],
+        action: p.action,
+      };
+    });
+
+    return {
+      navClosed: !st.navExpanded,
+      navOpen: st.navExpanded,
+      toggleNav: () => this.setState(prev => { const v = !prev.navExpanded; try { localStorage.setItem('onb-nav-expanded', v ? '1' : '0'); } catch (e) {} return { navExpanded: v }; }),
+      periodTabs, kpis, benches, chart, appeals, agingRows, worked, comparison, reasons, prevRows, payerRows,
+      ...(() => {
+        const SC = window.ClaimsStore;
+        if (!SC || !SC.balanceOwner) return { hasOwnerSplit: false, ownerSplit: [], ownerTotal: '' };
+        const open = SC.openAR();
+        const sums = {};
+        let total = 0;
+        open.forEach(c => {
+          const o = SC.balanceOwner(c).owner;
+          sums[o] = sums[o] || { n: 0, amt: 0 };
+          sums[o].n++; sums[o].amt += c.balance; total += c.balance;
+        });
+        const DEF = [
+          ['PRIMARY', 'Primary payers', '#7B61FF'],
+          ['SECONDARY', 'Secondary payers', '#0081CF'],
+          ['TERTIARY', 'Tertiary payers', '#C34A7D'],
+          ['PATIENT', 'Patients', '#E9C05F'],
+        ];
+        const ownerSplit = DEF.filter(d => sums[d[0]]).map(d => {
+          const s = sums[d[0]];
+          const pct = total ? Math.round(s.amt / total * 100) : 0;
+          return {
+            label: d[1], color: d[2],
+            w: Math.max(2, pct) + '%',
+            detail: '$' + Math.round(s.amt).toLocaleString() + ' \u00b7 ' + s.n + ' claims \u00b7 ' + pct + '%',
+            tip: d[1] + ': $' + Math.round(s.amt).toLocaleString(),
+          };
+        });
+        return { hasOwnerSplit: ownerSplit.length > 0, ownerSplit, ownerTotal: '$' + Math.round(total).toLocaleString() + ' open' };
+      })(),
+      yieldInsight: isWFM
+        ? 'Humana is collecting 97.0% of its inferred rates — load an exhibit to make the gap actionable in'
+        : 'MHS is collecting 94.2% of its contracted rates, the lowest yield on the panel — a rate review is proposed in',
+      practiceLabel,
+      chartSubtitle: monthly ? '2026 by month · charges vs total payments · PC ratio above bars' : 'last 8 weeks · charges vs total payments · PC ratio above bars',
+      chartInsight: monthly
+        ? 'PC ratio has held above 90% for three straight months — collections are keeping pace with charges. March\u2019s spike reflects the quarterly MDS assessment cycle.'
+        : 'Weekly collections have tracked within 6% of charges for four straight weeks. No backlog is forming at the clearinghouse or in payer adjudication.',
+    };
+  }
+}
+</script>
+</body>
+</html>

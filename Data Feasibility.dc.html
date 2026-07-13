@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<div style="max-width: 900px; margin: 0 auto; padding: 48px 40px 80px; display: flex; flex-direction: column; gap: 28px;" data-screen-label="Data Feasibility">
+
+  <!-- Title -->
+  <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 2px solid #7B61FF; padding-bottom: 22px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #E6F7F2; color: #22C5A7; font-size: 12px; font-weight: 700;">FEASIBILITY — BUILDABLE</span>
+      <span style="font-size: 12px; color: #6B7280;">Jul 12, 2026 · companion to the Billing Portal PRD · Otangeles Note+</span>
+    </div>
+    <h1 style="font-size: 30px; font-weight: 700; margin: 0;">Data Feasibility: Billing Portal</h1>
+    <p style="font-size: 15px; line-height: 23px; color: #6B7280; margin: 0;">Can the data behind every Billing Portal feature actually be obtained? <strong style="color: #0F1B2E;">Yes.</strong> Most of it arrives through one clearinghouse integration; the rest is either native to the platform, operationally maintained, or produced by the agent itself. Three items are genuinely hard and are flagged honestly below.</p>
+  </div>
+
+  <!-- 1 Source classes -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">1 · The four source classes</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <div style="background: #E7F5EF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-size: 13px; font-weight: 700; color: #1B7F5E;">A · Native — we generate it</span>
+        <p style="font-size: 13px; line-height: 20px; color: #0F1B2E; margin: 0;">Encounters, codes, charges, patients, facilities come from Otangeles itself. Everything the agent produces — decisions, touch logs, call summaries, learned rules — is our own data. Zero integration risk.</p>
+      </div>
+      <div style="background: #F1EEFF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-size: 13px; font-weight: 700; color: #5B46D6;">B · Clearinghouse EDI — one vendor</span>
+        <p style="font-size: 13px; line-height: 20px; color: #0F1B2E; margin: 0;">Standard X12 transactions via one API vendor (Claim.MD, Availity, Optum, Stedi, Waystar): <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">837</span> submission, <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">277CA</span> accept/reject, <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">276/277</span> status, <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">835</span> payments + CARC/RARC, <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">270/271</span> eligibility and benefits.</p>
+      </div>
+      <div style="background: #FEF3DF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-size: 13px; font-weight: 700; color: #B45309;">C · Operationally maintained</span>
+        <p style="font-size: 13px; line-height: 20px; color: #0F1B2E; margin: 0;">No feed exists: payer phone numbers, IVR paths, hours, filing limits. A curated payer directory table someone owns and updates. Buildable on day one; a staffing commitment, not an integration.</p>
+      </div>
+      <div style="background: #FFF3EF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-size: 13px; font-weight: 700; color: #C2410C;">D · Agent-worked</span>
+        <p style="font-size: 13px; line-height: 20px; color: #0F1B2E; margin: 0;">Data no API returns: payer-rep phone confirmations, portal-only pending detail, COB primacy rulings. The agent obtains it by call or portal — exactly what the Agent Inbox and Coverage screens already depict.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 Per-screen map -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">2 · Per-screen source map</h2>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 1.1fr 1.9fr 0.8fr; gap: 0; font-size: 12px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 20px; border-bottom: 1px solid #E5E7EB;">
+        <span>Screen</span><span>Key data → source class</span><span style="text-align: right;">Coverage</span>
+      </div>
+      <sc-for list="{{ screens }}" as="s" hint-placeholder-count="8">
+        <div style="display: grid; grid-template-columns: 1.1fr 1.9fr 0.8fr; padding: 11px 20px; border-bottom: 1px solid #F1F5F9; font-size: 13px; line-height: 19px; align-items: center;">
+          <span style="font-weight: 600;">{{ s.name }}</span>
+          <span style="color: #6B7280; padding-right: 16px;">{{ s.sources }}</span>
+          <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: {{ s.covColor }};">{{ s.cov }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <p style="font-size: 12px; color: #94A3B8; margin: 0;">"Coverage" = share of the screen's data obtainable without agent phone/portal work, once the clearinghouse integration and payer directory exist.</p>
+  </div>
+
+  <!-- 3 Hard flags -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">3 · The three honest flags</h2>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="background: #FFFFFF; border: 1px solid #FFD3D2; border-radius: 12px; padding: 14px 18px;">
+        <span style="font-size: 13px; font-weight: 700; color: #DC2626;">Prior authorization</span>
+        <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 4px 0 0;">X12 <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">278</span> exists but payer adoption is poor. Realistically portal / phone / fax — the Coverage screen's auth check will be part-automated, part-agent-worked for the foreseeable future. Design already models this correctly.</p>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #FFD3D2; border-radius: 12px; padding: 14px 18px;">
+        <span style="font-size: 13px; font-weight: 700; color: #DC2626;">COB primacy</span>
+        <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 4px 0 0;">271 sometimes flags other coverage, but confirming payer order (e.g. Medicare Benefits Coordination Center) is a phone/portal workflow, not an API. The Coverage board's "agent re-checking, ~48h" pattern is the accurate representation.</p>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #FFD3D2; border-radius: 12px; padding: 14px 18px;">
+        <span style="font-size: 13px; font-weight: 700; color: #DC2626;">Legacy AR backfill</span>
+        <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 4px 0 0;">Claims billed before Otangeles (from another PM system) need an 837/835 backfill from the practice's prior clearinghouse or a PM export. Scope decision required: is pre-Otangeles AR in or out for launch?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 Phase additions -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">4 · What each future phase adds to the integration surface</h2>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+      <sc-for list="{{ phases }}" as="p" hint-placeholder-count="5">
+        <div style="display: grid; grid-template-columns: 200px 1fr; padding: 11px 20px; border-bottom: 1px solid #F1F5F9; font-size: 13px; line-height: 19px; align-items: center;">
+          <span style="font-weight: 700;">{{ p.name }}</span>
+          <span style="color: #6B7280;">{{ p.adds }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- 5 Decisions -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">5 · Integration decisions to make</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 6px;">
+      <li><strong>Pick the clearinghouse vendor.</strong> Evaluate on: real-time 270/271 payer coverage for IN/MI Medicaid + MA plans, 835 enrollment turnaround, API quality, per-transaction pricing. This one contract powers ~70% of the portal.</li>
+      <li><strong>Own the payer directory.</strong> Decide who maintains phones/IVR/filing limits — ops team, the billing companies themselves, or shared. Ship it as an editable table either way.</li>
+      <li><strong>Insurance discovery add-on.</strong> Demographic-sweep eligibility ("Not our insured" cases) is sold as a product by several vendors — buy, don't build.</li>
+      <li><strong>Portal RPA — defer.</strong> Payer-portal scraping vendors exist but add fragility; the agent's phone workflow covers the same gap. Revisit if call volume becomes the bottleneck.</li>
+      <li><strong>Legacy AR scope</strong> (flag 3): decide before onboarding any practice with existing AR.</li>
+    </ul>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      screens: [
+        { name: 'Billing Home', sources: 'Claim counts + $ (A/B via 835-837 join) · agent tasks (A) · per-rep workload (A)', cov: '~100%', covColor: '#1B7F5E' },
+        { name: 'Agent Inbox', sources: 'Agent decisions + evidence (A) · denial codes from 835 (B) · payer-rep confirmations (D)', cov: '~90%', covColor: '#1B7F5E' },
+        { name: 'Coverage', sources: 'Eligibility, plan, benefits, COB flags via 270/271 (B) · discovery sweeps (B, vendor add-on) · auth + primacy (D)', cov: '~70%', covColor: '#B45309' },
+        { name: 'AR Worklist', sources: 'Aging + balances (A/B) · denial reasons CARC/RARC (B) · payer phone/IVR/limits (C) · pending detail (D)', cov: '~80%', covColor: '#1B7F5E' },
+        { name: 'Claims Register', sources: 'Claim lifecycle: 837 out (A), 277CA + 276/277 status (B), 835 outcome (B)', cov: '~95%', covColor: '#1B7F5E' },
+        { name: 'Claim Detail', sources: 'Timeline from A + B events · payer responses 277CA/835 (B) · call log entries (D)', cov: '~90%', covColor: '#1B7F5E' },
+        { name: 'Rulebook', sources: 'Rules + provenance (A — mined from own 835 denial history) · zero external dependency', cov: '100%', covColor: '#1B7F5E' },
+        { name: 'Analytics', sources: 'All derived from the above once 835/837 are ingested — no new sources', cov: '~95%', covColor: '#1B7F5E' },
+        { name: 'Settings · Ops Admin', sources: 'Teams, tenancy, audit, config — all native (A)', cov: '100%', covColor: '#1B7F5E' }
+      ],
+      phases: [
+        { name: 'Phase 6a — Rulebook', adds: 'Nothing external. Rules are mined from our own 835 denial history.' },
+        { name: 'Phase 6b — Agent QA', adds: 'Nothing external. Sampling and scorecards run on native agent-action data.' },
+        { name: 'Phase 6c — Practice window', adds: 'Nothing external. Re-presents existing data to a new audience; action queue is native workflow.' },
+        { name: 'Phase 7 — Posting', adds: 'Bank deposit data (BAI2 file or banking API) to match against 835 batches. First genuinely new integration.' },
+        { name: 'Phase 8 — Secondary / patient', adds: 'Secondary 837 with primary 835 attached (same clearinghouse). Patient statements: vendor decision pending.' }
+      ]
+    };
+  }
+}
+
+</script>
+</body>
+</html>

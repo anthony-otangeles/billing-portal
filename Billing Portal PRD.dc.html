@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<div style="max-width: 900px; margin: 0 auto; padding: 48px 40px 80px; display: flex; flex-direction: column; gap: 28px;" data-screen-label="Billing Portal PRD">
+
+  <!-- Title block -->
+  <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 2px solid #7B61FF; padding-bottom: 22px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #E6F7F2; color: #22C5A7; font-size: 12px; font-weight: 700;">APPROVED — JUL 9</span>
+      <span style="font-size: 12px; color: #6B7280;">v1 · Jul 8, 2026 · approved Jul 9 · Otangeles Note+</span>
+    </div>
+    <h1 style="font-size: 30px; font-weight: 700; margin: 0; color: #0F1B2E;">PRD: Billing Portal &amp; Billing Administration</h1>
+    <p style="font-size: 15px; line-height: 23px; color: #6B7280; margin: 0;">A standalone, external-facing portal for revenue-cycle billing companies, plus the administrative surfaces to onboard and govern them — replacing Billing-inside-the-Clerk-Portal.</p>
+  </div>
+
+  <!-- 1. Background -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">1 · Background &amp; problem</h2>
+    <p style="font-size: 14px; line-height: 22px; margin: 0;">The billing workspace (Dashboard, Agent Inbox, AR Worklist, Claims, Analytics) was prototyped as a subtab group inside the Clerk Portal. Its users, however, are <strong>external billing companies</strong> (e.g. Bell Medics working the practice's AR). Housing external users in an internal staff portal creates two structural problems:</p>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 6px;">
+      <li><strong>Access boundary.</strong> Clerk Portal exposes Schedules, Calendar, Workflows, and the staff Directory. Hiding nav items is not a security boundary; an external party must log into a surface where <em>everything visible is theirs to see</em>.</li>
+      <li><strong>Scale.</strong> Otangeles will serve multiple billing companies across multiple practices. Each company must see only the practices it is contracted for and only its own team's work — a tenant boundary, consistent with how the platform already isolates medical practices.</li>
+    </ul>
+    <p style="font-size: 14px; line-height: 22px; margin: 0;">The platform already runs five portals on one shell (Platform Admin, Operations Admin, Provider, Scribe, Clerk). This PRD adds the sixth — the <strong>Billing Portal</strong> — and the admin surfaces that govern it.</p>
+  </div>
+
+  <!-- 2. Goals -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">2 · Goals &amp; non-goals</h2>
+    <p style="font-size: 13px; font-weight: 700; margin: 0; color: #0F1B2E;">Goals</p>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li>A standalone Billing Portal, on the standard Otangeles portal shell, whose entire surface is billing work — nothing clinical, nothing scheduling, no staff directory.</li>
+      <li>Multi-tenant from day one: billing company ⟷ practice is many-to-many; every screen is scoped by (billing company, selected practice).</li>
+      <li>Billing companies manage their own teams (invite reps, set roles) so Otangeles ops does not administer every rep account.</li>
+      <li>Onboarding and governance of billing companies lives in Operations Admin, mirroring how medical practices are onboarded today.</li>
+      <li>Platform Admin sees billing roles, activity, and audit events like any other portal population.</li>
+      <li>All existing prototype functionality (priority worklist, agent inbox, claims timeline, analytics, capture workflows) re-homes without regression.</li>
+    </ul>
+    <p style="font-size: 13px; font-weight: 700; margin: 4px 0 0; color: #0F1B2E;">Non-goals (this phase)</p>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li>Real authentication/credentials (per direction Jul 8 — design the boundary and flows, not auth plumbing).</li>
+      <li>Patient-responsibility collections and secondary billing workflows.</li>
+      <li>Payer call recording / audio capture (compliance scope).</li>
+      <li>Rebuilding the Clerk Portal; it simply loses the billing work surface. Whether clerks keep a read-only billing status view is an open question (§10).</li>
+    </ul>
+  </div>
+
+  <!-- 3. Personas -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">3 · Personas &amp; roles</h2>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 18px;">
+        <span style="font-size: 13px; font-weight: 700;">Billing Rep</span> <span style="font-size: 12px; color: #6B7280;">(external · Billing Portal)</span>
+        <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 4px 0 0;">Works the AR queue daily: payer calls, appeals, touch logging, practice requests. Sees only claims for practices assigned to them by their manager. E.g. Angela Mensah, Bell Medics.</p>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 18px;">
+        <span style="font-size: 13px; font-weight: 700;">Billing Manager</span> <span style="font-size: 12px; color: #6B7280;">(external · Billing Portal)</span>
+        <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 4px 0 0;">Everything a rep can do, plus: team management (invite/deactivate reps, assign reps to practices), performance view across reps, and company settings. Owns the weekly report relationship with each practice.</p>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 18px;">
+        <span style="font-size: 13px; font-weight: 700;">Operations Admin</span> <span style="font-size: 12px; color: #6B7280;">(internal · Operations Admin Portal)</span>
+        <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 4px 0 0;">Onboards billing companies, assigns them to medical practices, suspends access, monitors activity. Mirrors their existing Medical Practices responsibilities.</p>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 18px;">
+        <span style="font-size: 13px; font-weight: 700;">Platform Admin</span> <span style="font-size: 12px; color: #6B7280;">(internal · Platform Admin Portal)</span>
+        <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 4px 0 0;">Platform-wide oversight: billing roles appear in Role Distribution, billing portal activity in Portal Activity, billing events in the Audit Log, billing portal defaults in Portal Configuration.</p>
+      </div>
+    </div>
+    <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;"><strong style="color: #0F1B2E;">Tenancy rule (applies everywhere):</strong> every billing-portal query is scoped by billing company AND selected practice. A rep additionally sees "My accounts" within that scope. Practice staff never appear in the Billing Portal; billing users never appear in clinical portals.</p>
+  </div>
+
+  <!-- 4. IA -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">4 · Information architecture</h2>
+    <div style="background: #F1EEFF; border-radius: 12px; padding: 16px 20px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 21px; color: #0F1B2E;">
+      BILLING PORTAL (external)<br>
+      ├─ Dashboard<br>
+      ├─ Agent Inbox<br>
+      ├─ AR Worklist<br>
+      ├─ Claims<br>
+      ├─ Analytics<br>
+      └─ Settings&nbsp;&nbsp;(Team · Company profile · Notifications)<br><br>
+      OPERATIONS ADMIN (internal — additions in bold)<br>
+      ├─ Dashboard&nbsp;&nbsp;(+ billing tiles)<br>
+      ├─ Medical Practices<br>
+      ├─ <strong>Billing Companies</strong>&nbsp;&nbsp;(list → company detail → onboarding wizard)<br>
+      ├─ Users · Onboarding · Facilities · Notifications · Analytics · Audit Log · Settings<br><br>
+      PLATFORM ADMIN (internal — integrations only)<br>
+      └─ Role Distribution + Portal Activity + Audit Log + Portal Configuration gain billing entries
+    </div>
+    <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">The Billing Portal uses the standard shell: top bar with the Otangeles mark + "Billing Portal" + notifications + avatar; left nav with collapse control; greeting-style dashboard; Settings last; © footer. One addition to the standard shell: a <strong style="color: #0F1B2E;">practice switcher</strong> in the top bar (pattern borrowed from Provider/Clerk "Current working facility"), showing the practices this billing company is contracted for. All content reloads in that practice's scope.</p>
+  </div>
+
+  <!-- 5. Billing Portal screens -->
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">5 · Billing Portal — screen by screen</h2>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">5.1 Dashboard <span style="font-size: 11px; font-weight: 700; color: #22C5A7; background: #E6F7F2; border-radius: 9999px; padding: 2px 8px; margin-left: 6px;">EXISTS — re-home</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">The current Billing Home, re-scoped: greeting ("Hi, Angela!"), today's numbers (decisions waiting, follow-ups due, claims in flight, collected MTD), "Needs you now" list, workspace cards. New: numbers reflect the selected practice; a manager sees an additional per-rep workload strip (each rep's due-today count) for the selected practice.</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">5.2 Agent Inbox <span style="font-size: 11px; font-weight: 700; color: #22C5A7; background: #E6F7F2; border-radius: 9999px; padding: 2px 8px; margin-left: 6px;">EXISTS — re-home</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Unchanged functionally: pipeline stages, decision cards, approvals, prevention cross-links. Scoped to the selected practice. The two demo stubs ("Edit first", "Escalate") remain flagged in the QA checklist for a future decision.</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">5.3 AR Worklist <span style="font-size: 11px; font-weight: 700; color: #22C5A7; background: #E6F7F2; border-radius: 9999px; padding: 2px 8px; margin-left: 6px;">EXISTS — re-home</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Unchanged functionally: priority queue (P1–P4, filing deadlines, low-balance write-off policy), focused work view, voice/quick/typed capture, agent-polished notes, smart practice requests. Scoped to the selected practice; "My accounts" scopes to the signed-in rep.</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">5.4 Claims <span style="font-size: 11px; font-weight: 700; color: #22C5A7; background: #E6F7F2; border-radius: 9999px; padding: 2px 8px; margin-left: 6px;">EXISTS — re-home</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Claim detail (timeline, versions, payer responses, payments, source-note modal) unchanged. Known prototype boundary stays: one sample claim page. A claims <em>list</em> landing (search + filters → detail) is specified but deferred to Phase 2 (§9) — the worklist is the primary entry into claims.</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">5.5 Analytics <span style="font-size: 11px; font-weight: 700; color: #22C5A7; background: #E6F7F2; border-radius: 9999px; padding: 2px 8px; margin-left: 6px;">EXISTS — re-home</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Unchanged functionally: KPIs vs MGMA/HFMA benchmarks, aging, payer performance, denial prevention. Scoped per practice; shared-with-practice framing stays.</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">5.6 Settings <span style="font-size: 11px; font-weight: 700; color: #5B46D6; background: #F1EEFF; border-radius: 9999px; padding: 2px 8px; margin-left: 6px;">NEW</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;"><strong style="color: #0F1B2E;">Team tab (manager only):</strong> roster table (name, role Rep/Manager, assigned practices, status, last active), Invite Rep (email + role + practice assignments), deactivate/reactivate, per-rep due-today load. <strong style="color: #0F1B2E;">Company profile tab:</strong> company name, contact, logo slot. <strong style="color: #0F1B2E;">Notifications tab:</strong> per-user toggles — SLA breaches, appeal outcomes, practice replies, weekly report ready. Reps see only Notifications + their own profile; the Team tab is the visible role difference.</p>
+    </div>
+  </div>
+
+  <!-- 6. Ops Admin -->
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">6 · Billing administration — in Operations Admin</h2>
+    <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Not a separate portal: billing companies are governed from Operations Admin, exactly where medical practices are governed today. A new <strong style="color: #0F1B2E;">Billing Companies</strong> nav item (People group) with three screens:</p>
+
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">6.1 Billing Companies — list <span style="font-size: 11px; font-weight: 700; color: #5B46D6; background: #F1EEFF; border-radius: 9999px; padding: 2px 8px; margin-left: 6px;">NEW</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Table: company, status (Active / Onboarding / Suspended), practices served, users, open AR under management, last activity. Primary action: "Onboard Billing Company". Row → company detail.</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">6.2 Company detail <span style="font-size: 11px; font-weight: 700; color: #5B46D6; background: #F1EEFF; border-radius: 9999px; padding: 2px 8px; margin-left: 6px;">NEW</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Four tabs. <strong style="color: #0F1B2E;">Overview:</strong> profile + health tiles (open AR, touches/week, collected MTD, SLA status). <strong style="color: #0F1B2E;">Practice assignments:</strong> the many-to-many control — assign/unassign practices, effective dates, per-assignment status; unassigning revokes that practice's data instantly. <strong style="color: #0F1B2E;">Users:</strong> read-only roster of the company's team (managed by the company's manager, visible for support/audit; ops can force-deactivate). <strong style="color: #0F1B2E;">Activity:</strong> audit trail of company-level events (assignment changes, suspensions, manager invites).</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">6.3 Onboarding wizard <span style="font-size: 11px; font-weight: 700; color: #5B46D6; background: #F1EEFF; border-radius: 9999px; padding: 2px 8px; margin-left: 6px;">NEW</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Three steps, matching the existing onboarding pattern: (1) company profile, (2) assign practice(s), (3) invite the first Billing Manager. Ends with a summary + "company is live" state; the manager then builds their own team from Billing Portal Settings. Ops Dashboard gains one tile: "Billing Companies · N active" beside Medical Practices.</p>
+    </div>
+  </div>
+
+  <!-- 7. Platform Admin -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">7 · Platform Admin integration</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li><strong>Role Distribution</strong> gains two roles: Billing Manager, Billing Rep (donut + legend counts).</li>
+      <li><strong>Portal Activity</strong> gains a "Billing activity" series alongside Provider/Scribe/Clerk.</li>
+      <li><strong>Audit Log</strong> ingests billing events (approvals, appeals filed, write-off requests, assignment changes) tagged with billing company + practice.</li>
+      <li><strong>Portal Configuration</strong> gains a Billing Portal section: platform defaults for SLA windows, low-balance write-off threshold (default $25), quick-log outcome set, and benchmark targets.</li>
+      <li>KPI tiles: "Platform Users" counts include billing users, with the subtitle updated accordingly.</li>
+    </ul>
+    <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">No new Platform Admin screens — billing becomes another population inside the existing oversight surfaces.</p>
+  </div>
+
+  <!-- 8. Data model -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">8 · Entities &amp; scoping model</h2>
+    <div style="background: #F1EEFF; border-radius: 12px; padding: 16px 20px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 21px; color: #0F1B2E;">
+      BillingCompany { id, name, status, contact }<br>
+      PracticeAssignment { billingCompanyId, practiceId, status, effectiveDate }&nbsp;&nbsp;// many-to-many<br>
+      BillingUser { id, companyId, role: manager|rep, practiceIds[], status }<br>
+      Claim / Touch / PracticeRequest / Appeal … all carry { practiceId } and actions carry { billingUserId }
+    </div>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li>Billing Portal reads: filtered by company's active PracticeAssignments ∩ user's practiceIds ∩ selected practice.</li>
+      <li>Practice-side surfaces (weekly report, practice requests, shared Analytics) show the billing company's name on everything it produced.</li>
+      <li>Suspending a company or unassigning a practice removes access immediately; historical actions remain in the practice's record and audit log.</li>
+    </ul>
+  </div>
+
+  <!-- 9. Phasing -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">9 · Build phases</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 6px;">
+      <li><strong>Phase 1 — Billing Portal shell + re-home.</strong> Portal shell (top bar "Billing Portal", practice switcher, billing-only nav); the five existing screens re-homed into it; internal nav items removed. Largest visual change, lowest functional risk.</li>
+      <li><strong>Phase 2 — Settings &amp; team.</strong> Team roster, invite flow, role difference (manager vs rep), company profile, notification preferences. Optional: claims list landing.</li>
+      <li><strong>Phase 3 — Operations Admin: Billing Companies.</strong> List, company detail (4 tabs), onboarding wizard, dashboard tile.</li>
+      <li><strong>Phase 4 — Platform Admin touches.</strong> Roles, activity series, audit entries, portal configuration section.</li>
+    </ul>
+    <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Each phase follows the established loop: detailed plan → your approval → implementation → embedded QA (automated pass + NEW steps appended to the QA Checklist) → handoff.</p>
+  </div>
+
+  <!-- 10. Open questions -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #7B61FF;">10 · Open questions</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 6px;">
+      <li><strong>Clerk Portal residue:</strong> do internal clerks keep a read-only "Billing status" view, or does billing disappear from the Clerk Portal entirely?</li>
+      <li><strong>Practice-side counterpart:</strong> where does the practice answer practice requests and read the weekly report — Clerk Portal inbox, Provider Portal, or a Practice Admin surface?</li>
+      <li><strong>Rep-to-practice assignment granularity:</strong> can one rep serve multiple practices (assumed yes) and does the manager assign per-practice or per-payer books of business?</li>
+      <li><strong>Demo stubs:</strong> "Edit first" / "Escalate" in the Agent Inbox still need a build-or-boundary decision.</li>
+    </ul>
+  </div>
+
+  <div style="border-top: 1px solid #E5E7EB; padding-top: 16px; font-size: 12px; color: #94A3B8;">Otangeles Note+ · Billing Portal PRD v1 · approved Jul 9, 2026 — Phase 1 (shell + re-home) delivered · next: Phase 2, Settings &amp; team.</div>
+
+</div>
+</x-dc>
+</body>
+</html>

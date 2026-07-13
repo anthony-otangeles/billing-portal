@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<div style="max-width: 860px; margin: 0 auto; padding: 48px 40px 80px; display: flex; flex-direction: column; gap: 26px;" data-screen-label="Phase 5 Plan">
+
+  <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 2px solid #7B61FF; padding-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 700;">PLAN — FOR YOUR APPROVAL</span>
+      <span style="font-size: 12px; color: #6B7280;">Jul 11, 2026 · scoped from the billing company's AR report (1,262 claims) + your questionnaire answers</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 700; margin: 0;">Phase 5 — Proactive Coverage Intelligence</h1>
+    <p style="font-size: 14px; line-height: 22px; color: #6B7280; margin: 0;">The AR report is a rear-view mirror: nearly every denial in it traces to a data fact that was knowable <strong>before the visit</strong>. Phase 5 adds a coverage layer where the AI agent verifies every scheduled patient's payer picture ahead of each visit and humans handle only the exceptions — so claims go out clean the first time. Flagship screen ships with this plan: <a href="Coverage.dc.html">Coverage.dc.html</a>.</p>
+  </div>
+
+  <!-- 1 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">1 · What the AR report actually says</h2>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0; color: #0F1B2E;">Of 1,262 claims, 737 were worked ($49.9K balance). Setting aside normal outcomes (paid, correctly moved to secondary/patient — 409 claims, $17.0K), <strong>328 claims / $29.9K across 80 patients are preventable failures</strong>, in seven root-cause buckets:</p>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 1fr 90px 90px 1.2fr; gap: 0; font-size: 12px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 20px; border-bottom: 1px solid #E5E7EB;">
+        <span>Root cause</span><span style="text-align: right;">Claims</span><span style="text-align: right;">Balance</span><span style="padding-left: 20px;">The upstream fact that was missing</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 90px 90px 1.2fr; padding: 10px 20px; border-bottom: 1px solid #F1F5F9; font-size: 13px; line-height: 19px; align-items: center;"><span style="font-weight: 600;">Claim coding rules (DX/CPT/modifier/POS)</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">102</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">$14,042</span><span style="padding-left: 20px; color: #6B7280;">Payer-specific coding requirements — $11.8K is MHS HIP alone (one rule, 84 denials)</span></div>
+      <div style="display: grid; grid-template-columns: 1fr 90px 90px 1.2fr; padding: 10px 20px; border-bottom: 1px solid #F1F5F9; font-size: 13px; line-height: 19px; align-items: center;"><span style="font-weight: 600;">Coordination of benefits</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">47</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">$6,020</span><span style="padding-left: 20px; color: #6B7280;">The patient's full payer stack + primacy order; one COB form outstanding since May 1</span></div>
+      <div style="display: grid; grid-template-columns: 1fr 90px 90px 1.2fr; padding: 10px 20px; border-bottom: 1px solid #F1F5F9; font-size: 13px; line-height: 19px; align-items: center;"><span style="font-weight: 600;">Eligibility (not on file / terminated / bad ID)</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">58</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">$3,912</span><span style="padding-left: 20px; color: #6B7280;">Active coverage at date of service — e.g. a member ID that belongs to a vision plan</span></div>
+      <div style="display: grid; grid-template-columns: 1fr 90px 90px 1.2fr; padding: 10px 20px; border-bottom: 1px solid #F1F5F9; font-size: 13px; line-height: 19px; align-items: center;"><span style="font-weight: 600;">Prior authorization</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">38</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">$3,340</span><span style="padding-left: 20px; color: #6B7280;">Which payers require auth for which services — 28 Anthem + 9 Humana; one missing auth burns many visits</span></div>
+      <div style="display: grid; grid-template-columns: 1fr 90px 90px 1.2fr; padding: 10px 20px; border-bottom: 1px solid #F1F5F9; font-size: 13px; line-height: 19px; align-items: center;"><span style="font-weight: 600;">Billing ops process (timely filing, EOB, posting)</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">27</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">$2,913</span><span style="padding-left: 20px; color: #6B7280;">Deadline tracking + attachment handling — a supervision problem, already partly covered by SLAs</span></div>
+      <div style="display: grid; grid-template-columns: 1fr 90px 90px 1.2fr; padding: 10px 20px; border-bottom: 1px solid #F1F5F9; font-size: 13px; line-height: 19px; align-items: center;"><span style="font-weight: 600;">Provider credentialing (taxonomy, provider info)</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">41</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">$1,539</span><span style="padding-left: 20px; color: #6B7280;">Provider enrollment data per payer — one Medicare taxonomy setup sprayed 35 denials</span></div>
+      <div style="display: grid; grid-template-columns: 1fr 90px 90px 1.2fr; padding: 10px 20px; font-size: 13px; line-height: 19px; align-items: center;"><span style="font-weight: 600;">Coverage status + contract (hospice, capitation, non-covered)</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace;">15</span><span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700;">$1,066</span><span style="padding-left: 20px; color: #6B7280;">Hospice election, capitation agreements, benefit exclusions — who actually pays for this patient</span></div>
+    </div>
+    <div style="background: #F1EEFF; border: 1px solid #D6CCFF; border-radius: 12px; padding: 14px 20px; font-size: 13.5px; line-height: 21px; color: #0F1B2E;"><strong style="color: #5B46D6;">Two insights govern the design.</strong> First, 60% of preventable dollars come from just two failure modes (coding rules + COB). Second, most buckets are <em>one root cause fanning out into dozens of denials</em> — a payer rule, a taxonomy setup, a missing auth. So the system needs two kinds of memory: a <strong>per-patient coverage profile</strong> and a <strong>per-payer rulebook</strong> that turns every denial into a rule that prevents the next one.</p></div>
+  </div>
+
+  <!-- 2 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">2 · The concept — agent verifies, humans handle exceptions</h2>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0; color: #0F1B2E;">Per your answers: the agent runs checks automatically on a <strong>pre-visit schedule</strong>, designed for the ideal data source (real-time 270/271 eligibility + payer portals), and people see only what the agent can't resolve. For every patient on the upcoming schedule, the agent verifies six things:</p>
+    <ul style="margin: 0; padding-left: 22px; font-size: 13.5px; line-height: 21px; display: flex; flex-direction: column; gap: 4px;">
+      <li><strong>Eligibility</strong> — coverage active on the visit date, member ID valid, plan type correct.</li>
+      <li><strong>Payer stack / COB</strong> — all payers known, primacy order confirmed, COB forms current.</li>
+      <li><strong>Prior authorization</strong> — does this payer require auth for the planned service; is one on file.</li>
+      <li><strong>Benefits</strong> — what's covered, visit limits used vs. remaining, deductible/copay state, exhaustion date.</li>
+      <li><strong>Status flags</strong> — hospice election, capitation assignment, MA plan changes.</li>
+      <li><strong>Provider enrollment</strong> — rendering provider credentialed + taxonomy correct with this payer.</li>
+    </ul>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0; color: #0F1B2E;">Every check result lands on the patient's <strong>coverage profile</strong> — your "complete understanding of each patient from an insurance point of view." The end state you described: before a clinician sees the patient, the system already knows who pays, what they pay for, what they require, and how much benefit is left.</p>
+  </div>
+
+  <!-- 3 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">3 · Screens</h2>
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Coverage — pre-visit verification board <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Coverage.dc.html · ships with this plan</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">New top-level section in the Billing Portal. Verification run summary (verified clean / exceptions / re-checking), <strong>practice-wide flags</strong> (fix-once root causes like the Medicare taxonomy setup), and the exception queue — each row shows what the agent found, what it already did, and what it needs from a human. Clicking a row opens the full <strong>patient coverage profile</strong>: payer stack with primacy + status, six-check panel, benefits snapshot, and the agent's activity log. Populated with real cases from the AR report.</p>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Follow-on edits to existing screens <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">next, on your go</span></span>
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Claim Detail</strong> — a "coverage verified" panel: the pre-submission gate result for this claim, linking back to the profile.</li>
+        <li><strong>AR Worklist</strong> — root-cause chip on each denial + "preventable" tally, closing the loop from denial to rule.</li>
+        <li><strong>Analytics</strong> — denial-prevention section: preventable $ trend, first-pass clean-claim rate, rules learned.</li>
+        <li><strong>Agent Inbox</strong> — coverage exceptions join the inbox as a task type, so supervision stays in one place.</li>
+        <li><strong>Nav</strong> — Coverage link added to all Billing Portal side navs.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">4 · Out of scope (later phases)</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li>The payer rulebook as its own management screen (rules are shown where they fire for now).</li>
+      <li>Fee-schedule / expected-reimbursement modeling per payer — the revenue-maximization half of your goal; deserves its own phase once verification is solid.</li>
+      <li>Real 270/271 clearinghouse integration details — screens are designed for the ideal and degrade to portal-verified statuses.</li>
+    </ul>
+  </div>
+
+  <div style="border-top: 1px solid #E5E7EB; padding-top: 16px; font-size: 12px; color: #94A3B8;">Otangeles Note+ · Phase 5 plan — approve, edit, or comment; follow-on edits start on your go.</div>
+
+</div>
+
+</x-dc>
+</body>
+</html>

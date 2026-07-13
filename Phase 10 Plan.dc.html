@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<div style="max-width: 880px; margin: 0 auto; padding: 48px 40px 80px; display: flex; flex-direction: column; gap: 30px;" data-screen-label="Phase 10 Plan">
+
+  <!-- Header -->
+  <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 2px solid #7B61FF; padding-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 700;">PLAN — FOR YOUR APPROVAL</span>
+      <span style="font-size: 12px; color: #6B7280;">Jul 13, 2026 · from the scale &amp; intuitiveness evaluation</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 700; margin: 0;">Phase 10 — Built for Volume, Learnable in a Day</h1>
+    <p style="font-size: 14px; line-height: 22px; color: #6B7280; margin: 0;">Five changes from the evaluation, ordered by leverage. The first two attack both weaknesses at once (scale <em>and</em> intuitiveness); the rest go one level deeper. Each step ships and stops for your review, as always. The tenancy layer stays untouched — it's right.</p>
+  </div>
+
+  <!-- 10.1 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #7B61FF;">10.1</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Global search that actually works</h2>
+      <span style="font-size: 12px; color: #6B7280;">effort M · the single biggest fix for both scale and intuitiveness</span>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px;">
+      <span style="font-size: 13px; line-height: 20px; color: #6B7280;"><strong style="color: #0F1B2E;">Why first:</strong> at 100K claims, search is how anyone finds anything — and today the box is painted on. It's also the intuitiveness fix: a new rep who can type a patient name and land on the right claim doesn't need to understand the nav first.</span>
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>One shared component</strong> (search web component, like the practice/role switchers) dropped into the header of every billing screen — build once, wire everywhere.</li>
+        <li><strong>Searches everything in the stores:</strong> patients, claim IDs, payers, CPT codes, facilities, payer references (EFT/check traces), decision titles.</li>
+        <li><strong>Grouped results panel</strong> with keyboard navigation: Claims · Patients · Payers &amp; Contracts · Payments · Decisions — each row deep-links to the right screen (claim → Claim Detail, payer → Contracts, trace → Payments deposits).</li>
+        <li><strong>Scale behaviors baked in:</strong> result caps with "show all N in Register" overflow rows that land on the Register pre-filtered — search and the Register learn to work together.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 10.2 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #7B61FF;">10.2</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Agent Inbox at volume — grouping &amp; batch approval</h2>
+      <span style="font-size: 12px; color: #6B7280;">effort M · the exception queue has to scale too</span>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px;">
+      <span style="font-size: 13px; line-height: 20px; color: #6B7280;"><strong style="color: #0F1B2E;">Why second:</strong> exception-based supervision only works if the exceptions themselves stay manageable. At hundreds of decisions/day, a flat card list becomes the new backlog.</span>
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Group-by-type view</strong> (default above ~10 open decisions): one row per decision archetype — "Small-balance write-offs (38) · $412 total · all within your threshold" — expandable to the individual cards.</li>
+        <li><strong>Batch approve on uniform groups:</strong> where every member passes the same policy check, one action approves the group; mixed groups force item-by-item. The distinction itself is governance — the agent states why a group is or isn't batchable.</li>
+        <li><strong>Simulated volume day:</strong> a "busy morning" dataset (~60 decisions) behind a toggle, so the demo can show the inbox surviving scale, not just a quiet Tuesday.</li>
+        <li><strong>Routing rule stated in the UI:</strong> a one-line header — "Every approval lives here; queues on Payments/Worklist are working views of the same decisions" — kills the two-front-doors confusion.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 10.3 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #7B61FF;">10.3</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Claims Register — saved views &amp; bulk actions</h2>
+      <span style="font-size: 12px; color: #6B7280;">effort M</span>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px;">
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Saved views:</strong> current filter combination saves under a name ("Secondary denials &gt; $200"), pinned as chips above the table, persisted per person. Ships with 3 starter views.</li>
+        <li><strong>Bulk actions:</strong> checkbox column + action bar on selection — assign to rep, add to worklist, export CSV, request write-off batch. Governed actions route through the Inbox, not around it.</li>
+        <li><strong>Register receives search overflow</strong> from 10.1 (pre-filtered deep links), making it the "show me all N" surface.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 10.4 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #7B61FF;">10.4</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">First-day experience — orientation &amp; glossary</h2>
+      <span style="font-size: 12px; color: #6B7280;">effort S–M · makes "learnable in a day" literal</span>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px;">
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>"How this portal thinks" panel:</strong> a dismissible first-run card on Billing Home — five sentences: the agent works, you decide, everything lands in the Inbox, balances are owned until zero, autonomy is governed. The mental model in 30 seconds.</li>
+        <li><strong>Inline glossary:</strong> one shared term component — dotted underline under 835, PLB, CO-45, MA18, 271, COB, ERA; hover/tap shows a plain-language definition. Applied to the highest-traffic screens (Inbox, Payments, Claim Detail).</li>
+        <li><strong>Zero states with intent:</strong> empty Inbox and clean variance queue get designed states that say what the system is doing ("All clear — the agent is watching 4 crossovers and 2 veto windows"), not blank panels. The clean morning teaches the product.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 10.5 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #7B61FF;">10.5</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Contracts at hundreds of payers</h2>
+      <span style="font-size: 12px; color: #6B7280;">effort M</span>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px;">
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6B7280; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Search-first rate lookup:</strong> type-ahead across the full CPT catalog (simulated at a few hundred codes) replacing the 10-chip row; chips remain as "this practice's top codes" shortcuts.</li>
+        <li><strong>Payer list built for 200:</strong> search + status filters (drift / missing codes / inferred-only / expiring soon), sorted exceptions-first, with a "needs attention" strip replacing the flat 8-row table as the default view.</li>
+        <li><strong>Bulk exhibit import:</strong> the upload modal grows a multi-payer CSV path with a preview-and-confirm step — 40 exhibits land in one action, versioned and attributed like single loads.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Explicitly not doing -->
+  <div style="background: #F1EEFF; border: 1px solid #C9BCF5; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+    <span style="font-size: 13px; font-weight: 700; color: #5B46D6;">Explicitly not in this phase</span>
+    <span style="font-size: 13px; line-height: 20px; color: #0F1B2E;">Tenancy changes (the Ops layer is right) · per-practice contract scoping (worth a future phase if the demo needs it) · nav restructuring (10.1's search + 10.2's routing rule should relieve the 9-item nav; restructure only if they don't).</span>
+  </div>
+
+  <!-- Decisions -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">Decisions I need from you</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 6px;">
+      <li><strong>Approve the order?</strong> 10.1 → 10.2 → 10.3 → 10.4 → 10.5, one step at a time. I'd argue hard for keeping 10.1 and 10.2 first; 10.3–10.5 can be reordered or cut.</li>
+      <li><strong>Busy-morning dataset (10.2):</strong> behind a demo toggle, or made the default state of the Inbox?</li>
+      <li><strong>Glossary reach (10.4):</strong> top-3 screens only (scoped) or portal-wide (slower, more polish)?</li>
+      <li>Anything from the evaluation you weigh differently — or want added?</li>
+    </ul>
+  </div>
+
+</div>
+
+</x-dc>
+</body>
+</html>

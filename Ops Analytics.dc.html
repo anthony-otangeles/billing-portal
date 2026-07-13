@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #FFFFFF; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #22C5A7; }
+  a:hover { color: #0B7D6C; }
+  * { box-sizing: border-box; }
+</style>
+<script src="./claims-store.js"></script>
+<script src="./companies-store.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #FFFFFF; display: flex; flex-direction: column;" data-screen-label="Ops Admin — Analytics">
+
+  <x-import component-from-global-scope="ops-header" from="./ops-shell.js" hint-size="100%,76px"></x-import>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+    <x-import component-from-global-scope="ops-nav" from="./ops-shell.js" active="analytics" hint-size="300px,900px"></x-import>
+
+    <div style="flex: 1; padding: 34px 44px 60px; display: flex; flex-direction: column; gap: 26px; min-width: 0; max-width: 1240px;">
+
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <h1 style="font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 700; color: #7B61FF; margin: 0;">Analytics</h1>
+        <span style="font-size: 15px; color: #6B7280;">Platform-wide usage and health metrics for Operations.</span>
+      </div>
+
+      <!-- Existing platform metrics (condensed) -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 18px;">
+        <div style="border: 1px solid #E5E7EB; border-radius: 14px; padding: 20px 22px; display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 13.5px; font-weight: 600; color: #334155;">Encounters This Week</span>
+          <span style="font-size: 26px; font-weight: 700;">176</span>
+          <span style="font-size: 12px; font-weight: 600; color: #0B7D6C;">+12% vs last week</span>
+        </div>
+        <div style="border: 1px solid #E5E7EB; border-radius: 14px; padding: 20px 22px; display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 13.5px; font-weight: 600; color: #334155;">Scribe Turnaround</span>
+          <span style="font-size: 26px; font-weight: 700;">3.2 hrs</span>
+          <span style="font-size: 12px; font-weight: 600; color: #0B7D6C;">Median, all practices</span>
+        </div>
+        <div style="border: 1px solid #E5E7EB; border-radius: 14px; padding: 20px 22px; display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 13.5px; font-weight: 600; color: #334155;">Active Providers</span>
+          <span style="font-size: 26px; font-weight: 700;">14</span>
+          <span style="font-size: 12px; font-weight: 600; color: #6B7280;">Across 2 practices</span>
+        </div>
+        <div style="border: 1px solid #E5E7EB; border-radius: 14px; padding: 20px 22px; display: flex; flex-direction: column; gap: 2px;">
+          <span style="font-size: 13.5px; font-weight: 600; color: #334155;">Notes Signed</span>
+          <span style="font-size: 26px; font-weight: 700;">148</span>
+          <span style="font-size: 12px; font-weight: 600; color: #0B7D6C;">84% within 24h</span>
+        </div>
+      </div>
+
+      <!-- ===== Revenue Cycle (NEW) ===== -->
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 18px; font-weight: 700; color: #0F1B2E;">Revenue Cycle</span>
+          <span style="font-size: 9px; font-weight: 700; color: #0B7D6C; background: #E6F7F2; border: 1px solid #B9E8DC; border-radius: 9999px; padding: 2px 8px;">NEW</span>
+          <span style="font-size: 13px; color: #6B7280;">AR health per billing company — aggregates only; claim-level detail lives in each company's portal.</span>
+        </div>
+
+        <div style="border: 1px solid #E5E7EB; border-radius: 14px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: 2fr 1.1fr 1.1fr 2.2fr 1.1fr 1.2fr; gap: 12px; padding: 12px 22px; border-bottom: 1px solid #EEF2F7; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.07em;">
+            <span>Billing Company</span><span>Open AR</span><span>Claims Open</span><span>Aging Mix</span><span>PC Ratio</span><span>SLA Compliance</span>
+          </div>
+          <sc-for list="{{ rcRows }}" as="r" hint-placeholder-count="2">
+            <div style="display: grid; grid-template-columns: 2fr 1.1fr 1.1fr 2.2fr 1.1fr 1.2fr; gap: 12px; padding: 16px 22px; border-bottom: 1px solid #EEF2F7; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                <span style="width: 36px; height: 36px; border-radius: 10px; background: #F1EEFF; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                </span>
+                <div style="display: flex; flex-direction: column; gap: 1px; min-width: 0;">
+                  <span style="font-size: 14px; font-weight: 700; color: #0F1B2E; white-space: nowrap;">{{ r.name }}</span>
+                  <span style="font-size: 12px; color: #6B7280;">{{ r.sub }}</span>
+                </div>
+              </div>
+              <span style="font-size: 16px; font-weight: 700; color: #0F1B2E;">{{ r.openAr }}</span>
+              <span style="font-size: 16px; font-weight: 700; color: #0F1B2E;">{{ r.openClaims }}</span>
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <div style="display: flex; height: 9px; border-radius: 9999px; overflow: hidden; background: #F1F5F9;">
+                  <div style="width: {{ r.b0 }}; background: #22C5A7;"></div>
+                  <div style="width: {{ r.b31 }}; background: #F59E0B;"></div>
+                  <div style="width: {{ r.b61 }}; background: #FB923C;"></div>
+                  <div style="width: {{ r.b90 }}; background: #EF4444;"></div>
+                </div>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #94A3B8;">{{ r.agingLabel }}</span>
+              </div>
+              <span style="font-size: 16px; font-weight: 700; color: {{ r.pcColor }};">{{ r.pc }}</span>
+              <span style="display: inline-flex; width: fit-content; padding: 3px 11px; border-radius: 9999px; background: {{ r.slaBg }}; color: {{ r.slaFg }}; font-size: 12px; font-weight: 700;">{{ r.sla }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #94A3B8;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          No patient-level data crosses this boundary. Bell Medics figures are live from the shared claims store; drill-down requires entering the company's portal (audited).
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { ready: false };
+  componentDidMount() {
+    const check = () => {
+      if (window.ClaimsStore && window.CompaniesStore) this.setState({ ready: true });
+      else setTimeout(check, 60);
+    };
+    check();
+  }
+  renderVals() {
+    let rcRows = [];
+    if (this.state.ready) {
+      const CS = window.ClaimsStore;
+      const aIfc = CS.aggregate('ifc'), aWfm = CS.aggregate('wfm');
+      const openAr = aIfc.openAr + aWfm.openAr;
+      const openCount = aIfc.openCount + aWfm.openCount;
+      // Aging mix across both practices
+      const buckets = [0, 0, 0, 0];
+      ['ifc', 'wfm'].forEach(p => CS.openAR(p).forEach(c => {
+        const d = c.age;
+        buckets[d <= 30 ? 0 : d <= 60 ? 1 : d <= 90 ? 2 : 3] += c.balance;
+      }));
+      const total = buckets.reduce((s, n) => s + n, 0) || 1;
+      const pct = buckets.map(b => Math.round(b / total * 100));
+      rcRows = [
+        {
+          key: 'bell', name: 'Bell Medics', sub: '2 practices · live',
+          openAr: CS.moneyK(openAr), openClaims: String(openCount),
+          b0: pct[0] + '%', b31: pct[1] + '%', b61: pct[2] + '%', b90: pct[3] + '%',
+          agingLabel: pct[0] + '% · ' + pct[1] + '% · ' + pct[2] + '% · ' + pct[3] + '% (0-30 → 90+)',
+          pc: '0.87', pcColor: '#0B7D6C',
+          sla: '96%', slaBg: '#E6F7F2', slaFg: '#0B7D6C',
+        },
+        {
+          key: 'meridian', name: 'Meridian Revenue Partners', sub: 'onboarding · no data yet',
+          openAr: '\u2014', openClaims: '\u2014',
+          b0: '0%', b31: '0%', b61: '0%', b90: '0%',
+          agingLabel: 'no claims yet',
+          pc: '\u2014', pcColor: '#94A3B8',
+          sla: 'n/a', slaBg: '#F1F5F9', slaFg: '#6B7280',
+        },
+      ];
+    }
+    return { rcRows };
+  }
+}
+
+</script>
+</body>
+</html>

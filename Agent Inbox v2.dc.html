@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="Agent Inbox v2 (high volume)">
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <div style="margin-left: 16px; flex: 0 1 480px; background: #F8FAFC; border: 1px solid #E5E7EB; border-radius: 5px; height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 14px; font-size: 14px; color: #94A3B8;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+      Search patients, claims, payer refs…
+    </div>
+    <div style="flex: 1;"></div>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <div style="display: flex; align-items: center; gap: 10px; margin-left: 4px; cursor: pointer;">
+      <div style="width: 36px; height: 36px; border-radius: 9999px; background: linear-gradient(#7B61FF, #22C5A7); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px;">SN</div>
+      <div style="display: flex; flex-direction: column;">
+        <span style="font-weight: 700; font-size: 13px; color: #0F1B2E;">Stella Ngozi</span>
+        <span style="font-size: 11px; color: #6B7280;">Billing Clerk</span>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+    </div>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav ===== -->
+    <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700;" style-hover="background: #F1F5F9;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10H3"></path><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect></svg>
+        Schedules
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700;" style-hover="background: #F1F5F9;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path></svg>
+        Calendar
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700;" style-hover="background: #F1F5F9;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+        Workflows
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700;" style-hover="background: #F1F5F9;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        Directory
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Billing
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px; padding-left: 26px;">
+          <div style="padding: 8px 14px; border-radius: 4px; background: #F1EEFF; color: #5B46D6; font-size: 13px; font-weight: 700; cursor: pointer;">Agent Inbox</div>
+          <a href="Claim Detail.dc.html" style="padding: 8px 14px; border-radius: 4px; color: #6B7280; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none;" style-hover="background: #F1F5F9;">Claims</a>
+        </div>
+      </div>
+      <div style="flex: 1;"></div>
+      <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+        <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+        Reach the billing support desk 24/7.
+      </div>
+    </div>
+
+    <!-- ===== Main content ===== -->
+    <div style="flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+
+      <!-- Page title -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <h1 style="font-size: 24px; font-weight: 700; margin: 0;">Agent Inbox</h1>
+        <span style="font-size: 13px; color: #6B7280;">Today · Tue, Jul 7 2026 · All Locations</span>
+        <div style="flex: 1;"></div>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 12px; font-weight: 600;">{{ needsChipText }}</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: {{ breachBg }}; color: {{ breachFg }}; font-size: 12px; font-weight: 600;">{{ breachChipText }}</span>
+      </div>
+
+      <!-- ===== Pipeline throughput strip ===== -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: baseline; gap: 10px;">
+          <span style="font-size: 20px; font-weight: 700; color: #0F1B2E;">{{ volText }}</span>
+          <span style="font-size: 13px; color: #6B7280;">claims in the pipeline today</span>
+          <div style="flex: 1;"></div>
+          <span style="font-size: 13px; font-weight: 700; color: #109680;">{{ autoRateText }}</span>
+          <span style="font-size: 12px; color: #94A3B8;">handled without human touch</span>
+        </div>
+        <div style="display: flex; height: 10px; border-radius: 9999px; overflow: hidden; background: #F1F5F9;">
+          <div style="width: {{ segDoneW }}; background: #22C5A7; transition: width 240ms ease-out;"></div>
+          <div style="width: {{ segWorkW }}; background: #7B61FF; transition: width 240ms ease-out;"></div>
+          <div style="width: {{ segNeedsW }}; background: #FF6E6C; transition: width 240ms ease-out;"></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px; font-size: 12px; color: #6B7280;">
+          <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 9999px; background: #22C5A7;"></span><strong style="color: #0F1B2E;">{{ doneCountText }}</strong> done today</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 9999px; background: #7B61FF;"></span><strong style="color: #0F1B2E;">{{ workCountText }}</strong> agents working — no action needed</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C;"></span><strong style="color: #0F1B2E;">{{ needsCountText }}</strong> need a human decision</span>
+          <div style="flex: 1;"></div>
+          <span style="color: #94A3B8;">{{ decisionsHint }}</span>
+        </div>
+      </div>
+
+      <!-- ===== Tabs ===== -->
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="3">
+          <button onClick="{{ tb.onClick }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 9999px; border: 1px solid {{ tb.border }}; background: {{ tb.bg }}; color: {{ tb.fg }}; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 150ms ease-out;">{{ tb.label }}<span style="display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: {{ tb.badgeBg }}; color: {{ tb.badgeFg }}; font-size: 11px; font-weight: 700;">{{ tb.count }}</span></button>
+        </sc-for>
+      </div>
+
+      <!-- ===== EMPTY (healthy) STATE ===== -->
+      <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 16px; padding: 72px 32px; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center;">
+          <div style="width: 64px; height: 64px; border-radius: 9999px; background: #E6F7F2; display: flex; align-items: center; justify-content: center;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; max-width: 480px;">
+            <div style="font-size: 20px; font-weight: 700; color: #0F1B2E;">Nothing needs you right now.</div>
+            <div style="font-size: 14px; color: #6B7280; line-height: 21px;">Your agents handled everything overnight. New exceptions will appear here the moment an agent needs a human decision.</div>
+          </div>
+          <div style="display: flex; align-items: stretch; gap: 12px; margin-top: 8px;">
+            <div style="display: flex; flex-direction: column; gap: 4px; padding: 16px 28px; border-radius: 12px; background: #F1EEFF; min-width: 150px;">
+              <span style="font-size: 24px; font-weight: 700; color: #5B46D6;">{{ volText }}</span>
+              <span style="font-size: 12px; font-weight: 600; color: #5B46D6;">Claims processed today</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px; padding: 16px 28px; border-radius: 12px; background: #E6F7F2; min-width: 150px;">
+              <span style="font-size: 24px; font-weight: 700; color: #109680;">{{ emptyPaidText }}</span>
+              <span style="font-size: 12px; font-weight: 600; color: #109680;">Paid &amp; closed</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px; padding: 16px 28px; border-radius: 12px; background: #F8FAFC; border: 1px solid #E5E7EB; min-width: 150px;">
+              <span style="font-size: 24px; font-weight: 700; color: #6B7280;">0</span>
+              <span style="font-size: 12px; font-weight: 600; color: #6B7280;">Exceptions open</span>
+            </div>
+          </div>
+          <a href="Claim Detail.dc.html" style="font-size: 13px; font-weight: 600; color: #7B61FF; text-decoration: none; margin-top: 4px;">Review today's activity →</a>
+        </div>
+      </sc-if>
+
+      <!-- ===== TAB: NEEDS YOU ===== -->
+      <sc-if value="{{ tabNeeds }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; gap: 16px; align-items: flex-start; min-width: 0;">
+
+          <!-- Left: clusters + singles queue -->
+          <div style="flex: 55 1 0; min-width: 0; display: flex; flex-direction: column; gap: 14px;">
+
+            <!-- Root-cause clusters -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">Grouped by root cause</span>
+                <span style="font-size: 12px; color: #6B7280;">{{ clusterSummary }}</span>
+              </div>
+              <sc-for list="{{ clusterCards }}" as="cc" hint-placeholder-count="3">
+                <div onClick="{{ cc.onClick }}" style="display: flex; align-items: center; gap: 14px; background: #FFFFFF; border: 1px solid {{ cc.border }}; border-left: 3px solid {{ cc.bar }}; border-radius: 12px; padding: 12px 16px; cursor: pointer; transition: border-color 150ms ease-out;">
+                  <div style="width: 44px; height: 44px; border-radius: 10px; background: {{ cc.tileBg }}; color: {{ cc.tileFg }}; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; flex-shrink: 0;">{{ cc.count }}</div>
+                  <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">{{ cc.title }}</span>
+                      <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: {{ cc.typeBg }}; color: {{ cc.typeFg }}; font-size: 10px; font-weight: 700;">{{ cc.type }}</span>
+                    </div>
+                    <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ cc.desc }}</span>
+                  </div>
+                  <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0;">
+                    <span style="font-size: 13px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums;">{{ cc.valueText }}</span>
+                    <span style="font-size: 11px; font-weight: 600; color: #7B61FF;">1 decision clears {{ cc.count }} →</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+
+            <!-- Singles -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">Individual exceptions</span>
+                <span style="font-size: 12px; color: #6B7280;">{{ singleCountText }}</span>
+                <div style="flex: 1;"></div>
+                <sc-for list="{{ typeChips }}" as="chip" hint-placeholder-count="5">
+                  <button onClick="{{ chip.onClick }}" style="padding: 4px 11px; border-radius: 9999px; border: 1px solid {{ chip.border }}; background: {{ chip.bg }}; color: {{ chip.fg }}; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 150ms ease-out;">{{ chip.label }}</button>
+                </sc-for>
+              </div>
+
+              <sc-if value="{{ anyChecked }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; align-items: center; gap: 10px; background: #0F1B2E; border-radius: 8px; padding: 8px 14px;">
+                  <span style="font-size: 12px; font-weight: 700; color: #FFFFFF;">{{ checkedCountText }}</span>
+                  <div style="flex: 1;"></div>
+                  <button onClick="{{ bulkApprove }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 5px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 12px; font-weight: 700; cursor: pointer;" style-hover="background: #109680;">Approve recommended actions</button>
+                  <button onClick="{{ bulkEscalate }}" style="padding: 7px 14px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.3); background: transparent; color: #FFFFFF; font-size: 12px; font-weight: 600; cursor: pointer;">Escalate</button>
+                  <button onClick="{{ bulkClear }}" style="padding: 7px 10px; border-radius: 5px; border: none; background: transparent; color: #94A3B8; font-size: 12px; font-weight: 600; cursor: pointer;">Clear</button>
+                </div>
+              </sc-if>
+
+              <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+                <div style="display: grid; grid-template-columns: 30px 42px 92px minmax(140px, 1fr) 104px 82px 100px; gap: 8px; align-items: center; padding: 9px 14px; background: #7B61FF;">
+                  <input type="checkbox" checked="{{ allChecked }}" onChange="{{ toggleAll }}" style="width: 14px; height: 14px; accent-color: #FFFFFF; cursor: pointer;">
+                  <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Pri</span>
+                  <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Type</span>
+                  <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Patient / Claim</span>
+                  <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Payer</span>
+                  <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Value</span>
+                  <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">SLA</span>
+                </div>
+                <div style="max-height: 420px; overflow-y: auto;">
+                  <sc-for list="{{ singleRows }}" as="row" hint-placeholder-count="5">
+                    <div style="display: grid; grid-template-columns: 30px 42px 92px minmax(140px, 1fr) 104px 82px 100px; gap: 8px; align-items: center; padding: 8px 14px 8px 11px; border-bottom: 1px solid #EEEEEE; border-left: 3px solid {{ row.barColor }}; background: {{ row.rowBg }}; cursor: pointer; transition: background 120ms ease-out;">
+                      <input type="checkbox" checked="{{ row.checked }}" onChange="{{ row.onCheck }}" style="width: 14px; height: 14px; accent-color: #7B61FF; cursor: pointer;">
+                      <span onClick="{{ row.onClick }}" style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; color: {{ row.priColor }};"><span style="width: 8px; height: 8px; border-radius: 9999px; background: {{ row.priColor }}; flex-shrink: 0;"></span>{{ row.pri }}</span>
+                      <span onClick="{{ row.onClick }}"><span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: {{ row.typeBg }}; color: {{ row.typeFg }}; font-size: 11px; font-weight: 600; white-space: nowrap;">{{ row.type }}</span></span>
+                      <span onClick="{{ row.onClick }}" style="display: flex; flex-direction: column; gap: 1px; min-width: 0;">
+                        <span style="font-size: 13px; font-weight: 600; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.patient }}</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #6B7280;">{{ row.claim }}</span>
+                      </span>
+                      <span onClick="{{ row.onClick }}" style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.payer }}</span>
+                      <span onClick="{{ row.onClick }}" style="font-size: 13px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums; text-align: right;">{{ row.amtStr }}</span>
+                      <span onClick="{{ row.onClick }}" style="display: inline-flex; padding: 3px 8px; border-radius: 9999px; background: {{ row.slaBg }}; color: {{ row.slaFg }}; font-size: 10px; font-weight: 700; white-space: nowrap; justify-self: start;">{{ row.sla }}</span>
+                    </div>
+                  </sc-for>
+                  <sc-if value="{{ noSingles }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding: 28px; text-align: center; font-size: 13px; color: #94A3B8;">No individual exceptions match the current filter.</div>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ showHints }}" hint-placeholder-val="{{ true }}">
+                  <div style="display: flex; align-items: center; gap: 16px; padding: 9px 14px; background: #F9FAFB; border-top: 1px solid #EEEEEE; font-size: 11px; color: #94A3B8;">
+                    <span style="display: inline-flex; align-items: center; gap: 5px;"><kbd style="font-family: 'JetBrains Mono', monospace; font-size: 10px; background: #FFFFFF; border: 1px solid #D1D5DC; border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; color: #6B7280;">j</kbd><kbd style="font-family: 'JetBrains Mono', monospace; font-size: 10px; background: #FFFFFF; border: 1px solid #D1D5DC; border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; color: #6B7280;">k</kbd> navigate</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px;"><kbd style="font-family: 'JetBrains Mono', monospace; font-size: 10px; background: #FFFFFF; border: 1px solid #D1D5DC; border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; color: #6B7280;">a</kbd> approve selected</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px;"><kbd style="font-family: 'JetBrains Mono', monospace; font-size: 10px; background: #FFFFFF; border: 1px solid #D1D5DC; border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; color: #6B7280;">x</kbd> escalate</span>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: detail panel -->
+          <div style="flex: 45 1 0; min-width: 0; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden; position: sticky; top: 16px;">
+
+            <!-- Cluster detail -->
+            <sc-if value="{{ detailIsCluster }}" hint-placeholder-val="{{ true }}">
+              <div data-screen-label="Detail: cluster">
+                <div style="padding: 20px 20px 16px; border-bottom: 1px solid #EEEEEE; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 16px; font-weight: 700; color: #0F1B2E;">{{ detail.title }}</span>
+                    <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: {{ detail.typeBg }}; color: {{ detail.typeFg }}; font-size: 11px; font-weight: 600;">{{ detail.type }}</span>
+                    <div style="flex: 1;"></div>
+                    <span style="display: inline-flex; padding: 4px 10px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">{{ detail.countText }}</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: #6B7280;">
+                    <span style="font-weight: 700; color: #0F1B2E; font-size: 14px;">{{ detail.valueText }}</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg>Raised by {{ detail.agent }}</span>
+                  </div>
+                </div>
+                <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 16px;">
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">What happened</span>
+                    <div style="background: #F1EEFF; border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 20px; color: #0F1B2E;">{{ detail.narrative }}</div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Evidence</span>
+                    <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden;">
+                      <sc-for list="{{ detailEvidence }}" as="ev" hint-placeholder-count="3">
+                        <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #EEEEEE;">
+                          <span style="font-size: 12px; font-weight: 600; color: #6B7280; width: 140px; flex-shrink: 0;">{{ ev.k }}</span>
+                          <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 4px; background: {{ ev.vBg }}; color: {{ ev.vFg }};">{{ ev.v }}</span>
+                          <span style="font-size: 11px; color: #94A3B8;">{{ ev.note }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Affected claims</span>
+                    <div style="border: 1px solid #E5E7EB; border-radius: 8px; max-height: 168px; overflow-y: auto;">
+                      <sc-for list="{{ detailAffected }}" as="ac" hint-placeholder-count="5">
+                        <div style="display: flex; align-items: center; gap: 10px; padding: 7px 14px; border-bottom: 1px solid #EEEEEE; font-size: 12px;">
+                          <a href="Claim Detail.dc.html" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #7B61FF; text-decoration: none; flex-shrink: 0;">{{ ac.claim }}</a>
+                          <span style="color: #0F1B2E; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">{{ ac.patient }}</span>
+                          <span style="font-family: 'JetBrains Mono', monospace; color: #6B7280; font-variant-numeric: tabular-nums;">{{ ac.amtStr }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Recommended action</span>
+                    <button onClick="{{ detailAction }}" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px 20px; border-radius: 8px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #109680;">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                      {{ detail.actionLabel }}
+                      <kbd style="font-family: 'JetBrains Mono', monospace; font-size: 11px; background: rgba(255,255,255,0.22); border-radius: 4px; padding: 2px 7px; font-weight: 700;">a</kbd>
+                    </button>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <button onClick="{{ actReviewEach }}" style="flex: 1; padding: 9px 14px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Review individually</button>
+                      <button onClick="{{ actEscalate }}" style="flex: 1; padding: 9px 14px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Escalate to billing lead</button>
+                    </div>
+                    <span style="font-size: 11px; color: #94A3B8; text-align: center;">One decision — logged to every affected claim's timeline under your name.</span>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- Single detail -->
+            <sc-if value="{{ detailIsSingle }}" hint-placeholder-val="{{ false }}">
+              <div data-screen-label="Detail: single exception">
+                <div style="padding: 20px 20px 16px; border-bottom: 1px solid #EEEEEE; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 16px; font-weight: 700; color: #0F1B2E;">{{ detail.patient }}</span>
+                    <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: {{ detail.typeBg }}; color: {{ detail.typeFg }}; font-size: 11px; font-weight: 600;">{{ detail.type }}</span>
+                    <div style="flex: 1;"></div>
+                    <span style="display: inline-flex; padding: 4px 10px; border-radius: 9999px; background: {{ detail.slaBg }}; color: {{ detail.slaFg }}; font-size: 11px; font-weight: 700;">SLA · {{ detail.sla }}</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: #6B7280;">
+                    <a href="Claim Detail.dc.html" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #7B61FF;">{{ detail.claim }}</a>
+                    <span style="font-weight: 700; color: #0F1B2E; font-size: 14px;">{{ detail.amtStr }}</span>
+                    <span>{{ detail.payer }}</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg>Raised by {{ detail.agent }}</span>
+                  </div>
+                </div>
+                <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 16px;">
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">What happened</span>
+                    <div style="background: #F1EEFF; border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 20px; color: #0F1B2E;">{{ detail.narrative }}</div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Evidence</span>
+                    <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden;">
+                      <sc-for list="{{ detailEvidence }}" as="ev" hint-placeholder-count="3">
+                        <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #EEEEEE;">
+                          <span style="font-size: 12px; font-weight: 600; color: #6B7280; width: 140px; flex-shrink: 0;">{{ ev.k }}</span>
+                          <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 4px; background: {{ ev.vBg }}; color: {{ ev.vFg }};">{{ ev.v }}</span>
+                          <span style="font-size: 11px; color: #94A3B8;">{{ ev.note }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                      <a href="#" style="font-size: 12px; font-weight: 600; color: #7B61FF; text-decoration: none;">Source note ↗</a>
+                      <a href="Claim Detail.dc.html" style="font-size: 12px; font-weight: 600; color: #7B61FF; text-decoration: none;">Full claim timeline ↗</a>
+                    </div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Recommended action</span>
+                    <button onClick="{{ detailAction }}" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px 20px; border-radius: 8px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #109680;">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                      {{ detail.actionLabel }}
+                      <kbd style="font-family: 'JetBrains Mono', monospace; font-size: 11px; background: rgba(255,255,255,0.22); border-radius: 4px; padding: 2px 7px; font-weight: 700;">a</kbd>
+                    </button>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <button onClick="{{ actEdit }}" style="flex: 1; padding: 9px 14px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Edit</button>
+                      <button onClick="{{ actRetry }}" style="flex: 1; padding: 9px 14px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Retry</button>
+                      <button onClick="{{ actSendBack }}" style="flex: 1; padding: 9px 14px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Send back</button>
+                      <button onClick="{{ actEscalate }}" style="flex: 1; padding: 9px 14px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Escalate</button>
+                    </div>
+                    <span style="font-size: 11px; color: #94A3B8; text-align: center;">One click — logged to the claim timeline under your name.</span>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- Resolved confirmation -->
+            <sc-if value="{{ detailIsResolved }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 48px 32px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;" data-screen-label="Detail: resolved confirmation">
+                <div style="width: 52px; height: 52px; border-radius: 9999px; background: #E6F7F2; display: flex; align-items: center; justify-content: center;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                </div>
+                <span style="font-size: 17px; font-weight: 700; color: #0F1B2E;">{{ resolvedTitle }}</span>
+                <span style="font-size: 13px; color: #6B7280; line-height: 20px; max-width: 400px;">{{ resolvedBody }}</span>
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
+                  <button onClick="{{ undoResolve }}" style="padding: 9px 16px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 13px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Undo</button>
+                  <a href="Claim Detail.dc.html" style="padding: 9px 16px; border-radius: 4px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 13px; font-weight: 700; text-decoration: none;" style-hover="background: #F1EEFF;">View claim timeline</a>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- Nothing selected -->
+            <sc-if value="{{ detailIsNone }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 48px 32px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;">
+                <span style="font-size: 14px; font-weight: 700; color: #0F1B2E;">Queue clear</span>
+                <span style="font-size: 13px; color: #6B7280;">Select an item on the left, or switch tabs to watch your agents work.</span>
+              </div>
+            </sc-if>
+
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== TAB: AGENTS WORKING ===== -->
+      <sc-if value="{{ tabWorking }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 10px; min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 10px; background: #F1EEFF; border-radius: 8px; padding: 10px 14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg>
+            <span style="font-size: 12px; color: #5B46D6; line-height: 18px;"><strong>No action needed.</strong> These claims are moving through the pipeline on their own — an agent will raise an exception to Needs You only if it gets blocked.</span>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 118px minmax(150px, 1fr) 140px 84px 200px minmax(180px, 1.2fr) 90px; gap: 8px; align-items: center; padding: 9px 16px; background: #7B61FF;">
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Claim</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Patient</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Payer</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Value</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Agent</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Current step</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">ETA</span>
+            </div>
+            <div style="max-height: 560px; overflow-y: auto;">
+              <sc-for list="{{ workingRows }}" as="w" hint-placeholder-count="8">
+                <div style="display: grid; grid-template-columns: 118px minmax(150px, 1fr) 140px 84px 200px minmax(180px, 1.2fr) 90px; gap: 8px; align-items: center; padding: 7px 16px; border-bottom: 1px solid #EEEEEE;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">{{ w.claim }}</span>
+                  <span style="font-size: 12px; font-weight: 600; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ w.patient }}</span>
+                  <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ w.payer }}</span>
+                  <span style="font-size: 12px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums; text-align: right;">{{ w.amtStr }}</span>
+                  <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: #5B46D6;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg>{{ w.agent }}</span>
+                  <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: #0F1B2E;"><span style="width: 7px; height: 7px; border-radius: 9999px; background: #7B61FF; flex-shrink: 0;"></span>{{ w.step }}</span>
+                  <span style="font-size: 11px; color: #94A3B8;">{{ w.eta }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== TAB: DONE TODAY ===== -->
+      <sc-if value="{{ tabDone }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 10px; min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 20px; border-radius: 12px; background: #E6F7F2; min-width: 140px;">
+              <span style="font-size: 20px; font-weight: 700; color: #109680;">{{ donePaidText }}</span>
+              <span style="font-size: 11px; font-weight: 600; color: #109680;">Paid &amp; closed</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 20px; border-radius: 12px; background: #F1EEFF; min-width: 140px;">
+              <span style="font-size: 20px; font-weight: 700; color: #5B46D6;">{{ doneSubText }}</span>
+              <span style="font-size: 11px; font-weight: 600; color: #5B46D6;">Submitted / accepted</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 20px; border-radius: 12px; background: #F8FAFC; border: 1px solid #E5E7EB; min-width: 140px;">
+              <span style="font-size: 20px; font-weight: 700; color: #6B7280;">{{ doneValueText }}</span>
+              <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Total value moved</span>
+            </div>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 118px minmax(150px, 1fr) 150px 90px 150px 100px; gap: 8px; align-items: center; padding: 9px 16px; background: #7B61FF;">
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Claim</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Patient</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Payer</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Value</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Outcome</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Time</span>
+            </div>
+            <div style="max-height: 560px; overflow-y: auto;">
+              <sc-for list="{{ doneRows }}" as="d" hint-placeholder-count="8">
+                <div style="display: grid; grid-template-columns: 118px minmax(150px, 1fr) 150px 90px 150px 100px; gap: 8px; align-items: center; padding: 7px 16px; border-bottom: 1px solid #EEEEEE;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">{{ d.claim }}</span>
+                  <span style="font-size: 12px; font-weight: 600; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ d.patient }}</span>
+                  <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ d.payer }}</span>
+                  <span style="font-size: 12px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums; text-align: right;">{{ d.amtStr }}</span>
+                  <span><span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: {{ d.outBg }}; color: {{ d.outFg }}; font-size: 10px; font-weight: 700;">{{ d.outcome }}</span></span>
+                  <span style="font-size: 11px; color: #94A3B8;">{{ d.time }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <sc-if value="{{ toastVisible }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 6px -4px rgba(0,0,0,0.1), 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50;">{{ toast }}</div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;dailyVolume&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 180, &quot;min&quot;: 60, &quot;max&quot;: 240, &quot;step&quot;: 20, &quot;unit&quot;: &quot; claims&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Stress test&quot; },
+  &quot;emptyState&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Inbox state&quot; },
+  &quot;showHints&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Inbox state&quot; }
+}">
+class Component extends DCLogic {
+  state = {
+    tab: 'needs',
+    selected: 'c-zip',
+    checked: {},
+    resolved: {},
+    typeFilter: 'All',
+    toast: '',
+  };
+
+  componentDidMount() {
+    this._onKey = (e) => {
+      const t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (this.props.emptyState || this.state.tab !== 'needs') return;
+      const d = this.data();
+      const ids = d.singles.filter(s => !this.state.resolved['s-' + s.id]).map(s => 's-' + s.id);
+      if (e.key === 'j' || e.key === 'k') {
+        if (!ids.length) return;
+        const idx = ids.indexOf(this.state.selected);
+        const next = e.key === 'j' ? ids[Math.min(idx + 1, ids.length - 1)] : ids[Math.max(idx - 1, 0)];
+        if (idx === -1) this.setState({ selected: ids[0] });
+        else this.setState({ selected: next });
+      } else if (e.key === 'a') {
+        this.approveSelected();
+      } else if (e.key === 'x') {
+        this.showToast('Escalated to billing lead (demo)');
+      }
+    };
+    window.addEventListener('keydown', this._onKey);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this._onKey);
+    clearTimeout(this._toastTimer);
+  }
+
+  money(n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+  data() {
+    const vol = this.props.dailyVolume ?? 180;
+    if (this._data && this._vol === vol) return this._data;
+    let seed = 1234;
+    const rnd = () => {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+    const pick = a => a[Math.floor(rnd() * a.length)];
+    const LAST = ['RILEY','MELTINOS','WILSON','HOLLOWAY','OKONKWO','ADEYEMI','VASQUEZ','KOWALSKI','TRAN','PETERSEN','GALLAGHER','NAKAMURA','OSEI','LINDQVIST','MORALES','CZARNECKI','ABERNATHY','DUBOIS','FITZGERALD','IBRAHIM','KETTERING','LOVELACE','MBEKI','NOVAK','OYELARAN','PRICE','QUINTERO','ROSSI','SANTIAGO','THIBODEAUX','UPDIKE','VANCE','WHITFIELD','YODER','ZIELINSKI'];
+    const FIRST = ['DIERDRE','MARCY','DANNY','ERNEST','GRACE','HAROLD','IRENE','JOSEPH','KAREN','LEONARD','MARGARET','NORMAN','OPAL','PHILLIP','RUTH','STANLEY','THELMA','VERNON','WANDA','EUGENE'];
+    const PAYERS = ['Medicare (WPS J8)','Medicare (WPS J8)','Medicare (WPS J8)','Medicare (WPS J8)','Indiana Medicaid','Indiana Medicaid','Humana MA PPO','UHC Medicare Adv.','Anthem BCBS','Aetna MA HMO'];
+    let n = 0;
+    const mk = () => {
+      n++;
+      const amt = Math.round((68 + rnd() * 255) * 100) / 100;
+      return {
+        id: n,
+        claim: 'ENCT' + String(600 + n).padStart(7, '0') + '-01',
+        patient: pick(LAST) + ', ' + pick(FIRST) + ' ' + String.fromCharCode(65 + Math.floor(rnd() * 26)) + '.',
+        payer: pick(PAYERS),
+        amt, amtStr: this.money(amt),
+      };
+    };
+
+    const excN = Math.max(8, Math.round(vol * 0.17));
+    const doneN = Math.round(vol * 0.31);
+    const workN = vol - excN - doneN;
+    let zipN = Math.round(excN * 0.38);
+    let portalN = Math.round(excN * 0.28);
+    let seqN = Math.max(2, Math.round(excN * 0.16));
+    let singleN = excN - zipN - portalN - seqN;
+    if (singleN < 4) { zipN -= (4 - singleN); singleN = 4; }
+
+    const mkCluster = (count, payerFix, slaFn) => {
+      const items = [];
+      for (let i = 0; i < count; i++) {
+        const c = mk();
+        if (payerFix) c.payer = payerFix;
+        Object.assign(c, slaFn(i));
+        items.push(c);
+      }
+      return items;
+    };
+
+    const zipItems = mkCluster(zipN, 'Medicare (WPS J8)', () => ({ sla: Math.floor(3 + rnd() * 6) + 'h left', breached: false }));
+    const portalItems = mkCluster(portalN, 'Indiana Medicaid', (i) => (
+      i < Math.ceil(portalN / 3)
+        ? { sla: 'Breached ' + (1 + Math.floor(rnd() * 3)) + 'h ago', breached: true }
+        : { sla: Math.floor(1 + rnd() * 4) + 'h left', breached: false }
+    ));
+    const seqItems = mkCluster(seqN, 'Medicare (WPS J8)', () => ({ sla: '1d+ left', breached: false }));
+    seqItems.forEach(c => { c.amt = Math.round(c.amt * 2) / 100; c.amtStr = this.money(c.amt); });
+
+    const zipTotal = zipItems.reduce((s, c) => s + c.amt, 0);
+    const portalTotal = portalItems.reduce((s, c) => s + c.amt, 0);
+    const seqTotal = seqItems.reduce((s, c) => s + c.amt, 0);
+
+    const clusters = [
+      {
+        key: 'c-zip', type: 'Validation', typeBg: '#F1EEFF', typeFg: '#5B46D6', tileBg: '#F1EEFF', tileFg: '#5B46D6',
+        title: 'Medicare ZIP+4 validation — rule MCR-J8 · 214',
+        desc: 'Billing provider ZIP is 5 digits; Medicare requires ZIP+4. Same fix applies to every claim.',
+        agent: 'Claim Validation Agent',
+        narrative: 'I generated ' + zipN + ' Medicare claims from signed notes overnight, and all ' + zipN + ' failed the same validation rule: the billing provider address ZIP code is 5 digits (49120) and Medicare requires 9 (ZIP+4). The facility record confirms 49120-3414. One approval applies the fix to every claim and revalidates the batch.',
+        evidence: [
+          { k: 'Rule that fired', v: 'MCR-J8 · 214', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Billing provider ZIP must be 9-digit ZIP+4' },
+          { k: 'Current → fix', v: '49120 → 49120-3414', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Matches facility record' },
+          { k: 'Blast radius', v: zipN + ' claims', vBg: '#F1EEFF', vFg: '#5B46D6', note: 'All Medicare (WPS J8), same billing address' },
+        ],
+        items: zipItems, total: zipTotal,
+        actionLabel: 'Approve fix for all ' + zipN + ' claims & revalidate',
+        resolvedTitle: 'Fix applied to ' + zipN + ' claims',
+        resolvedBody: 'ZIP 49120-3414 applied across the batch. The Claim Validation Agent is revalidating all ' + zipN + ' claims and will submit each automatically once rules pass. Logged to every claim timeline under your name.',
+        toast: zipN + ' claims fixed — revalidating batch',
+      },
+      {
+        key: 'c-portal', type: 'Rejection', typeBg: '#FEECEC', typeFg: '#DC2626', tileBg: '#FEECEC', tileFg: '#DC2626',
+        title: 'Clearinghouse rejections — Indiana Medicaid gateway outage',
+        desc: '277CA rejections A7·21 between 2:10–2:35 AM. Gateway back online; retest accepted.',
+        agent: 'Submission Agent',
+        narrative: 'Availity returned 277CA rejections for ' + portalN + ' Indiana Medicaid claims submitted between 2:10 and 2:35 AM — error A7·21 (payer system unavailable). The payer gateway came back at 6:00 AM; I re-tested one claim and it was accepted. Nothing is wrong with the claims themselves — I recommend resubmitting the batch.',
+        evidence: [
+          { k: 'Reject code', v: 'A7 · 21', vBg: '#FEECEC', vFg: '#DC2626', note: 'Payer system unavailable' },
+          { k: 'Outage window', v: '2:10–2:35 AM', vBg: '#F8FAFC', vFg: '#6B7280', note: 'All ' + portalN + ' rejections fall in this window' },
+          { k: 'Retest', v: 'Accepted 6:04 AM', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Probe claim went through clean' },
+        ],
+        items: portalItems, total: portalTotal,
+        actionLabel: 'Resubmit all ' + portalN + ' claims',
+        resolvedTitle: portalN + ' claims resubmitted',
+        resolvedBody: 'The Submission Agent is refiling the batch and will confirm 277CA acceptance per claim. Any claim rejected again will come back here as an individual exception. Logged under your name.',
+        toast: portalN + ' claims resubmitted to Indiana Medicaid',
+      },
+      {
+        key: 'c-seq', type: 'Variance', typeBg: '#FEF3DF', typeFg: '#B45309', tileBg: '#FEF3DF', tileFg: '#B45309',
+        title: 'Sequestration variance — CO-253 not in expectation model',
+        desc: 'Every variance is exactly 2% of the paid amount. Accept all and update the model.',
+        agent: 'Payment Reconciliation Agent',
+        narrative: 'Medicare applied CO-253 sequestration (a federal 2% payment reduction) to ' + seqN + ' remittances in this morning\u2019s 835 file. My expectation model v3.2 predates the reinstated reduction, so each one flagged as an underpayment. Every variance is exactly 2.00% — I recommend accepting all ' + seqN + ' and updating the model so this stops flagging.',
+        evidence: [
+          { k: 'Adjustment code', v: 'CO-253', vBg: '#FEF3DF', vFg: '#B45309', note: 'Sequestration — federal 2% reduction' },
+          { k: 'Pattern', v: '2.00% on all', vBg: '#F8FAFC', vFg: '#6B7280', note: 'No outliers in the set' },
+          { k: 'Total variance', v: this.money(seqTotal), vBg: '#F8FAFC', vFg: '#6B7280', note: 'Across ' + seqN + ' remittances' },
+        ],
+        items: seqItems, total: seqTotal,
+        actionLabel: 'Accept all ' + seqN + ' variances & update model',
+        resolvedTitle: seqN + ' variances accepted',
+        resolvedBody: 'All ' + seqN + ' claims closed with the CO-253 adjustment posted. Expectation model updated to v3.3 with the 2% sequestration reduction — future remittances will not flag. Logged under your name.',
+        toast: seqN + ' variances accepted — model updated to v3.3',
+      },
+    ];
+
+    const archetypes = [
+      {
+        type: 'Denial', typeBg: '#FEECEC', typeFg: '#DC2626', pri: 'HIGH', priColor: '#EF4444',
+        agent: 'Denial Triage Agent', actionLabel: 'Approve corrected claim — submit replacement',
+        narrative: (c) => 'The payer denied this claim with CO-16 (claim lacks information). Remark code MA61 points to a truncated member ID — the chart shows 11 digits, the eligibility response shows 12. I recommend correcting the member ID and submitting a replacement claim.',
+        evidence: (c) => [
+          { k: 'Denial codes', v: 'CO-16 · MA61', vBg: '#FEECEC', vFg: '#DC2626', note: 'Missing or incomplete member ID' },
+          { k: 'Member ID', v: '…5621 → …56212', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'From eligibility (271)' },
+          { k: 'Payer claim #', v: '2126IN4' + (7000 + c.id), vBg: '#F8FAFC', vFg: '#6B7280', note: 'Captured — required for replacement' },
+        ],
+        resolvedTitle: 'Replacement claim approved',
+        resolvedBody: 'Member ID corrected. The Submission Agent will file the replacement claim (frequency 7) referencing the payer claim number. Logged under your name.',
+      },
+      {
+        type: 'Coding', typeBg: '#EBF2FE', typeFg: '#1D4ED8', pri: 'MED', priColor: '#B45309',
+        agent: 'Claim Generation Agent', actionLabel: 'Confirm 99308 & submit',
+        narrative: (c) => 'My coding confidence is below threshold (72%). The note\u2019s detailed interval history and expanded exam support 99309, but the decision making reads as low complexity, which supports 99308. I drafted at 99308 (conservative) — confirm or upgrade before I submit.',
+        evidence: (c) => [
+          { k: 'History / Exam', v: 'supports 99309', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Detailed interval; expanded, 2 systems' },
+          { k: 'MDM', v: 'supports 99308', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Low complexity' },
+          { k: 'Drafted as', v: '99308 · ' + c.amtStr, vBg: '#F1EEFF', vFg: '#5B46D6', note: 'Conservative — upgrade adds ~$44' },
+        ],
+        resolvedTitle: 'Code confirmed — 99308',
+        resolvedBody: 'Claim confirmed at CPT 99308. The Claim Validation Agent is revalidating and will submit once all rules pass. Your coding decision is logged under your name.',
+      },
+      {
+        type: 'Eligibility', typeBg: '#E6F7F2', typeFg: '#0B7D6C', pri: 'HIGH', priColor: '#EF4444',
+        agent: 'Eligibility Agent', actionLabel: 'Update coverage & rebill to Humana',
+        narrative: (c) => 'The payer shows coverage terminated 06-30, but the date of service is 07-02. The chart has a new Humana MA card scanned on 07-01 that was never entered as active coverage. I recommend updating the coverage record and rebilling to Humana.',
+        evidence: (c) => [
+          { k: 'Coverage term', v: '06-30-2026', vBg: '#FEECEC', vFg: '#DC2626', note: 'From eligibility (271)' },
+          { k: 'Date of service', v: '07-02-2026', vBg: '#F8FAFC', vFg: '#6B7280', note: 'After termination' },
+          { k: 'New coverage', v: 'Humana MA PPO', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Card scanned 07-01 — not yet entered' },
+        ],
+        resolvedTitle: 'Coverage updated — rebilling',
+        resolvedBody: 'Coverage switched to Humana MA PPO effective 07-01. The Claim Generation Agent is rebuilding the claim for the new payer. Logged under your name.',
+      },
+      {
+        type: 'Auth', typeBg: '#FEF3DF', typeFg: '#B45309', pri: 'MED', priColor: '#B45309',
+        agent: 'Claim Validation Agent', actionLabel: 'Attach auth #A-88213 & submit',
+        narrative: (c) => 'CPT 97110 requires prior authorization for this payer and none is on file. The PT evaluation note references auth #A-88213 in free text, but I couldn\u2019t verify the format against the payer\u2019s auth registry. Confirm the number and I\u2019ll attach it and submit.',
+        evidence: (c) => [
+          { k: 'Requirement', v: 'PA for 97110', vBg: '#FEF3DF', vFg: '#B45309', note: 'Payer policy TP-114' },
+          { k: 'Found in note', v: 'A-88213', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Free text, PT eval 07-01' },
+          { k: 'Registry check', v: 'Not verified', vBg: '#FEECEC', vFg: '#DC2626', note: 'Format is plausible; needs human confirm' },
+        ],
+        resolvedTitle: 'Auth attached — submitting',
+        resolvedBody: 'Auth #A-88213 attached to the claim. The Submission Agent is filing now. Logged under your name.',
+      },
+      {
+        type: 'A/R Unmatched', typeBg: '#F1F5F9', typeFg: '#6B7280', pri: 'LOW', priColor: '#6B7280',
+        agent: 'Payment Reconciliation Agent', actionLabel: 'Post as unapplied cash & flag payer',
+        narrative: (c) => 'A payment of ' + c.amtStr + ' arrived on today\u2019s EFT with no matching open claim. The closest match is a voided claim for this patient from May. I recommend posting as unapplied cash and opening a payer follow-up so the funds don\u2019t sit unreconciled.',
+        evidence: (c) => [
+          { k: 'EFT', v: 'EFT-44' + (78000 + c.id), vBg: '#F8FAFC', vFg: '#6B7280', note: 'Received Jul 7, 6:00 AM' },
+          { k: 'Match attempt', v: 'No open claim', vBg: '#FEECEC', vFg: '#DC2626', note: 'Closest: voided claim, May 2026' },
+          { k: 'Recommendation', v: 'Unapplied cash', vBg: '#F1EEFF', vFg: '#5B46D6', note: 'With payer follow-up task' },
+        ],
+        resolvedTitle: 'Posted as unapplied cash',
+        resolvedBody: 'Funds posted to unapplied cash and a payer follow-up task was opened. Logged under your name.',
+      },
+      {
+        type: 'Denial', typeBg: '#FEECEC', typeFg: '#DC2626', pri: 'HIGH', priColor: '#EF4444',
+        agent: 'Denial Triage Agent', actionLabel: 'Approve appeal & send',
+        narrative: (c) => 'The payer denied this claim CO-29 (timely filing), but our clearinghouse log shows the original submission was accepted on 04-02 — inside the 90-day window. I drafted an appeal with the acceptance report attached as proof of timely filing.',
+        evidence: (c) => [
+          { k: 'Denial code', v: 'CO-29', vBg: '#FEECEC', vFg: '#DC2626', note: 'Timely filing limit expired' },
+          { k: 'Our proof', v: 'Accepted 04-02', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Clearinghouse 999/277CA log attached' },
+          { k: 'Appeal draft', v: 'Ready', vBg: '#F1EEFF', vFg: '#5B46D6', note: 'Letter + acceptance report bundled' },
+        ],
+        resolvedTitle: 'Appeal approved — sending',
+        resolvedBody: 'The appeal packet is being sent with the timely-filing proof attached. The Denial Triage Agent will track the payer\u2019s response. Logged under your name.',
+      },
+    ];
+
+    const singles = [];
+    for (let i = 0; i < singleN; i++) {
+      const c = mk();
+      const a = archetypes[i % archetypes.length];
+      const breached = i === 0;
+      singles.push(Object.assign({}, c, {
+        arch: a,
+        type: a.type, typeBg: a.typeBg, typeFg: a.typeFg,
+        pri: breached ? 'HIGH' : a.pri, priColor: breached ? '#EF4444' : a.priColor,
+        sla: breached ? 'Breached 1h 05m' : Math.floor(2 + rnd() * 20) + 'h left',
+        breached,
+        agent: a.agent,
+        narrative: a.narrative(c),
+        evidence: a.evidence(c),
+        actionLabel: a.actionLabel,
+      }));
+    }
+
+    const STEPS = [
+      ['Claim Generation Agent', 'Extracting codes from signed note'],
+      ['Claim Validation Agent', 'Running payer rule validation'],
+      ['Eligibility Agent', 'Checking eligibility (270/271)'],
+      ['Submission Agent', 'Submitting to clearinghouse'],
+      ['Submission Agent', 'Awaiting 277CA acknowledgment'],
+      ['Payment Reconciliation Agent', 'Matching remittance (835)'],
+    ];
+    const working = [];
+    for (let i = 0; i < workN; i++) {
+      const c = mk();
+      const s = pick(STEPS);
+      working.push(Object.assign({}, c, { agent: s[0], step: s[1], eta: '~' + Math.floor(1 + rnd() * 18) + 'm' }));
+    }
+
+    const OUTCOMES = [
+      ['Paid & closed', '#E6F7F2', '#0B7D6C'],
+      ['Accepted 277CA', '#F1EEFF', '#5B46D6'],
+      ['Submitted', '#F1F5F9', '#6B7280'],
+      ['Paid & closed', '#E6F7F2', '#0B7D6C'],
+    ];
+    const doneRows = [];
+    let paidCount = 0;
+    for (let i = 0; i < doneN; i++) {
+      const c = mk();
+      const o = pick(OUTCOMES);
+      if (o[0] === 'Paid & closed') paidCount++;
+      const h = Math.floor(rnd() * 7); const m = Math.floor(rnd() * 60);
+      doneRows.push(Object.assign({}, c, { outcome: o[0], outBg: o[1], outFg: o[2], time: (h === 0 ? 12 : h) + ':' + String(m).padStart(2, '0') + ' AM' }));
+    }
+    const doneValue = doneRows.reduce((s, c) => s + c.amt, 0);
+
+    this._vol = vol;
+    this._data = { vol, excN, doneN, workN, clusters, singles, working, doneRows, paidCount, doneValue };
+    return this._data;
+  }
+
+  showToast(msg) {
+    clearTimeout(this._toastTimer);
+    this.setState({ toast: msg });
+    this._toastTimer = setTimeout(() => this.setState({ toast: '' }), 2800);
+  }
+
+  nextSelection(resolved) {
+    const d = this.data();
+    const c = d.clusters.find(cl => !resolved[cl.key]);
+    if (c) return c.key;
+    const s = d.singles.find(sg => !resolved['s-' + sg.id]);
+    return s ? 's-' + s.id : null;
+  }
+
+  approveSelected() {
+    const sel = this.state.selected;
+    const d = this.data();
+    if (!sel || this.state.resolved[sel]) return;
+    const cluster = d.clusters.find(c => c.key === sel);
+    const resolved = Object.assign({}, this.state.resolved, { [sel]: true });
+    this.setState({ resolved });
+    if (cluster) {
+      this.showToast(cluster.toast);
+    } else {
+      this.showToast('Approved — removed from your queue');
+    }
+  }
+
+  renderVals() {
+    const st = this.state;
+    const d = this.data();
+    const isEmpty = !!(this.props.emptyState ?? false);
+    const showHints = !!(this.props.showHints ?? true);
+
+    const clusterResolvedCount = d.clusters.reduce((s, c) => s + (st.resolved[c.key] ? c.items.length : 0), 0);
+    const singleResolvedCount = d.singles.filter(s => st.resolved['s-' + s.id]).length;
+    const resolvedClaims = clusterResolvedCount + singleResolvedCount;
+
+    const needsEff = isEmpty ? 0 : d.excN - resolvedClaims;
+    const doneEff = isEmpty ? d.doneN + d.excN : d.doneN + resolvedClaims;
+    const workEff = d.workN;
+    const vol = d.vol;
+
+    const liveClusters = d.clusters.filter(c => !st.resolved[c.key]);
+    const liveSingles = d.singles.filter(s => !st.resolved['s-' + s.id]);
+    const breachedEff = isEmpty ? 0 :
+      liveClusters.reduce((s, c) => s + c.items.filter(i => i.breached).length, 0) +
+      liveSingles.filter(s => s.breached).length;
+
+    const filteredSingles = liveSingles.filter(s => st.typeFilter === 'All' || s.type === st.typeFilter);
+    const singleRows = filteredSingles.map(s => {
+      const key = 's-' + s.id;
+      const selected = st.selected === key;
+      return Object.assign({}, s, {
+        rowBg: selected ? '#F1EEFF' : '#FFFFFF',
+        barColor: selected ? '#7B61FF' : 'transparent',
+        slaBg: s.breached ? '#FEECEC' : '#F1F5F9',
+        slaFg: s.breached ? '#DC2626' : '#6B7280',
+        checked: !!st.checked[key],
+        onCheck: () => this.setState(prev => {
+          const ch = Object.assign({}, prev.checked);
+          if (ch[key]) delete ch[key]; else ch[key] = true;
+          return { checked: ch };
+        }),
+        onClick: () => this.setState({ selected: key }),
+      });
+    });
+
+    const checkedKeys = Object.keys(st.checked).filter(k => st.checked[k] && !st.resolved[k]);
+    const allChecked = filteredSingles.length > 0 && filteredSingles.every(s => st.checked['s-' + s.id]);
+
+    const clusterCards = liveClusters.map(c => ({
+      key: c.key, count: c.items.length, title: c.title, desc: c.desc,
+      type: c.type, typeBg: c.typeBg, typeFg: c.typeFg, tileBg: c.tileBg, tileFg: c.tileFg,
+      valueText: this.money(c.total),
+      border: st.selected === c.key ? '#7B61FF' : '#E5E7EB',
+      bar: st.selected === c.key ? '#7B61FF' : 'transparent',
+      onClick: () => this.setState({ selected: c.key }),
+    }));
+
+    const clusteredLive = liveClusters.reduce((s, c) => s + c.items.length, 0);
+
+    const types = ['All'].concat([...new Set(d.singles.map(s => s.type))]);
+    const typeChips = types.map(label => {
+      const active = label === st.typeFilter;
+      return {
+        label,
+        bg: active ? '#7B61FF' : '#FFFFFF',
+        fg: active ? '#FFFFFF' : '#6B7280',
+        border: active ? '#7B61FF' : '#E5E7EB',
+        onClick: () => this.setState({ typeFilter: label }),
+      };
+    });
+
+    const tabs = [
+      { key: 'needs', label: 'Needs You', count: needsEff },
+      { key: 'working', label: 'Agents Working', count: workEff },
+      { key: 'done', label: 'Done Today', count: doneEff },
+    ].map(t => {
+      const active = st.tab === t.key;
+      return {
+        label: t.label, count: String(t.count),
+        bg: active ? '#7B61FF' : '#FFFFFF',
+        fg: active ? '#FFFFFF' : '#6B7280',
+        border: active ? '#7B61FF' : '#E5E7EB',
+        badgeBg: active ? 'rgba(255,255,255,0.22)' : '#F1F5F9',
+        badgeFg: active ? '#FFFFFF' : '#6B7280',
+        onClick: () => this.setState({ tab: t.key }),
+      };
+    });
+
+    // Detail
+    const sel = st.selected;
+    const selCluster = d.clusters.find(c => c.key === sel);
+    const selSingle = d.singles.find(s => 's-' + s.id === sel);
+    const isResolved = sel && !!st.resolved[sel];
+    let detail = {}; let detailEvidence = []; let detailAffected = [];
+    let resolvedTitle = '', resolvedBody = '';
+    if (selCluster) {
+      detail = {
+        title: selCluster.title, type: selCluster.type, typeBg: selCluster.typeBg, typeFg: selCluster.typeFg,
+        countText: selCluster.items.length + ' claims · 1 decision',
+        valueText: this.money(selCluster.total) + ' total',
+        agent: selCluster.agent, narrative: selCluster.narrative, actionLabel: selCluster.actionLabel,
+      };
+      detailEvidence = selCluster.evidence;
+      detailAffected = selCluster.items;
+      resolvedTitle = selCluster.resolvedTitle; resolvedBody = selCluster.resolvedBody;
+    } else if (selSingle) {
+      detail = {
+        patient: selSingle.patient, claim: selSingle.claim, payer: selSingle.payer, amtStr: selSingle.amtStr,
+        type: selSingle.type, typeBg: selSingle.typeBg, typeFg: selSingle.typeFg,
+        sla: selSingle.sla, slaBg: selSingle.breached ? '#FEECEC' : '#FEF3DF', slaFg: selSingle.breached ? '#DC2626' : '#B45309',
+        agent: selSingle.agent, narrative: selSingle.narrative, actionLabel: selSingle.actionLabel,
+      };
+      detailEvidence = selSingle.evidence;
+      resolvedTitle = selSingle.arch.resolvedTitle; resolvedBody = selSingle.arch.resolvedBody;
+    }
+
+    const showDetail = !isEmpty && st.tab === 'needs';
+
+    return {
+      isEmpty,
+      showHints,
+      tabNeeds: !isEmpty && st.tab === 'needs',
+      tabWorking: !isEmpty && st.tab === 'working',
+      tabDone: !isEmpty && st.tab === 'done',
+      tabs,
+
+      volText: String(vol),
+      autoRateText: Math.round(((vol - d.excN) / vol) * 100) + '%',
+      segDoneW: Math.round((doneEff / vol) * 100) + '%',
+      segWorkW: Math.round((workEff / vol) * 100) + '%',
+      segNeedsW: Math.round((needsEff / vol) * 100) + '%',
+      doneCountText: String(doneEff),
+      workCountText: String(workEff),
+      needsCountText: String(needsEff),
+      decisionsHint: needsEff === 0 ? 'Queue clear' : (liveClusters.length > 0 ? liveClusters.length + ' batch decisions clear ' + clusteredLive + ' of ' + needsEff + ' items' : liveSingles.length + ' individual decisions remain'),
+      emptyPaidText: String(Math.round(vol * 0.34)),
+
+      needsChipText: needsEff + ' Need You',
+      breachChipText: isEmpty ? 'All clear' : (breachedEff > 0 ? breachedEff + ' SLA Breached' : '0 Breached'),
+      breachBg: (isEmpty || breachedEff === 0) ? '#E6F7F2' : '#FEECEC',
+      breachFg: (isEmpty || breachedEff === 0) ? '#109680' : '#DC2626',
+
+      clusterSummary: liveClusters.length === 0 ? 'All batches cleared' : liveClusters.length + ' root causes cover ' + clusteredLive + ' of ' + needsEff + ' open exceptions',
+      clusterCards,
+
+      singleCountText: '(' + filteredSingles.length + ')',
+      typeChips,
+      singleRows,
+      noSingles: singleRows.length === 0,
+      allChecked,
+      toggleAll: () => {
+        const ch = {};
+        if (!allChecked) filteredSingles.forEach(s => { ch['s-' + s.id] = true; });
+        this.setState({ checked: ch });
+      },
+      anyChecked: checkedKeys.length > 0,
+      checkedCountText: checkedKeys.length + ' selected',
+      bulkApprove: () => {
+        const resolved = Object.assign({}, st.resolved);
+        checkedKeys.forEach(k => { resolved[k] = true; });
+        this.setState({ resolved, checked: {} });
+        this.showToast(checkedKeys.length + ' recommendations approved — agents proceeding');
+      },
+      bulkEscalate: () => { this.setState({ checked: {} }); this.showToast(checkedKeys.length + ' items escalated to billing lead (demo)'); },
+      bulkClear: () => this.setState({ checked: {} }),
+
+      detailIsCluster: showDetail && !!selCluster && !isResolved,
+      detailIsSingle: showDetail && !!selSingle && !isResolved,
+      detailIsResolved: showDetail && isResolved && (selCluster || selSingle),
+      detailIsNone: showDetail && !selCluster && !selSingle,
+      detail,
+      detailEvidence,
+      detailAffected,
+      detailAction: () => this.approveSelected(),
+      resolvedTitle, resolvedBody,
+      undoResolve: () => this.setState(prev => {
+        const r = Object.assign({}, prev.resolved);
+        delete r[prev.selected];
+        return { resolved: r };
+      }),
+
+      actReviewEach: () => this.showToast('Expanded — review each claim in the queue (demo)'),
+      actEdit: () => this.showToast('Opening claim editor (demo)'),
+      actRetry: () => this.showToast('Agent retrying with same inputs (demo)'),
+      actSendBack: () => this.showToast('Sent back to agent with note (demo)'),
+      actEscalate: () => this.showToast('Escalated to billing lead (demo)'),
+
+      workingRows: d.working,
+      doneRows: d.doneRows,
+      donePaidText: String(d.paidCount + (isEmpty ? 0 : resolvedClaims)),
+      doneSubText: String(d.doneN - d.paidCount),
+      doneValueText: this.money(d.doneValue),
+
+      toast: st.toast,
+      toastVisible: !!st.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

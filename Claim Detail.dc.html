@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button { font-family: 'Inter', sans-serif; }
+</style>
+<script src="./documents-store.js"></script>
+<script src="./glossary.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="Claim Detail — Timeline">
+
+  <x-import component-from-global-scope="ops-banner" from="./ops-banner.js" hint-size="100%,0px"></x-import>
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Billing Portal</span>
+    <x-import component-from-global-scope="search-bar" from="./search-bar.js" hint-size="480px,40px"></x-import>
+    <div style="flex: 1;"></div>
+    <div title="This claim belongs to Ibekie Foundation Clinics" style="height: 40px; display: flex; align-items: center; gap: 9px; padding: 0 14px; border-radius: 5px; border: 1px solid #E5E7EB; background: #F8FAFC;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg><span style="display: flex; flex-direction: column; line-height: 1.2;"><span style="font-size: 9px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.07em;">Practice</span><span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">Ibekie Foundation Clinics</span></span></div>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <x-import component-from-global-scope="role-switcher" from="./role-switcher.js" hint-size="210px,44px"></x-import>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav — collapsed icon rail ===== -->
+    <sc-if value="{{ navClosed }}" hint-placeholder-val="{{ true }}">
+      <div style="width: 64px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 12px 10px; display: flex; flex-direction: column; gap: 6px; align-items: center; flex-shrink: 0;">
+        <button onClick="{{ toggleNav }}" title="Expand navigation" style="width: 40px; height: 36px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 5 5-5 5"></path><path d="m13 7 5 5-5 5"></path></svg>
+        </button>
+        <div style="height: 1px; width: 36px; background: #EEEEEE; margin: 4px 0;"></div>
+        <a href="Billing Home.dc.html" title="Dashboard" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg></a>
+        <a href="Agent Inbox v3.dc.html" title="Agent Inbox" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></a>
+        <a href="Coverage.dc.html" title="Coverage" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg></a>
+        <a href="AR Worklist.dc.html" title="AR Worklist" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+        <a href="Claims Register.dc.html" title="Claims" style="width: 40px; height: 40px; border-radius: 4px; background: #7B61FF; display: flex; align-items: center; justify-content: center; text-decoration: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg></a>
+        <a href="Payments.dc.html" title="Payments" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg></a>
+        <a href="Rulebook.dc.html" title="Rulebook" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></a>
+        <a href="Contracts.dc.html" title="Contracts" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></a>
+        <a href="Analytics.dc.html" title="Analytics" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg></a>
+        <a href="Settings.dc.html" title="Settings" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
+      </div>
+    </sc-if>
+    <!-- ===== Side nav — expanded ===== -->
+    <sc-if value="{{ navOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+      <div style="display: flex; justify-content: flex-end;">
+        <button onClick="{{ toggleNav }}" title="Collapse navigation" style="width: 32px; height: 28px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 17-5-5 5-5"></path><path d="m11 17-5-5 5-5"></path></svg>
+        </button>
+      </div>
+        <a href="Billing Home.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg>
+          Dashboard
+        </a>
+        <a href="Agent Inbox v3.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+          Agent Inbox
+        </a>
+        <a href="Coverage.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+          Coverage
+        </a>
+        <a href="AR Worklist.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          AR Worklist
+        </a>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+          Claims
+        </div>
+        <a href="Payments.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Payments
+          <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">NEW</span>
+        </a>
+        <a href="Rulebook.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+          Rulebook
+        </a>
+        <a href="Contracts.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+          Contracts
+                  </a>
+        <a href="Analytics.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+          Analytics
+        </a>
+        <a href="Settings.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Settings
+        </a>
+        <div style="flex: 1;"></div>
+      <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+        <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+        Reach the billing support desk 24/7.
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===== Main content ===== -->
+    <div style="flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 16px; min-width: 0; max-width: 1160px;">
+
+      <!-- Breadcrumb -->
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #94A3B8;">
+        <a href="Billing Home.dc.html" style="color: #7B61FF; text-decoration: none; font-weight: 600;">Billing</a>
+        <span>/</span>
+        <a href="Claims Register.dc.html" style="color: #7B61FF; text-decoration: none; font-weight: 600;">Claims</a>
+        <span>/</span>
+        <span style="font-family: 'JetBrains Mono', monospace;">ENCT0000432-01</span>
+      </div>
+
+      <!-- ===== Claim header ===== -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <h1 style="font-size: 22px; font-weight: 700; margin: 0;">RILEY, DIERDRE W.</h1>
+          <span style="display: inline-flex; padding: 4px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 700;">Variance Review</span>
+          <div style="flex: 1;"></div>
+          <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-end;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Claim version</span>
+              <div style="display: flex; align-items: center; border: 1px solid #E5E7EB; border-radius: 5px; overflow: hidden;">
+                <button onClick="{{ viewV1 }}" title="The version that failed validation and was never submitted" style="padding: 7px 14px; border: none; background: {{ v1Bg }}; color: {{ v1Fg }}; font-size: 12px; font-weight: 700; cursor: pointer;">v1 · superseded</button>
+                <button onClick="{{ viewV2 }}" title="The corrected version that was submitted and paid" style="padding: 7px 14px; border: none; border-left: 1px solid #E5E7EB; background: {{ v2Bg }}; color: {{ v2Fg }}; font-size: 12px; font-weight: 700; cursor: pointer;">v2 · current</button>
+              </div>
+            </div>
+            <span style="font-size: 10px; color: #94A3B8;">v2 was created when Angela approved the ZIP fix — v1 was never submitted</span>
+          </div>
+          <button onClick="{{ openSourceNote }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 4px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #F1EEFF;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path></svg>
+            Source encounter note
+          </button>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 20px; font-size: 13px; color: #6B7280; flex-wrap: wrap;">
+          <span><span style="color: #94A3B8;">DOS</span> <strong style="color: #0F1B2E;">06-15-2026</strong></span>
+          <span><span style="color: #94A3B8;">Payer</span> <strong style="color: #0F1B2E;">Medicare (WPS J8)</strong></span>
+          <span><span style="color: #94A3B8;">Provider</span> <strong style="color: #0F1B2E;">Dr. Oranu Ibekie</strong></span>
+          <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="color: #94A3B8;">Facility</span> <strong style="color: #0F1B2E;">Niles Care Center</strong></span>
+          <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="color: #94A3B8;">Claim</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E; font-weight: 700;">ENCT0000432-01</span>
+            <button onClick="{{ copyInternal }}" title="Copy claim ID" style="border: none; background: transparent; cursor: pointer; padding: 2px; display: inline-flex;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+          </span>
+          <span style="display: inline-flex; align-items: center; gap: 6px;"><span style="color: #94A3B8;">Payer claim</span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E; font-weight: 700;">21606E98700</span>
+            <button onClick="{{ copyPayer }}" title="Copy payer claim number" style="border: none; background: transparent; cursor: pointer; padding: 2px; display: inline-flex;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+          </span>
+        </div>
+
+        <div style="display: flex; align-items: stretch; gap: 12px;">
+          <div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 20px; border-radius: 8px; background: #F8FAFC; border: 1px solid #EEEEEE; min-width: 130px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Billed</span>
+            <span style="font-size: 20px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums;">$108.43</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 20px; border-radius: 8px; background: #E6F7F2; min-width: 130px;">
+            <span style="font-size: 11px; font-weight: 700; color: #109680; text-transform: uppercase; letter-spacing: 0.06em;">Paid</span>
+            <span style="font-size: 20px; font-weight: 700; color: #0B7D6C; font-variant-numeric: tabular-nums;">$71.23</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 20px; border-radius: 8px; background: #FEF3DF; min-width: 130px;">
+            <span style="font-size: 11px; font-weight: 700; color: #B45309; text-transform: uppercase; letter-spacing: 0.06em;">Balance</span>
+            <span style="font-size: 20px; font-weight: 700; color: #92400E; font-variant-numeric: tabular-nums;">$37.20</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 8px; background: #FEF3DF; border: 1px dashed #F5D9A8; flex: 1;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+            <span style="font-size: 12px; color: #92400E; line-height: 18px;">A $7.20 payment variance is open in the <a href="Agent Inbox v3.dc.html" style="font-weight: 700;">Agent Inbox</a> — CO-253 sequestration was not in the expectation model.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Tabs ===== -->
+      <div style="display: flex; align-items: center; gap: 4px; border-bottom: 1px solid #E5E7EB; padding: 0 4px;">
+        <button onClick="{{ tabTimeline }}" style="padding: 10px 16px; border: none; background: transparent; font-size: 13px; font-weight: 700; color: {{ tlFg }}; border-bottom: 2px solid {{ tlBorder }}; margin-bottom: -1px; cursor: pointer;">Timeline</button>
+        <button onClick="{{ tabClaim }}" style="padding: 10px 16px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: {{ clFg }}; border-bottom: 2px solid {{ clBorder }}; margin-bottom: -1px; cursor: pointer;">Claim</button>
+        <button onClick="{{ tabPayer }}" style="padding: 10px 16px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: {{ prFg }}; border-bottom: 2px solid {{ prBorder }}; margin-bottom: -1px; cursor: pointer;">Payer Responses</button>
+        <button onClick="{{ tabPayments }}" style="padding: 10px 16px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: {{ pyFg }}; border-bottom: 2px solid {{ pyBorder }}; margin-bottom: -1px; cursor: pointer;">Payments</button>
+        <button onClick="{{ tabDocs }}" style="padding: 10px 16px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: {{ dcFg }}; border-bottom: 2px solid {{ dcBorder }}; margin-bottom: -1px; cursor: pointer;">Documents ({{ docCount }})</button>
+        <div style="flex: 1;"></div>
+        <div style="display: flex; align-items: center; gap: 14px; font-size: 11px; color: #94A3B8; padding-right: 4px;">
+          <span style="display: inline-flex; align-items: center; gap: 5px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #7B61FF;"></span>Agent</span>
+          <span style="display: inline-flex; align-items: center; gap: 5px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #3B82F6;"></span>Payer</span>
+          <span style="display: inline-flex; align-items: center; gap: 5px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #22C5A7;"></span>Human</span>
+          <span style="display: inline-flex; align-items: center; gap: 5px;"><span style="width: 8px; height: 8px; border-radius: 2px; background: #94A3B8;"></span>System</span>
+        </div>
+      </div>
+
+      <!-- ===== Claim tab ===== -->
+      <sc-if value="{{ showClaim }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 16px;" data-screen-label="Claim tab">
+
+          <div style="display: flex; align-items: center; gap: 10px; background: #F1EEFF; border-radius: 8px; padding: 10px 14px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+            <span style="font-size: 12px; color: #5B46D6; line-height: 18px; flex: 1;">This claim was assembled from Dr. Ibekie's signed note — the visit was coded to CPT/ICD-10, priced from the fee schedule, and combined with chart demographics. <strong>The note itself is never sent to the payer</strong>; it stays on file as supporting documentation.</span>
+            <button onClick="{{ openSourceNote }}" style="border: none; background: transparent; font-size: 12px; font-weight: 700; color: #7B61FF; white-space: nowrap; cursor: pointer; padding: 0;">View source note ↗</button>
+          </div>
+
+          <sc-if value="{{ isV1 }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; align-items: center; gap: 10px; background: #FEF3DF; border: 1px solid #F5D9A8; border-radius: 8px; padding: 10px 14px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+              <span style="font-size: 12px; color: #92400E;"><strong>Viewing v1 — superseded.</strong> This version failed validation on the billing provider ZIP and was never submitted. Select v2 for the claim as submitted.</span>
+            </div>
+          </sc-if>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+            <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;"><span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Patient &amp; insured</span><span style="font-size: 10px; color: #94A3B8;">From patient chart</span></div>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #0F1B2E;">
+                <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: #6B7280;">Name</span><strong>RILEY, DIERDRE W.</strong></div>
+                <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: #6B7280;">DOB / Sex</span><span>03-08-1948 · F</span></div>
+                <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: #6B7280;">Medicare MBI</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">4XR0-TE5-MK72</span></div>
+                <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: #6B7280;">Relationship</span><span>Self</span></div>
+              </div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;"><span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Billing provider</span><span style="font-size: 10px; color: #94A3B8;">From facility record</span></div>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #0F1B2E;">
+                <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: #6B7280;">Facility</span><strong>Niles Skilled Nursing Center</strong></div>
+                <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: #6B7280;">NPI / Tax ID</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">1487654321 · 38-2456789</span></div>
+                <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: #6B7280;">Address</span><span>1204 Oak Ridge Dr, Niles, MI</span></div>
+                <sc-if value="{{ isV2 }}" hint-placeholder-val="{{ true }}">
+                  <div style="display: flex; justify-content: space-between; gap: 8px; align-items: center;"><span style="color: #6B7280;">ZIP</span><span style="display: inline-flex; align-items: center; gap: 6px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0B7D6C; background: #E6F7F2; padding: 1px 6px; border-radius: 4px;">49120-3414</span><span style="font-size: 10px; font-weight: 600; color: #109680;">Corrected in v2 · Angela Mensah</span></span></div>
+                </sc-if>
+                <sc-if value="{{ isV1 }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; justify-content: space-between; gap: 8px; align-items: center;"><span style="color: #6B7280;">ZIP</span><span style="display: inline-flex; align-items: center; gap: 6px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #B91C1C; background: #FEECEC; padding: 1px 6px; border-radius: 4px;">49120</span><span style="font-size: 10px; font-weight: 600; color: #DC2626;">Failed MCR-J8 214 — ZIP+4 required</span></span></div>
+                </sc-if>
+              </div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;"><span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Rendering provider &amp; claim</span><span style="font-size: 10px; color: #94A3B8;">From credential file</span></div>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #0F1B2E;">
+                <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: #6B7280;">Provider</span><strong>Oranu Ibekie, MD</strong></div>
+                <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: #6B7280;">NPI</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">1093827465</span></div>
+                <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: #6B7280;">POS</span><span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">32</span> Nursing facility</span></div>
+                <div style="display: flex; justify-content: space-between; gap: 8px;"><span style="color: #6B7280;">Frequency</span><span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">1</span> Original claim · Assignment accepted</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;"><span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Diagnoses</span><span style="font-size: 10px; color: #94A3B8;">Coded from the signed note</span></div>
+            <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #0F1B2E;">
+              <div style="display: flex; align-items: center; gap: 10px;"><span style="width: 18px; height: 18px; border-radius: 4px; background: #F1EEFF; color: #5B46D6; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">A</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; width: 64px;">T14.90</span><span>Injury, unspecified (wound)</span></div>
+              <div style="display: flex; align-items: center; gap: 10px;"><span style="width: 18px; height: 18px; border-radius: 4px; background: #F1EEFF; color: #5B46D6; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">B</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; width: 64px;">E78.5</span><span>Hyperlipidemia, unspecified</span></div>
+              <div style="display: flex; align-items: center; gap: 10px;"><span style="width: 18px; height: 18px; border-radius: 4px; background: #F1EEFF; color: #5B46D6; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">C</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; width: 64px;">K59.00</span><span>Constipation, unspecified</span></div>
+            </div>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 36px 100px 48px 70px 1fr 70px 56px 90px; gap: 8px; align-items: center; padding: 10px 16px; background: #7B61FF;">
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Ln</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">DOS</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">POS</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">CPT</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Description</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Dx ptr</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Units</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Charge</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 36px 100px 48px 70px 1fr 70px 56px 90px; gap: 8px; align-items: center; padding: 12px 16px; border-bottom: 1px solid #EEEEEE; font-size: 13px; color: #0F1B2E;">
+              <span style="color: #6B7280;">1</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">06-15-2026</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">32</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;">99308</span>
+              <span>Subsequent nursing facility care, per day</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">A,B,C</span>
+              <span>1</span>
+              <span style="font-weight: 700; text-align: right; font-variant-numeric: tabular-nums;">$108.43</span>
+            </div>
+            <div style="display: flex; justify-content: flex-end; align-items: center; gap: 16px; padding: 12px 16px; background: #F8FAFC;">
+              <span style="font-size: 10px; color: #94A3B8; margin-right: auto;">CPT coded from note complexity · charge priced from fee schedule MCR-2026</span>
+              <span style="font-size: 12px; color: #6B7280;">Total charge</span>
+              <span style="font-size: 14px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums;">$108.43</span>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== Payer Responses tab ===== -->
+      <sc-if value="{{ showPayer }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 16px;" data-screen-label="Payer Responses tab">
+
+          <!-- 277CA clearinghouse -->
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-left: 3px solid #3B82F6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #3B82F6; background: #EBF2FE; padding: 2px 8px; border-radius: 4px;">277CA</span>
+              <span style="font-size: 14px; font-weight: 700; color: #0F1B2E;">Clearinghouse acknowledgement</span>
+              <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #EBF2FE; color: #1D4ED8; font-size: 10px; font-weight: 700;">ACCEPTED</span>
+              <div style="flex: 1;"></div>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8;">Jun 27 · 9:02 AM · via Stedi</span>
+            </div>
+            <div style="font-size: 13px; color: #6B7280; line-height: 20px;">The clearinghouse received the claim, passed its front-end edits, and forwarded it to Medicare. No action was needed.</div>
+            <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #EEEEEE;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #1D4ED8; width: 64px;">A1</span><span style="font-size: 12px; color: #0F1B2E;">Acknowledgement — claim received</span></div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #1D4ED8; width: 64px;">A5</span><span style="font-size: 12px; color: #0F1B2E;">Forwarded to the payer</span></div>
+            </div>
+            <button onClick="{{ tgR1 }}" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; border: none; background: transparent; padding: 0; font-size: 12px; font-weight: 600; color: #7B61FF; cursor: pointer;">{{ chevR1 }} View raw payload</button>
+            <sc-if value="{{ raw1 }}" hint-placeholder-val="{{ false }}">
+              <div style="background: #F8FAFC; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280; line-height: 18px; overflow-x: auto; white-space: pre;">ST*277*000000001*005010X214~
+BHT*0085*08*ENCT0000432-01*20260627*090201*TH~
+TRN*2*ENCT0000432-01~
+STC*A1:20*20260627*WQ*108.43~
+STC*A5:0*20260627*WQ*108.43~</div>
+            </sc-if>
+          </div>
+
+          <!-- 277CA payer -->
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-left: 3px solid #3B82F6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #3B82F6; background: #EBF2FE; padding: 2px 8px; border-radius: 4px;">277CA</span>
+              <span style="font-size: 14px; font-weight: 700; color: #0F1B2E;">Payer acceptance</span>
+              <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #EBF2FE; color: #1D4ED8; font-size: 10px; font-weight: 700;">IN ADJUDICATION</span>
+              <div style="flex: 1;"></div>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8;">Jun 30 · 2:15 PM · Medicare (WPS J8)</span>
+            </div>
+            <div style="font-size: 13px; color: #6B7280; line-height: 20px;">Medicare accepted the claim into adjudication and assigned payer claim <span style="font-family: 'JetBrains Mono', monospace; color: #0F1B2E;">#21606E98700</span>. A day-21 no-response check was armed automatically.</div>
+            <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #1D4ED8; width: 64px;">A2</span><span style="font-size: 12px; color: #0F1B2E;">Accepted for adjudication — awaiting payment decision</span></div>
+            </div>
+            <button onClick="{{ tgR2 }}" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; border: none; background: transparent; padding: 0; font-size: 12px; font-weight: 600; color: #7B61FF; cursor: pointer;">{{ chevR2 }} View raw payload</button>
+            <sc-if value="{{ raw2 }}" hint-placeholder-val="{{ false }}">
+              <div style="background: #F8FAFC; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280; line-height: 18px; overflow-x: auto; white-space: pre;">ST*277*000000002*005010X214~
+TRN*2*ENCT0000432-01~
+REF*1K*21606E98700~
+STC*A2:20*20260630*WQ*108.43~</div>
+            </sc-if>
+          </div>
+
+          <!-- 835 remittance -->
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-left: 3px solid #22C5A7; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #0B7D6C; background: #E6F7F2; padding: 2px 8px; border-radius: 4px;">835</span>
+              <span style="font-size: 14px; font-weight: 700; color: #0F1B2E;">Electronic remittance advice</span>
+              <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #E6F7F2; color: #0B7D6C; font-size: 10px; font-weight: 700;">PAID $71.23</span>
+              <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 10px; font-weight: 700;">VARIANCE OPEN</span>
+              <div style="flex: 1;"></div>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8;">Jul 6 · 6:00 AM · EFT-4478215</span>
+            </div>
+            <div style="font-size: 13px; color: #6B7280; line-height: 20px;">Medicare paid $71.23 of the $108.43 billed. The CO-45 adjustment was expected; the CO-253 sequestration reduction was not in the expectation model and is <a href="Agent Inbox v3.dc.html" style="font-weight: 700;">under review in the Agent Inbox</a>.</div>
+            <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden;">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #EEEEEE;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #6B7280; width: 64px;">CO-45</span>
+                <span style="font-size: 12px; color: #0F1B2E; flex: 1;">Charge exceeds fee schedule</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E;">−$30.00</span>
+                <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #109680; width: 150px; justify-content: flex-end;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Expected</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 14px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #B45309; width: 64px;">CO-253</span>
+                <span style="font-size: 12px; color: #0F1B2E; flex: 1;">Sequestration — federal 2% payment reduction</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E;">−$7.20</span>
+                <span style="font-size: 11px; font-weight: 600; color: #B45309; width: 150px; text-align: right;">Not in model</span>
+              </div>
+            </div>
+            <button onClick="{{ tgR3 }}" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; border: none; background: transparent; padding: 0; font-size: 12px; font-weight: 600; color: #7B61FF; cursor: pointer;">{{ chevR3 }} View raw payload</button>
+            <sc-if value="{{ raw3 }}" hint-placeholder-val="{{ false }}">
+              <div style="background: #F8FAFC; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280; line-height: 18px; overflow-x: auto; white-space: pre;">TRN*1*EFT-4478215*1352840547~
+CLP*ENCT0000432-01*1*108.43*71.23**MC*21606E98700*32~
+CAS*CO*45*30.00**253*7.20~
+NM1*QC*1*RILEY*DIERDRE*W~
+DTM*232*20260615~</div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== Documents tab (Phase 6c) ===== -->
+      <sc-if value="{{ showDocs }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 14px;" data-screen-label="Documents tab">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 12.5px; color: #6B7280; line-height: 19px; flex: 1;">Everything on file for this claim — agent-fetched payer documents, the source note, and your team's uploads. Documents the practice sends through its billing view attach here automatically.</span>
+            <button onClick="{{ uploadDoc }}" style="display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap;" style-hover="background: #5B46D6;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m17 8-5-5-5 5"></path><path d="M12 3v12"></path></svg>
+              Upload Document
+            </button>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: 26px 1.7fr 140px 1fr 150px; gap: 12px; padding: 10px 20px; border-bottom: 1px solid #E5E7EB; font-size: 10.5px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">
+              <span></span><span>Document</span><span>Type</span><span>Source</span><span style="text-align: right;">Added</span>
+            </div>
+            <sc-for list="{{ docs }}" as="d" hint-placeholder-count="4">
+              <div style="display: grid; grid-template-columns: 26px 1.7fr 140px 1fr 150px; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #F1F5F9; font-size: 12.5px; align-items: center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{ d.iconColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path></svg>
+                <span style="display: flex; flex-direction: column; gap: 1px; min-width: 0;">
+                  <span style="font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ d.name }}</span>
+                  <span style="font-size: 11px; color: #94A3B8;">{{ d.note }}</span>
+                </span>
+                <span><span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: {{ d.typeBg }}; color: {{ d.typeFg }}; font-size: 10.5px; font-weight: 700;">{{ d.docType }}</span></span>
+                <span style="color: #6B7280;">{{ d.by }}</span>
+                <span style="text-align: right; color: #94A3B8; font-size: 11.5px;">{{ d.when }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <input type="file" ref="{{ docFileRef }}" onChange="{{ onDocFile }}" style="display: none;">
+        </div>
+      </sc-if>
+
+      <!-- ===== Payments tab ===== -->
+      <sc-if value="{{ showPayments }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 16px;" data-screen-label="Payments tab">
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px;">
+              <span style="font-size: 14px; font-weight: 700;">Claim ledger</span>
+              <span style="font-size: 12px; color: #6B7280;">charge → payments → adjustments → balance · always summing</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 95px 180px 120px 1fr 100px 100px 110px; gap: 8px; align-items: center; padding: 10px 16px; background: #7B61FF;">
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Date</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Type</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Reference</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Detail</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Amount</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Balance</span>
+              <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Status</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 95px 180px 120px 1fr 100px 100px 110px; gap: 8px; align-items: center; padding: 11px 16px; border-bottom: 1px solid #F1F5F9; font-size: 13px; color: #0F1B2E;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">06-26</span>
+              <span>Charge</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">ENCT0000432-01</span>
+              <span style="color: #6B7280;">CPT 99308 · billed charges</span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-variant-numeric: tabular-nums;">+$108.43</span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums;">$108.43</span>
+              <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: #E6F7F2; color: #0B7D6C; font-size: 10px; font-weight: 700; justify-self: end;">POSTED</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 95px 180px 120px 1fr 100px 100px 110px; gap: 8px; align-items: center; padding: 11px 16px; border-bottom: 1px solid #F1F5F9; font-size: 13px; color: #0F1B2E;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">07-06</span>
+              <span><gloss-t term="era">ERA payment (835)</gloss-t></span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">EFT-4478215</span>
+              <span style="color: #6B7280;">Medicare (WPS J8) · payment posted</span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0B7D6C; font-variant-numeric: tabular-nums;">−$71.23</span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums;">$37.20</span>
+              <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: #E6F7F2; color: #0B7D6C; font-size: 10px; font-weight: 700; justify-self: end;">POSTED</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 95px 180px 120px 1fr 100px 100px 110px; gap: 8px; align-items: center; padding: 11px 16px; border-bottom: 1px solid #F1F5F9; font-size: 13px; color: #0F1B2E;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">07-06</span>
+              <span>Contractual adjustment</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;"><gloss-t term="co-45">CO-45</gloss-t></span>
+              <span style="color: #6B7280;">Charge exceeds fee schedule · expected per contract</span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-variant-numeric: tabular-nums;">−$30.00</span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums;">$7.20</span>
+              <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: #E6F7F2; color: #0B7D6C; font-size: 10px; font-weight: 700; justify-self: end;">POSTED</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 95px 180px 120px 1fr 100px 100px 110px; gap: 8px; align-items: center; padding: 11px 16px; font-size: 13px; color: #0F1B2E; background: #FFFDF8;">
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">07-06</span>
+              <span>Sequestration reduction</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;"><gloss-t term="co-253">CO-253</gloss-t></span>
+              <span style="color: #6B7280;">Held in the variance queue — not posted silently</span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-variant-numeric: tabular-nums;">−$7.20</span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums;">$0.00</span>
+              <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 10px; font-weight: 700; justify-self: end;">PENDING</span>
+            </div>
+          </div>
+
+          <!-- Balance ownership (Phase 8) -->
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: baseline; gap: 10px;">
+              <span style="font-size: 14px; font-weight: 700;">Balance ownership</span>
+              <span style="font-size: 12px; color: #6B7280;">a balance is owned until it is zero — every hand-off rides the ledger</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="display: inline-flex; flex-direction: column; gap: 2px; padding: 8px 14px; border-radius: 8px; background: #EAF3FF; border: 1px solid #BFDBFE;">
+                <span style="font-size: 11px; font-weight: 700; color: #1D4ED8;">PRIMARY</span>
+                <span style="font-size: 11px; color: #6B7280;">Medicare · paid Jul 6</span>
+              </span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              <span style="display: inline-flex; flex-direction: column; gap: 2px; padding: 8px 14px; border-radius: 8px; background: #F8FAFC; border: 1px dashed #E5E7EB;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8;">SECONDARY</span>
+                <span style="font-size: 11px; color: #94A3B8;">skipped — no secondary payer on the COB stack</span>
+              </span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              <span style="display: inline-flex; flex-direction: column; gap: 2px; padding: 8px 14px; border-radius: 8px; background: #F8FAFC; border: 1px dashed #E5E7EB;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8;">PATIENT</span>
+                <span style="font-size: 11px; color: #94A3B8;">skipped — patient responsibility $0.00</span>
+              </span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              <span style="display: inline-flex; flex-direction: column; gap: 2px; padding: 8px 14px; border-radius: 8px; background: #E7F5EF; border: 1px solid #B9E8DC;">
+                <span style="font-size: 11px; font-weight: 700; color: #1B7F5E;">ZERO — CURRENT</span>
+                <span style="font-size: 11px; color: #6B7280;">pending only the $7.20 variance decision</span>
+              </span>
+            </div>
+          </div>
+
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Reconciliation</span>
+            <div style="display: flex; flex-direction: column; font-size: 13px; color: #0F1B2E;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #EEEEEE;">
+                <span>Billed charges</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;">$108.43</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #EEEEEE;">
+                <span style="display: inline-flex; align-items: center; gap: 8px;">Contractual adjustment <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">CO-45</span><span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #109680;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Expected</span></span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">−$30.00</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #EEEEEE;">
+                <span style="display: inline-flex; align-items: center; gap: 8px;">Sequestration reduction <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">CO-253</span><span style="display: inline-flex; padding: 1px 7px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 10px; font-weight: 700;">UNDER REVIEW</span></span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">−$7.20</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #EEEEEE;">
+                <span>Patient responsibility</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">$0.00</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
+                <span style="font-weight: 700;">Payment posted</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #0B7D6C;">$71.23</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; background: #FEF3DF; border: 1px dashed #F5D9A8; border-radius: 8px; padding: 10px 14px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+              <span style="font-size: 12px; color: #92400E; line-height: 18px; flex: 1;">The $37.20 balance is pending write-off: $30.00 contractual (auto-closes on acceptance) and $7.20 sequestration awaiting the variance decision.</span>
+              <a href="Agent Inbox v3.dc.html" style="padding: 8px 14px; border-radius: 4px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap;" style-hover="background: #F1EEFF;">Open in Agent Inbox</a>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== Timeline ===== -->
+      <sc-if value="{{ showTimeline }}" hint-placeholder-val="{{ true }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px 20px 24px; position: relative;">
+          <div style="position: absolute; left: 151px; top: 36px; bottom: 36px; width: 2px; background: #EEEEEE;"></div>
+
+          <!-- 1 · Human — note signed -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: start; padding: 8px 0; position: relative;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; padding-top: 8px; text-align: right;">Jun 26 · 1:13 PM</span>
+            <span style="width: 30px; height: 30px; border-radius: 9999px; background: #E6F7F2; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #0B7D6C; position: relative; z-index: 1;">OI</span>
+            <div style="padding-top: 6px; font-size: 13px; color: #0F1B2E;"><strong>Dr. Oranu Ibekie</strong> signed the encounter note <span style="font-size: 11px; color: #94A3B8;">· Human action</span></div>
+          </div>
+
+          <!-- 2 · Agent — QA -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: start; padding: 8px 0; position: relative;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; padding-top: 8px; text-align: right;">Jun 26 · 1:14 PM</span>
+            <span style="width: 30px; height: 30px; border-radius: 9999px; background: #F1EEFF; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg></span>
+            <div style="min-width: 0;">
+              <button onClick="{{ tg2 }}" style="display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; border: none; background: transparent; padding: 6px 0; cursor: pointer; font-size: 13px; color: #0F1B2E;">
+                <span style="color: #94A3B8; font-size: 11px; width: 10px;">{{ chev2 }}</span>
+                <span><strong style="color: #5B46D6;">Revenue QA Agent</strong> — passed <strong>12/12</strong> readiness checks</span>
+                <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #E6F7F2; color: #0B7D6C; font-size: 10px; font-weight: 700;">PASSED</span>
+              </button>
+              <sc-if value="{{ ex2 }}" hint-placeholder-val="{{ false }}">
+                <div style="margin: 4px 0 8px 18px; background: #F9FAFB; border: 1px solid #EEEEEE; border-radius: 8px; padding: 12px 14px; font-size: 12px; color: #6B7280; line-height: 19px;">
+                  Signed note present · Medicare Part B eligibility verified (271) · provider NPI active · POS 32 matches facility · face-to-face documented · all dx coded to billable specificity.
+                  <div style="margin-top: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8;">Config: QA pack SNF-core v2.1</div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <!-- 3 · Agent — claim generation -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: start; padding: 8px 0; position: relative;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; padding-top: 8px; text-align: right;">Jun 26 · 1:14 PM</span>
+            <span style="width: 30px; height: 30px; border-radius: 9999px; background: #F1EEFF; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg></span>
+            <div style="min-width: 0;">
+              <button onClick="{{ tg3 }}" style="display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; border: none; background: transparent; padding: 6px 0; cursor: pointer; font-size: 13px; color: #0F1B2E;">
+                <span style="color: #94A3B8; font-size: 11px; width: 10px;">{{ chev3 }}</span>
+                <span><strong style="color: #5B46D6;">Claim Generation Agent</strong> — drafted claim · <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">CPT 99308</span></span>
+              </button>
+              <sc-if value="{{ ex3 }}" hint-placeholder-val="{{ false }}">
+                <div style="margin: 4px 0 8px 18px; background: #F9FAFB; border: 1px solid #EEEEEE; border-radius: 8px; padding: 12px 14px; font-size: 12px; color: #6B7280; line-height: 19px; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="font-weight: 700; color: #0F1B2E;">How the signed note became this claim</div>
+                  <div><span style="font-family: 'JetBrains Mono', monospace; color: #0F1B2E; font-weight: 700;">CPT 99308</span> Subsequent nursing facility care — the note documents an expanded interval history, exam of 2 systems, and low-complexity decision making (2 problems addressed).</div>
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <span><span style="font-family: 'JetBrains Mono', monospace; color: #0F1B2E;">T14.90</span> Injury, unspecified — from “sacral wound improving with current dressing regimen”</span>
+                    <span><span style="font-family: 'JetBrains Mono', monospace; color: #0F1B2E;">E78.5</span> Hyperlipidemia — from “lipids stable, continue atorvastatin”</span>
+                    <span><span style="font-family: 'JetBrains Mono', monospace; color: #0F1B2E;">K59.00</span> Constipation — from “constipation managed with senna, tolerating well”</span>
+                  </div>
+                  <div>Charge <span style="font-family: 'JetBrains Mono', monospace; color: #0F1B2E;">$108.43</span> priced from fee schedule MCR-2026 · demographics and MBI pulled from the patient chart · NPIs from the credential file.</div>
+                  <div style="display: flex; align-items: center; gap: 8px; background: #F1EEFF; border-radius: 6px; padding: 8px 10px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path></svg>
+                    <span style="color: #5B46D6; font-weight: 600;">The note itself is never sent to the payer — only these coded fields. The note stays on file as supporting documentation.</span>
+                  </div>
+                  <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8;">Config: coder model c-4.2 · fee schedule MCR-2026</div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <!-- 4 · Agent — validation FAILED (expanded) -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: start; padding: 8px 0; position: relative;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; padding-top: 8px; text-align: right;">Jun 26 · 1:15 PM</span>
+            <span style="width: 30px; height: 30px; border-radius: 9999px; background: #FEECEC; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg></span>
+            <div style="min-width: 0;">
+              <button onClick="{{ tg4 }}" style="display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; border: none; background: transparent; padding: 6px 0; cursor: pointer; font-size: 13px; color: #0F1B2E;">
+                <span style="color: #94A3B8; font-size: 11px; width: 10px;">{{ chev4 }}</span>
+                <span><strong style="color: #5B46D6;">Claim Validation Agent</strong> — validation stopped: ZIP+4 required</span>
+                <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #FEECEC; color: #DC2626; font-size: 10px; font-weight: 700;">FAILED</span>
+              </button>
+              <sc-if value="{{ ex4 }}" hint-placeholder-val="{{ true }}">
+                <div style="margin: 4px 0 8px 18px; background: #FFFDFD; border: 1px solid #FCA5A5; border-radius: 8px; padding: 14px; font-size: 12px; color: #0F1B2E; display: flex; flex-direction: column; gap: 10px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #DC2626; background: #FEECEC; padding: 2px 7px; border-radius: 4px;">MCR-J8 · 214</span>
+                    <span style="color: #0F1B2E;">Billing provider ZIP must be 9-digit ZIP+4</span>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">ZIP+4 candidates found</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0B7D6C; background: #E6F7F2; padding: 2px 7px; border-radius: 4px;">49120-3414</span>
+                      <span style="font-size: 11px; font-weight: 600; color: #109680;">Matches facility record — recommended</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B7280; background: #F8FAFC; padding: 2px 7px; border-radius: 4px;">49120-9203</span>
+                      <span style="font-size: 11px; color: #94A3B8;">USPS range match only</span>
+                    </div>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px; background: #FEF3DF; border-radius: 6px; padding: 8px 10px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                    <span style="color: #92400E; font-weight: 600;">Auto-repair skipped: ambiguous — two candidates. Routed to Agent Inbox for a human decision.</span>
+                  </div>
+                  <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8;">Config: rule pack MCR-J8 v1.4 · validator v2.0.1</div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <!-- 5 · Human — Angela approved fix -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: start; padding: 8px 0; position: relative;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; padding-top: 8px; text-align: right;">Jun 26 · 3:40 PM</span>
+            <span style="width: 30px; height: 30px; border-radius: 9999px; background: #E6F7F2; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #0B7D6C; position: relative; z-index: 1;">AM</span>
+            <div style="padding-top: 2px; font-size: 13px; color: #0F1B2E; display: flex; flex-direction: column; gap: 3px;">
+              <div><strong>Angela Mensah</strong> approved the fix: ZIP <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">49120</span> → <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0B7D6C;">49120-3414</span> <span style="font-size: 11px; color: #94A3B8;">· Human action</span></div>
+              <div style="font-size: 12px; color: #6B7280;">Reason: “Matches the facility record in PCC — confirmed with front office.”</div>
+              <div style="font-size: 11px; color: #94A3B8;">Claim v2 created from this fix</div>
+            </div>
+          </div>
+
+          <!-- 6 · Agent — validation passed -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: start; padding: 8px 0; position: relative;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; padding-top: 8px; text-align: right;">Jun 26 · 3:40 PM</span>
+            <span style="width: 30px; height: 30px; border-radius: 9999px; background: #F1EEFF; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg></span>
+            <div style="min-width: 0;">
+              <button onClick="{{ tg6 }}" style="display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; border: none; background: transparent; padding: 6px 0; cursor: pointer; font-size: 13px; color: #0F1B2E;">
+                <span style="color: #94A3B8; font-size: 11px; width: 10px;">{{ chev6 }}</span>
+                <span><strong style="color: #5B46D6;">Claim Validation Agent</strong> — revalidated after fix</span>
+                <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #E6F7F2; color: #0B7D6C; font-size: 10px; font-weight: 700;">PASSED</span>
+              </button>
+              <sc-if value="{{ ex6 }}" hint-placeholder-val="{{ false }}">
+                <div style="margin: 4px 0 8px 18px; background: #F9FAFB; border: 1px solid #EEEEEE; border-radius: 8px; padding: 12px 14px; font-size: 12px; color: #6B7280; line-height: 19px;">
+                  38/38 rules passed, including MCR-J8 214 (ZIP+4).
+                  <div style="margin-top: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8;">Config: rule pack MCR-J8 v1.4 · validator v2.0.1</div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <!-- 7 · Agent — submitted -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: start; padding: 8px 0; position: relative;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; padding-top: 8px; text-align: right;">Jun 26 · 3:41 PM</span>
+            <span style="width: 30px; height: 30px; border-radius: 9999px; background: #F1EEFF; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg></span>
+            <div style="padding-top: 8px; font-size: 13px; color: #0F1B2E;"><strong style="color: #5B46D6;">Submission Agent</strong> — submitted to Medicare via Stedi <span style="color: #0B7D6C; font-weight: 700;">✓</span></div>
+          </div>
+
+          <!-- 8 · Payer — 277CA clearinghouse -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: start; padding: 8px 0; position: relative;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; padding-top: 8px; text-align: right;">Jun 27 · 9:02 AM</span>
+            <span style="width: 30px; height: 30px; border-radius: 9999px; background: #EBF2FE; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12h12"></path><path d="M6 7h12"></path><path d="M6 17h12"></path></svg></span>
+            <div style="padding-top: 4px; font-size: 13px; color: #0F1B2E;">
+              <strong style="color: #3B82F6;">Clearinghouse accepted</strong> <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280; background: #EBF2FE; padding: 1px 6px; border-radius: 4px;">277CA</span>
+              <div style="font-size: 12px; color: #6B7280; margin-top: 2px;">Acknowledged and forwarded to the payer — claim is in flight.</div>
+            </div>
+          </div>
+
+          <!-- 9 · Payer — accepted into adjudication -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: start; padding: 8px 0; position: relative;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; padding-top: 8px; text-align: right;">Jun 30 · 2:15 PM</span>
+            <span style="width: 30px; height: 30px; border-radius: 9999px; background: #EBF2FE; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12h12"></path><path d="M6 7h12"></path><path d="M6 17h12"></path></svg></span>
+            <div style="padding-top: 4px; font-size: 13px; color: #0F1B2E;">
+              <strong style="color: #3B82F6;">Payer accepted into adjudication</strong>
+              <div style="font-size: 12px; color: #6B7280; margin-top: 2px;">Payer claim <span style="font-family: 'JetBrains Mono', monospace; color: #0F1B2E;">#21606E98700</span> assigned — awaiting payment decision.</div>
+            </div>
+          </div>
+
+          <!-- 9b · System — day-21 timer -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: center; padding: 4px 0; position: relative;">
+            <span></span>
+            <span style="width: 22px; height: 22px; margin-left: 4px; border-radius: 9999px; background: #F1F5F9; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span>
+            <span style="font-size: 12px; color: #94A3B8;">Day-21 no-response check armed — follow-up scheduled for Jul 21 if no remittance arrives.</span>
+          </div>
+
+          <!-- 10 · Payer — payment 835 -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: start; padding: 8px 0; position: relative;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; padding-top: 8px; text-align: right;">Jul 6 · 6:00 AM</span>
+            <span style="width: 30px; height: 30px; border-radius: 9999px; background: #EBF2FE; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 6v2"></path><path d="M12 16v2"></path></svg></span>
+            <div style="padding-top: 4px; font-size: 13px; color: #0F1B2E; min-width: 0;">
+              <strong style="color: #3B82F6;">Payment received</strong> <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280; background: #EBF2FE; padding: 1px 6px; border-radius: 4px;">835</span>
+              <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #E6F7F2; color: #0B7D6C; font-size: 10px; font-weight: 700; margin-left: 6px;">PAID $71.23</span>
+              <div style="font-size: 12px; color: #6B7280; margin-top: 4px; display: flex; flex-direction: column; gap: 2px;">
+                <span><span style="font-family: 'JetBrains Mono', monospace; color: #0F1B2E;">CO-45</span> Charge exceeds fee schedule — $30.00</span>
+                <span><span style="font-family: 'JetBrains Mono', monospace; color: #0F1B2E;">CO-253</span> Sequestration, federal 2% reduction — $7.20</span>
+                <span>Remittance <span style="font-family: 'JetBrains Mono', monospace; color: #0F1B2E;">EFT-4478215</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 10b · System — day-21 timer disarmed -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: center; padding: 4px 0; position: relative;">
+            <span></span>
+            <span style="width: 22px; height: 22px; margin-left: 4px; border-radius: 9999px; background: #F1F5F9; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></span>
+            <span style="font-size: 12px; color: #94A3B8;">Day-21 check disarmed — remittance received before the deadline.</span>
+          </div>
+
+          <!-- 11 · Agent — variance flagged -->
+          <div style="display: grid; grid-template-columns: 112px 34px 1fr; gap: 8px; align-items: start; padding: 8px 0; position: relative;">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; padding-top: 8px; text-align: right;">Jul 6 · 6:01 AM</span>
+            <span style="width: 30px; height: 30px; border-radius: 9999px; background: #FEF3DF; border: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg></span>
+            <div style="min-width: 0;">
+              <button onClick="{{ tg11 }}" style="display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; border: none; background: transparent; padding: 6px 0; cursor: pointer; font-size: 13px; color: #0F1B2E;">
+                <span style="color: #94A3B8; font-size: 11px; width: 10px;">{{ chev11 }}</span>
+                <span><strong style="color: #5B46D6;">Payment Reconciliation Agent</strong> — variance flagged → sent to <a href="Agent Inbox v3.dc.html" style="font-weight: 700;">Agent Inbox</a></span>
+                <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 10px; font-weight: 700;">NEEDS ATTENTION</span>
+              </button>
+              <sc-if value="{{ ex11 }}" hint-placeholder-val="{{ false }}">
+                <div style="margin: 4px 0 8px 18px; background: #F9FAFB; border: 1px solid #EEEEEE; border-radius: 8px; padding: 12px 14px; font-size: 12px; color: #6B7280; line-height: 19px;">
+                  CO-253 ($7.20) was not in the payment expectation model. Verified as legitimate Medicare sequestration but above the auto-accept threshold — exception VAR-2214 created and routed for human review.
+                  <div style="margin-top: 6px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8;">Config: expectation model v3.2</div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- ===== Source encounter note modal ===== -->
+  <sc-if value="{{ sourceNoteOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeSourceNote }}" style="position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 40px;">
+      <div onClick="{{ stopClick }}" style="background: #FFFFFF; border-radius: 16px; box-shadow: 0 1px 2px -1px rgba(0,0,0,0.1), 0 1px 3px 0 rgba(0,0,0,0.1); width: 720px; max-width: 100%; max-height: 100%; overflow-y: auto; display: flex; flex-direction: column;">
+        <div style="padding: 18px 24px; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; background: #FFFFFF; border-radius: 16px 16px 0 0;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 16px; font-weight: 700; color: #0F1B2E;">Source encounter note</span>
+            <span style="font-size: 12px; color: #6B7280;">The signed note this claim was assembled from — never sent to the payer</span>
+          </div>
+          <div style="flex: 1;"></div>
+          <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; background: #E6F7F2; color: #0B7D6C; font-size: 11px; font-weight: 700;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0B7D6C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+            SIGNED
+          </span>
+          <button onClick="{{ closeSourceNote }}" style="width: 32px; height: 32px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          </button>
+        </div>
+        <div style="padding: 20px 24px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px 20px; font-size: 12px; color: #0F1B2E; background: #F8FAFC; border-radius: 8px; padding: 12px 14px;">
+            <span><span style="color: #6B7280;">Patient</span> <strong>RILEY, DIERDRE W.</strong></span>
+            <span><span style="color: #6B7280;">DOS</span> <span style="font-family: 'JetBrains Mono', monospace;">06-15-2026</span></span>
+            <span><span style="color: #6B7280;">Facility</span> West Woods of Niles (SNF)</span>
+            <span><span style="color: #6B7280;">Provider</span> <strong>Dr. Oranu Ibekie</strong></span>
+            <span><span style="color: #6B7280;">Signed</span> <span style="font-family: 'JetBrains Mono', monospace;">06-16-2026 · 8:41 AM</span></span>
+            <span><span style="color: #6B7280;">Visit type</span> Subsequent nursing facility care</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px; font-size: 13px; line-height: 20px; color: #0F1B2E;">
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px;">Chief complaint / HPI</div>
+              Resident seen for scheduled follow-up of hypertension and type 2 diabetes. Reports mild fatigue; denies chest pain, dyspnea, dizziness. Appetite fair. No falls since last visit.
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px;">Exam (abbreviated)</div>
+              BP 142/86, HR 78, afebrile. Lungs CTA (Clear to Auscultation). No edema in lower extremities. Alert, oriented ×3.
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px;">Assessment &amp; Plan</div>
+              1. Essential hypertension — continue lisinopril 10 mg; recheck BP weekly. 2. Type 2 diabetes without complications — continue metformin; A1c due next month. Face-to-face visit performed; continue current care plan.
+            </div>
+          </div>
+          <div style="border-top: 1px solid #EEEEEE; padding-top: 14px; display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-size: 11px; font-weight: 700; color: #5B46D6; text-transform: uppercase; letter-spacing: 0.06em;">What the Coding Agent extracted for this claim</span>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="display: inline-flex; padding: 4px 10px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace;">CPT 99308</span>
+              <span style="display: inline-flex; padding: 4px 10px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace;">ICD-10 I10</span>
+              <span style="display: inline-flex; padding: 4px 10px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace;">ICD-10 E11.9</span>
+              <span style="display: inline-flex; padding: 4px 10px; border-radius: 9999px; background: #F1F5F9; color: #6B7280; font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace;">POS 32</span>
+            </div>
+            <span style="font-size: 11px; color: #94A3B8;">Only these coded fields went to the payer. The note stays on file as supporting documentation.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toastVisible }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 6px -4px rgba(0,0,0,0.1), 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50;">{{ toast }}</div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;expandAll&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Timeline&quot; }
+}">
+class Component extends DCLogic {
+  state = {
+    navExpanded: (() => { try { return localStorage.getItem('onb-nav-expanded') === '1'; } catch (e) { return false; } })(),
+    srcNote: false,
+    tab: 'timeline',
+    version: 'v2',
+    expanded: { 4: true },
+    raw: {},
+    toast: '',
+  };
+
+  componentWillUnmount() { clearTimeout(this._toastTimer); }
+
+  showToast(msg) {
+    clearTimeout(this._toastTimer);
+    this.setState({ toast: msg });
+    this._toastTimer = setTimeout(() => this.setState({ toast: '' }), 2400);
+  }
+
+  toggle(n) {
+    this.setState(s => ({ expanded: Object.assign({}, s.expanded, { [n]: !s.expanded[n] }) }));
+  }
+
+  copy(text, label) {
+    if (navigator.clipboard) navigator.clipboard.writeText(text).catch(() => {});
+    this.showToast(label + ' copied — ' + text);
+  }
+
+  renderVals() {
+    const st = this.state;
+    const expandAll = !!(this.props.expandAll ?? false);
+    const isOpen = (n) => expandAll || !!st.expanded[n];
+    const chev = (n) => (isOpen(n) ? '▾' : '▸');
+    const tabStyle = (id) => ({
+      fg: st.tab === id ? '#7B61FF' : '#6B7280',
+      border: st.tab === id ? '#7B61FF' : 'transparent',
+    });
+    const tl = tabStyle('timeline'), cl = tabStyle('claim'), pr = tabStyle('payer'), py = tabStyle('payments');
+    const dcTab = tabStyle('docs');
+    if (!this._docRef) this._docRef = React.createRef();
+    const CLAIM_ID = 'ENCT0000432-01';
+    const DOC_STYLE = { agent: ['#F1EEFF', '#5B46D6'], practice: ['#E7F5EF', '#0B7D6C'], billing: ['#F8FAFC', '#6B7280'] };
+    const docs = (window.DocumentsStore ? DocumentsStore.forEntity('claim', CLAIM_ID) : []).map(d => {
+      const ds = DOC_STYLE[d.source] || DOC_STYLE.billing;
+      return {
+        name: d.name, note: d.note || '', docType: d.docType || 'Document',
+        typeBg: ds[0], typeFg: ds[1], iconColor: ds[1],
+        by: d.by || '', when: d.when + (d.size ? ' · ' + d.size : '')
+      };
+    });
+    const isRaw = (n) => !!st.raw[n];
+    const rchev = (n) => (isRaw(n) ? '▾' : '▸');
+    const tgRaw = (n) => () => this.setState(s => ({ raw: Object.assign({}, s.raw, { [n]: !s.raw[n] }) }));
+    return {
+      navClosed: !st.navExpanded,
+      navOpen: st.navExpanded,
+      toggleNav: () => this.setState(prev => { const v = !prev.navExpanded; try { localStorage.setItem('onb-nav-expanded', v ? '1' : '0'); } catch (e) {} return { navExpanded: v }; }),
+      sourceNoteOpen: st.srcNote,
+      openSourceNote: () => this.setState({ srcNote: true }),
+      closeSourceNote: () => this.setState({ srcNote: false }),
+      stopClick: (e) => e.stopPropagation(),
+      showTimeline: st.tab === 'timeline',
+      showClaim: st.tab === 'claim',
+      showPayer: st.tab === 'payer',
+      showPayments: st.tab === 'payments',
+      showDocs: st.tab === 'docs',
+      docs,
+      docCount: String(docs.length),
+      docFileRef: this._docRef,
+      uploadDoc: () => { const i = this._docRef.current; if (i) { i.value = ''; i.click(); } },
+      onDocFile: (e) => {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        DocumentsStore.add({ entityType: 'claim', entityId: CLAIM_ID, name: f.name, docType: 'Billing upload', source: 'billing', by: 'Angela Mensah (Bell Medics)', size: Math.max(1, Math.round(f.size / 1024)) + ' KB', note: 'Uploaded from Claim Detail' });
+        this.showToast('Document attached to the claim');
+        this.forceUpdate();
+      },
+      isV1: st.version === 'v1',
+      isV2: st.version === 'v2',
+      raw1: isRaw(1), chevR1: rchev(1), tgR1: tgRaw(1),
+      raw2: isRaw(2), chevR2: rchev(2), tgR2: tgRaw(2),
+      raw3: isRaw(3), chevR3: rchev(3), tgR3: tgRaw(3),
+      tabTimeline: () => this.setState({ tab: 'timeline' }),
+      tabClaim: () => this.setState({ tab: 'claim' }),
+      tabPayer: () => this.setState({ tab: 'payer' }),
+      tabPayments: () => this.setState({ tab: 'payments' }),
+      tabDocs: () => this.setState({ tab: 'docs' }),
+      tlFg: tl.fg, tlBorder: tl.border,
+      clFg: cl.fg, clBorder: cl.border,
+      prFg: pr.fg, prBorder: pr.border,
+      pyFg: py.fg, pyBorder: py.border,
+      dcFg: dcTab.fg, dcBorder: dcTab.border,
+      v1Bg: st.version === 'v1' ? '#7B61FF' : '#FFFFFF',
+      v1Fg: st.version === 'v1' ? '#FFFFFF' : '#6B7280',
+      v2Bg: st.version === 'v2' ? '#7B61FF' : '#FFFFFF',
+      v2Fg: st.version === 'v2' ? '#FFFFFF' : '#6B7280',
+      viewV1: () => { this.setState({ version: 'v1' }); this.showToast('Viewing claim v1 — before the ZIP+4 fix'); },
+      viewV2: () => { this.setState({ version: 'v2' }); this.showToast('Viewing claim v2 — current, as submitted'); },
+      copyInternal: () => this.copy('ENCT0000432-01', 'Claim ID'),
+      copyPayer: () => this.copy('21606E98700', 'Payer claim number'),
+      ex2: isOpen(2), chev2: chev(2), tg2: () => this.toggle(2),
+      ex3: isOpen(3), chev3: chev(3), tg3: () => this.toggle(3),
+      ex4: isOpen(4), chev4: chev(4), tg4: () => this.toggle(4),
+      ex6: isOpen(6), chev6: chev(6), tg6: () => this.toggle(6),
+      ex11: isOpen(11), chev11: chev(11), tg11: () => this.toggle(11),
+      toast: st.toast,
+      toastVisible: !!st.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

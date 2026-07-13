@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #FFFFFF; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #22C5A7; }
+  a:hover { color: #0B7D6C; }
+  * { box-sizing: border-box; }
+  button { font-family: 'Inter', sans-serif; }
+</style>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #FFFFFF; display: flex; flex-direction: column;" data-screen-label="Ops Admin — Notifications">
+
+  <x-import component-from-global-scope="ops-header" from="./ops-shell.js" hint-size="100%,76px"></x-import>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+    <x-import component-from-global-scope="ops-nav" from="./ops-shell.js" active="notifications" hint-size="300px,900px"></x-import>
+
+    <div style="flex: 1; padding: 34px 44px 60px; display: flex; flex-direction: column; gap: 22px; min-width: 0; max-width: 1020px;">
+
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <h1 style="font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 700; color: #7B61FF; margin: 0;">Notifications</h1>
+        <span style="font-size: 15px; color: #6B7280;">Default notification policy per role. Users can narrow (but not widen) these in their own settings.</span>
+      </div>
+
+      <!-- Role tabs -->
+      <div style="display: flex; gap: 6px; border: 1px solid #E5E7EB; border-radius: 12px; padding: 6px; width: fit-content;">
+        <sc-for list="{{ roleTabs }}" as="t" hint-placeholder-count="3">
+          <button onClick="{{ t.onClick }}" style="height: 40px; padding: 0 18px; border-radius: 8px; border: none; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 13.5px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+            {{ t.label }}
+            <sc-if value="{{ t.isNew }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size: 9px; font-weight: 700; color: #0B7D6C; background: #E6F7F2; border: 1px solid #B9E8DC; border-radius: 9999px; padding: 1px 6px;">NEW</span>
+            </sc-if>
+          </button>
+        </sc-for>
+      </div>
+
+      <!-- Matrix -->
+      <div style="border: 1px solid #E5E7EB; border-radius: 14px; overflow: hidden;">
+        <div style="display: grid; grid-template-columns: 1fr 110px 110px; gap: 12px; padding: 12px 22px; border-bottom: 1px solid #EEF2F7; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.07em;">
+          <span>Event</span><span style="text-align: center;">Email</span><span style="text-align: center;">In-App</span>
+        </div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+          <div style="display: grid; grid-template-columns: 1fr 110px 110px; gap: 12px; padding: 14px 22px; border-bottom: 1px solid #EEF2F7; align-items: center; background: {{ r.rowBg }};">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #0F1B2E;">
+                {{ r.label }}
+                <sc-if value="{{ r.isNew }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size: 9px; font-weight: 700; color: #0B7D6C; background: #E6F7F2; border: 1px solid #B9E8DC; border-radius: 9999px; padding: 1px 6px;">NEW</span>
+                </sc-if>
+              </span>
+              <span style="font-size: 12.5px; color: #6B7280;">{{ r.desc }}</span>
+            </div>
+            <div style="display: flex; justify-content: center;">
+              <button onClick="{{ r.onEmail }}" title="Toggle email" style="width: 38px; height: 22px; border-radius: 9999px; border: none; background: {{ r.emailBg }}; position: relative; cursor: pointer; transition: background 150ms ease-out;">
+                <span style="position: absolute; top: 3px; left: {{ r.emailKnob }}; width: 16px; height: 16px; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: left 150ms ease-out;"></span>
+              </button>
+            </div>
+            <div style="display: flex; justify-content: center;">
+              <button onClick="{{ r.onApp }}" title="Toggle in-app" style="width: 38px; height: 22px; border-radius: 9999px; border: none; background: {{ r.appBg }}; position: relative; cursor: pointer; transition: background 150ms ease-out;">
+                <span style="position: absolute; top: 3px; left: {{ r.appKnob }}; width: 16px; height: 16px; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: left 150ms ease-out;"></span>
+              </button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <span style="font-size: 12.5px; color: #94A3B8;">{{ footNote }}</span>
+
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    tab: 'ops',
+    prefs: (() => { try { return JSON.parse(localStorage.getItem('onb-ops-notifs') || '{}'); } catch (e) { return {}; } })(),
+  };
+
+  setPref(key, val) {
+    const prefs = Object.assign({}, this.state.prefs, { [key]: val });
+    try { localStorage.setItem('onb-ops-notifs', JSON.stringify(prefs)); } catch (e) {}
+    this.setState({ prefs });
+  }
+
+  renderVals() {
+    const st = this.state;
+
+    const roleTabs = [
+      { id: 'ops', label: 'Operations Admin' },
+      { id: 'pa', label: 'Practice Admin' },
+      { id: 'bm', label: 'Billing Manager', isNew: true },
+    ].map(t => ({
+      key: t.id, label: t.label, isNew: !!t.isNew,
+      bg: st.tab === t.id ? '#E6F7F2' : 'transparent',
+      fg: st.tab === t.id ? '#0B7D6C' : '#6B7280',
+      onClick: () => this.setState({ tab: t.id }),
+    }));
+
+    const MATRICES = {
+      ops: [
+        { key: 'facility', label: 'Facility request received', desc: 'A Practice Admin requests a new facility link', dEmail: true, dApp: true },
+        { key: 'mfa', label: 'MFA review flagged', desc: 'Users missing MFA exceed the practice threshold', dEmail: true, dApp: true },
+        { key: 'stuck', label: 'Onboarding invitation stuck', desc: 'An invitation makes no progress for 72 hours \u2014 covers Practice Admins and Billing Managers', dEmail: true, dApp: true, isNew: true },
+        { key: 'cocreated', label: 'Billing company created or suspended', desc: 'Lifecycle changes to any billing-company tenant', dEmail: true, dApp: true, isNew: true },
+        { key: 'reassign', label: 'Practice billing reassignment', desc: 'A practice is moved between billing companies', dEmail: true, dApp: true, isNew: true },
+        { key: 'opsentry', label: 'Ops portal entry', desc: 'Any Operations user enters a practice or billing-company portal', dEmail: false, dApp: true, isNew: true },
+      ],
+      pa: [
+        { key: 'newuser', label: 'User joined the practice', desc: 'An invited user completes onboarding', dEmail: true, dApp: true },
+        { key: 'facilityok', label: 'Facility request decided', desc: 'Operations approves or declines a facility link', dEmail: true, dApp: true },
+        { key: 'billingchange', label: 'Billing company changed', desc: 'The practice\u2019s billing company assignment changes', dEmail: true, dApp: true, isNew: true },
+      ],
+      bm: [
+        { key: 'sla', label: 'SLA breach in Agent Inbox', desc: 'A queued decision passes its SLA without action', dEmail: true, dApp: true, isNew: true },
+        { key: 'invite', label: 'Team invitation accepted', desc: 'An invited rep or manager completes onboarding', dEmail: true, dApp: true, isNew: true },
+        { key: 'practicechange', label: 'Practice contract change', desc: 'A practice is added to or removed from the company', dEmail: true, dApp: true, isNew: true },
+        { key: 'weekly', label: 'Weekly collections report', desc: 'Monday summary compiled in the Billing Portal', dEmail: false, dApp: true, isNew: true },
+      ],
+    };
+
+    const rows = MATRICES[st.tab].map(r => {
+      const emailKey = st.tab + '-' + r.key + '-email';
+      const appKey = st.tab + '-' + r.key + '-app';
+      const email = st.prefs[emailKey] !== undefined ? st.prefs[emailKey] : r.dEmail;
+      const app = st.prefs[appKey] !== undefined ? st.prefs[appKey] : r.dApp;
+      return {
+        key: r.key, label: r.label, desc: r.desc, isNew: !!r.isNew,
+        rowBg: r.isNew ? '#FDFCFF' : '#FFFFFF',
+        emailBg: email ? '#22C5A7' : '#D1D5DC', emailKnob: email ? '19px' : '3px',
+        appBg: app ? '#22C5A7' : '#D1D5DC', appKnob: app ? '19px' : '3px',
+        onEmail: () => this.setPref(emailKey, !email),
+        onApp: () => this.setPref(appKey, !app),
+      };
+    });
+
+    const NOTES = {
+      ops: 'Defaults for all Operations Admins. Changes persist in this prototype.',
+      pa: 'Defaults applied to every Practice Admin across all medical practices.',
+      bm: 'Defaults seeded into each new billing company \u2014 individual users refine them in their portal Settings (as Angela and Derek already can).',
+    };
+
+    return { roleTabs, rows, footNote: NOTES[st.tab] };
+  }
+}
+
+</script>
+</body>
+</html>

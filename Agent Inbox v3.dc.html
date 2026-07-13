@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+<script src="./claims-store.js"></script>
+<script src="./portal-config-store.js"></script>
+<script src="./documents-store.js"></script>
+<script src="./contracts-store.js"></script>
+<script src="./glossary.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="Agent Inbox v3 (pipeline + decisions)">
+
+  <x-import component-from-global-scope="ops-banner" from="./ops-banner.js" hint-size="100%,0px"></x-import>
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Billing Portal</span>
+    <x-import component-from-global-scope="search-bar" from="./search-bar.js" hint-size="480px,40px"></x-import>
+    <div style="flex: 1;"></div>
+    <x-import component-from-global-scope="practice-switcher" from="./practice-switcher.js" hint-size="260px,40px"></x-import>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <x-import component-from-global-scope="role-switcher" from="./role-switcher.js" hint-size="210px,44px"></x-import>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav — collapsed icon rail ===== -->
+    <sc-if value="{{ navClosed }}" hint-placeholder-val="{{ true }}">
+      <div style="width: 64px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 12px 10px; display: flex; flex-direction: column; gap: 6px; align-items: center; flex-shrink: 0;">
+        <button onClick="{{ toggleNav }}" title="Expand navigation" style="width: 40px; height: 36px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 5 5-5 5"></path><path d="m13 7 5 5-5 5"></path></svg>
+        </button>
+        <div style="height: 1px; width: 36px; background: #EEEEEE; margin: 4px 0;"></div>
+        <a href="Billing Home.dc.html" title="Dashboard" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg></a>
+        <a href="Agent Inbox v3.dc.html" title="Agent Inbox" style="width: 40px; height: 40px; border-radius: 4px; background: #7B61FF; display: flex; align-items: center; justify-content: center; text-decoration: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></a>
+        <a href="Coverage.dc.html" title="Coverage" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg></a>
+        <a href="AR Worklist.dc.html" title="AR Worklist" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+        <a href="Claims Register.dc.html" title="Claims" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg></a>
+        <a href="Payments.dc.html" title="Payments" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg></a>
+        <a href="Rulebook.dc.html" title="Rulebook" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></a>
+        <a href="Contracts.dc.html" title="Contracts" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></a>
+        <a href="Analytics.dc.html" title="Analytics" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg></a>
+        <a href="Settings.dc.html" title="Settings" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
+      </div>
+    </sc-if>
+    <!-- ===== Side nav — expanded ===== -->
+    <sc-if value="{{ navOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+      <div style="display: flex; justify-content: flex-end;">
+        <button onClick="{{ toggleNav }}" title="Collapse navigation" style="width: 32px; height: 28px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 17-5-5 5-5"></path><path d="m11 17-5-5 5-5"></path></svg>
+        </button>
+      </div>
+        <a href="Billing Home.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg>
+          Dashboard
+        </a>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+          Agent Inbox
+        </div>
+        <a href="Coverage.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+          Coverage
+        </a>
+        <a href="AR Worklist.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          AR Worklist
+        </a>
+        <a href="Claims Register.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+          Claims
+        </a>
+        <a href="Payments.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Payments
+          <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">NEW</span>
+        </a>
+        <a href="Rulebook.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+          Rulebook
+        </a>
+        <a href="Contracts.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+          Contracts
+                  </a>
+        <a href="Analytics.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+          Analytics
+        </a>
+        <a href="Settings.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Settings
+        </a>
+        <div style="flex: 1;"></div>
+      <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+        <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+        Reach the billing support desk 24/7.
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ===== Main content ===== -->
+    <div style="flex: 1; width: 100%; padding: 24px 28px; display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+
+      <!-- Page title -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <h1 style="font-size: 24px; font-weight: 700; margin: 0;">Agent Inbox</h1>
+        <span style="font-size: 13px; color: #6B7280;">Today · Tue, Jul 7 2026 · {{ practiceLabel }}</span>
+        <div style="flex: 1;"></div>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: {{ breachBg }}; color: {{ breachFg }}; font-size: 12px; font-weight: 600;">{{ breachChipText }}</span>
+      </div>
+
+      <!-- ===== Tab bar ===== -->
+      <div style="display: flex; align-items: center; gap: 4px; border-bottom: 1px solid #E5E7EB;">
+        <button onClick="{{ goTabDecisions }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: none; background: transparent; font-size: 13.5px; font-weight: 700; color: {{ tabDecFg }}; border-bottom: 2px solid {{ tabDecBorder }}; margin-bottom: -1px; cursor: pointer;">
+          Your decisions
+          <span style="display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">{{ decBadge }}</span>
+        </button>
+        <button onClick="{{ goTabQa }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: none; background: transparent; font-size: 13.5px; font-weight: 700; color: {{ tabQaFg }}; border-bottom: 2px solid {{ tabQaBorder }}; margin-bottom: -1px; cursor: pointer;">
+          Agent QA
+          <sc-if value="{{ qaBadgeVisible }}" hint-placeholder-val="{{ true }}">
+            <span style="display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 11px; font-weight: 700;">{{ qaBadge }}</span>
+          </sc-if>
+        </button>
+        <div style="flex: 1;"></div>
+        <sc-if value="{{ tabQA }}" hint-placeholder-val="{{ false }}">
+          <span style="font-size: 12px; color: #94A3B8; padding-right: 4px;">Tier 1 drafts only · Tier 2 acts with your approval · Tier 3 acts on its own, sampled here</span>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ tabDecisions }}" hint-placeholder-val="{{ true }}">
+      <!-- ===== Pipeline: where every claim is ===== -->
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">Today's pipeline</span>
+          <span style="font-size: 12px; color: #6B7280;">{{ volText }} claims · click a stage to see its claims</span>
+        </div>
+        <div style="display: flex; align-items: stretch; gap: 0;">
+          <sc-for list="{{ stages }}" as="sg" hint-placeholder-count="4">
+            <div style="display: flex; align-items: stretch; flex: 1; min-width: 0;">
+              <div onClick="{{ sg.onClick }}" style="flex: 1; min-width: 0; background: {{ sg.bg }}; border: 1px solid {{ sg.border }}; border-radius: 12px; padding: 14px 18px; display: flex; flex-direction: column; gap: 4px; cursor: pointer; transition: border-color 150ms ease-out;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 12px; font-weight: 700; color: {{ sg.labelFg }};">{{ sg.label }}</span>
+                  <div style="flex: 1;"></div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+                </div>
+                <span style="font-size: 26px; font-weight: 700; color: {{ sg.countFg }}; line-height: 30px;">{{ sg.count }}</span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: {{ sg.subFg }};"><span style="width: 7px; height: 7px; border-radius: 9999px; background: {{ sg.subDot }}; flex-shrink: 0;"></span>{{ sg.sub }}</span>
+              </div>
+              <sc-if value="{{ sg.hasArrow }}" hint-placeholder-val="{{ true }}">
+                <div style="display: flex; align-items: center; padding: 0 4px; flex-shrink: 0;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D1D5DC" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- Stage drill-in -->
+        <sc-if value="{{ stageOpenVisible }}" hint-placeholder-val="{{ false }}">
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+            <div style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #EEEEEE;">
+              <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">{{ stagePanelTitle }}</span>
+              <span style="font-size: 12px; color: #6B7280;">{{ stagePanelSub }}</span>
+              <div style="flex: 1;"></div>
+              <button onClick="{{ closeStage }}" style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Close</button>
+            </div>
+            <div style="max-height: 320px; overflow-y: auto;">
+              <sc-for list="{{ stageRows }}" as="r" hint-placeholder-count="6">
+                <div style="display: grid; grid-template-columns: 118px minmax(150px, 1fr) 150px 84px minmax(260px, 1.4fr) 130px; gap: 10px; align-items: center; padding: 8px 16px; border-bottom: 1px solid #EEEEEE; background: {{ r.rowBg }};">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">{{ r.claim }}</span>
+                  <span style="font-size: 12px; font-weight: 600; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ r.patient }}</span>
+                  <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ r.payer }}</span>
+                  <span style="font-size: 12px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums; text-align: right;">{{ r.amtStr }}</span>
+                  <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: {{ r.statusFg }};"><span style="width: 7px; height: 7px; border-radius: 9999px; background: {{ r.statusDot }}; flex-shrink: 0;"></span>{{ r.status }}</span>
+                  <span style="justify-self: end;">
+                    <sc-if value="{{ r.blocked }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ r.goToDecision }}" style="padding: 5px 12px; border-radius: 4px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap;" style-hover="background: #F1EEFF;">{{ r.decisionLabel }}</button>
+                    </sc-if>
+                    <sc-if value="{{ r.notBlocked }}" hint-placeholder-val="{{ true }}">
+                      <span style="font-size: 11px; color: #94A3B8;">{{ r.meta }}</span>
+                    </sc-if>
+                  </span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <!-- ===== EMPTY STATE ===== -->
+      <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 16px; padding: 64px 32px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center;">
+          <div style="width: 64px; height: 64px; border-radius: 9999px; background: #E6F7F2; display: flex; align-items: center; justify-content: center;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; max-width: 480px;">
+            <div style="font-size: 20px; font-weight: 700; color: #0F1B2E;">Nothing needs you right now.</div>
+            <div style="font-size: 14px; color: #6B7280; line-height: 21px;">Your agents are moving every claim through the pipeline above — and still watching the things that take time: open <gloss-t term="crossover">crossovers</gloss-t>, collections veto windows, payment plans, and this week's statement cycle. The moment any of it needs a human, it lands here.</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== YOUR DECISIONS ===== -->
+      <sc-if value="{{ notEmpty }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 16px; font-weight: 700; color: #0F1B2E;">Your decisions</span>
+            <span style="font-size: 13px; color: #6B7280;">{{ decisionsSummary }}</span>
+            <div style="flex: 1;"></div>
+            <sc-if value="{{ showViewToggle }}" hint-placeholder-val="{{ false }}">
+              <span style="display: inline-flex; border: 1px solid #E5E7EB; border-radius: 5px; overflow: hidden;">
+                <button onClick="{{ setViewGrouped }}" style="padding: 5px 12px; border: none; background: {{ viewGroupedBg }}; cursor: pointer; font-size: 11.5px; font-weight: 700; color: {{ viewGroupedFg }};">Grouped</button>
+                <button onClick="{{ setViewCards }}" style="padding: 5px 12px; border: none; background: {{ viewCardsBg }}; cursor: pointer; font-size: 11.5px; font-weight: 700; color: {{ viewCardsFg }};">All cards</button>
+              </span>
+            </sc-if>
+            <button onClick="{{ toggleBusy }}" title="Demo affordance — draws more decisions of each type from the same claims store" style="padding: 5px 12px; border-radius: 5px; border: 1px dashed #C9BCF5; background: #FBFAFF; color: #5B46D6; font-size: 11.5px; font-weight: 700; cursor: pointer;">{{ busyLabel }}</button>
+            <span style="font-size: 12px; font-weight: 600; color: #109680;">{{ decisionsProgressText }}</span>
+          </div>
+          <span style="font-size: 12px; color: #94A3B8;">Every approval in the portal lives here. The queues on Payments and the AR Worklist are working views of these same decisions — acting in either place resolves the one record.</span>
+          <sc-if value="{{ hasGroupOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <button onClick="{{ backToGroups }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 700; cursor: pointer;" style-hover="background: #F8FAFC;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+                All groups
+              </button>
+              <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">{{ groupOpenLabel }}</span>
+            </div>
+          </sc-if>
+          <div style="height: 6px; border-radius: 9999px; background: #EEEEEE; overflow: hidden;">
+            <div style="height: 100%; width: {{ decisionsProgressW }}; background: #22C5A7; border-radius: 9999px; transition: width 240ms ease-out;"></div>
+          </div>
+
+          <sc-if value="{{ allDone }}" hint-placeholder-val="{{ false }}">
+            <div style="background: #E6F7F2; border: 1px solid #A7E8D8; border-radius: 12px; padding: 20px 24px; display: flex; align-items: center; gap: 14px;">
+              <div style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 15px; font-weight: 700; color: #0B7D6C;">All decisions cleared.</span>
+                <span style="font-size: 13px; color: #109680;">{{ allDoneSub }}</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ draftMode }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; align-items: center; gap: 10px; background: #F1EEFF; border: 1px solid #C9BCF5; border-radius: 10px; padding: 12px 18px; font-size: 13px; font-weight: 600; color: #5B46D6;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1 1 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+              Agent autonomy is set to draft-only by Operations — the agent prepares work but approvals are disabled portal-wide. Escalation and requests still work.
+            </div>
+          </sc-if>
+
+          <!-- Grouped view (Phase 10.2) -->
+          <sc-if value="{{ showGrouped }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <sc-for list="{{ groups }}" as="g" hint-placeholder-count="6">
+                <div onClick="{{ g.onOpen }}" style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: border-color 120ms ease-out;" style-hover="border-color: #C9BCF5;">
+                  <span style="min-width: 44px; height: 32px; padding: 0 10px; border-radius: 9999px; background: {{ g.countBg }}; color: {{ g.countFg }}; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; font-family: 'JetBrains Mono', monospace; flex-shrink: 0;">{{ g.count }}</span>
+                  <div style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                      <span style="font-size: 14px; font-weight: 700; color: #0F1B2E;">{{ g.label }}</span>
+                      <span style="font-size: 11.5px; color: #94A3B8;">{{ g.agent }} · {{ g.sla }}</span>
+                    </div>
+                    <span style="font-size: 12px; color: {{ g.noteFg }}; line-height: 17px;">{{ g.note }}</span>
+                  </div>
+                  <sc-if value="{{ g.isBatchable }}" hint-placeholder-val="{{ false }}">
+                    <button onClick="{{ g.onBatch }}" style="padding: 9px 16px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0;" style-hover="background: #5B46D6;">{{ g.batchLabel }}</button>
+                  </sc-if>
+                  <button onClick="{{ g.onOpen }}" style="padding: 9px 16px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12.5px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0;" style-hover="background: #F8FAFC;">{{ g.reviewLabel }}</button>
+                </div>
+              </sc-for>
+              <span style="font-size: 11.5px; color: #94A3B8;">A group is batch-approvable only when every member passes the identical policy check — otherwise it opens for item-by-item review. Batch approvals log each decision individually under your name.</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showCards }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+          <sc-for list="{{ decisions }}" as="dd" hint-placeholder-count="4">
+            <div style="background: {{ dd.cardBg }}; border: 1px solid {{ dd.cardBorder }}; border-radius: 12px; overflow: hidden; transition: border-color 150ms ease-out;">
+
+              <!-- Card header row -->
+              <div onClick="{{ dd.onToggle }}" style="display: flex; align-items: center; gap: 14px; padding: 14px 18px; cursor: pointer;">
+                <sc-if value="{{ dd.isDone }}" hint-placeholder-val="{{ false }}">
+                  <div style="width: 34px; height: 34px; border-radius: 9999px; background: #22C5A7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ dd.notDone }}" hint-placeholder-val="{{ true }}">
+                  <div style="width: 34px; height: 34px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0;">{{ dd.num }}</div>
+                </sc-if>
+                <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 14px; font-weight: 700; color: {{ dd.titleFg }};">{{ dd.title }}</span>
+                    <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: {{ dd.stageBg }}; color: {{ dd.stageFg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">Stuck at {{ dd.stage }}</span>
+                    <sc-if value="{{ dd.showSla }}" hint-placeholder-val="{{ false }}">
+                      <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: {{ dd.slaBg }}; color: {{ dd.slaFg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ dd.sla }}</span>
+                    </sc-if>
+                    <sc-if value="{{ dd.isEscalated }}" hint-placeholder-val="{{ false }}">
+                      <span style="display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 10px; font-weight: 700; white-space: nowrap;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 22h20L12 2Z"></path><path d="M12 9v5"></path><path d="M12 17h.01"></path></svg>Escalated · Derek Okafor</span>
+                    </sc-if>
+                    <sc-if value="{{ dd.escYouChip }}" hint-placeholder-val="{{ false }}">
+                      <span style="display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 10px; font-weight: 700; white-space: nowrap;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 22h20L12 2Z"></path><path d="M12 9v5"></path><path d="M12 17h.01"></path></svg>Escalated to you</span>
+                    </sc-if>
+                  </div>
+                  <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ dd.subtitle }}</span>
+                </div>
+                <sc-if value="{{ dd.notDone }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ dd.onApprove }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: background 150ms ease-out;" style-hover="background: #109680;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                    {{ dd.primaryShort }}
+                  </button>
+                </sc-if>
+                <sc-if value="{{ dd.isDone }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ dd.onUndo }}" style="padding: 8px 14px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0;" style-hover="background: #F1F5F9;">Undo</button>
+                </sc-if>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; transform: rotate({{ dd.chevRot }}); transition: transform 150ms ease-out;"><path d="m6 9 6 6 6-6"></path></svg>
+              </div>
+
+              <!-- Expanded body -->
+              <sc-if value="{{ dd.expanded }}" hint-placeholder-val="{{ false }}">
+                <div style="border-top: 1px solid #EEEEEE; padding: 16px 18px 18px 66px; display: flex; flex-direction: column; gap: 14px;">
+                  <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #6B7280;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg>
+                    {{ dd.agent }} says:
+                  </div>
+                  <div style="background: #F1EEFF; border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 20px; color: #0F1B2E; margin-top: -6px;">{{ dd.narrative }}</div>
+                  <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden; background: #FFFFFF;">
+                    <sc-for list="{{ dd.evidence }}" as="ev" hint-placeholder-count="3">
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-bottom: 1px solid #EEEEEE;">
+                        <span style="font-size: 12px; font-weight: 600; color: #6B7280; width: 140px; flex-shrink: 0;">{{ ev.k }}</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 4px; background: {{ ev.vBg }}; color: {{ ev.vFg }};">{{ ev.v }}</span>
+                        <span style="font-size: 11px; color: #94A3B8;">{{ ev.note }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{ dd.hasAttachments }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                      <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Attachments</span>
+                      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <sc-for list="{{ dd.attachments }}" as="att" hint-placeholder-count="1">
+                          <span style="display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 8px; background: #E7F5EF; border: 1px solid #BFE8DC; font-size: 12px; font-weight: 600; color: #0F1B2E;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0B7D6C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path></svg>
+                            {{ att.name }}
+                            <span style="font-size: 10.5px; color: #94A3B8; font-weight: 400;">{{ att.meta }}</span>
+                          </span>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ dd.hasPattern }}" hint-placeholder-val="{{ false }}">
+                    <a href="Analytics.dc.html#prevention" style="display: flex; align-items: center; gap: 8px; background: #F1EEFF; border-radius: 8px; padding: 9px 12px; text-decoration: none;">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 16h5v5"></path></svg>
+                      <span style="font-size: 12px; color: #5B46D6; font-weight: 600; flex: 1;">{{ dd.patternNote }}</span>
+                      <span style="font-size: 11px; font-weight: 700; color: #7B61FF; white-space: nowrap;">View in Prevention →</span>
+                    </a>
+                  </sc-if>
+                  <sc-if value="{{ dd.hasAffected }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                      <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Affected claims ({{ dd.count }})</span>
+                      <div style="border: 1px solid #E5E7EB; border-radius: 8px; max-height: 150px; overflow-y: auto; background: #FFFFFF;">
+                        <sc-for list="{{ dd.affected }}" as="ac" hint-placeholder-count="4">
+                          <div style="display: flex; align-items: center; gap: 10px; padding: 6px 14px; border-bottom: 1px solid #EEEEEE; font-size: 12px;">
+                            <a href="Claim Detail.dc.html" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #7B61FF; text-decoration: none; flex-shrink: 0;">{{ ac.claim }}</a>
+                            <span style="color: #0F1B2E; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;">{{ ac.patient }}</span>
+                            <span style="font-family: 'JetBrains Mono', monospace; color: #6B7280; font-variant-numeric: tabular-nums;">{{ ac.amtStr }}</span>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <!-- Escalated to you (manager view) -->
+                  <sc-if value="{{ dd.isEscalatedToYou }}" hint-placeholder-val="{{ false }}">
+                    <div style="border: 1px solid #F5D9A8; border-radius: 10px; background: #FFFBF2; padding: 14px 16px; display: flex; align-items: center; gap: 12px;">
+                      <span style="width: 30px; height: 30px; border-radius: 9999px; background: linear-gradient(#7B61FF, #22C5A7); color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0;">AM</span>
+                      <div style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0;">
+                        <span style="font-size: 13px; font-weight: 700; color: #B45309;">Escalated to you by Angela Mensah</span>
+                        <span style="font-size: 12px; color: #6B7280;">Reason: {{ dd.escReasonText }} — your decision below closes the loop.</span>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ dd.showActionRow }}" hint-placeholder-val="{{ true }}">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <button onClick="{{ dd.onApprove }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 8px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #109680;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                        {{ dd.primaryLabel }}
+                      </button>
+                      <button onClick="{{ dd.onEdit }}" style="padding: 10px 16px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Edit first</button>
+                      <sc-if value="{{ dd.canEscalate }}" hint-placeholder-val="{{ true }}">
+                        <button onClick="{{ dd.onEscalate }}" style="padding: 10px 16px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Escalate</button>
+                      </sc-if>
+                      <div style="flex: 1;"></div>
+                      <span style="font-size: 11px; color: #94A3B8;">Logged to the claim timeline under your name.</span>
+                    </div>
+                  </sc-if>
+
+                  <!-- Edit-first panel -->
+                  <sc-if value="{{ dd.isEditing }}" hint-placeholder-val="{{ false }}">
+                    <div style="border: 1px solid #C9BCF5; border-radius: 10px; background: #FBFAFF; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+                        <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">Edit the agent's fix before approving</span>
+                      </div>
+                      <sc-if value="{{ dd.hasEditField }}" hint-placeholder-val="{{ true }}">
+                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                          <label style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em;">{{ dd.editFieldLabel }}</label>
+                          <input value="{{ dd.editVal }}" onInput="{{ dd.onEditVal }}" style="width: 100%; padding: 9px 12px; border: 1px solid #D1D5DC; border-radius: 6px; font-size: 13px; font-family: 'JetBrains Mono', monospace; color: #0F1B2E; background: #FFFFFF; box-sizing: border-box;">
+                        </div>
+                      </sc-if>
+                      <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em;">Adjustment note (optional)</label>
+                        <textarea value="{{ dd.editNote }}" onInput="{{ dd.onEditNote }}" placeholder="Why you changed the agent's proposal — recorded on the claim timeline and used to improve the agent." style="width: 100%; min-height: 56px; resize: vertical; padding: 9px 12px; border: 1px solid #D1D5DC; border-radius: 6px; font-size: 13px; font-family: 'Inter', sans-serif; color: #0F1B2E; background: #FFFFFF; box-sizing: border-box;"></textarea>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <button onClick="{{ dd.onApproveEdits }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: #109680;">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                          Approve with edits
+                        </button>
+                        <button onClick="{{ dd.onCancelEdit }}" style="padding: 9px 16px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Cancel</button>
+                        <div style="flex: 1;"></div>
+                        <span style="font-size: 11px; color: #94A3B8;">Your changes are logged against the agent's original proposal.</span>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <!-- Escalate panel -->
+                  <sc-if value="{{ dd.isEscalating }}" hint-placeholder-val="{{ false }}">
+                    <div style="border: 1px solid #F5D9A8; border-radius: 10px; background: #FFFBF2; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 22h20L12 2Z"></path><path d="M12 9v5"></path><path d="M12 17h.01"></path></svg>
+                        <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">Escalate to your billing manager</span>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #FFFFFF; border: 1px solid #F0E4C9; border-radius: 8px;">
+                        <span style="width: 28px; height: 28px; border-radius: 9999px; background: linear-gradient(#7B61FF, #22C5A7); color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">DO</span>
+                        <div style="display: flex; flex-direction: column;">
+                          <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">Derek Okafor</span>
+                          <span style="font-size: 11px; color: #6B7280;">Billing Manager · Bell Medics</span>
+                        </div>
+                      </div>
+                      <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <label style="font-size: 11px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em;">Reason (required)</label>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                          <button onClick="{{ dd.setEscQuick1 }}" style="padding: 5px 11px; border-radius: 9999px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 11px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Payer-specific judgment call</button>
+                          <button onClick="{{ dd.setEscQuick2 }}" style="padding: 5px 11px; border-radius: 9999px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 11px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">High-dollar — second review</button>
+                          <button onClick="{{ dd.setEscQuick3 }}" style="padding: 5px 11px; border-radius: 9999px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 11px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Payer policy unclear</button>
+                        </div>
+                        <textarea value="{{ dd.escReason }}" onInput="{{ dd.onEscReason }}" placeholder="Add context for Derek — what you want him to decide." style="width: 100%; min-height: 56px; resize: vertical; padding: 9px 12px; border: 1px solid #D1D5DC; border-radius: 6px; font-size: 13px; font-family: 'Inter', sans-serif; color: #0F1B2E; background: #FFFFFF; box-sizing: border-box;"></textarea>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <button onClick="{{ dd.onConfirmEscalate }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px; border: none; background: #B45309; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: #92400E;">Send to Derek</button>
+                        <button onClick="{{ dd.onCancelEscalate }}" style="padding: 9px 16px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Cancel</button>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <!-- Escalated banner -->
+                  <sc-if value="{{ dd.isEscalated }}" hint-placeholder-val="{{ false }}">
+                    <div style="border: 1px solid #F5D9A8; border-radius: 10px; background: #FFFBF2; padding: 14px 16px; display: flex; align-items: center; gap: 12px;">
+                      <span style="width: 30px; height: 30px; border-radius: 9999px; background: linear-gradient(#7B61FF, #22C5A7); color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0;">DO</span>
+                      <div style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0;">
+                        <span style="font-size: 13px; font-weight: 700; color: #B45309;">Escalated to Derek Okafor — awaiting his decision</span>
+                        <span style="font-size: 12px; color: #6B7280;">Reason: {{ dd.escReasonText }}</span>
+                      </div>
+                      <button onClick="{{ dd.onRecall }}" style="padding: 8px 14px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0;" style-hover="background: #F1F5F9;">Recall</button>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ dd.isDone }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #109680; font-weight: 600;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                      {{ dd.doneNote }}
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+          </div>
+          </sc-if>
+        </div>
+      </sc-if>
+      </sc-if>
+
+      <!-- ===== AGENT QA TAB ===== -->
+      <sc-if value="{{ tabQA }}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 20px;" data-screen-label="Agent QA tab">
+
+        <!-- Scorecard strip -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+          <sc-for list="{{ qaStats }}" as="qs" hint-placeholder-count="4">
+            <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 18px; display: flex; flex-direction: column; gap: 4px;">
+              <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">{{ qs.label }}</span>
+              <span style="font-size: 26px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: {{ qs.fg }};">{{ qs.value }}</span>
+              <span style="font-size: 12px; color: #6B7280;">{{ qs.sub }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- Tier recommendation -->
+        <sc-if value="{{ tierPending }}" hint-placeholder-val="{{ false }}">
+          <div style="background: #F1EEFF; border: 1px solid #C9BCF5; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 36px; height: 36px; border-radius: 9999px; background: #7B61FF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0;">
+                <span style="font-size: 14.5px; font-weight: 700; color: #0F1B2E;">Autonomy recommendation — Outage resubmission: Tier 2 → Tier 3</span>
+                <span style="font-size: 12.5px; color: #5B46D6;">You approved this action 24 times in a row without a single edit. The agent can start doing it on its own — sampled here at 10%.</span>
+              </div>
+              <sc-if value="{{ tierCanApprove }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ approveTier }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                  Raise to Tier 3
+                </button>
+                <button onClick="{{ dismissTier }}" style="padding: 9px 16px; border-radius: 4px; border: 1px solid #C9BCF5; background: #FFFFFF; color: #5B46D6; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0;" style-hover="background: #F8F7FF;">Keep at Tier 2</button>
+              </sc-if>
+              <sc-if value="{{ tierNeedsMgr }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size: 12px; color: #6B7280; flex-shrink: 0; text-align: right;">Awaiting Derek Okafor —<br>tier changes need a billing manager</span>
+              </sc-if>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+              <div style="background: #FFFFFF; border-radius: 8px; padding: 10px 14px; display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">Agreement</span>
+                <span style="font-size: 16px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #1B7F5E;">24 / 24</span>
+                <span style="font-size: 11px; color: #6B7280;">approvals over 6 weeks, no edits</span>
+              </div>
+              <div style="background: #FFFFFF; border-radius: 8px; padding: 10px 14px; display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">Escalations</span>
+                <span style="font-size: 16px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #1B7F5E;">0</span>
+                <span style="font-size: 11px; color: #6B7280;">none sent up in the window</span>
+              </div>
+              <div style="background: #FFFFFF; border-radius: 8px; padding: 10px 14px; display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">Downstream</span>
+                <span style="font-size: 16px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #1B7F5E;">0 re-rejects</span>
+                <span style="font-size: 11px; color: #6B7280;">every resubmission was accepted</span>
+              </div>
+            </div>
+            <span style="font-size: 11.5px; color: #6B7280;">The change is recorded in the Audit Log and can be reverted any time. Tier 3 actions keep appearing in this sample queue.</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ tierDone }}" hint-placeholder-val="{{ false }}">
+          <div style="background: #E6F7F2; border: 1px solid #A7E8D8; border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; gap: 12px;">
+            <div style="width: 34px; height: 34px; border-radius: 9999px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px; flex: 1;">
+              <span style="font-size: 13.5px; font-weight: 700; color: #0B7D6C;">Outage resubmission raised to Tier 3</span>
+              <span style="font-size: 12px; color: #109680;">Logged to the Audit Log · the agent now resubmits outage-rejected claims on its own, sampled here at 10%.</span>
+            </div>
+            <button onClick="{{ revertTier }}" style="padding: 8px 14px; border-radius: 4px; border: 1px solid #A7E8D8; background: #FFFFFF; color: #0B7D6C; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0;" style-hover="background: #F7FDFB;">Revert to Tier 2</button>
+          </div>
+        </sc-if>
+
+        <!-- Sample queue -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 16px; font-weight: 700; color: #0F1B2E;">This week's sample</span>
+            <span style="font-size: 13px; color: #6B7280;">{{ qaSummary }}</span>
+            <div style="flex: 1;"></div>
+            <span style="font-size: 12px; font-weight: 600; color: #109680;">{{ qaProgressText }}</span>
+          </div>
+          <div style="height: 6px; border-radius: 9999px; background: #EEEEEE; overflow: hidden;">
+            <div style="height: 100%; width: {{ qaProgressW }}; background: #22C5A7; border-radius: 9999px; transition: width 240ms ease-out;"></div>
+          </div>
+
+          <sc-for list="{{ qaSamples }}" as="q" hint-placeholder-count="4">
+            <div style="background: {{ q.cardBg }}; border: 1px solid {{ q.cardBorder }}; border-radius: 12px; overflow: hidden; transition: border-color 150ms ease-out;">
+              <div onClick="{{ q.onToggle }}" style="display: flex; align-items: center; gap: 14px; padding: 14px 18px; cursor: pointer;">
+                <sc-if value="{{ q.isAgree }}" hint-placeholder-val="{{ false }}">
+                  <div style="width: 34px; height: 34px; border-radius: 9999px; background: #22C5A7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ q.isDisagree }}" hint-placeholder-val="{{ false }}">
+                  <div style="width: 34px; height: 34px; border-radius: 9999px; background: #FF6E6C; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ q.notReviewed }}" hint-placeholder-val="{{ true }}">
+                  <div style="width: 34px; height: 34px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0;">{{ q.num }}</div>
+                </sc-if>
+                <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 14px; font-weight: 700; color: {{ q.titleFg }};">{{ q.title }}</span>
+                    <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ q.tier }}</span>
+                    <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #F1F5F9; color: #6B7280; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ q.actionType }}</span>
+                  </div>
+                  <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ q.subtitle }}</span>
+                </div>
+                <sc-if value="{{ q.notReviewed }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ q.onAgree }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: background 150ms ease-out;" style-hover="background: #109680;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg>
+                    Agree
+                  </button>
+                </sc-if>
+                <sc-if value="{{ q.reviewed }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ q.onUndo }}" style="padding: 8px 14px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0;" style-hover="background: #F1F5F9;">Undo</button>
+                </sc-if>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; transform: rotate({{ q.chevRot }}); transition: transform 150ms ease-out;"><path d="m6 9 6 6 6-6"></path></svg>
+              </div>
+
+              <sc-if value="{{ q.expanded }}" hint-placeholder-val="{{ false }}">
+                <div style="border-top: 1px solid #EEEEEE; padding: 16px 18px 18px 66px; display: flex; flex-direction: column; gap: 14px;">
+                  <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #6B7280;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg>
+                    {{ q.agent }} did this on its own — {{ q.when }}:
+                  </div>
+                  <div style="background: #F1EEFF; border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 20px; color: #0F1B2E; margin-top: -6px;">{{ q.narrative }}</div>
+                  <div style="border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden; background: #FFFFFF;">
+                    <sc-for list="{{ q.evidence }}" as="ev" hint-placeholder-count="3">
+                      <div style="display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-bottom: 1px solid #EEEEEE;">
+                        <span style="font-size: 12px; font-weight: 600; color: #6B7280; width: 140px; flex-shrink: 0;">{{ ev.k }}</span>
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 4px; background: {{ ev.vBg }}; color: {{ ev.vFg }};">{{ ev.v }}</span>
+                        <span style="font-size: 11px; color: #94A3B8;">{{ ev.note }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 10px; font-size: 12px;">
+                    <a href="Claim Detail.dc.html" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #7B61FF; text-decoration: none;">{{ q.claim }}</a>
+                    <span style="color: #6B7280;">{{ q.patient }} · {{ q.payer }} · {{ q.amtStr }}</span>
+                    <sc-if value="{{ q.hasRuleLink }}" hint-placeholder-val="{{ false }}">
+                      <a href="Rulebook.dc.html" style="font-size: 11px; font-weight: 700; color: #7B61FF; text-decoration: none; margin-left: auto;">View rule in Rulebook →</a>
+                    </sc-if>
+                  </div>
+
+                  <sc-if value="{{ q.showActionRow }}" hint-placeholder-val="{{ true }}">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <button onClick="{{ q.onAgree }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 8px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #109680;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg>
+                        Agree — I'd have done the same
+                      </button>
+                      <button onClick="{{ q.onDisagree }}" style="padding: 10px 16px; border-radius: 4px; border: 1px solid #FFD3D2; background: #FFFFFF; color: #DC2626; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #FFF7F7;">Disagree…</button>
+                      <div style="flex: 1;"></div>
+                      <span style="font-size: 11px; color: #94A3B8;">Your review feeds the agent's scorecard below.</span>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ q.isDisagreeing }}" hint-placeholder-val="{{ false }}">
+                    <div style="border: 1px solid #FFD3D2; border-radius: 10px; background: #FFF7F7; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 22h20L12 2Z"></path><path d="M12 9v5"></path><path d="M12 17h.01"></path></svg>
+                        <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">What should the agent have done instead?</span>
+                      </div>
+                      <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                        <button onClick="{{ q.setDis1 }}" style="padding: 5px 11px; border-radius: 9999px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 11px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Should have escalated to a human</button>
+                        <button onClick="{{ q.setDis2 }}" style="padding: 5px 11px; border-radius: 9999px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 11px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Right action, wrong details</button>
+                        <button onClick="{{ q.setDis3 }}" style="padding: 5px 11px; border-radius: 9999px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 11px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Should have waited</button>
+                      </div>
+                      <textarea value="{{ q.disNote }}" onInput="{{ q.onDisNote }}" placeholder="Describe the call you'd have made — this goes to the agent team and the claim timeline." style="width: 100%; min-height: 56px; resize: vertical; padding: 9px 12px; border: 1px solid #D1D5DC; border-radius: 6px; font-size: 13px; font-family: 'Inter', sans-serif; color: #0F1B2E; background: #FFFFFF; box-sizing: border-box;"></textarea>
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <button onClick="{{ q.onConfirmDisagree }}" style="padding: 10px 18px; border-radius: 8px; border: none; background: #DC2626; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: #B91C1C;">Log disagreement</button>
+                        <button onClick="{{ q.onCancelDisagree }}" style="padding: 9px 16px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Cancel</button>
+                        <div style="flex: 1;"></div>
+                        <span style="font-size: 11px; color: #94A3B8;">Disagreements pause tier raises for this action type.</span>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ q.isAgree }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #109680; font-weight: 600;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#109680" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                      You agreed with the agent's call — counted toward {{ q.actionType }}.
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ q.isDisagree }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #DC2626; font-weight: 600;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 22h20L12 2Z"></path><path d="M12 9v5"></path><path d="M12 17h.01"></path></svg>
+                      Disagreement logged{{ q.disNoteSuffix }} — sent to the agent team and recorded on the claim timeline.
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- Scorecard by action type -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: baseline; gap: 8px;">
+            <span style="font-size: 16px; font-weight: 700; color: #0F1B2E;">Agreement by action type</span>
+            <span style="font-size: 13px; color: #6B7280;">last 4 weeks · sampled reviews + your approval history</span>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+            <div style="display: grid; grid-template-columns: minmax(220px, 1.4fr) 130px 110px 90px 1fr 130px; gap: 10px; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 18px; border-bottom: 1px solid #E5E7EB; align-items: center;">
+            <span>Action type</span><span>Tier</span><span style="text-align: right;">Auto this week</span><span style="text-align: right;">Sampled</span><span>Agreement</span><span style="text-align: right;">Trend</span>
+            </div>
+            <sc-for list="{{ scoreRows }}" as="sr" hint-placeholder-count="6">
+              <div style="display: grid; grid-template-columns: minmax(220px, 1.4fr) 130px 110px 90px 1fr 130px; gap: 10px; padding: 11px 18px; border-bottom: 1px solid #F1F5F9; font-size: 13px; align-items: center; background: {{ sr.rowBg }};">
+                <span style="font-weight: 600; color: #0F1B2E;">{{ sr.name }}</span>
+                <span><span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: {{ sr.tierBg }}; color: {{ sr.tierFg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ sr.tier }}</span></span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B7280; text-align: right;">{{ sr.auto }}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B7280; text-align: right;">{{ sr.sampled }}</span>
+                <span style="display: flex; align-items: center; gap: 10px;">
+                  <span style="flex: 1; height: 8px; border-radius: 9999px; background: #F1F5F9; overflow: hidden; display: block;"><span style="display: block; height: 100%; border-radius: 9999px; background: {{ sr.barColor }}; width: {{ sr.barW }};"></span></span>
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: {{ sr.pctFg }}; width: 42px; text-align: right;">{{ sr.pct }}</span>
+                </span>
+                <span style="font-size: 12px; font-weight: 600; color: {{ sr.trendFg }}; text-align: right; white-space: nowrap;">{{ sr.trend }}</span>
+              </div>
+            </sc-for>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 18px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+              <span style="font-size: 12px; color: #6B7280;">Agreement below 90% pauses autonomy for that action type — everything routes back through your decisions until it recovers.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <sc-if value="{{ toastVisible }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 6px -4px rgba(0,0,0,0.1), 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50;">{{ toast }}</div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;dailyVolume&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 180, &quot;min&quot;: 60, &quot;max&quot;: 240, &quot;step&quot;: 20, &quot;unit&quot;: &quot; claims&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Stress test&quot; },
+  &quot;emptyState&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Inbox state&quot; }
+}">
+class Component extends DCLogic {
+  practiceKey() { try { return localStorage.getItem('onb-practice') === 'wfm' ? 'wfm' : 'ifc'; } catch (e) { return 'ifc'; } }
+  resolvedStoreKey() { return 'onb-inbox-resolved-' + this.practiceKey(); }
+  loadResolved() { try { return JSON.parse(localStorage.getItem(this.resolvedStoreKey()) || '{}'); } catch (e) { return {}; } }
+  persistResolved(resolved) { try { localStorage.setItem(this.resolvedStoreKey(), JSON.stringify(resolved)); } catch (e) {} }
+  escalatedStoreKey() { return 'onb-inbox-escalated-' + this.practiceKey(); }
+  persistEscalated(escalated) { try { localStorage.setItem(this.escalatedStoreKey(), JSON.stringify(escalated)); } catch (e) {} }
+  qaStoreKey() { return 'onb-qa-reviews-' + this.practiceKey(); }
+  persistQa(r) { try { localStorage.setItem(this.qaStoreKey(), JSON.stringify(r)); } catch (e) {} }
+  tierStoreKey() { return 'onb-qa-tier3-' + this.practiceKey(); }
+  persistTier(v) { try { localStorage.setItem(this.tierStoreKey(), v); } catch (e) {} }
+
+  state = {
+    navExpanded: (() => { try { return localStorage.getItem('onb-nav-expanded') === '1'; } catch (e) { return false; } })(),
+    expanded: null,
+    resolved: (() => { try { const p = localStorage.getItem('onb-practice') === 'wfm' ? 'wfm' : 'ifc'; return JSON.parse(localStorage.getItem('onb-inbox-resolved-' + p) || '{}'); } catch (e) { return {}; } })(),
+    editApplied: {},
+    escalated: (() => { try { const p = localStorage.getItem('onb-practice') === 'wfm' ? 'wfm' : 'ifc'; return JSON.parse(localStorage.getItem('onb-inbox-escalated-' + p) || '{}'); } catch (e) { return {}; } })(),
+    editing: null,
+    escalating: null,
+    editVal: '',
+    editNote: '',
+    escReason: '',
+    stageOpen: null,
+    toast: '',
+    tab: 'decisions',
+    qaExpanded: null,
+    qaDisagreeing: null,
+    qaNote: '',
+    qaReviews: (() => { try { const p = localStorage.getItem('onb-practice') === 'wfm' ? 'wfm' : 'ifc'; return JSON.parse(localStorage.getItem('onb-qa-reviews-' + p) || '{}'); } catch (e) { return {}; } })(),
+    tierState: (() => { try { const p = localStorage.getItem('onb-practice') === 'wfm' ? 'wfm' : 'ifc'; return localStorage.getItem('onb-qa-tier3-' + p) || 'pending'; } catch (e) { return 'pending'; } })(),
+    busy: (() => { try { return localStorage.getItem('onb-inbox-busy') === '1'; } catch (e) { return false; } })(),
+    inboxView: 'grouped',
+    groupOpen: null,
+  };
+
+  // Batch policy per decision type (keyed by primaryShort). A group is batchable
+  // only when every member passes the identical policy check — that distinction
+  // is itself governance, and the note states why.
+  static GROUPS = {
+    'Approve reprocess': { label: 'Underpayment reprocess requests', batchable: true, note: 'Identical check on every claim: paid below a CONTRACTED rate, no explaining adjustment code' },
+    'Approve write-off': { label: 'Small-balance write-offs', batchable: true, note: 'Every residual is within your $50 threshold \u00b7 reason SB \u00b7 one policy, one approval' },
+    'Ask facility': { label: 'Returned mail — address requests', batchable: true, note: 'Same request to the facility clerk; every cycle clock pauses on send' },
+    'Submit direct': { label: 'Stalled crossovers — direct submissions', batchable: true, note: 'Same 10-day silence rule; every submission is duplicate-safe' },
+    'Approve & submit': { label: 'Secondary claims — first to this plan', batchable: false, note: 'First submission to each plan needs individual review — tier-gating is per plan' },
+    'Approve plan': { label: 'Payment plan requests', batchable: false, note: 'Terms differ per patient — each plan is its own agreement' },
+    'Approve for export': { label: 'Collections proposals', batchable: false, note: 'Read each contact history — a person goes to an agency, not a number' },
+  };
+
+  componentDidMount() {
+    const tryInit = () => {
+      const first = this.data().decisions[0];
+      if (this.state.expanded === null && first) this.setState({ expanded: first.key });
+    };
+    if (window.ClaimsStore) { tryInit(); return; }
+    let tries = 0;
+    this._pollStore = setInterval(() => {
+      tries++;
+      if (window.ClaimsStore || tries > 40) { clearInterval(this._pollStore); this.forceUpdate(); tryInit(); }
+    }, 50);
+  }
+
+  componentWillUnmount() { clearTimeout(this._toastTimer); clearInterval(this._pollStore); }
+
+  money(n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+  data() {
+    const S = window.ClaimsStore;
+    const practice = S ? S.currentPractice() : 'ifc';
+    const isWFM = practice === 'wfm';
+    const volTweak = isWFM ? 90 : (this.props.dailyVolume ?? 180);
+    const busy = !!this.state.busy;
+    if (this._data && this._practice === practice && this._vol === volTweak && this._busy === busy) return this._data;
+    if (!S) return { vol: 0, excN: 0, doneN: 0, workN: 0, decisions: [], working: [], doneRows: [], isWFM, practiceLabel: '' };
+
+    const all = S.getAllClaims(practice);
+    const open = all.filter(c => c.statusCat === 'open');
+    const closed = all.filter(c => c.statusCat === 'paid' || c.statusCat === 'void');
+    const byArch = {};
+    open.forEach(c => { (byArch[c.archKey] = byArch[c.archKey] || []).push(c); });
+
+    // Deterministic drawdown from the shared store so every claim shown here is a real
+    // register record (opens in Claim Detail; approvals write back to the store).
+    const used = new Set();
+    const take = (pool, count, filter) => {
+      const out = [];
+      for (let i = 0; pool && i < pool.length && out.length < count; i++) {
+        const c = pool[i];
+        if (used.has(c.id) || (filter && !filter(c))) continue;
+        used.add(c.id); out.push(c);
+      }
+      return out;
+    };
+    const toItem = c => ({ id: c.id, claim: c.claim, patient: c.patient, payer: c.payer, billed: c.billed, amt: c.balance, amtStr: this.money(c.balance) });
+    const sum = arr => arr.reduce((s, c) => s + c.amt, 0);
+
+    // ---- Decision batches, each bound to real store claims ----
+    const zipItems = take(byArch.draft, 18, c => c.payerCat === 'Medicare').map(toItem);
+    const outageItems = take(open, 12, c => c.payerCat === 'Medicaid' && (c.archKey === 'ready' || c.archKey === 'inprocess' || c.archKey === 'reprocess')).map(toItem);
+    const seqItems = take(byArch.underpay, 8, c => c.payerCat === 'Medicare').map(toItem);
+    const zipN = zipItems.length, portalN = outageItems.length, seqN = seqItems.length;
+
+    const decisions = [];
+    if (zipN) decisions.push({
+      key: 'd1', stageKey: 'validate', stage: 'Validation', agent: 'Claim Validation Agent',
+      editFix: { label: 'Corrected billing ZIP', value: '49120-3414', mono: true },
+      patternNote: '2nd address-quality pattern this quarter — the Denial Triage Agent is tracking the root cause',
+      title: 'One address fix unblocks ' + zipN + ' Medicare claims',
+      subtitle: 'Rule MCR-J8 · 214 — billing ZIP needs +4. Fix: 49120 → 49120-3414 · ' + this.money(sum(zipItems)) + ' total',
+      breached: false, sla: 'Due today',
+      primaryShort: 'Approve fix for all ' + zipN,
+      primaryLabel: 'Approve fix & revalidate all ' + zipN + ' claims',
+      narrative: 'I generated these ' + zipN + ' Medicare claims from signed notes overnight, and all of them failed the same validation rule: the billing provider ZIP is 5 digits (49120) and Medicare requires ZIP+4. The facility record confirms 49120-3414. One approval applies the fix to every claim and revalidates the batch.',
+      evidence: [
+        { k: 'Rule that fired', v: 'MCR-J8 · 214', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Billing provider ZIP must be 9-digit ZIP+4' },
+        { k: 'Current → fix', v: '49120 → 49120-3414', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Matches facility record' },
+        { k: 'Blast radius', v: zipN + ' claims', vBg: '#F1EEFF', vFg: '#5B46D6', note: 'All Medicare, same billing address' },
+      ],
+      items: zipItems,
+      writeBack: { status: 'Ready to submit', lastAction: 'Billing ZIP corrected & revalidated \u00b7 today' },
+      toast: zipN + ' claims fixed — revalidating batch',
+      doneNote: 'Fix applied. The Claim Validation Agent is revalidating all ' + zipN + ' claims and will submit each automatically.',
+    });
+    if (portalN) decisions.push({
+      key: 'd2', stageKey: 'submit', stage: 'Submission', agent: 'Submission Agent',
+      editFix: null,
+      title: 'Resubmit ' + portalN + ' claims rejected during a payer outage',
+      subtitle: 'Indiana Medicaid gateway was down 2:10–2:35 AM. Back online — retest accepted · ' + this.money(sum(outageItems)) + ' total',
+      breached: true, sla: 'SLA breached',
+      primaryShort: 'Resubmit all ' + portalN,
+      primaryLabel: 'Resubmit all ' + portalN + ' claims',
+      narrative: 'Availity returned 277CA rejections for these ' + portalN + ' Indiana Medicaid claims submitted between 2:10 and 2:35 AM — error A7·21 (payer system unavailable). The gateway came back at 6:00 AM; I re-tested one claim and it was accepted. Nothing is wrong with the claims themselves.',
+      evidence: [
+        { k: 'Reject code', v: 'A7 · 21', vBg: '#FEECEC', vFg: '#DC2626', note: 'Payer system unavailable' },
+        { k: 'Outage window', v: '2:10–2:35 AM', vBg: '#F8FAFC', vFg: '#6B7280', note: 'All ' + portalN + ' rejections fall in this window' },
+        { k: 'Retest', v: 'Accepted 6:04 AM', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Probe claim went through clean' },
+      ],
+      items: outageItems,
+      writeBack: { status: 'Submitted', lastAction: 'Resubmitted after payer outage \u00b7 today' },
+      toast: portalN + ' claims resubmitted to Indiana Medicaid',
+      doneNote: 'Batch refiling. Any claim rejected again will come back as its own decision.',
+    });
+    if (seqN) decisions.push({
+      key: 'd3', stageKey: 'payer', stage: 'Awaiting Payer', agent: 'Payment Reconciliation Agent',
+      editFix: null,
+      patternNote: 'Filing these disputes feeds the underpayment tracker in Analytics',
+      title: 'File disputes for ' + seqN + ' underpaid remittances',
+      subtitle: 'All paid well under the contracted fee schedule (CO-45) · ' + this.money(sum(seqItems)) + ' short',
+      breached: false, sla: 'Due tomorrow',
+      primaryShort: 'File disputes for all ' + seqN,
+      primaryLabel: 'File payment disputes for all ' + seqN,
+      narrative: 'These ' + seqN + ' Medicare remittances posted well below the contracted rate — the paid amount is roughly 40% of expected, and the variance does not match any standard adjustment-code pattern. I recommend filing a payment dispute on each; one approval files all ' + seqN + '.',
+      evidence: [
+        { k: 'Adjustment', v: 'CO-45', vBg: '#FEF3DF', vFg: '#B45309', note: 'Charge exceeds fee schedule — variance beyond contract' },
+        { k: 'Paid vs. expected', v: '~40% of rate', vBg: '#FEECEC', vFg: '#DC2626', note: 'Consistent shortfall across the set' },
+        { k: 'Total short', v: this.money(sum(seqItems)), vBg: '#F8FAFC', vFg: '#6B7280', note: 'Across ' + seqN + ' remittances' },
+      ],
+      items: seqItems,
+      writeBack: { lastAction: 'Underpayment dispute filed \u00b7 today' },
+      toast: seqN + ' disputes filed — tracking payer response',
+      doneNote: 'All ' + seqN + ' disputes filed. The Payment Reconciliation Agent will track each payer response and reopen any that are denied.',
+    });
+
+    const singleDefs = [
+      {
+        pool: byArch.cob,
+        stageKey: 'payer', stage: 'Awaiting Payer', agent: 'Denial Triage Agent', breached: true, sla: 'SLA breached',
+        titleFn: c => 'Fix a truncated member ID and resubmit — ' + c.patient,
+        subFn: c => 'Denied CO-16/MA61 · ' + c.payer + ' · ' + c.amtStr,
+        primaryShort: 'Approve replacement', primaryLabel: 'Approve corrected claim — submit replacement',
+        editFix: { label: 'Corrected member ID', value: '…56212', mono: true },
+        narrative: 'The payer denied this claim with CO-16 (claim lacks information). Remark code MA61 points to a truncated member ID — the chart shows 11 digits, the eligibility response shows 12. I recommend correcting the member ID and submitting a replacement claim.',
+        evidence: c => [
+          { k: 'Denial codes', v: 'CO-16 · MA61', vBg: '#FEECEC', vFg: '#DC2626', note: 'Missing or incomplete member ID' },
+          { k: 'Member ID', v: '…5621 → …56212', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'From eligibility (271)' },
+          { k: 'Payer claim #', v: '2126IN4' + (7000 + c.id), vBg: '#F8FAFC', vFg: '#6B7280', note: 'Captured — required for replacement' },
+        ],
+        writeBack: { status: 'Submitted', lastAction: 'Member ID corrected — replacement filed \u00b7 today' },
+        toast: 'Replacement claim approved — submitting',
+        doneNote: 'Member ID corrected. The Submission Agent is filing the replacement claim (frequency 7).',
+      },
+      {
+        pool: byArch.draft,
+        stageKey: 'validate', stage: 'Validation', agent: 'Claim Generation Agent', breached: false, sla: 'Due today',
+        titleFn: c => 'Confirm the E/M code (99308 vs 99309) — ' + c.patient,
+        subFn: c => 'Coding confidence 72% · ' + c.payer + ' · drafted conservative at ' + c.amtStr,
+        primaryShort: 'Confirm 99308', primaryLabel: 'Confirm 99308 & submit',
+        editFix: { label: 'E/M code to submit', value: '99308', mono: true },
+        narrative: 'My coding confidence is below threshold (72%). The note\u2019s detailed interval history and expanded exam support 99309, but the decision making reads as low complexity, which supports 99308. I drafted at 99308 (conservative) — confirm or edit before I submit.',
+        evidence: c => {
+          const CS = window.ContractsStore;
+          const e8 = CS ? CS.expected(c.payer, '99308') : null;
+          const e9 = CS ? CS.expected(c.payer, '99309') : null;
+          const fmt = r => r ? '$' + r.amount.toFixed(2) : '\u2014';
+          return [
+            { k: 'History / Exam', v: 'supports 99309', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Detailed interval; expanded, 2 systems' },
+            { k: 'MDM', v: 'supports 99308', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Low complexity' },
+            { k: 'Expected payment', v: fmt(e8), vBg: '#E6F7F2', vFg: '#0B7D6C', note: e8 ? (e8.basis === 'CONTRACTED' ? 'Contracted rate' : 'Inferred rate \u2014 flag-only') + ' for 99308 \u00b7 from Contracts & Fee Schedules' : 'No rate on file for this payer' },
+            { k: 'If upgraded', v: fmt(e9), vBg: '#F1EEFF', vFg: '#5B46D6', note: e8 && e9 ? '99309 adds $' + (e9.amount - e8.amount).toFixed(2) + ' \u2014 only if the note supports it' : 'Expected payment at 99309' },
+          ];
+        },
+        writeBack: { status: 'Ready to submit', lastAction: 'E/M code 99308 confirmed \u00b7 today' },
+        toast: 'Code confirmed — revalidating',
+        doneNote: 'Confirmed at CPT 99308. Revalidating, then submitting.',
+      },
+      {
+        pool: byArch.coverageterm,
+        stageKey: 'validate', stage: 'Validation', agent: 'Eligibility Agent', breached: false, sla: 'Due today',
+        titleFn: c => 'Coverage changed mid-stay — rebill to Humana — ' + c.patient,
+        subFn: c => 'Old plan termed 06-30; new Humana MA card scanned but never entered · ' + c.amtStr,
+        primaryShort: 'Update & rebill', primaryLabel: 'Update coverage & rebill to Humana',
+        editFix: { label: 'Rebill to payer', value: 'Humana MA PPO', mono: false },
+        narrative: 'The payer shows coverage terminated 06-30, but the date of service is 07-02. The chart has a new Humana MA card scanned on 07-01 that was never entered as active coverage. I recommend updating the coverage record and rebilling to Humana.',
+        evidence: c => [
+          { k: 'Coverage term', v: '06-30-2026', vBg: '#FEECEC', vFg: '#DC2626', note: 'From eligibility (271)' },
+          { k: 'Date of service', v: '07-02-2026', vBg: '#F8FAFC', vFg: '#6B7280', note: 'After termination' },
+          { k: 'New coverage', v: 'Humana MA PPO', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Card scanned 07-01 — not yet entered' },
+        ],
+        writeBack: { status: 'Ready to submit', lastAction: 'Coverage updated — rebilling Humana \u00b7 today' },
+        toast: 'Coverage updated — rebilling to Humana',
+        doneNote: 'Coverage switched to Humana MA PPO. Rebuilding the claim for the new payer.',
+      },
+      {
+        pool: byArch.priorauth,
+        stageKey: 'validate', stage: 'Validation', agent: 'Claim Validation Agent', breached: false, sla: 'Due today',
+        titleFn: c => 'Verify a prior-auth number found in the note — ' + c.patient,
+        subFn: c => 'CPT 97110 needs PA; note references auth #A-88213 in free text · ' + c.amtStr,
+        primaryShort: 'Attach & submit', primaryLabel: 'Attach auth #A-88213 & submit',
+        editFix: { label: 'Auth number to attach', value: 'A-88213', mono: true },
+        narrative: 'CPT 97110 requires prior authorization for this payer and none is on file. The PT evaluation note references auth #A-88213 in free text, but I couldn\u2019t verify the format against the payer\u2019s auth registry. Confirm the number and I\u2019ll attach it and submit.',
+        evidence: c => [
+          { k: 'Requirement', v: 'PA for 97110', vBg: '#FEF3DF', vFg: '#B45309', note: 'Payer policy TP-114' },
+          { k: 'Found in note', v: 'A-88213', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Free text, PT eval 07-01' },
+          { k: 'Registry check', v: 'Not verified', vBg: '#FEECEC', vFg: '#DC2626', note: 'Format plausible; needs human confirm' },
+        ],
+        writeBack: { status: 'Ready to submit', lastAction: 'Prior auth attached — resubmitting \u00b7 today' },
+        toast: 'Auth attached — submitting',
+        doneNote: 'Auth #A-88213 attached. The Submission Agent is filing now.',
+      },
+      {
+        pool: closed.filter(c => c.statusCat === 'void'),
+        stageKey: 'payer', stage: 'Awaiting Payer', agent: 'Payment Reconciliation Agent', breached: false, sla: 'Due tomorrow',
+        titleFn: c => 'A payment arrived with no matching open claim — ' + c.patient,
+        subFn: c => 'EFT with no open claim; closest match is this voided claim from May · ' + c.amtStr,
+        primaryShort: 'Post as unapplied', primaryLabel: 'Post as unapplied cash & flag payer',
+        editFix: null,
+        narrative: 'A payment arrived on today\u2019s EFT with no matching open claim. The closest match is this voided claim for the patient from May. I recommend posting as unapplied cash and opening a payer follow-up so the funds don\u2019t sit unreconciled.',
+        evidence: c => [
+          { k: 'EFT', v: 'EFT-44' + (78000 + c.id), vBg: '#F8FAFC', vFg: '#6B7280', note: 'Received Jul 7, 6:00 AM' },
+          { k: 'Match attempt', v: 'No open claim', vBg: '#FEECEC', vFg: '#DC2626', note: 'Closest: this voided claim, May 2026' },
+          { k: 'Recommendation', v: 'Unapplied cash', vBg: '#F1EEFF', vFg: '#5B46D6', note: 'With payer follow-up task' },
+        ],
+        writeBack: { lastAction: 'Payment posted as unapplied cash \u00b7 today' },
+        toast: 'Posted as unapplied cash — follow-up opened',
+        doneNote: 'Funds posted to unapplied cash; payer follow-up task opened.',
+      },
+      {
+        pool: byArch.coverageterm,
+        stageKey: 'payer', stage: 'Awaiting Payer', agent: 'A/R Follow-up Agent', breached: false, sla: 'Due today',
+        titleFn: c => 'The practice replied with updated insurance — ' + c.patient,
+        subFn: c => 'Your request REQ-2214 answered; front office confirmed a new Humana MA card · ' + c.amtStr,
+        primaryShort: 'Apply & rebill', primaryLabel: 'Apply new coverage & rebill to Humana',
+        editFix: { label: 'Coverage to apply', value: 'Humana MA PPO', mono: false },
+        narrative: 'The payer shows coverage terminated before the date of service, so I asked the practice for the patient\u2019s current insurance (request REQ-2214). The front office replied this morning: a new Humana MA card effective 07-01, scan attached. Approve and I\u2019ll update the coverage record and rebill to Humana.',
+        evidence: c => [
+          { k: 'Practice request', v: 'REQ-2214', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Answered today via the Practice Billing View queue' },
+          { k: 'Old coverage', v: 'Termed 06-30', vBg: '#FEECEC', vFg: '#DC2626', note: 'From eligibility (271) — DOS is after termination' },
+          { k: 'New coverage', v: 'Humana MA PPO', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Card scan attached to the reply' },
+        ],
+        attachments: c => {
+          var atts = [{ name: 'Humana MA card scan — front & back.jpg', meta: 'uploaded by the practice · today · 1.2 MB' }];
+          try {
+            if (window.DocumentsStore) {
+              DocumentsStore.all().filter(d => d.source === 'practice').slice(-3).forEach(d => {
+                atts.push({ name: d.name, meta: 'uploaded by ' + (d.by || 'the practice') + ' · ' + d.when + (d.size ? ' · ' + d.size : '') });
+              });
+            }
+          } catch (e) {}
+          return atts;
+        },
+        writeBack: { status: 'Ready to submit', lastAction: 'Coverage updated from practice reply — rebilling Humana \u00b7 today' },
+        toast: 'Coverage applied — rebilling to Humana',
+        doneNote: 'Coverage updated from the practice\u2019s reply. Rebuilding the claim for Humana MA.',
+      },
+      {
+        pool: byArch.underpay,
+        stageKey: 'payer', stage: 'Awaiting Payer', agent: 'Payment Reconciliation Agent', breached: false, sla: 'Due today',
+        titleFn: c => 'Variance disposition — paid below the contracted rate — ' + c.patient,
+        subFn: c => 'The posting run held this line: paid \u2260 expected against the loaded exhibit \u00b7 ' + c.amtStr,
+        primaryShort: 'Approve reprocess', primaryLabel: 'Approve reprocess request',
+        editFix: null,
+        narrative: 'This 835 line paid below the contracted rate with no adjustment code explaining the reduction. The rate basis is CONTRACTED (exhibit on file), so a reprocess request is appealable \u2014 I held the line in the variance queue instead of posting the shortfall silently. The full queue, with the batch this belongs to, is on the Payments screen.',
+        evidence: c => {
+          const CS = window.ContractsStore;
+          const r = CS ? CS.expected(c.payer, '99309') : null;
+          return [
+            { k: 'Expected', v: r ? '$' + r.amount.toFixed(2) : '$141.20', vBg: '#F8FAFC', vFg: '#6B7280', note: (r && r.basis === 'INFERRED') ? 'Inferred rate \u2014 flag-only' : 'Contracted rate \u2014 appealable' },
+            { k: 'Paid', v: '89% of rate', vBg: '#FEECEC', vFg: '#DC2626', note: 'Matches the drift flagged in Contracts since Jun 14' },
+            { k: 'Disposition', v: 'Reprocess', vBg: '#F1EEFF', vFg: '#5B46D6', note: 'Batch of 12 \u2014 manage it on the Payments screen' },
+          ];
+        },
+        writeBack: { lastAction: 'Variance disposition approved — reprocess requested \u00b7 today' },
+        toast: 'Reprocess request approved',
+        doneNote: 'Reprocess request filed with the payer. The line stays open until the corrected 835 arrives.',
+      },
+      {
+        pool: byArch.reprocess,
+        stageKey: 'payer', stage: 'Awaiting Payer', agent: 'Payment Reconciliation Agent', breached: false, sla: 'Due this week',
+        titleFn: c => 'Write-off request — $9.20 residual balance — ' + c.patient,
+        subFn: c => 'Small remainder after the corrected remittance posted \u00b7 ' + c.payer,
+        primaryShort: 'Approve write-off', primaryLabel: 'Approve $9.20 write-off',
+        editFix: null,
+        narrative: 'After the corrected remittance posted, a $9.20 residual remains \u2014 a rounding difference between the reprocessed allowed amount and the original adjustment. Pursuing it would cost more than it returns. It is within your $50 rep threshold; write-offs above that route to a manager (thresholds are governed in Settings).',
+        evidence: c => [
+          { k: 'Residual', v: '$9.20', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Rounding gap after the corrected 835 posted' },
+          { k: 'Reason code', v: 'SB', vBg: '#F1EEFF', vFg: '#5B46D6', note: 'Small balance \u2014 required on every write-off' },
+          { k: 'Threshold', v: '\u2264 $50', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Within rep authority; logged to the Audit Log' },
+        ],
+        writeBack: { lastAction: 'Residual $9.20 written off — reason SB \u00b7 today' },
+        toast: 'Write-off approved — posted with reason code',
+        doneNote: 'Written off with reason code SB. Recorded in the Audit Log and the Analytics adjustments rollup.',
+      },
+      {
+        pool: byArch.cob,
+        stageKey: 'payer', stage: 'Secondary Billing', agent: 'Secondary Billing Agent', breached: false, sla: 'Due today',
+        titleFn: c => 'Review the secondary claim I generated — ' + c.patient,
+        subFn: c => 'Primary 835 posted; the Medigap plan does not auto-crossover \u00b7 balance ' + c.amtStr,
+        primaryShort: 'Approve & submit', primaryLabel: 'Approve secondary claim & submit',
+        editFix: null,
+        narrative: 'The primary 835 posted this morning and moved the remaining balance to SECONDARY on the claim ledger. The patient\u2019s Medigap plan — from the COB stack Coverage maintains — does not participate in auto-crossover, so I generated the secondary claim from the primary remittance: allowed amount, primary paid, and patient responsibility carried over line by line. Secondary generation is tier-gated like primary generation; this one needs your approval because it is my first secondary claim to this plan.',
+        evidence: c => [
+          { k: 'Balance owner', v: 'SECONDARY', vBg: '#F1EEFF', vFg: '#5B46D6', note: 'Moved from PRIMARY when the 835 posted — recorded on the ledger' },
+          { k: 'COB stack', v: 'Medigap Plan G', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'From Coverage \u00b7 verified Jul 9' },
+          { k: 'Crossover', v: 'Not enabled', vBg: '#FEF3DF', vFg: '#B45309', note: 'Plan does not auto-crossover — direct submission required' },
+        ],
+        writeBack: { status: 'Submitted', lastAction: 'Secondary claim submitted to Medigap \u00b7 today' },
+        toast: 'Secondary claim approved — submitting',
+        doneNote: 'Secondary claim filed. The balance stays owned by SECONDARY on the ledger until their remittance arrives.',
+      },
+      {
+        pool: byArch.inprocess,
+        stageKey: 'payer', stage: 'Secondary Billing', agent: 'Secondary Billing Agent', breached: false, sla: 'Due today',
+        titleFn: c => 'Crossover went quiet — 14 days, no secondary response — ' + c.patient,
+        subFn: c => 'Medicare flagged auto-crossover on the 835; nothing has arrived since \u00b7 ' + c.amtStr,
+        primaryShort: 'Submit direct', primaryLabel: 'Submit the secondary claim directly',
+        editFix: null,
+        narrative: 'Medicare\u2019s 835 indicated this claim crossed over to the Medigap plan automatically (MOA MA18), so I tracked it instead of billing twice. It has now been 14 days with no secondary remittance or acknowledgment — past the 10-day intervention window. I\u2019ve prepared a direct secondary submission from the primary 835 and the COB stack. If the crossover remittance lands first, I\u2019ll void the direct claim so nothing duplicates.',
+        evidence: c => [
+          { k: 'Crossover flag', v: 'MA18', vBg: '#F8FAFC', vFg: '#6B7280', note: 'On the primary 835 — claim forwarded to the supplemental payer' },
+          { k: 'Days silent', v: '14 days', vBg: '#FEECEC', vFg: '#DC2626', note: 'Intervention window is 10 days without a secondary response' },
+          { k: 'Prepared claim', v: 'Ready', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Built from the primary 835 + COB stack; duplicate-safe' },
+        ],
+        writeBack: { status: 'Submitted', lastAction: 'Stalled crossover — secondary submitted directly \u00b7 today' },
+        toast: 'Direct secondary submitted',
+        doneNote: 'Direct secondary claim filed. Crossover watch stays on — I\u2019ll void the direct claim if the crossover 835 arrives first.',
+      },
+      {
+        pool: byArch.underpay,
+        stageKey: 'practice', stage: 'Practice Queue', agent: 'Patient Balance Agent', breached: false, sla: 'Due this week',
+        titleFn: c => 'Statement came back — address unknown — ' + c.patient,
+        subFn: c => 'USPS return on the Jul 6 statement \u00b7 patient balance $127.60',
+        primaryShort: 'Ask facility', primaryLabel: 'Send address request to the facility',
+        editFix: null,
+        narrative: 'The patient\u2019s first statement came back USPS "return to sender \u2014 address unknown." The address on the claim came from the facility census in March and no fresher one exists in Coverage or the clearinghouse. The resident is at Ibekie Foundation \u2014 the facility usually has the responsible-party contact on the admission agreement. I drafted an address request to the facility clerk; the statement cycle pauses (it does not count against the 3-statement clock) until a good address lands.',
+        evidence: c => [
+          { k: 'Return reason', v: 'ANK', vBg: '#FEECEC', vFg: '#DC2626', note: 'USPS: addressee not known \u00b7 vendor ref STM-88419' },
+          { k: 'Address age', v: 'Mar 2026', vBg: '#FEF3DF', vFg: '#B45309', note: 'From facility census at admission \u2014 no update since' },
+          { k: 'Cycle clock', v: 'Paused', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Returned mail never counts toward the collections clock' },
+        ],
+        writeBack: { lastAction: 'Address request sent to facility clerk \u00b7 today' },
+        toast: 'Address request sent to the facility',
+        doneNote: 'Request sent to the Ibekie Foundation clerk queue. Statement cycle resumes when a deliverable address is on file.',
+      },
+      {
+        pool: byArch.reprocess,
+        stageKey: 'payer', stage: 'Awaiting Payer', agent: 'Patient Balance Agent', breached: false, sla: 'Due today',
+        titleFn: c => 'Payment plan requested — $85/month on a $340 balance — ' + c.patient,
+        subFn: c => 'Patient replied via text-to-pay \u00b7 proposed terms fit the practice\u2019s plan policy',
+        primaryShort: 'Approve plan', primaryLabel: 'Approve payment plan \u00b7 4 \u00d7 $85',
+        editFix: null,
+        narrative: 'The patient\u2019s daughter replied through the text-to-pay link asking to split the $340 balance over four months. The practice\u2019s statement policy allows plans up to 6 months without practice sign-off, so this is yours to approve. On approval the ledger status flips to PAYMENT PLAN, statements switch to installment reminders, and the collections clock stops while the plan stays current \u2014 it resumes only if an installment is missed by 15 days.',
+        evidence: c => [
+          { k: 'Proposed terms', v: '4 \u00d7 $85.00', vBg: '#EBF2FE', vFg: '#0081CF', note: 'First installment offered for Aug 1' },
+          { k: 'Policy check', v: 'Within policy', vBg: '#E7F5EF', vFg: '#29BB89', note: '\u2264 6 months \u2014 no practice sign-off needed' },
+          { k: 'History', v: 'No prior plans', vBg: '#F8FAFC', vFg: '#6B7280', note: 'First balance for this resident; no missed payments' },
+        ],
+        writeBack: { lastAction: 'Payment plan approved — 4 \u00d7 $85 \u00b7 today' },
+        toast: 'Payment plan approved',
+        doneNote: 'Plan active: 4 \u00d7 $85 starting Aug 1. Ledger shows PAYMENT PLAN; reminders go through the statement vendor; collections clock is paused while current.',
+      },
+      {
+        pool: byArch.cob,
+        stageKey: 'practice', stage: 'Practice Queue', agent: 'Patient Balance Agent', breached: false, sla: 'Due this week',
+        titleFn: c => 'Collections proposal — cycle exhausted, no contact — ' + c.patient,
+        subFn: c => '128 days patient-owned \u00b7 3 statements \u00b7 $58.20 \u00b7 practice veto window open until Jul 20',
+        primaryShort: 'Approve for export', primaryLabel: 'Approve for agency export \u00b7 after veto window',
+        editFix: null,
+        narrative: 'This balance has been patient-owned for 128 days: three statements (Apr 30, May 28, Jun 28 final notice), one text-to-pay link never opened, no calls returned, no returned mail — the address is good, there has simply been no contact. That exhausts the cycle, so I\u2019m proposing this account for the collections agency. Because this is post-acute care, the proposal is visible in the practice\u2019s window first: Ibekie Foundation can pull the resident off the list until Jul 20. If you approve and the practice doesn\u2019t veto, the account lands in the agency export and the ledger flips to UNCOLLECTIBLE-REQUESTED — still on the books, just flagged as handed off.',
+        evidence: c => [
+          { k: 'Contact history', v: '3 stmts \u00b7 0 replies', vBg: '#FDEEF5', vFg: '#C34A7D', note: 'Apr 30 \u00b7 May 28 \u00b7 Jun 28 final \u2014 all delivered, none answered' },
+          { k: 'Cycle check', v: 'Exhausted', vBg: '#FEECEC', vFg: '#DC2626', note: '128 days \u2265 120-day policy \u00b7 statement clock never paused' },
+          { k: 'Practice veto', v: 'Open to Jul 20', vBg: '#F5F2FD', vFg: '#845EC2', note: 'Visible in the Practice window now \u2014 export holds until it closes' },
+        ],
+        writeBack: { lastAction: 'Collections approved pending practice veto \u00b7 today' },
+        toast: 'Approved — export holds for the veto window',
+        doneNote: 'Approved. The account exports to the agency when the veto window closes Jul 20 unless Ibekie Foundation pulls it; the ledger then shows UNCOLLECTIBLE-REQUESTED.',
+      },
+    ];
+    const singles = [];
+    singleDefs.forEach(def => {
+      // Busy-morning simulation: types with a batch policy draw more members from
+      // the same store pool; quiet mode keeps one exemplar each.
+      const g = Component.GROUPS[def.primaryShort];
+      const n = busy ? (g && g.batchable ? 6 : 2) : 1;
+      const picked = take(def.pool, n);
+      picked.forEach(p => {
+        const it = toItem(p);
+        singles.push({
+          key: 's' + it.id, stageKey: def.stageKey, stage: def.stage, agent: def.agent,
+          breached: def.breached, sla: def.sla,
+          title: def.titleFn(it), subtitle: def.subFn(it),
+          primaryShort: def.primaryShort, primaryLabel: def.primaryLabel,
+          typeKey: def.primaryShort,
+          narrative: def.narrative, evidence: def.evidence(it),
+          editFix: def.editFix, patternNote: def.patternNote || null,
+          attachments: def.attachments ? def.attachments(it) : [],
+          items: [it], writeBack: def.writeBack, toast: def.toast, doneNote: def.doneNote,
+        });
+      });
+    });
+    const allDecisions = decisions.concat(singles);
+    allDecisions.forEach(dec => { if (!dec.typeKey) dec.typeKey = dec.key; });
+    // breached decisions float to top
+    allDecisions.sort((a, b) => (b.breached ? 1 : 0) - (a.breached ? 1 : 0));
+
+    // ---- Working claims (real store records, still moving through the pipeline) ----
+    const stageForArch = k => k === 'draft' ? 'validate' : (k === 'ready' ? 'submit' : 'payer');
+    const STEP = {
+      validate: [['Claim Generation Agent', 'Extracting codes from signed note'], ['Claim Validation Agent', 'Running payer rule validation'], ['Eligibility Agent', 'Checking eligibility (270/271)']],
+      submit: [['Submission Agent', 'Submitting to clearinghouse'], ['Submission Agent', 'Building the 837 batch']],
+      payer: [['Submission Agent', 'Awaiting 277CA acknowledgment'], ['Payment Reconciliation Agent', 'Matching remittance (835)'], ['A/R Follow-up Agent', 'Automated status check (276/277)']],
+    };
+    const workTarget = Math.round(volTweak * 0.55);
+    const workPool = open.filter(c => !used.has(c.id));
+    const working = workPool.slice(0, workTarget).map((c, i) => {
+      const stageKey = stageForArch(c.archKey);
+      const steps = STEP[stageKey];
+      const s = steps[(c.id + i) % steps.length];
+      return { id: c.id, claim: c.claim, patient: c.patient, payer: c.payer, amtStr: this.money(c.balance), agent: s[0], step: s[1], stageKey, eta: '~' + (1 + (c.id % 18)) + 'm' };
+    });
+
+    // ---- Done today (real paid / closed store records) ----
+    const doneTarget = Math.round(volTweak * 0.32);
+    const doneRows = closed.slice(0, doneTarget).map((c, i) => {
+      const paidOut = c.statusCat === 'paid';
+      const h = (c.id % 7); const m = (c.id * 7) % 60;
+      return {
+        id: c.id, claim: c.claim, patient: c.patient, payer: c.payer, amtStr: this.money(c.billed),
+        outcome: paidOut ? 'Paid & closed' : (c.status === 'Voided' ? 'Voided' : 'Reconciled & closed'),
+        outcomeFg: paidOut ? '#0B7D6C' : '#6B7280',
+        time: (h === 0 ? 12 : h) + ':' + String(m).padStart(2, '0') + ' AM',
+      };
+    });
+
+    this._vol = volTweak;
+    this._practice = practice;
+    this._busy = busy;
+    const finalDecisions = isWFM ? allDecisions.slice(0, 2) : allDecisions;
+    const excN = finalDecisions.reduce((s, d) => s + d.items.length, 0);
+    const vol = excN + working.length + doneRows.length;
+    this._data = { vol, excN, doneN: doneRows.length, workN: working.length, decisions: finalDecisions, working, doneRows, isWFM, practiceLabel: S.meta(practice).practiceLabel };
+    return this._data;
+  }
+
+  qaData() {
+    const S = window.ClaimsStore;
+    const practice = S ? S.currentPractice() : 'ifc';
+    if (this._qa && this._qaPractice === practice) return this._qa;
+    if (!S) return { samples: [] };
+    const all = S.getAllClaims(practice);
+    const paid = all.filter(c => c.statusCat === 'paid');
+    const open = all.filter(c => c.statusCat === 'open');
+    const pick = (arr, i) => arr.length ? arr[i % arr.length] : null;
+    const mk = c => c ? { claim: c.claim, patient: c.patient, payer: c.payer, amtStr: this.money(c.billed || c.balance) } : { claim: '—', patient: '—', payer: '—', amtStr: '—' };
+    const c1 = mk(pick(paid, 2)), c2 = mk(pick(paid, 5)), c3 = mk(pick(paid, 9)), c4 = mk(pick(open, 3)), c5 = mk(pick(open, 11)), c6 = mk(pick(open, 7));
+
+    const samples = [
+      {
+        key: 'q1', actionType: 'Clean claim submission', tier: 'Tier 3', agent: 'Submission Agent', when: 'Thu · 6:12 AM',
+        title: 'Submitted a clean claim straight through — ' + c1.patient,
+        subtitle: 'Validation passed with 0 issues · 277CA accepted same day · ' + c1.amtStr,
+        narrative: 'The claim passed every payer rule check on the first run, eligibility was active, and no Rulebook rule flagged it. I submitted it in the 6 AM batch without holding it for review. The clearinghouse accepted it (277CA) at 9:41 AM.',
+        evidence: [
+          { k: 'Validation', v: '0 issues', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'All payer rules passed on first run' },
+          { k: 'Eligibility', v: 'Active (271)', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Checked at 5:58 AM, same morning' },
+          { k: 'Acknowledgment', v: '277CA accepted', vBg: '#E6F7F2', vFg: '#0B7D6C', note: '9:41 AM — no rejections' },
+        ],
+        ref: c1, hasRuleLink: false,
+      },
+      {
+        key: 'q2', actionType: 'Rulebook auto-fix', tier: 'Tier 3', agent: 'Claim Validation Agent', when: 'Wed · 6:03 AM',
+        title: 'Applied the ZIP+4 rule and revalidated — ' + c2.patient,
+        subtitle: 'Rule MCR-J8 fired · 49120 → 49120-3414 · submitted after fix · ' + c2.amtStr,
+        narrative: 'The claim failed validation on the billing ZIP rule you approved on Jul 2. The fix is deterministic — the facility record carries the ZIP+4 — so I applied it, revalidated, and submitted. This is the same fix you approved 61 times before the rule went active.',
+        evidence: [
+          { k: 'Rule fired', v: 'MCR-J8 · 214', vBg: '#F1EEFF', vFg: '#5B46D6', note: 'Active rule — approved by Angela Mensah Jul 2' },
+          { k: 'Fix applied', v: '49120 → 49120-3414', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'From the facility record' },
+          { k: 'Result', v: 'Revalidated · submitted', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Accepted in the same batch' },
+        ],
+        ref: c2, hasRuleLink: true,
+      },
+      {
+        key: 'q3', actionType: 'Remittance posting', tier: 'Tier 3', agent: 'Payment Reconciliation Agent', when: 'Tue · 7:20 AM',
+        title: 'Posted an 835 that matched the contract exactly — ' + c3.patient,
+        subtitle: 'Paid = expected allowed amount · $0.00 variance · claim closed',
+        narrative: 'The remittance landed at exactly the contracted allowed amount with standard patient-responsibility adjustments. Variance was $0.00, so I posted the payment and closed the claim. Anything off-contract would have come to you as a variance decision instead.',
+        evidence: [
+          { k: 'Expected', v: c3.amtStr, vBg: '#F8FAFC', vFg: '#6B7280', note: 'Contracted allowed amount' },
+          { k: 'Paid', v: c3.amtStr, vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'From the 835' },
+          { k: 'Variance', v: '$0.00', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Auto-post threshold is $0 variance' },
+        ],
+        ref: c3, hasRuleLink: false,
+      },
+      {
+        key: 'q4', actionType: 'Automated status check', tier: 'Tier 3', agent: 'A/R Follow-up Agent', when: 'Mon · 5:45 AM',
+        title: 'Ran a 276 status check at day 21 — ' + c4.patient,
+        subtitle: 'Payer response: in process, no action needed · next check scheduled day 28',
+        narrative: 'The claim hit 21 days with no remittance, which triggers an automated status query (276). The payer responded "in adjudication, no additional information needed." I logged the response on the claim timeline and scheduled the next check for day 28.',
+        evidence: [
+          { k: 'Trigger', v: 'Day 21 · no 835', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Standard follow-up cadence' },
+          { k: 'Response (277)', v: 'In process', vBg: '#EBF2FE', vFg: '#1D4ED8', note: 'No additional information requested' },
+          { k: 'Next step', v: 'Recheck day 28', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Escalates to you if still unpaid at day 35' },
+        ],
+        ref: c4, hasRuleLink: false,
+      },
+      {
+        key: 'q5', actionType: 'Eligibility recheck', tier: 'Tier 3', agent: 'Eligibility Agent', when: 'Wed · 5:52 AM',
+        title: 'Re-verified coverage before submission — ' + c5.patient,
+        subtitle: '271 shows plan active, no COB change · claim released to the batch',
+        narrative: 'Pre-submission policy is to re-run eligibility on any claim older than 7 days at submit time. The 271 came back active with an unchanged payer stack, so I released the claim to the batch. A termination or COB change would have routed it to the Coverage board instead.',
+        evidence: [
+          { k: 'Coverage', v: 'Active', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'From the 271, morning of submission' },
+          { k: 'Payer stack', v: 'Unchanged', vBg: '#E6F7F2', vFg: '#0B7D6C', note: 'Primary/secondary order matches the record' },
+          { k: 'Action', v: 'Released to batch', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Submitted same morning' },
+        ],
+        ref: c5, hasRuleLink: false,
+      },
+      {
+        key: 'q6', actionType: 'Rulebook hold routing', tier: 'Tier 3', agent: 'Claim Validation Agent', when: 'Tue · 6:07 AM',
+        title: 'Held a Part B claim on the hospice-election rule — ' + c6.patient,
+        subtitle: 'Rule fired: patient shows an active hospice election · routed to hold, not submitted',
+        narrative: 'The nightly 271 pull shows an active hospice election for this patient, and the active Rulebook rule says Part B claims for hospice-elected patients get held for GV/GW modifier review instead of submitted. I moved the claim to the hold queue and flagged it for the coder.',
+        evidence: [
+          { k: 'Rule fired', v: 'Hospice election', vBg: '#F1EEFF', vFg: '#5B46D6', note: 'Active rule — approved Jun 1' },
+          { k: 'Source', v: 'Nightly 271 pull', vBg: '#F8FAFC', vFg: '#6B7280', note: 'Election effective before date of service' },
+          { k: 'Action', v: 'Held for review', vBg: '#FEF3DF', vFg: '#B45309', note: 'Not submitted — prevented a certain CO-B9 denial' },
+        ],
+        ref: c6, hasRuleLink: true,
+      },
+    ];
+    this._qa = { samples };
+    this._qaPractice = practice;
+    return this._qa;
+  }
+
+  qaAgree(key) {
+    const r = Object.assign({}, this.state.qaReviews, { [key]: { r: 'agree' } });
+    this.persistQa(r);
+    const next = this.qaData().samples.find(s => !r[s.key]);
+    this.setState({ qaReviews: r, qaDisagreeing: null, qaNote: '', qaExpanded: next ? next.key : null });
+    this.showToast('Agreed — counted toward the agent\u2019s scorecard');
+  }
+
+  qaConfirmDisagree(key) {
+    if (this.state.qaNote.trim().length < 3) { this.showToast('Add a short note so the agent team knows what you\u2019d have done'); return; }
+    const r = Object.assign({}, this.state.qaReviews, { [key]: { r: 'disagree', note: this.state.qaNote.trim() } });
+    this.persistQa(r);
+    const next = this.qaData().samples.find(s => !r[s.key]);
+    this.setState({ qaReviews: r, qaDisagreeing: null, qaNote: '', qaExpanded: next ? next.key : null });
+    this.showToast('Disagreement logged — sent to the agent team');
+  }
+
+  qaUndo(key) {
+    const r = Object.assign({}, this.state.qaReviews); delete r[key];
+    this.persistQa(r);
+    this.setState({ qaReviews: r, qaExpanded: key });
+  }
+
+  showToast(msg) {
+    clearTimeout(this._toastTimer);
+    this.setState({ toast: msg });
+    this._toastTimer = setTimeout(() => this.setState({ toast: '' }), 2800);
+  }
+
+  approveGroup(typeKey) {
+    if (this.draftOnly()) { this.showToast('Approvals are disabled — Operations set agent autonomy to draft-only'); return; }
+    const d = this.data();
+    const members = d.decisions.filter(x => x.typeKey === typeKey && !this.state.resolved[x.key] && !this.state.escalated[x.key]);
+    if (!members.length) return;
+    const resolved = Object.assign({}, this.state.resolved);
+    members.forEach(dec => { this.writeBack(dec); resolved[dec.key] = true; });
+    this.persistResolved(resolved);
+    this.setState({ resolved, groupOpen: null, expanded: null });
+    this.showToast(members.length + ' decisions approved in one action — each logged individually under your name');
+  }
+
+  writeBack(dec) {
+    const S = window.ClaimsStore;
+    if (!S || !dec || !dec.writeBack) return;
+    const p = S.currentPractice();
+    dec.items.forEach(it => { if (it && it.id != null) S.saveOverride(p, it.id, dec.writeBack); });
+  }
+
+  draftOnly() {
+    return window.PortalConfig && window.PortalConfig.get('billing.autonomy') === 'draft';
+  }
+
+  approve(key) {
+    if (this.draftOnly()) { this.showToast('Approvals are disabled — Operations set agent autonomy to draft-only'); return; }
+    const d = this.data();
+    const dec = d.decisions.find(x => x.key === key);
+    if (!dec || this.state.resolved[key]) return;
+    this.writeBack(dec);
+    const resolved = Object.assign({}, this.state.resolved, { [key]: true });
+    this.persistResolved(resolved);
+    let escalated = this.state.escalated;
+    if (escalated[key]) { escalated = Object.assign({}, escalated); delete escalated[key]; this.persistEscalated(escalated); }
+    const next = d.decisions.find(x => !resolved[x.key] && !escalated[x.key]);
+    this.setState({ resolved, escalated, editing: null, escalating: null, expanded: next ? next.key : null });
+    this.showToast(dec.toast);
+  }
+
+  openEdit(key) {
+    const dec = this.data().decisions.find(x => x.key === key);
+    this.setState({ editing: key, escalating: null, expanded: key, editVal: (dec && dec.editFix) ? dec.editFix.value : '', editNote: '' });
+  }
+
+  cancelEdit() { this.setState({ editing: null, editVal: '', editNote: '' }); }
+
+  approveWithEdits(key) {
+    if (this.draftOnly()) { this.showToast('Approvals are disabled — Operations set agent autonomy to draft-only'); return; }
+    const st = this.state;
+    const d = this.data();
+    const dec = d.decisions.find(x => x.key === key);
+    if (!dec || st.resolved[key]) return;
+    const orig = dec.editFix ? dec.editFix.value : '';
+    const valChanged = !!dec.editFix && st.editVal.trim() !== orig;
+    const noteAdded = st.editNote.trim().length > 0;
+    const edited = valChanged || noteAdded;
+    const editApplied = Object.assign({}, st.editApplied);
+    if (edited) {
+      editApplied[key] = {
+        label: dec.editFix ? dec.editFix.label : 'Adjustment',
+        from: orig, to: st.editVal.trim(), valChanged,
+        note: st.editNote.trim(),
+      };
+    }
+    this.writeBack(dec);
+    const resolved = Object.assign({}, st.resolved, { [key]: true });
+    this.persistResolved(resolved);
+    let escalated = st.escalated;
+    if (escalated[key]) { escalated = Object.assign({}, escalated); delete escalated[key]; this.persistEscalated(escalated); }
+    const next = d.decisions.find(x => !resolved[x.key] && !escalated[x.key]);
+    this.setState({ resolved, escalated, editApplied, editing: null, escalating: null, editVal: '', editNote: '', expanded: next ? next.key : null });
+    this.showToast(edited ? 'Approved with your edits — logged under your name' : dec.toast);
+  }
+
+  openEscalate(key) { this.setState({ escalating: key, editing: null, expanded: key, escReason: '' }); }
+  cancelEscalate() { this.setState({ escalating: null, escReason: '' }); }
+
+  confirmEscalate(key) {
+    const st = this.state;
+    if (st.escReason.trim().length < 3) { this.showToast('Add a short reason so Derek has context'); return; }
+    const escalated = Object.assign({}, st.escalated, { [key]: { reason: st.escReason.trim(), to: 'Derek Okafor' } });
+    this.persistEscalated(escalated);
+    const d = this.data();
+    const next = d.decisions.find(x => !this.state.resolved[x.key] && !escalated[x.key]);
+    this.setState({ escalated, escalating: null, escReason: '', expanded: next ? next.key : null });
+    this.showToast('Escalated to Derek Okafor, Billing Manager');
+  }
+
+  recallEscalation(key) {
+    const e = Object.assign({}, this.state.escalated); delete e[key];
+    this.persistEscalated(e);
+    this.setState({ escalated: e, expanded: key });
+    this.showToast('Recalled — decision is back with you');
+  }
+
+  renderVals() {
+    const st = this.state;
+    const d = this.data();
+    const isEmpty = !!(this.props.emptyState ?? false);
+    const vol = d.vol;
+
+    const live = d.decisions.filter(x => !st.resolved[x.key]);
+    const resolvedList = d.decisions.filter(x => st.resolved[x.key]);
+    const resolvedClaims = resolvedList.reduce((s, x) => s + x.items.length, 0);
+    const liveClaims = live.reduce((s, x) => s + x.items.length, 0);
+    const blockedByStage = { validate: 0, submit: 0, payer: 0 };
+    live.forEach(x => { blockedByStage[x.stageKey] += x.items.length; });
+
+    const workByStage = { validate: 0, submit: 0, payer: 0 };
+    d.working.forEach(w => { workByStage[w.stageKey]++; });
+
+    const effEmptyBlocked = isEmpty ? { validate: 0, submit: 0, payer: 0 } : blockedByStage;
+    const doneEff = d.doneN + (isEmpty ? d.excN : resolvedClaims);
+
+    const stageDefs = [
+      { key: 'validate', label: 'Coding & Validation', count: workByStage.validate + effEmptyBlocked.validate, blocked: effEmptyBlocked.validate },
+      { key: 'submit', label: 'Submission', count: workByStage.submit + effEmptyBlocked.submit, blocked: effEmptyBlocked.submit },
+      { key: 'payer', label: 'Awaiting Payer', count: workByStage.payer + effEmptyBlocked.payer, blocked: effEmptyBlocked.payer },
+      { key: 'done', label: 'Done Today', count: doneEff, blocked: 0 },
+    ];
+    const stages = stageDefs.map((s, i) => {
+      const open = st.stageOpen === s.key;
+      const isDone = s.key === 'done';
+      return {
+        label: s.label,
+        labelFg: isDone ? '#0B7D6C' : '#6B7280',
+        count: String(s.count),
+        countFg: isDone ? '#109680' : '#0F1B2E',
+        sub: s.blocked > 0 ? s.blocked + ' blocked — need you' : (isDone ? 'Moving on their own' : 'On track — agents working'),
+        subFg: s.blocked > 0 ? '#DC2626' : (isDone ? '#109680' : '#94A3B8'),
+        subDot: s.blocked > 0 ? '#FF6E6C' : (isDone ? '#22C5A7' : '#7B61FF'),
+        bg: isDone ? '#E6F7F2' : '#FFFFFF',
+        border: open ? '#7B61FF' : (s.blocked > 0 ? '#FBCACA' : '#E5E7EB'),
+        hasArrow: i < stageDefs.length - 1,
+        onClick: () => this.setState({ stageOpen: open ? null : s.key }),
+      };
+    });
+
+    // Stage drill-in rows
+    let stageRows = [];
+    let stagePanelTitle = '', stagePanelSub = '';
+    if (st.stageOpen) {
+      const def = stageDefs.find(s => s.key === st.stageOpen);
+      stagePanelTitle = def ? def.label : '';
+      if (st.stageOpen === 'done') {
+        stagePanelSub = doneEff + ' claims finished today';
+        stageRows = d.doneRows.map(r => ({
+          claim: r.claim, patient: r.patient, payer: r.payer, amtStr: r.amtStr,
+          status: r.outcome, statusFg: r.outcomeFg, statusDot: '#22C5A7',
+          blocked: false, notBlocked: true, meta: r.time, rowBg: '#FFFFFF',
+        }));
+      } else {
+        const blockedRows = [];
+        if (!isEmpty) {
+          d.decisions.forEach((dec, di) => {
+            if (st.resolved[dec.key] || dec.stageKey !== st.stageOpen) return;
+            dec.items.forEach(c => {
+              blockedRows.push({
+                claim: c.claim, patient: c.patient, payer: c.payer, amtStr: c.amtStr,
+                status: 'Blocked — ' + dec.stage.toLowerCase() + ' needs your decision', statusFg: '#DC2626', statusDot: '#FF6E6C',
+                blocked: true, notBlocked: false, decisionLabel: 'Go to decision', rowBg: '#FFF7F7',
+                goToDecision: () => this.setState({ stageOpen: null, expanded: dec.key }),
+              });
+            });
+          });
+        }
+        const workRows = d.working.filter(w => w.stageKey === st.stageOpen).map(w => ({
+          claim: w.claim, patient: w.patient, payer: w.payer, amtStr: w.amtStr,
+          status: w.agent + ' — ' + w.step, statusFg: '#5B46D6', statusDot: '#7B61FF',
+          blocked: false, notBlocked: true, meta: 'ETA ' + w.eta.replace('~', ''), rowBg: '#FFFFFF',
+        }));
+        stageRows = blockedRows.concat(workRows);
+        stagePanelSub = stageRows.length + ' claims at this stage' + (blockedRows.length ? ' · ' + blockedRows.length + ' blocked' : '');
+      }
+    }
+
+    const draftMode = this.draftOnly();
+    // Decision cards — live escalated pinned to top
+    const isMgr = window.RoleStore ? window.RoleStore.isManager() : (() => { try { return localStorage.getItem('onb-role') === 'do'; } catch (e) { return false; } })();
+    // ---- Grouped view (Phase 10.2) ----
+    // Grouped is the default once the open queue is big enough to need it.
+    const liveList = d.decisions.filter(x => !st.resolved[x.key]);
+    // Grouped view only earns its place when it condenses: default on only when
+    // some type has multiple members (busy mode), never on a quiet day of singletons.
+    const typeCounts = {};
+    liveList.forEach(x => { typeCounts[x.typeKey] = (typeCounts[x.typeKey] || 0) + 1; });
+    const groupable = liveList.length > 10 && Object.values(typeCounts).some(n => n > 1);
+    const showGrouped = groupable && st.inboxView === 'grouped' && !st.groupOpen;
+    const groupMap = {};
+    liveList.forEach(dec => { (groupMap[dec.typeKey] = groupMap[dec.typeKey] || []).push(dec); });
+    const groups = Object.keys(groupMap).map(tk => {
+      const members = groupMap[tk];
+      const meta = Component.GROUPS[tk];
+      const escalatedN = members.filter(m => st.escalated[m.key]).length;
+      const batchable = !!(meta && meta.batchable) && members.length > 1 && escalatedN === 0 && !draftMode;
+      return {
+        typeKey: tk,
+        label: meta ? meta.label : members[0].title,
+        count: members.length,
+        countLabel: members.length + (members.length === 1 ? ' decision' : ' decisions'),
+        agent: members[0].agent,
+        sla: members[0].sla,
+        note: meta ? meta.note : 'One decision — open the card',
+        noteFg: batchable ? '#0B7D6C' : '#6B7280',
+        isBatchable: batchable,
+        notBatchable: !batchable,
+        batchLabel: 'Approve all ' + members.length,
+        reviewLabel: members.length === 1 ? 'Open' : 'Review each',
+        countBg: batchable ? '#E6F7F2' : '#F1EEFF',
+        countFg: batchable ? '#0B7D6C' : '#5B46D6',
+        onBatch: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.approveGroup(tk); },
+        onOpen: () => this.setState({ groupOpen: tk, inboxView: 'grouped', expanded: members[0].key }),
+      };
+    }).sort((a, b) => b.count - a.count);
+
+    const escLive = d.decisions.filter(x => st.escalated[x.key] && !st.resolved[x.key]);
+    const rest = d.decisions.filter(x => !(st.escalated[x.key] && !st.resolved[x.key]));
+    let ordered = escLive.concat(rest);
+    if (groupable && st.groupOpen) ordered = ordered.filter(x => x.typeKey === st.groupOpen);
+    const decisions = isEmpty ? [] : ordered.map((dec, i) => {
+      const done = !!st.resolved[dec.key];
+      const escalated = !done && !!st.escalated[dec.key];
+      const active = !done && (!escalated || isMgr);
+      const expanded = st.expanded === dec.key;
+      const ea = st.editApplied[dec.key];
+      let doneNoteText = dec.doneNote;
+      if (ea) {
+        const parts = [];
+        if (ea.valChanged) parts.push(ea.label + ' changed to ' + ea.to);
+        if (ea.note) parts.push('Note: ' + ea.note);
+        doneNoteText = 'Approved with your edits — ' + parts.join(' · ').replace(/\.\s*$/, '') + '. ' + dec.doneNote;
+      }
+      return {
+        key: dec.key,
+        num: String(i + 1),
+        isDone: done, notDone: active, isEscalated: escalated && !isMgr, isEscalatedToYou: escalated && isMgr && expanded,
+        escYouChip: escalated && isMgr,
+        canEscalate: !isMgr,
+        expanded,
+        chevRot: expanded ? '180deg' : '0deg',
+        title: dec.title,
+        titleFg: done ? '#6B7280' : '#0F1B2E',
+        subtitle: dec.subtitle,
+        stage: dec.stage,
+        stageBg: dec.stageKey === 'validate' ? '#F1EEFF' : dec.stageKey === 'submit' ? '#FEF3DF' : '#EBF2FE',
+        stageFg: dec.stageKey === 'validate' ? '#5B46D6' : dec.stageKey === 'submit' ? '#B45309' : '#1D4ED8',
+        showSla: active,
+        sla: dec.sla,
+        slaBg: dec.breached ? '#FEECEC' : '#F1F5F9',
+        slaFg: dec.breached ? '#DC2626' : '#6B7280',
+        agent: dec.agent,
+        narrative: dec.narrative,
+        evidence: dec.evidence,
+        hasPattern: !!dec.patternNote,
+        patternNote: dec.patternNote || '',
+        hasAttachments: !!(dec.attachments && dec.attachments.length),
+        attachments: dec.attachments || [],
+        hasAffected: dec.items.length > 1,
+        affected: dec.items,
+        count: String(dec.items.length),
+        primaryShort: dec.primaryShort,
+        primaryLabel: dec.primaryLabel,
+        doneNote: doneNoteText,
+        // edit-first
+        isEditing: st.editing === dec.key && active,
+        showActionRow: active && st.editing !== dec.key && st.escalating !== dec.key,
+        hasEditField: !!dec.editFix,
+        editFieldLabel: dec.editFix ? dec.editFix.label : '',
+        editFieldMono: !!(dec.editFix && dec.editFix.mono),
+        editVal: st.editVal,
+        editNote: st.editNote,
+        // escalate
+        isEscalating: st.escalating === dec.key && active,
+        escReason: st.escReason,
+        escReasonText: escalated && st.escalated[dec.key] ? st.escalated[dec.key].reason : '',
+        cardBg: done ? '#F7FDFB' : (escalated ? '#FFFBF2' : '#FFFFFF'),
+        cardBorder: escalated ? '#F5D9A8' : (expanded && active ? '#7B61FF' : (done ? '#D6F2E9' : '#E5E7EB')),
+        onToggle: () => this.setState({ expanded: expanded ? null : dec.key }),
+        onApprove: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.approve(dec.key); },
+        onUndo: (e) => {
+          if (e && e.stopPropagation) e.stopPropagation();
+          const S = window.ClaimsStore;
+          if (S && dec.writeBack) { const p = S.currentPractice(); dec.items.forEach(it => { if (it && it.id != null) S.saveOverride(p, it.id, { lastAction: 'Decision reopened \u00b7 today' }); }); }
+          this.setState(prev => { const r = Object.assign({}, prev.resolved); delete r[dec.key]; const ap = Object.assign({}, prev.editApplied); delete ap[dec.key]; this.persistResolved(r); return { resolved: r, editApplied: ap }; });
+        },
+        onEdit: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.openEdit(dec.key); },
+        onEditVal: (e) => this.setState({ editVal: e.target.value }),
+        onEditNote: (e) => this.setState({ editNote: e.target.value }),
+        onApproveEdits: () => this.approveWithEdits(dec.key),
+        onCancelEdit: () => this.cancelEdit(),
+        onEscalate: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.openEscalate(dec.key); },
+        onEscReason: (e) => this.setState({ escReason: e.target.value }),
+        setEscQuick1: () => this.setState({ escReason: 'Payer-specific judgment call' }),
+        setEscQuick2: () => this.setState({ escReason: 'High-dollar — wants a second review' }),
+        setEscQuick3: () => this.setState({ escReason: 'Payer policy unclear' }),
+        onConfirmEscalate: () => this.confirmEscalate(dec.key),
+        onCancelEscalate: () => this.cancelEscalate(),
+        onRecall: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.recallEscalation(dec.key); },
+      };
+    });
+
+    const totalDecisions = d.decisions.length;
+    const doneDecisions = resolvedList.length;
+    const breachedCount = isEmpty ? 0 : live.filter(x => x.breached).length;
+
+    // ===== Agent QA tab =====
+    const qa = this.qaData();
+    const reviews = st.qaReviews;
+    const reviewedN = qa.samples.filter(s => reviews[s.key]).length;
+    const disagreeN = qa.samples.filter(s => reviews[s.key] && reviews[s.key].r === 'disagree').length;
+    const pendingN = qa.samples.length - reviewedN;
+
+    const qaSamples = qa.samples.map((s, i) => {
+      const rv = reviews[s.key];
+      const reviewed = !!rv;
+      const expanded = st.qaExpanded === s.key;
+      const disagreeing = st.qaDisagreeing === s.key && !reviewed;
+      return {
+        key: s.key, num: String(i + 1),
+        title: s.title, subtitle: s.subtitle, tier: s.tier, actionType: s.actionType,
+        agent: s.agent, when: s.when, narrative: s.narrative, evidence: s.evidence,
+        claim: s.ref.claim, patient: s.ref.patient, payer: s.ref.payer, amtStr: s.ref.amtStr,
+        hasRuleLink: s.hasRuleLink,
+        reviewed, notReviewed: !reviewed,
+        isAgree: reviewed && rv.r === 'agree',
+        isDisagree: reviewed && rv.r === 'disagree',
+        disNoteSuffix: reviewed && rv.r === 'disagree' && rv.note ? ': \u201c' + rv.note + '\u201d' : '',
+        expanded, chevRot: expanded ? '180deg' : '0deg',
+        titleFg: reviewed ? '#6B7280' : '#0F1B2E',
+        cardBg: !reviewed ? '#FFFFFF' : (rv.r === 'agree' ? '#F7FDFB' : '#FFFBFB'),
+        cardBorder: expanded && !reviewed ? '#7B61FF' : (!reviewed ? '#E5E7EB' : (rv.r === 'agree' ? '#D6F2E9' : '#F5C2C2')),
+        showActionRow: !reviewed && !disagreeing,
+        isDisagreeing: disagreeing,
+        disNote: st.qaNote,
+        onToggle: () => this.setState({ qaExpanded: expanded ? null : s.key }),
+        onAgree: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.qaAgree(s.key); },
+        onUndo: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.qaUndo(s.key); },
+        onDisagree: () => this.setState({ qaDisagreeing: s.key, qaExpanded: s.key, qaNote: '' }),
+        onDisNote: (e) => this.setState({ qaNote: e.target.value }),
+        setDis1: () => this.setState({ qaNote: 'Should have escalated to a human' }),
+        setDis2: () => this.setState({ qaNote: 'Right action, wrong details' }),
+        setDis3: () => this.setState({ qaNote: 'Should have waited' }),
+        onConfirmDisagree: () => this.qaConfirmDisagree(s.key),
+        onCancelDisagree: () => this.setState({ qaDisagreeing: null, qaNote: '' }),
+      };
+    });
+
+    // Scorecard rows — base history + this week's reviews folded in
+    const baseRows = [
+      { name: 'Clean claim submission', key: 'Clean claim submission', tier: 'Tier 3', auto: '182', sampled: 18, agreeBase: [18, 18], trend: '\u2191 was 97%', trendUp: true },
+      { name: 'Rulebook auto-fixes', key: 'Rulebook auto-fix', tier: 'Tier 3', auto: '61', sampled: 8, agreeBase: [8, 8], trend: '\u2192 steady', trendUp: false },
+      { name: 'Remittance posting ($0 variance)', key: 'Remittance posting', tier: 'Tier 3', auto: '74', sampled: 9, agreeBase: [9, 9], trend: '\u2191 was 94%', trendUp: true },
+      { name: 'Automated status checks', key: 'Automated status check', tier: 'Tier 3', auto: '210', sampled: 12, agreeBase: [12, 12], trend: '\u2192 steady', trendUp: false },
+      { name: 'Eligibility rechecks', key: 'Eligibility recheck', tier: 'Tier 3', auto: '96', sampled: 10, agreeBase: [9, 10], trend: '\u2192 steady', trendUp: false },
+      { name: 'Rulebook hold routing', key: 'Rulebook hold routing', tier: 'Tier 3', auto: '14', sampled: 6, agreeBase: [6, 6], trend: '\u2192 steady', trendUp: false },
+      { name: 'Outage resubmission', key: '__outage', tier: st.tierState === 'raised' ? 'Tier 3' : 'Tier 2', auto: st.tierState === 'raised' ? '24' : '24 approvals', sampled: 24, agreeBase: [24, 24], trend: '\u2191 6 wks clean', trendUp: true, highlight: st.tierState === 'pending' },
+      { name: 'Underpayment disputes', key: '__disputes', tier: 'Tier 2', auto: '11 approvals', sampled: 11, agreeBase: [10, 11], trend: '\u2192 1 edited', trendUp: false },
+    ];
+    const scoreRows = baseRows.map(b => {
+      let agree = b.agreeBase[0], total = b.agreeBase[1];
+      qa.samples.forEach(s => {
+        if (s.actionType !== b.key || !reviews[s.key]) return;
+        total += 1;
+        if (reviews[s.key].r === 'agree') agree += 1;
+      });
+      const pct = Math.round((agree / Math.max(1, total)) * 100);
+      const low = pct < 90;
+      return {
+        name: b.name, tier: b.tier, auto: b.auto, sampled: String(total),
+        tierBg: b.tier === 'Tier 3' ? '#F1EEFF' : '#F1F5F9',
+        tierFg: b.tier === 'Tier 3' ? '#5B46D6' : '#6B7280',
+        pct: pct + '%', pctFg: low ? '#DC2626' : '#1B7F5E',
+        barColor: low ? '#FF6E6C' : '#22C5A7', barW: pct + '%',
+        trend: low ? '\u26a0 autonomy paused' : b.trend,
+        trendFg: low ? '#DC2626' : (b.trendUp ? '#109680' : '#94A3B8'),
+        rowBg: b.highlight ? '#FBFAFF' : '#FFFFFF',
+      };
+    });
+
+    const sampledTotal = 47 + reviewedN;
+    const sampledAgree = 46 + (reviewedN - disagreeN);
+    const overallPct = ((sampledAgree / sampledTotal) * 100).toFixed(1);
+    const qaStats = [
+      { label: 'Agreement (sampled)', value: overallPct + '%', fg: disagreeN > 1 ? '#B45309' : '#109680', sub: 'across ' + sampledTotal + ' sampled actions · 4 weeks' },
+      { label: 'Auto-approved this week', value: '527', fg: '#0F1B2E', sub: 'actions the agent took on its own' },
+      { label: 'Sample reviewed', value: reviewedN + ' of ' + qa.samples.length, fg: '#0F1B2E', sub: 'this week\u2019s 10% draw — due Friday' },
+      { label: 'Disagreements', value: String(disagreeN), fg: disagreeN > 0 ? '#DC2626' : '#109680', sub: disagreeN > 0 ? 'each one retrains the agent' : 'none this week' },
+    ];
+
+    const isQaTab = st.tab === 'qa';
+
+    return {
+      tabDecisions: !isQaTab,
+      tabQA: isQaTab,
+      goTabDecisions: () => this.setState({ tab: 'decisions' }),
+      goTabQa: () => this.setState({ tab: 'qa' }),
+      tabDecFg: !isQaTab ? '#0F1B2E' : '#6B7280',
+      tabDecBorder: !isQaTab ? '#7B61FF' : 'transparent',
+      tabQaFg: isQaTab ? '#0F1B2E' : '#6B7280',
+      tabQaBorder: isQaTab ? '#7B61FF' : 'transparent',
+      decBadge: String(isEmpty ? 0 : live.length),
+      qaBadgeVisible: pendingN > 0,
+      qaBadge: String(pendingN),
+
+      qaStats, qaSamples, scoreRows,
+      qaSummary: pendingN === 0 ? 'Sample complete for the week' : pendingN + ' auto-approved actions drawn for your review — did the agent make the right call?',
+      qaProgressText: reviewedN + ' of ' + qa.samples.length + ' reviewed',
+      qaProgressW: Math.round((reviewedN / Math.max(1, qa.samples.length)) * 100) + '%',
+      tierPending: isQaTab && st.tierState === 'pending',
+      tierDone: isQaTab && st.tierState === 'raised',
+      tierCanApprove: isMgr,
+      tierNeedsMgr: !isMgr,
+      approveTier: () => { this.persistTier('raised'); this.setState({ tierState: 'raised' }); this.showToast('Outage resubmission raised to Tier 3 — logged to the Audit Log'); },
+      dismissTier: () => { this.persistTier('kept'); this.setState({ tierState: 'kept' }); this.showToast('Kept at Tier 2 — the agent keeps asking for approval'); },
+      revertTier: () => { this.persistTier('pending'); this.setState({ tierState: 'pending' }); this.showToast('Reverted to Tier 2 — logged to the Audit Log'); },
+
+      draftMode,
+      navClosed: !st.navExpanded,
+      navOpen: st.navExpanded,
+      toggleNav: () => this.setState(prev => { const v = !prev.navExpanded; try { localStorage.setItem('onb-nav-expanded', v ? '1' : '0'); } catch (e) {} return { navExpanded: v }; }),
+      isEmpty, notEmpty: !isEmpty,
+      volText: String(vol),
+      practiceLabel: d.practiceLabel,
+      breachChipText: isEmpty ? 'All clear' : (breachedCount > 0 ? breachedCount + ' SLA Breached' : 'No SLA breaches'),
+      breachBg: (isEmpty || breachedCount === 0) ? '#E6F7F2' : '#FEECEC',
+      breachFg: (isEmpty || breachedCount === 0) ? '#109680' : '#DC2626',
+
+      stages,
+      stageOpenVisible: !!st.stageOpen,
+      stagePanelTitle, stagePanelSub, stageRows,
+      closeStage: () => this.setState({ stageOpen: null }),
+
+      decisionsSummary: live.length === 0 ? 'Queue clear' : live.length + ' decisions unblock ' + liveClaims + ' claims — start at the top',
+      showGrouped,
+      showCards: !showGrouped,
+      groups,
+      hasGroupOpen: !!(groupable && st.groupOpen),
+      groupOpenLabel: st.groupOpen ? ((Component.GROUPS[st.groupOpen] || {}).label || 'This decision') : '',
+      backToGroups: () => this.setState({ groupOpen: null, inboxView: 'grouped' }),
+      showViewToggle: groupable && !st.groupOpen,
+      viewGroupedBg: st.inboxView === 'grouped' ? '#7B61FF' : '#FFFFFF',
+      viewGroupedFg: st.inboxView === 'grouped' ? '#FFFFFF' : '#6B7280',
+      viewCardsBg: st.inboxView !== 'grouped' ? '#7B61FF' : '#FFFFFF',
+      viewCardsFg: st.inboxView !== 'grouped' ? '#FFFFFF' : '#6B7280',
+      setViewGrouped: () => this.setState({ inboxView: 'grouped', groupOpen: null }),
+      setViewCards: () => this.setState({ inboxView: 'cards', groupOpen: null }),
+      busyOn: !!st.busy,
+      busyLabel: st.busy ? 'Busy morning: on \u00b7 back to a quiet day' : 'Simulate a busy morning',
+      toggleBusy: () => {
+        const next = !st.busy;
+        try { localStorage.setItem('onb-inbox-busy', next ? '1' : '0'); } catch (e) {}
+        this._data = null;
+        this.setState({ busy: next, groupOpen: null, inboxView: 'grouped', expanded: null }, () => {
+          if (!next) { const first = this.data().decisions.find(x => !this.state.resolved[x.key]); if (first) this.setState({ expanded: first.key }); }
+        });
+      },
+      decisionsProgressText: doneDecisions + ' of ' + totalDecisions + ' done',
+      decisionsProgressW: Math.round((doneDecisions / Math.max(1, totalDecisions)) * 100) + '%',
+      allDone: !isEmpty && live.length === 0,
+      allDoneSub: resolvedClaims + ' claims unblocked and back in the pipeline. Agents will take it from here.',
+      decisions,
+
+      toast: st.toast,
+      toastVisible: !!st.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

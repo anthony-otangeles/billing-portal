@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #FFFFFF; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #22C5A7; }
+  a:hover { color: #0B7D6C; }
+  * { box-sizing: border-box; }
+  button, select { font-family: 'Inter', sans-serif; }
+</style>
+<script src="./portal-config-store.js"></script>
+<script src="./companies-store.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #FFFFFF; display: flex; flex-direction: column;" data-screen-label="Ops Admin — Portal Configuration">
+
+  <x-import component-from-global-scope="ops-header" from="./ops-shell.js" hint-size="100%,76px"></x-import>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+    <x-import component-from-global-scope="ops-nav" from="./ops-shell.js" active="portalconfig" hint-size="300px,900px"></x-import>
+
+    <div style="flex: 1; padding: 34px 44px 60px; display: flex; flex-direction: column; gap: 22px; min-width: 0; max-width: 1240px;">
+
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <h1 style="font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 700; color: #7B61FF; margin: 0;">Portal Configuration</h1>
+        <span style="font-size: 15px; color: #6B7280;">Feature switches per portal. The Billing column is live — changes apply to the Bell Medics portal immediately and are audited.</span>
+      </div>
+
+      <!-- Config table -->
+      <div style="border: 1px solid #E5E7EB; border-radius: 16px; overflow: hidden;">
+        <div style="display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1.6fr; gap: 12px; padding: 14px 26px; border-bottom: 1px solid #EEF2F7; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.07em; align-items: center;">
+          <span>Setting</span>
+          <span style="text-align: center;">Provider</span>
+          <span style="text-align: center;">Scribe</span>
+          <span style="text-align: center;">Clerk</span>
+          <span style="text-align: center; color: #5B46D6; display: flex; align-items: center; justify-content: center; gap: 7px;">Billing <span style="font-size: 9px; font-weight: 700; color: #0B7D6C; background: #E6F7F2; border: 1px solid #B9E8DC; border-radius: 9999px; padding: 1px 6px; letter-spacing: 0;">LIVE</span></span>
+        </div>
+
+        <!-- Agent autonomy -->
+        <div style="display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1.6fr; gap: 12px; padding: 18px 26px; border-bottom: 1px solid #EEF2F7; align-items: center; background: #FDFCFF;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 14px; font-weight: 700; color: #0F1B2E;">Agent autonomy</span>
+            <span style="font-size: 12.5px; color: #6B7280; line-height: 18px;">How far AI agents may act without a human decision</span>
+          </div>
+          <span style="text-align: center; font-size: 12.5px; color: #6B7280;">Draft-only</span>
+          <span style="text-align: center; font-size: 12.5px; color: #6B7280;">Draft-only</span>
+          <span style="text-align: center; font-size: 12.5px; color: #6B7280;">Draft-only</span>
+          <div style="display: flex; flex-direction: column; gap: 5px; align-items: stretch;">
+            <sc-for list="{{ autonomyOptions }}" as="o" hint-placeholder-count="3">
+              <button onClick="{{ o.onClick }}" style="display: flex; align-items: center; gap: 9px; padding: 8px 12px; border-radius: 8px; border: 1.5px solid {{ o.border }}; background: {{ o.bg }}; cursor: pointer; text-align: left;">
+                <span style="width: 14px; height: 14px; border-radius: 9999px; border: 1.5px solid {{ o.dotBorder }}; background: {{ o.dotBg }}; flex-shrink: 0;"></span>
+                <span style="display: flex; flex-direction: column;">
+                  <span style="font-size: 12.5px; font-weight: 700; color: #0F1B2E;">{{ o.label }}</span>
+                  <span style="font-size: 11px; color: #6B7280;">{{ o.sub }}</span>
+                </span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- SLA window -->
+        <div style="display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1.6fr; gap: 12px; padding: 18px 26px; border-bottom: 1px solid #EEF2F7; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 14px; font-weight: 700; color: #0F1B2E;">Decision SLA window</span>
+            <span style="font-size: 12.5px; color: #6B7280;">Hours before a queued agent decision is flagged as breached</span>
+          </div>
+          <span style="text-align: center; font-size: 12.5px; color: #94A3B8;">n/a</span>
+          <span style="text-align: center; font-size: 12.5px; color: #6B7280;">24h</span>
+          <span style="text-align: center; font-size: 12.5px; color: #94A3B8;">n/a</span>
+          <div style="display: flex; justify-content: center; gap: 6px;">
+            <sc-for list="{{ slaOptions }}" as="s" hint-placeholder-count="3">
+              <button onClick="{{ s.onClick }}" style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1.5px solid {{ s.border }}; background: {{ s.bg }}; color: {{ s.fg }}; font-size: 12.5px; font-weight: 700; cursor: pointer;">{{ s.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Appeals -->
+        <div style="display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1.6fr; gap: 12px; padding: 18px 26px; border-bottom: 1px solid #EEF2F7; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 14px; font-weight: 700; color: #0F1B2E;">Appeal filing</span>
+            <span style="font-size: 12.5px; color: #6B7280;">Allow users to file payer appeals from the portal</span>
+          </div>
+          <span style="text-align: center; font-size: 12.5px; color: #94A3B8;">n/a</span>
+          <span style="text-align: center; font-size: 12.5px; color: #94A3B8;">n/a</span>
+          <span style="text-align: center; font-size: 12.5px; color: #94A3B8;">n/a</span>
+          <div style="display: flex; justify-content: center;">
+            <button onClick="{{ toggleAppeals }}" title="Toggle appeal filing" style="width: 42px; height: 24px; border-radius: 9999px; border: none; background: {{ appealsBg }}; position: relative; cursor: pointer; transition: background 150ms ease-out;">
+              <span style="position: absolute; top: 3px; left: {{ appealsKnob }}; width: 18px; height: 18px; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: left 150ms ease-out;"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Weekly report -->
+        <div style="display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1.6fr; gap: 12px; padding: 18px 26px; border-bottom: 1px solid #EEF2F7; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 14px; font-weight: 700; color: #0F1B2E;">Weekly report cadence</span>
+            <span style="font-size: 12.5px; color: #6B7280;">When the summary report is compiled for managers</span>
+          </div>
+          <span style="text-align: center; font-size: 12.5px; color: #6B7280;">Monday</span>
+          <span style="text-align: center; font-size: 12.5px; color: #6B7280;">Monday</span>
+          <span style="text-align: center; font-size: 12.5px; color: #94A3B8;">n/a</span>
+          <div style="display: flex; justify-content: center; gap: 6px;">
+            <sc-for list="{{ reportOptions }}" as="r" hint-placeholder-count="2">
+              <button onClick="{{ r.onClick }}" style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1.5px solid {{ r.border }}; background: {{ r.bg }}; color: {{ r.fg }}; font-size: 12.5px; font-weight: 700; cursor: pointer;">{{ r.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Write-off ceiling -->
+        <div style="display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1.6fr; gap: 12px; padding: 18px 26px; border-bottom: 1px solid #EEF2F7; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 14px; font-weight: 700; color: #0F1B2E;">Write-off ceiling</span>
+            <span style="font-size: 12.5px; color: #6B7280; line-height: 18px;">Platform-wide cap — company thresholds in Settings cannot exceed it</span>
+          </div>
+          <span style="text-align: center; font-size: 12.5px; color: #94A3B8;">n/a</span>
+          <span style="text-align: center; font-size: 12.5px; color: #94A3B8;">n/a</span>
+          <span style="text-align: center; font-size: 12.5px; color: #94A3B8;">n/a</span>
+          <div style="display: flex; justify-content: center; gap: 6px;">
+            <sc-for list="{{ ceilingOptions }}" as="w" hint-placeholder-count="3">
+              <button onClick="{{ w.onClick }}" style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1.5px solid {{ w.border }}; background: {{ w.bg }}; color: {{ w.fg }}; font-size: 12.5px; font-weight: 700; cursor: pointer;">{{ w.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- 2FA -->
+        <div style="display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1.6fr; gap: 12px; padding: 18px 26px; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 14px; font-weight: 700; color: #0F1B2E;">2FA enforcement</span>
+            <span style="font-size: 12.5px; color: #6B7280;">Require two-factor authentication for all portal users</span>
+          </div>
+          <span style="text-align: center; font-size: 12.5px; color: #6B7280;">Required</span>
+          <span style="text-align: center; font-size: 12.5px; color: #6B7280;">Required</span>
+          <span style="text-align: center; font-size: 12.5px; color: #6B7280;">Required</span>
+          <div style="display: flex; justify-content: center;">
+            <button onClick="{{ toggleMfa }}" title="Toggle 2FA enforcement" style="width: 42px; height: 24px; border-radius: 9999px; border: none; background: {{ mfaBg }}; position: relative; cursor: pointer; transition: background 150ms ease-out;">
+              <span style="position: absolute; top: 3px; left: {{ mfaKnob }}; width: 18px; height: 18px; border-radius: 9999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: left 150ms ease-out;"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #94A3B8;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg>
+        Every change writes an audit event. Try it: set Agent autonomy to draft-only, then open the Bell Medics <a href="Agent Inbox v3.dc.html" style="font-weight: 700;">Agent Inbox</a> — approvals are disabled with an explanatory notice.
+      </div>
+
+      <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+        <div style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; z-index: 900;">{{ toastText }}</div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { ready: false, toast: '' };
+
+  componentDidMount() {
+    const check = () => {
+      if (window.PortalConfig && window.CompaniesStore) this.setState({ ready: true });
+      else setTimeout(check, 60);
+    };
+    check();
+  }
+
+  change(key, val, desc) {
+    window.PortalConfig.set(key, val);
+    window.CompaniesStore.addAudit({ ts: 'Jul 10', type: 'access', who: 'Michael Ops Admin', what: 'Changed portal configuration', detail: 'Billing \u00b7 ' + desc });
+    clearTimeout(this._tt);
+    this.setState({ toast: desc + ' — applied to the Billing Portal' });
+    this._tt = setTimeout(() => this.setState({ toast: '' }), 3000);
+  }
+
+  renderVals() {
+    const st = this.state;
+    const PC = window.PortalConfig;
+    const g = (k, fb) => (st.ready && PC ? PC.get(k) : fb);
+
+    const autonomy = g('billing.autonomy', 'approval');
+    const autonomyOptions = [
+      { id: 'draft', label: 'Draft-only', sub: 'Agent prepares, humans do everything' },
+      { id: 'approval', label: 'Act with approval', sub: 'Agent executes approved decisions' },
+      { id: 'report', label: 'Act & report', sub: 'Agent acts, humans review after' },
+    ].map(o => ({
+      key: o.id, label: o.label, sub: o.sub,
+      border: autonomy === o.id ? '#7B61FF' : '#E5E7EB',
+      bg: autonomy === o.id ? '#F1EEFF' : '#FFFFFF',
+      dotBorder: autonomy === o.id ? '#7B61FF' : '#CBD5E1',
+      dotBg: autonomy === o.id ? '#7B61FF' : '#FFFFFF',
+      onClick: () => this.change('billing.autonomy', o.id, 'Agent autonomy set to ' + o.label),
+    }));
+
+    const sla = g('billing.slaHours', 24);
+    const slaOptions = [12, 24, 48].map(h => ({
+      key: 'h' + h, label: h + 'h',
+      border: sla === h ? '#7B61FF' : '#E5E7EB',
+      bg: sla === h ? '#F1EEFF' : '#FFFFFF',
+      fg: sla === h ? '#5B46D6' : '#6B7280',
+      onClick: () => this.change('billing.slaHours', h, 'Decision SLA set to ' + h + ' hours'),
+    }));
+
+    const appeals = g('billing.appeals', true);
+    const report = g('billing.weeklyReport', 'monday');
+    const reportOptions = [
+      { id: 'monday', label: 'Monday' },
+      { id: 'friday', label: 'Friday' },
+    ].map(r => ({
+      key: r.id, label: r.label,
+      border: report === r.id ? '#7B61FF' : '#E5E7EB',
+      bg: report === r.id ? '#F1EEFF' : '#FFFFFF',
+      fg: report === r.id ? '#5B46D6' : '#6B7280',
+      onClick: () => this.change('billing.weeklyReport', r.id, 'Weekly report moved to ' + r.label),
+    }));
+
+    const mfa = g('billing.mfa', true);
+
+    const ceiling = g('billing.writeoffCeiling', 2500) || 2500;
+    const ceilingOptions = [1000, 2500, 5000].map(v => ({
+      key: 'c' + v, label: '$' + v.toLocaleString(),
+      border: ceiling === v ? '#7B61FF' : '#E5E7EB',
+      bg: ceiling === v ? '#F1EEFF' : '#FFFFFF',
+      fg: ceiling === v ? '#5B46D6' : '#6B7280',
+      onClick: () => this.change('billing.writeoffCeiling', v, 'Write-off ceiling set to $' + v.toLocaleString()),
+    }));
+
+    return {
+      ceilingOptions,
+      autonomyOptions,
+      slaOptions,
+      appealsBg: appeals ? '#22C5A7' : '#D1D5DC',
+      appealsKnob: appeals ? '21px' : '3px',
+      toggleAppeals: () => this.change('billing.appeals', !appeals, 'Appeal filing ' + (!appeals ? 'enabled' : 'disabled')),
+      reportOptions,
+      mfaBg: mfa ? '#22C5A7' : '#D1D5DC',
+      mfaKnob: mfa ? '21px' : '3px',
+      toggleMfa: () => this.change('billing.mfa', !mfa, '2FA enforcement ' + (!mfa ? 'enabled' : 'disabled')),
+      hasToast: !!st.toast,
+      toastText: st.toast,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

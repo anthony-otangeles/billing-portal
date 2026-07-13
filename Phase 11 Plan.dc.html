@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #1C192E; }
+  a { color: #845EC2; }
+  a:hover { color: #67568C; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<div style="max-width: 880px; margin: 0 auto; padding: 48px 40px 80px; display: flex; flex-direction: column; gap: 30px;" data-screen-label="Phase 11 Plan — Portal Assistant">
+
+  <!-- Header -->
+  <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 2px solid #845EC2; padding-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 700;">PLAN — FOR YOUR APPROVAL</span>
+      <span style="font-size: 12px; color: #6A7282;">Jul 13, 2026 · thinking through the embedded assistant together</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 700; margin: 0;">Phase 11 — The Portal Assistant</h1>
+    <p style="font-size: 14px; line-height: 22px; color: #6A7282; margin: 0;">An AI assistant available on every billing screen that <strong style="color: #1C192E;">finds, explains, refines, and navigates — and never processes</strong>. It answers "where is…", "why did…", "show me all…", and "take me to…" questions from the same data every screen already shares. Anything that would change a claim is a hand-off to the governed surfaces (Agent Inbox, Payments), never an action the assistant takes itself.</p>
+  </div>
+
+  <!-- The core idea -->
+  <div style="background: #F5F2FD; border: 1px solid #C9BCF5; border-radius: 12px; padding: 18px 22px; display: flex; flex-direction: column; gap: 8px;">
+    <span style="font-size: 14px; font-weight: 700; color: #67568C;">Why this is a different thing from the agents you already have</span>
+    <p style="font-size: 13.5px; line-height: 21px; margin: 0; color: #1C192E;">The pipeline agents (generation, posting, follow-up) <em>do the work</em> and are governed by tiers, thresholds, and QA. This assistant is a <strong>navigator</strong> — a colleague who has read everything and can take you to the right place. Keeping it read-only by charter is what makes it safe to give it the whole platform as context: it can see everything the signed-in user can see, because the only thing it can do with that knowledge is show it to you, with citations.</p>
+  </div>
+
+  <!-- 11.1 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #845EC2;">11.1</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">The assistant panel — one shell, every screen</h2>
+      <span style="font-size: 12px; color: #6A7282;">effort M</span>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #845EC2; border-radius: 12px; padding: 16px 20px;">
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6A7282; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Entry:</strong> an "Ask" button in the top bar of every billing screen (beside search) + a keyboard shortcut. Opens a docked right-side panel — the page stays visible and usable, because the assistant's whole job is pointing at it.</li>
+        <li><strong>Built like the other shared components</strong> (one web component, dropped into each header), conversation persists per session, works identically on all 11 screens.</li>
+        <li><strong>Suggested prompts on open</strong>, seeded per screen ("What's holding up the Duran claim?", "Which payers are underpaying this month?") so the first use teaches the range.</li>
+        <li><strong>Charter shown in the panel:</strong> "I find, explain, and navigate. I don't approve, edit, or submit — those stay in your queues."</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 11.2 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #845EC2;">11.2</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Grounded answers — retrieval over the shared stores</h2>
+      <span style="font-size: 12px; color: #6A7282;">effort M–L · the substance</span>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #845EC2; border-radius: 12px; padding: 16px 20px;">
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6A7282; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Four question shapes, all against live store data</strong> (the same claims, contracts, and decisions every screen renders):
+          <em>Find</em> ("claims for Rosa Whitfield", "everything sitting with secondary payers over $100") ·
+          <em>Aggregate</em> ("how much is Humana underpaying us?", "open AR by facility") ·
+          <em>Explain</em> ("why was this paid $125.70?", "what does CO-253 mean?" — drawing on the drift narratives, variance dispositions, and glossary) ·
+          <em>Navigate</em> ("take me to the MHS rate review").</li>
+        <li><strong>Every answer cites its sources:</strong> claim chips, payer chips, and screen links you can click — the answer IS a set of deep links (Claim Detail, Register pre-filtered, Contracts with the code loaded, the exact Inbox decision).</li>
+        <li><strong>Honest misses:</strong> when it can't answer from the data, it says so and offers the nearest thing it can show — never invents a number.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 11.3 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #845EC2;">11.3</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Refinement — a working set you narrow by talking</h2>
+      <span style="font-size: 12px; color: #6A7282;">effort M</span>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px;">
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6A7282; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Follow-ups refine, not restart:</strong> "claims denied this month" → "just Humana" → "over $200" — the panel shows the current filter set as chips, with the count and dollars updating each turn.</li>
+        <li><strong>Exit ramps into the real surfaces:</strong> "Open these in the Register" (lands with those filters applied), "Save this as a view" (10.3's saved views), "Any of these have open decisions?" → links to the Inbox group.</li>
+        <li>This is where it beats the search box: search finds a thing; the assistant carves a population.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 11.4 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #E5E7EB; padding-bottom: 8px;">
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #845EC2;">11.4</span>
+      <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Guardrails, worn on the outside</h2>
+      <span style="font-size: 12px; color: #6A7282;">effort S · the trust story</span>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px;">
+      <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 20px; color: #6A7282; display: flex; flex-direction: column; gap: 4px;">
+        <li><strong>Read-only by construction:</strong> the assistant has no approve/edit/submit verbs. Asked to act ("write off these claims"), it declines and links to the governed path — the decline is part of the demo.</li>
+        <li><strong>Sees what you see, nothing more:</strong> scoped to the signed-in role and selected practice, same as every screen. Angela's assistant can't see Westbrook if Angela can't.</li>
+        <li><strong>Auditable:</strong> assistant sessions are noted in the Audit Log the same way Ops portal entries are — a question trail, not a black box.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Decisions -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #845EC2;">Decisions I need from you</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 8px;">
+      <li><strong>Live AI or scripted intents?</strong> I can build it two ways. <strong>(a) Deterministic:</strong> a real retrieval engine over the stores with a curated intent parser — every demo question works perfectly, every time, offline. <strong>(b) Live Claude-powered:</strong> the panel actually calls Claude to interpret free-form questions against the store data — genuinely open-ended, more impressive, slightly less predictable in a demo. My recommendation: <em>(a) as the foundation, with (b) as a toggle</em> — the demo stays safe, the wow is available.</li>
+      <li><strong>Name and voice?</strong> The pipeline agents are named by function ("Payment Reconciliation Agent"). Options: keep it functional ("Assistant"), or give it a light product name. I'd keep it functional — this platform's credibility is its restraint.</li>
+      <li><strong>Where does it live?</strong> Docked right panel (my recommendation — keeps the page visible for navigation) vs. a centered command-palette overlay.</li>
+      <li><strong>Scope of the first build:</strong> the four question shapes on the billing portal only, or also the Practice window (practices asking "what do you need from me?") — I'd hold the practice side for a later phase.</li>
+    </ul>
+  </div>
+
+</div>
+
+</x-dc>
+</body>
+</html>

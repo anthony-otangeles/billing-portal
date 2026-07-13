@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+</style>
+</helmet>
+
+<div style="max-width: 860px; margin: 0 auto; padding: 48px 40px 80px; display: flex; flex-direction: column; gap: 26px;" data-screen-label="Phase 4b Plan">
+
+  <div style="display: flex; flex-direction: column; gap: 10px; border-bottom: 2px solid #7B61FF; padding-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 700;">PLAN — FOR YOUR APPROVAL</span>
+      <span style="font-size: 12px; color: #6B7280;">Jul 10, 2026 · closes out PRD §9 Phase 4 (platform-admin touches)</span>
+    </div>
+    <h1 style="font-size: 28px; font-weight: 700; margin: 0;">Phase 4b — Roles &amp; Portal Configuration</h1>
+    <p style="font-size: 14px; line-height: 22px; color: #6B7280; margin: 0;">The governance layer: a definition of what each role can do, written down and visible in the Ops portal — so the permission boundaries the prototype enforces implicitly (Angela vs Derek vs Michael, tenant isolation) become explicit, reviewable artifacts. This is the last planned phase of the PRD.</p>
+  </div>
+
+  <!-- 1 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">1 · New screens (2)</h2>
+
+    <div style="background: #FFFFFF; border: 1px solid #7B61FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Roles &amp; Permissions <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Ops Roles.dc.html</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">A new System-group nav item. One card per role — Operations Admin, Practice Admin, Provider, Billing Manager (NEW), AR Rep (NEW) — with member count and scope statement. Selecting a role opens a <strong>permission matrix</strong> (capability × allow/deny) grouped by domain: Claims &amp; AR, Team, Practices, Patient Data (PHI), Audit. The PHI row makes isolation explicit: AR Reps and Billing Managers see PHI only for practices their company serves; Ops sees none. Read-only matrix with an "edit requests are audited" affordance — role editing is a real-product feature we only need to gesture at.</p>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 700;">Portal Configuration <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">Ops Portal Config.dc.html</span></span>
+      <p style="font-size: 13px; line-height: 20px; color: #6B7280; margin: 0;">Per-portal feature switches, one column per portal (Provider, Scribe, Clerk, <strong>Billing — NEW</strong>): Agent Inbox autonomy level (draft-only / act-with-approval / act-and-report), SLA windows, appeal filing, weekly report cadence, 2FA enforcement. Billing column is live-wired: flipping "Agent autonomy" to draft-only visibly disables the approve buttons in the Bell Medics Agent Inbox (read from a shared config store). The other three portals are static columns for context.</p>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">2 · Small ripples</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li>Ops nav gains <strong>Roles &amp; Permissions</strong> and <strong>Portal Configuration</strong> under System.</li>
+      <li>Config changes write audit events (visible in the Audit Log immediately).</li>
+      <li>Agent Inbox (Bell Medics) reads the autonomy setting — a one-line banner explains when approvals are disabled by Operations.</li>
+    </ul>
+  </div>
+
+  <!-- 3 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">3 · Out of scope</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li>Editable permission matrices (real RBAC editing) — read-only with audited-edit affordance.</li>
+      <li>Custom roles; per-user permission overrides.</li>
+      <li>A second live billing-company portal (the multi-tenant demo) — still available as an optional phase after this.</li>
+    </ul>
+  </div>
+
+  <!-- 4 -->
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: #7B61FF;">4 · Deliverables &amp; QA</h2>
+    <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 22px; display: flex; flex-direction: column; gap: 5px;">
+      <li>2 new Ops screens + <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">portal-config-store.js</span> (persisted settings shared with the Billing Portal).</li>
+      <li>Agent Inbox autonomy wiring + explanatory banner.</li>
+      <li>QA Checklist gains "NEW — Phase 4b" (~6 steps), including the cross-portal autonomy round trip.</li>
+    </ul>
+  </div>
+
+  <div style="border-top: 1px solid #E5E7EB; padding-top: 16px; font-size: 12px; color: #94A3B8;">Otangeles Note+ · Phase 4b plan — approve, edit, or comment; build starts on your go. This completes the PRD roadmap.</div>
+
+</div>
+
+</x-dc>
+</body>
+</html>

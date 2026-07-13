@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button, select, input, textarea { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+<script src="./claims-store.js"></script>
+<script src="./contracts-store.js"></script>
+<script src="./glossary.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="Payments (Bell Medics)">
+
+  <x-import component-from-global-scope="ops-banner" from="./ops-banner.js" hint-size="100%,0px"></x-import>
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Billing Portal</span>
+    <x-import component-from-global-scope="search-bar" from="./search-bar.js" hint-size="480px,40px"></x-import>
+    <div style="flex: 1;"></div>
+    <x-import component-from-global-scope="practice-switcher" from="./practice-switcher.js" hint-size="260px,40px"></x-import>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <x-import component-from-global-scope="role-switcher" from="./role-switcher.js" hint-size="210px,44px"></x-import>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav ===== -->
+    <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+      <a href="Billing Home.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg>
+        Dashboard
+      </a>
+      <a href="Agent Inbox v3.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+        Agent Inbox
+      </a>
+      <a href="Coverage.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        Coverage
+      </a>
+      <a href="AR Worklist.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        AR Worklist
+      </a>
+      <a href="Claims Register.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+        Claims
+      </a>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+        Payments
+        <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: rgba(255,255,255,0.22); font-size: 11px; font-weight: 700;">NEW</span>
+      </div>
+      <a href="Rulebook.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+        Rulebook
+      </a>
+      <a href="Contracts.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+        Contracts
+      </a>
+      <a href="Analytics.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+        Analytics
+      </a>
+      <a href="Settings.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        Settings
+      </a>
+      <div style="flex: 1;"></div>
+      <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+        <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+        Reach the billing support desk 24/7.
+      </div>
+    </div>
+
+    <!-- ===== Main ===== -->
+    <div style="flex: 1; padding: 24px 32px 48px; display: flex; flex-direction: column; gap: 16px; min-width: 0;" data-screen-label="Payments — posting & reconciliation">
+
+      <!-- Title -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <h1 style="font-size: 24px; font-weight: 700; margin: 0; white-space: nowrap;">Payments</h1>
+        <span style="font-size: 13px; color: #6B7280;">Posting &amp; reconciliation · {{ practiceLabel }} · Mon, Jul 13 2026</span>
+        <div style="flex: 1;"></div>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #E7F5EF; color: #1B7F5E; font-size: 12px; font-weight: 600; white-space: nowrap;">Jul 11 reconciled — every deposit tied out</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 600; white-space: nowrap;">{{ varChipText }}</span>
+      </div>
+
+      <!-- Needs you today (leads the page) -->
+      <div style="background: #FFF7ED; border: 1px solid #F5D9A8; border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <span style="font-size: 13px; font-weight: 700; color: #B45309; white-space: nowrap;">Needs you today</span>
+        <button onClick="{{ goDeposits }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 9999px; border: 1px solid #F5D9A8; background: #FFFFFF; color: #0F1B2E; font-size: 12.5px; font-weight: 600; cursor: pointer;" style-hover="border-color: #B45309;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #B45309;">2</span> deposits not tied out — 1 short $100, 1 waiting on its remittance
+        </button>
+        <button onClick="{{ goVarianceTab }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 9999px; border: 1px solid #F5D9A8; background: #FFFFFF; color: #0F1B2E; font-size: 12.5px; font-weight: 600; cursor: pointer;" style-hover="border-color: #B45309;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #B45309;">{{ openVarCount }}</span> payments below the contracted rate — {{ varTotal }} at stake
+        </button>
+        <sc-if value="{{ batchOpen }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ goStatements }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 9999px; border: 1px solid #F5D9A8; background: #FFFFFF; color: #0F1B2E; font-size: 12.5px; font-weight: 600; cursor: pointer;" style-hover="border-color: #B45309;">
+          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #B45309;">1</span> statement batch waiting for approval — 23 patients, $2,847.60
+          </button>
+        </sc-if>
+        <span style="font-size: 11.5px; color: #B45309; opacity: 0.75;">everything else on this page is running clean</span>
+      </div>
+
+      <!-- Stat strip -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Posted this week</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #1B7F5E;">$24.3K</span>
+          <span style="font-size: 12px; color: #6B7280;">across 156 claims · 6 remittances</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Posted without a human touch</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #5B46D6;">94.2%</span>
+          <span style="font-size: 12px; color: #6B7280;">clean lines post automatically and are QA-sampled — the rest wait for you</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Last fully reconciled day</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #1B7F5E;">Jul 11</span>
+          <span style="font-size: 12px; color: #6B7280;">every deposit that day tied to its remittance, to the cent</span>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 0; border: 1px solid #E5E7EB; border-radius: 5px; overflow: hidden;">
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.onClick }}" style="padding: 8px 16px; border: none; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;">{{ t.label }}</button>
+          </sc-for>
+        </div>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 12px; color: #94A3B8;">{{ tabSummary }}</span>
+      </div>
+
+      <!-- ===== Tab 1 · Deposits ===== -->
+      <sc-if value="{{ showDeposits }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <sc-for list="{{ days }}" as="d" hint-placeholder-count="3">
+            <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+              <button onClick="{{ d.onToggle }}" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; border: none; border-bottom: 1px solid #EEEEEE; background: #F8FAFC; width: 100%; text-align: left; cursor: pointer;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate({{ d.chev }}); transition: transform 150ms ease-out;"><path d="m6 9 6 6 6-6"></path></svg>
+                <span style="font-size: 13px; font-weight: 700;">{{ d.label }}</span>
+                <span style="display: inline-flex; padding: 2px 10px; border-radius: 9999px; background: {{ d.stBg }}; color: {{ d.stFg }}; font-size: 10.5px; font-weight: 700;">{{ d.status }}</span>
+                <sc-if value="{{ d.collapsedNote }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size: 11.5px; color: #94A3B8;">collapsed — everything tied out</span>
+                </sc-if>
+                <div style="flex: 1;"></div>
+                <span style="font-size: 12px; color: #94A3B8; font-family: 'JetBrains Mono', monospace;">{{ d.total }}</span>
+              </button>
+              <sc-if value="{{ d.open }}" hint-placeholder-val="{{ true }}">
+              <div style="display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2.2fr); gap: 0; font-size: 10.5px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; padding: 9px 20px; border-bottom: 1px solid #F1F5F9;">
+                <span>Payer</span><span>Trace</span><span style="text-align: right;"><gloss-t term="era">Payer said (ERA)</gloss-t></span><span style="text-align: right;">Bank received</span><span style="text-align: center;">Match</span><span style="padding-left: 20px;">Agent</span>
+              </div>
+              <sc-for list="{{ d.rows }}" as="dr" hint-placeholder-count="3">
+                <div style="border-bottom: 1px solid #F8FAFC;">
+                <button onClick="{{ dr.onClick }}" style="display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2.2fr); gap: 0; width: 100%; text-align: left; align-items: center; padding: 11px 20px; border: none; background: {{ dr.bg }}; cursor: {{ dr.cursor }}; transition: background 120ms ease-out;">
+                  <span style="font-size: 13px; font-weight: 600; color: #0F1B2E; display: inline-flex; align-items: center; gap: 7px;">{{ dr.payer }}
+                    <sc-if value="{{ dr.hasRun }}" hint-placeholder-val="{{ false }}">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate({{ dr.chev }}); transition: transform 150ms ease-out;"><path d="m6 9 6 6 6-6"></path></svg>
+                    </sc-if>
+                  </span>
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #6B7280;">{{ dr.trace }}</span>
+                  <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{ dr.eraFg }};">{{ dr.era }}</span>
+                  <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E;">{{ dr.bank }}</span>
+                  <span style="text-align: center;"><span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: {{ dr.stBg }}; color: {{ dr.stFg }}; font-size: 10.5px; font-weight: 700;">{{ dr.st }}</span></span>
+                  <span style="font-size: 12px; color: #6B7280; line-height: 17px; padding-left: 20px;">{{ dr.note }}</span>
+                </button>
+                <sc-if value="{{ dr.runOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="background: #FBFAFF; border-top: 1px solid #F1EEFF; padding: 12px 20px 14px; display: flex; align-items: center; gap: 26px; flex-wrap: wrap;">
+                    <span style="display: flex; flex-direction: column; gap: 1px;"><span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Posting detail</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #5B46D6;">{{ dr.runId }} · {{ dr.runWhen }}</span></span>
+                    <span style="display: flex; flex-direction: column; gap: 1px;"><span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Claims / lines</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E;">{{ dr.runCounts }}</span></span>
+                    <span style="display: flex; flex-direction: column; gap: 1px;"><span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Paid</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #1B7F5E;">{{ dr.runPaid }}</span></span>
+                    <span style="display: flex; flex-direction: column; gap: 1px;"><span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Contractual</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B7280;">{{ dr.runAdj }}</span></span>
+                    <span style="display: flex; flex-direction: column; gap: 1px;"><span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">To secondary / patient</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B7280;">{{ dr.runTransfer }}</span></span>
+                    <span style="display: flex; flex-direction: column; gap: 2px; min-width: 130px;"><span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Posted automatically</span>
+                      <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 70px; height: 5px; border-radius: 9999px; background: #F1F5F9; overflow: hidden; display: block;"><span style="display: block; height: 100%; width: {{ dr.runAutoW }}; background: {{ dr.runAutoColor }};"></span></span><span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: {{ dr.runAutoFg }};">{{ dr.runAuto }}</span></span>
+                    </span>
+                    <div style="flex: 1;"></div>
+                    <sc-if value="{{ dr.runHasExc }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ dr.goVariance }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 13px; border-radius: 9999px; border: 1px solid #F5D9A8; background: #FEF3DF; color: #B45309; font-size: 11.5px; font-weight: 700; cursor: pointer;">{{ dr.runExc }} → review</button>
+                    </sc-if>
+                    <sc-if value="{{ dr.runClean }}" hint-placeholder-val="{{ false }}">
+                      <span style="display: inline-flex; padding: 3px 10px; border-radius: 9999px; background: #E7F5EF; color: #1B7F5E; font-size: 11px; font-weight: 700;">ALL LINES POSTED CLEAN</span>
+                    </sc-if>
+                  </div>
+                </sc-if>
+                </div>
+              </sc-for>
+              </sc-if>
+            </div>
+          </sc-for>
+          <p style="font-size: 12px; color: #94A3B8; margin: 0;">The agent matches every <gloss-t term="era">ERA</gloss-t> to its bank deposit on the <gloss-t term="trace number">trace number</gloss-t> (<gloss-t term="eft">EFT</gloss-t> or check). A day is reconciled when every deposit ties out to the cent — reconciled days collapse; problems stay open. Click any matched deposit to see how its remittance posted, line by line.</p>
+        </div>
+      </sc-if>
+
+      <!-- ===== Tab 2 · Paid vs expected ===== -->
+      <sc-if value="{{ showVariance }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 2.2fr) minmax(0, 1.2fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1.6fr) minmax(0, 1.1fr); gap: 0; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 20px; border-bottom: 1px solid #E5E7EB;">
+            <span>Category</span><span>What happened</span><span>Payer</span><span style="text-align: right;">Expected</span><span style="text-align: right;">Paid</span><span style="text-align: right;">Variance</span><span style="padding-left: 24px;">Agent proposes</span><span style="text-align: right;">Status</span>
+          </div>
+          <sc-for list="{{ variances }}" as="v" hint-placeholder-count="5">
+            <button onClick="{{ v.onClick }}" style="display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 2.2fr) minmax(0, 1.2fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1.6fr) minmax(0, 1.1fr); width: 100%; text-align: left; align-items: center; padding: 13px 20px; border: none; border-bottom: 1px solid #F1F5F9; background: {{ v.bg }}; cursor: pointer; transition: background 120ms ease-out;" style-hover="background: #F8F7FF;">
+              <span><span style="display: inline-flex; padding: 3px 10px; border-radius: 9999px; background: {{ v.catBg }}; color: {{ v.catFg }}; font-size: 10.5px; font-weight: 700; white-space: nowrap;">{{ v.cat }}</span></span>
+              <span style="display: flex; flex-direction: column; gap: 1px; padding-right: 14px; min-width: 0;">
+                <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">{{ v.title }}</span>
+                <span style="font-size: 11.5px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ v.sub }}</span>
+              </span>
+              <span style="font-size: 12.5px; font-weight: 600; color: #0F1B2E;">{{ v.payer }}</span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B7280;">{{ v.expected }}</span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #0F1B2E;">{{ v.paid }}</span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: {{ v.varFg }};">{{ v.variance }}</span>
+              <span style="font-size: 12px; color: #5B46D6; font-weight: 600; padding-left: 24px;">{{ v.proposal }}</span>
+              <span style="text-align: right;"><span style="display: inline-flex; padding: 3px 10px; border-radius: 9999px; background: {{ v.stBg }}; color: {{ v.stFg }}; font-size: 10.5px; font-weight: 700; white-space: nowrap;">{{ v.st }}</span></span>
+            </button>
+          </sc-for>
+        </div>
+        <p style="font-size: 12px; color: #94A3B8; margin: 0;">Only CONTRACTED rates can drive appeal or reprocess proposals; variances against INFERRED rates flag for human review only. Write-offs above your threshold require manager approval (governed in Settings).</p>
+      </sc-if>
+
+      <!-- ===== Tab 4 · Statements (Phase 9) ===== -->
+      <sc-if value="{{ showStatements }}" hint-placeholder-val="{{ false }}">
+
+        <!-- Batch card -->
+        <div style="background: #FFFFFF; border: 1px solid {{ batchBorder }}; border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 18px;">
+          <span style="width: 44px; height: 44px; border-radius: 9999px; background: #F5F2FD; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#845EC2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8"></path><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path><path d="M16 19h6"></path><path d="M19 16v6"></path></svg>
+          </span>
+          <div style="display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0;">
+            <span style="font-size: 14px; font-weight: 700;">{{ batchTitle }}</span>
+            <span style="font-size: 12.5px; color: #6B7280; line-height: 18px;">{{ batchSub }}</span>
+          </div>
+          <sc-if value="{{ batchOpen }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ approveBatch }}" style="padding: 11px 18px; border-radius: 5px; border: none; background: #845EC2; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 150ms ease-out;" style-hover="background: #67568C;">Approve Weekly Batch · 23 statements</button>
+          </sc-if>
+          <sc-if value="{{ batchDone }}" hint-placeholder-val="{{ false }}">
+            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; background: #E7F5EF; color: #29BB89; font-size: 12px; font-weight: 700; white-space: nowrap;">Batch OTG-W29 sent to vendor — statuses updating</span>
+          </sc-if>
+        </div>
+
+        <!-- Statement population -->
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 2fr); gap: 0; font-size: 11px; font-weight: 700; color: #99A1AF; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 20px; border-bottom: 1px solid #E5E7EB;">
+            <span>Patient</span><span>Claim</span><span style="text-align: right;">Balance</span><span style="padding-left: 24px;">Cycle</span><span>Status</span><span>Next step</span>
+          </div>
+          <sc-for list="{{ statements }}" as="s" hint-placeholder-count="6">
+            <div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1.2fr) minmax(0, 2fr); gap: 0; align-items: center; padding: 12px 20px; border-bottom: 1px solid #F1F5F9; background: {{ s.bg }};">
+              <span style="font-size: 13px; font-weight: 600; color: #1C192E;">{{ s.patient }}</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #845EC2; font-weight: 700;">{{ s.claim }}</span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #1C192E;">{{ s.balance }}</span>
+              <span style="padding-left: 24px; font-size: 12px; color: #6A7282;">{{ s.cycle }}</span>
+              <span><span style="display: inline-flex; padding: 3px 10px; border-radius: 9999px; background: {{ s.stBg }}; color: {{ s.stFg }}; font-size: 10.5px; font-weight: 700; white-space: nowrap;">{{ s.st }}</span></span>
+              <span style="font-size: 12px; color: #6A7282; line-height: 17px;">{{ s.next }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <p style="font-size: 12px; color: #99A1AF; margin: 0;">Statements go out through the print/mail + text-to-pay vendor as a weekly batch the manager approves; each send stamps the vendor reference on the claim ledger. Returned mail and payment-plan requests come back as decisions in the Agent Inbox. After the final notice ages out, the agent proposes collections — governed in the next step of this phase.</p>
+      </sc-if>
+    </div>
+  </div>
+
+  <!-- ===== Variance detail panel ===== -->
+  <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePanel }}" style="position: fixed; inset: 0; background: rgba(15,27,46,0.4); z-index: 50;"></div>
+    <div style="position: fixed; top: 0; right: 0; bottom: 0; width: 580px; background: #FFFFFF; z-index: 51; box-shadow: -12px 0 40px rgba(15,27,46,0.18); display: flex; flex-direction: column; overflow-y: auto;">
+
+      <div style="padding: 22px 24px 18px; border-bottom: 1px solid #EEEEEE; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: {{ sel.catBg }}; color: {{ sel.catFg }}; font-size: 12px; font-weight: 700;">{{ sel.cat }}</span>
+          <span style="display: inline-flex; padding: 3px 12px; border-radius: 9999px; background: {{ sel.stBg }}; color: {{ sel.stFg }}; font-size: 12px; font-weight: 700;">{{ sel.st }}</span>
+          <div style="flex: 1;"></div>
+          <button onClick="{{ closePanel }}" style="width: 32px; height: 32px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          </button>
+        </div>
+        <h2 style="font-size: 19px; font-weight: 700; margin: 0; line-height: 26px;">{{ sel.title }}</h2>
+        <span style="font-size: 13px; color: #6B7280;">{{ sel.payer }} · {{ sel.run }} · Bell Medics · {{ practiceLabel }}</span>
+      </div>
+
+      <div style="padding: 20px 24px; display: flex; flex-direction: column; gap: 18px;">
+
+        <!-- The numbers -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+          <div style="background: #F8FAFC; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Expected</span>
+            <span style="font-size: 17px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #0F1B2E;">{{ sel.expected }}</span>
+            <span style="font-size: 11px; color: #94A3B8;">{{ sel.expectedNote }}</span>
+          </div>
+          <div style="background: #F8FAFC; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Paid</span>
+            <span style="font-size: 17px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #0F1B2E;">{{ sel.paid }}</span>
+            <span style="font-size: 11px; color: #94A3B8;">from the 835</span>
+          </div>
+          <div style="background: #FFF7ED; border: 1px solid #F5D9A8; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #B45309; text-transform: uppercase; letter-spacing: 0.06em;">Variance</span>
+            <span style="font-size: 17px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #C2410C;">{{ sel.variance }}</span>
+            <span style="font-size: 11px; color: #94A3B8;">{{ sel.varianceNote }}</span>
+          </div>
+        </div>
+
+        <!-- Narrative -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">What the agent found</span>
+          <div style="background: #F1EEFF; border-radius: 8px; padding: 14px 16px; font-size: 13px; line-height: 20px; color: #0F1B2E;">{{ sel.narrative }}</div>
+        </div>
+
+        <!-- Evidence -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Evidence</span>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <sc-for list="{{ sel.evidence }}" as="e" hint-placeholder-count="3">
+              <div style="display: flex; align-items: baseline; gap: 12px; padding: 8px 12px; border-radius: 6px; background: #F8FAFC;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; width: 130px; flex-shrink: 0;">{{ e.k }}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #0F1B2E; white-space: nowrap;">{{ e.v }}</span>
+                <span style="font-size: 12px; color: #6B7280;">{{ e.note }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Claims affected -->
+        <sc-if value="{{ sel.hasClaims }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Claims affected</span>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <sc-for list="{{ sel.claims }}" as="c" hint-placeholder-count="3">
+                <a href="Claim Detail.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 5px; background: #F8FAFC; text-decoration: none; transition: background 120ms ease-out;" style-hover="background: #F1EEFF;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #5B46D6; font-weight: 700;">{{ c.id }}</span>
+                  <span style="font-size: 12px; color: #0F1B2E; font-weight: 600;">{{ c.patient }}</span>
+                  <div style="flex: 1;"></div>
+                  <span style="font-size: 12px; color: #C2410C; font-family: 'JetBrains Mono', monospace;">{{ c.varAmt }}</span>
+                </a>
+              </sc-for>
+            </div>
+            <span style="font-size: 12px; color: #94A3B8;">{{ sel.claimsNote }}</span>
+          </div>
+        </sc-if>
+
+        <!-- Disposition -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Disposition</span>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <sc-for list="{{ sel.options }}" as="o" hint-placeholder-count="4">
+              <button onClick="{{ o.onClick }}" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 6px; border: 1px solid {{ o.border }}; background: {{ o.bg }}; cursor: pointer; text-align: left; transition: all 120ms ease-out;">
+                <span style="width: 15px; height: 15px; border-radius: 9999px; border: 2px solid {{ o.dotBorder }}; background: {{ o.dotBg }}; flex-shrink: 0;"></span>
+                <span style="display: flex; flex-direction: column; gap: 1px;">
+                  <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">{{ o.label }}</span>
+                  <span style="font-size: 11.5px; color: #6B7280;">{{ o.note }}</span>
+                </span>
+                <sc-if value="{{ o.isProposed }}" hint-placeholder-val="{{ false }}">
+                  <span style="margin-left: auto; display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 10px; font-weight: 700; white-space: nowrap;">AGENT PROPOSED</span>
+                </sc-if>
+              </button>
+            </sc-for>
+          </div>
+          <span style="font-size: 12px; color: {{ sel.thresholdFg }};">{{ sel.thresholdNote }}</span>
+        </div>
+      </div>
+
+      <div style="flex: 1;"></div>
+
+      <div style="padding: 16px 24px 20px; border-top: 1px solid #EEEEEE; display: flex; gap: 10px; align-items: center; background: #FFFFFF; position: sticky; bottom: 0;">
+        <sc-if value="{{ sel.isOpen }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ approveSel }}" style="flex: 1; padding: 11px 18px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">{{ sel.approveLabel }}</button>
+          <button onClick="{{ closePanel }}" style="padding: 11px 18px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 13px; font-weight: 700; cursor: pointer;" style-hover="background: #F1F5F9;">Decide Later</button>
+        </sc-if>
+        <sc-if value="{{ sel.isDone }}" hint-placeholder-val="{{ false }}">
+          <span style="flex: 1; font-size: 12px; color: #1B7F5E; font-weight: 600;">{{ sel.doneNote }}</span>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { tab: 'deposits', selId: null, chosen: {}, approved: {}, batchApproved: false, dayOpen: {}, depositOpen: null };
+
+  statementVals() {
+    const done = this.state.batchApproved;
+    const ST = {
+      pending: ['PENDING BATCH', '#FEF3DF', '#B45309'],
+      sent: ['SENT', '#E7F5EF', '#29BB89'],
+      plan: ['PAYMENT PLAN', '#EBF2FE', '#0081CF'],
+      returned: ['RETURNED MAIL', '#FEECEC', '#DC2626'],
+      final: ['FINAL NOTICE', '#FDEEF5', '#C34A7D']
+    };
+    const row = (patient, claim, balance, cycle, st, next, hi) => ({
+      patient, claim, balance, cycle,
+      st: done && st === 'pending' ? 'SENT' : ST[st][0],
+      stBg: done && st === 'pending' ? '#E7F5EF' : ST[st][1],
+      stFg: done && st === 'pending' ? '#29BB89' : ST[st][2],
+      next: done && st === 'pending' ? 'Sent in batch OTG-W29 \u00b7 vendor ref stamped on the ledger' : next,
+      bg: hi && !done ? '#FFFDF8' : '#FFFFFF'
+    });
+    return {
+      batchOpen: !done,
+      batchDone: done,
+      batchBorder: done ? '#B9E8DC' : '#E9C05F',
+      batchTitle: done ? 'Weekly batch OTG-W29 — sent Jul 13' : 'Weekly batch OTG-W29 — ready for approval',
+      batchSub: done
+        ? '23 statements \u00b7 $2,847.60 \u00b7 print/mail + text-to-pay \u00b7 vendor references stamped on each claim ledger. Next batch assembles Mon, Jul 20.'
+        : '23 statements \u00b7 $2,847.60 \u00b7 assembled from every PATIENT-owned balance due a statement this cycle: 14 first statements, 7 second, 2 final notices. Text-to-pay links included where a mobile number is on file.',
+      approveBatch: () => this.setState({ batchApproved: true }),
+      statements: [
+        row('Duran, Estelle', 'ENCT0000741-01', '$164.20', '1st statement', 'pending', 'In batch OTG-W29 \u2014 deductible balance from the Jul 13 posting run', true),
+        row('Storey, David', 'ENCT0000699-01', '$88.40', '1st statement', 'pending', 'In batch OTG-W29 \u00b7 text-to-pay \u2014 mobile on file', true),
+        row('Whitfield, Rosa', 'ENCT0000644-01', '$45.00', '2nd statement', 'pending', 'In batch OTG-W29 \u2014 no response to Jun 12 statement', true),
+        row('Reyes, Consuelo', 'ENCT0000618-01', '$212.00', 'Final notice', 'pending', 'In batch OTG-W29 \u2014 3rd of 3; collections review if no contact by Aug 12', true),
+        row('Nakamura, Grace', 'ENCT0000633-01', '$96.80', '2nd statement', 'sent', 'Sent Jul 6 \u00b7 vendor ref STM-88412 \u00b7 text-to-pay link opened twice'),
+        row('Okafor, Denise', 'ENCT0000587-01', '$340.00', 'Plan active', 'plan', '$85/mo \u00b7 2 of 4 installments paid \u00b7 next due Aug 1'),
+        row('Ellison, Marcus', 'ENCT0000571-01', '$127.60', '1st statement', 'returned', 'USPS return Jul 9 \u2014 address decision in the Agent Inbox'),
+        row('Baptiste, Renee', 'ENCT0000556-01', '$58.20', 'Final notice', 'final', 'Sent Jun 28 \u00b7 no contact \u2014 collections proposal expected if silent through Jul 28')
+      ]
+    };
+  }
+
+  variancesData() {
+    return [
+      {
+        id: 'v1', cat: 'UNDERPAYMENT', catBg: '#FEECEC', catFg: '#DC2626',
+        title: 'MHS paid 99309 at 89% of the contracted rate — 12 claims in this run',
+        sub: 'Contracted $141.20 · paid $125.70 · same shortfall on every line',
+        payer: 'MHS HIP', run: 'Run R-0713-B',
+        expected: '$1,694.40', expectedNote: 'contracted rate × 12', paid: '$1,508.40', variance: '−$186.00', varianceNote: '$15.50 per claim',
+        narrative: 'Every 99309 line in this remittance paid $125.70 against the loaded exhibit rate of $141.20. This matches the drift pattern flagged on the Contracts screen since Jun 14 (30 payments, 89% of contract). The rate basis is CONTRACTED, so a reprocess request is appealable. I held all 12 lines rather than posting the shortfall silently.',
+        evidence: [
+          { k: 'Rate basis', v: 'CONTRACTED', note: 'Exhibit B-2, effective Mar 1, 2025' },
+          { k: 'CARC on lines', v: 'CO-45', note: 'No new adjustment code explaining the reduction' },
+          { k: 'Pattern', v: '30 payments', note: 'Same 89% since Jun 14 — rate review proposed in Contracts' }
+        ],
+        claims: [
+          { id: 'ENCT0000731-01', patient: 'Storey, David', varAmt: '−$15.50' },
+          { id: 'ENCT0000734-01', patient: 'Okafor, Denise', varAmt: '−$15.50' },
+          { id: 'ENCT0000738-01', patient: 'Nakamura, Grace', varAmt: '−$15.50' }
+        ],
+        claimsNote: '+ 9 more claims in this batch — one approval covers all 12',
+        options: [
+          { key: 'reprocess', label: 'Request reprocess for all 12', note: 'Batch reprocess request citing the contract exhibit', proposed: true },
+          { key: 'appeal', label: 'Appeal underpayment', note: 'Formal appeal — slower; reprocess usually resolves rate errors' },
+          { key: 'post', label: 'Post as-is', note: 'Accept the $186.00 shortfall and close the lines' },
+          { key: 'writeoff', label: 'Write off variance', note: 'Requires manager approval — above the $50 rep threshold' }
+        ],
+        threshold: '$186.00 — above the $50 rep threshold. Your approval files this as a manager decision.', thresholdFg: '#B45309',
+        approveLabel: 'Approve Reprocess Request \u00b7 12 claims', doneNote: 'Reprocess request approved — the A/R Follow-up Agent is filing it with MHS; lines stay open until the corrected 835 arrives.'
+      },
+      {
+        id: 'v2', cat: 'TAKEBACK', catBg: '#FDEEF5', catFg: '#C34A7D',
+        title: 'Humana recouped a March payment inside this remittance',
+        sub: 'PLB segment WO — offset against current payments',
+        payer: 'Humana MA PPO', run: 'Run R-0712-B',
+        expected: '$0.00', expectedNote: 'no new payment due', paid: '−$212.40', variance: '−$212.40', varianceNote: 'recoupment (PLB WO)',
+        narrative: 'The 835 carries a provider-level adjustment (PLB, reason WO) recouping $212.40 paid in March on a claim Humana now says was the secondary payer\u2019s responsibility. The offset reduced this deposit. I recommend posting the takeback against the original claim and reopening it for COB rebilling — the balance moves back to open AR, it does not vanish.',
+        evidence: [
+          { k: 'PLB reason', v: 'WO', note: 'Overpayment recovery, ref 2126HU88121' },
+          { k: 'Original claim', v: 'ENCT0000589-01', note: 'Paid Mar 18, 2026 \u00b7 $212.40' },
+          { k: 'Stated cause', v: 'COB', note: 'Humana says Medicare was primary on the DOS' }
+        ],
+        claims: [
+          { id: 'ENCT0000589-01', patient: 'Whitfield, Rosa', varAmt: '−$212.40' }
+        ],
+        claimsNote: 'Ledger shows the payment reversal and the reopened balance on this claim',
+        options: [
+          { key: 'post', label: 'Post takeback & reopen claim', note: 'Reverse the March payment; rebill correct primary', proposed: true },
+          { key: 'dispute', label: 'Dispute the recoupment', note: 'If our COB records show Humana was primary' },
+          { key: 'writeoff', label: 'Write off', note: 'Requires manager approval — above the $50 rep threshold' }
+        ],
+        threshold: 'Coverage shows Medicare primary on the DOS — the agent\u2019s COB check supports Humana\u2019s position.', thresholdFg: '#6B7280',
+        approveLabel: 'Post Takeback & Reopen Claim', doneNote: 'Takeback posted. The claim is back in open AR, queued for rebilling to Medicare as primary.'
+      },
+      {
+        id: 'v3', cat: 'DUPLICATE', catBg: '#EAF3FF', catFg: '#1D4ED8',
+        title: 'Anthem paid the same claim twice',
+        sub: 'Second payment on a claim paid in full on Jun 20',
+        payer: 'Anthem MA', run: 'Run R-0712-A',
+        expected: '$0.00', expectedNote: 'claim already paid in full', paid: '$148.60', variance: '+$148.60', varianceNote: 'overpayment',
+        narrative: 'This 835 pays ENCT0000702-01 in full, but the claim was already paid in full by the same payer on Jun 20 (EFT-8817702). Posting it would overstate revenue and invite a takeback later. I recommend holding it as unapplied cash and notifying Anthem — payers reconcile faster when we report duplicates than when they find them.',
+        evidence: [
+          { k: 'First payment', v: 'Jun 20', note: 'EFT-8817702 \u00b7 $148.60 \u00b7 posted and closed' },
+          { k: 'This payment', v: 'Jul 12', note: 'Check #48812 \u00b7 identical line detail' },
+          { k: 'Bank impact', v: '+$148.60', note: 'Sitting in the partial Anthem deposit' }
+        ],
+        claims: [
+          { id: 'ENCT0000702-01', patient: 'Reyes, Consuelo', varAmt: '+$148.60' }
+        ],
+        claimsNote: 'The duplicate explains part of the Anthem check variance on the Deposits tab',
+        options: [
+          { key: 'hold', label: 'Hold as unapplied & notify payer', note: 'Funds stay reconciled; Anthem advised to recoup', proposed: true },
+          { key: 'refund', label: 'Issue refund check', note: 'Slower; use if the payer requests a refund in writing' },
+          { key: 'post', label: 'Post anyway', note: 'Not recommended — creates a future takeback' }
+        ],
+        threshold: 'Within your approval authority.', thresholdFg: '#6B7280',
+        approveLabel: 'Hold as Unapplied & Notify Anthem', doneNote: 'Held as unapplied cash. Payer notification drafted with both trace numbers.'
+      },
+      {
+        id: 'v4', cat: 'ZERO-PAY · PR SHIFT', catBg: '#FEF3DF', catFg: '#B45309',
+        title: 'UHC paid $0 and moved the full allowed amount to the patient',
+        sub: 'PR-1 deductible — patient in the annual deductible period',
+        payer: 'UHC Medicare Complete', run: 'Run R-0713-A',
+        expected: '$164.20', expectedNote: 'contracted rate', paid: '$0.00', variance: '−$164.20', varianceNote: 'moved to patient (PR-1)',
+        narrative: 'The 835 allows the full contracted amount but pays $0.00, applying it all to the patient\u2019s deductible (PR-1). This is a legitimate adjudication, not an underpayment — the balance belongs to the patient now. I recommend posting the adjudication and transferring the balance to patient responsibility so it stays owned and visible (statement workflow lands in Phase 8).',
+        evidence: [
+          { k: 'CARC', v: 'PR-1', note: 'Deductible amount \u2014 patient responsibility' },
+          { k: 'Allowed', v: '$164.20', note: 'Matches the contracted rate exactly' },
+          { k: 'Eligibility', v: 'Deductible open', note: '271 confirms $233 remaining on the annual deductible' }
+        ],
+        claims: [
+          { id: 'ENCT0000741-01', patient: 'Duran, Estelle', varAmt: '$164.20 → patient' }
+        ],
+        claimsNote: 'The claim\u2019s ledger will show the transfer — the balance is owned until it is zero',
+        options: [
+          { key: 'transfer', label: 'Post & transfer to patient', note: 'Balance moves to patient responsibility on the ledger', proposed: true },
+          { key: 'verify', label: 'Re-verify eligibility first', note: 'If you doubt the deductible status on the 271' },
+          { key: 'writeoff', label: 'Write off', note: 'Requires manager approval — above the $50 rep threshold' }
+        ],
+        threshold: 'Within your approval authority.', thresholdFg: '#6B7280',
+        approveLabel: 'Post & Transfer to Patient', doneNote: 'Adjudication posted; $164.20 transferred to patient responsibility on the claim ledger.'
+      },
+      {
+        id: 'v5', cat: 'INTEREST', catBg: '#E7F5EF', catFg: '#1B7F5E', autoPosted: true,
+        title: 'Medicare included late-payment interest',
+        sub: 'PLB L6 · $3.86 · posted automatically at Tier 3',
+        payer: 'Medicare of Indiana', run: 'Run R-0713-A',
+        expected: '$0.00', expectedNote: 'not claim revenue', paid: '+$3.86', variance: '+$3.86', varianceNote: 'interest (PLB L6)',
+        narrative: 'The remittance included $3.86 of late-payment interest (PLB reason L6). Interest posts to the interest income account, never to a claim balance. This is a standard, unambiguous category — I posted it automatically at Tier 3 and it is QA-sampled like every autonomous action.',
+        evidence: [
+          { k: 'PLB reason', v: 'L6', note: 'Interest owed on delayed claim payments' },
+          { k: 'Posted to', v: 'Interest income', note: 'Not applied to any claim balance' }
+        ],
+        claims: [], claimsNote: '',
+        options: [
+          { key: 'posted', label: 'Posted to interest income', note: 'Tier 3 \u2014 automatic, QA-sampled', proposed: true }
+        ],
+        threshold: 'No action needed — shown for the audit trail.', thresholdFg: '#6B7280',
+        approveLabel: '', doneNote: 'Posted automatically at Tier 3 \u00b7 Jul 13, 6:04 AM. In the QA sample pool.'
+      }
+    ];
+  }
+
+  renderVals() {
+    const S = window.ClaimsStore;
+    const practiceLabel = S ? S.meta().practiceLabel : 'Ibekie Foundation & partner facilities';
+
+    // ---- tabs ----
+    const vAll = this.variancesData();
+    const openVar = vAll.filter(v => !v.autoPosted && !this.state.approved[v.id]);
+    const tabDefs = [
+      ['deposits', 'Deposits & matching (8)'],
+      ['variance', 'Paid vs expected (' + openVar.length + ' to review)'],
+      ['statements', 'Patient statements (31 in cycle)']
+    ];
+    const tabs = tabDefs.map(t => {
+      const on = this.state.tab === t[0];
+      return { label: t[1], bg: on ? '#7B61FF' : '#FFFFFF', fg: on ? '#FFFFFF' : '#6B7280', onClick: () => this.setState({ tab: t[0], selId: null }) };
+    });
+    const tabSummary = this.state.tab === 'deposits'
+      ? 'every deposit tied to its remittance · click a deposit for its posting detail'
+      : this.state.tab === 'variance'
+        ? 'the payer paid something different than the contract says · nothing posts silently'
+        : 'weekly vendor batch of 23 + 8 already moving through the cycle';
+
+    // ---- deposits (posting detail folded in — a run is the detail view of its deposit) ----
+    const D = (payer, trace, era, bank, st, note, run) => {
+      const styles = { MATCHED: ['#E7F5EF', '#1B7F5E'], PARTIAL: ['#FEF3DF', '#B45309'], UNMATCHED: ['#FEECEC', '#DC2626'] };
+      const s = styles[st];
+      const open = this.state.depositOpen === trace;
+      const base = {
+        payer, trace, era, bank, st, stBg: s[0], stFg: s[1], note,
+        eraFg: era === '\u2014' ? '#94A3B8' : '#0F1B2E',
+        bg: st === 'MATCHED' ? (open ? '#FBFAFF' : '#FFFFFF') : '#FFFDF8',
+        hasRun: !!run, runOpen: !!run && open,
+        cursor: run ? 'pointer' : 'default',
+        chev: open ? '180deg' : '0deg',
+        onClick: () => { if (run) this.setState(s2 => ({ depositOpen: s2.depositOpen === trace ? null : trace })); }
+      };
+      if (run) {
+        Object.assign(base, {
+          runId: run[0], runWhen: run[1], runCounts: run[2], runPaid: run[3], runAdj: run[4], runTransfer: run[5],
+          runAuto: run[6] + '%', runAutoW: run[6] + '%',
+          runAutoColor: run[6] >= 90 ? '#29BB89' : run[6] >= 70 ? '#E9A23B' : '#DC2626',
+          runAutoFg: run[6] >= 90 ? '#1B7F5E' : run[6] >= 70 ? '#B45309' : '#DC2626',
+          runHasExc: run[7] > 0, runClean: run[7] === 0,
+          runExc: run[7] + (run[7] === 1 ? ' line needs review' : ' lines need review'),
+          goVariance: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ tab: 'variance', selId: null }); }
+        });
+      }
+      return base;
+    };
+    const dayDefs = [
+      {
+        label: 'Mon, Jul 13 — today', status: 'IN PROGRESS', stBg: '#EAF3FF', stFg: '#1D4ED8', total: '3 deposits · $12,124.94', defaultOpen: true,
+        rows: [
+          D('Medicare of Indiana', 'EFT-4479102', '$8,412.36', '$8,412.36', 'MATCHED', 'Auto-matched on trace · posted this morning', ['R-0713-A', 'Jul 13 · 6:04 AM', '61 / 74', '$8,412.36', '$3,108.22', '$412.40', 97, 2]),
+          D('MHS HIP', 'EFT-2214887', '$1,508.40', '$1,508.40', 'MATCHED', 'Auto-matched · 12 lines held — paid below contract', ['R-0713-B', 'Jul 13 · 6:09 AM', '18 / 21', '$1,508.40', '$644.10', '$0.00', 43, 12]),
+          D('UHC Medicare Complete', 'BANK-DEP-2214', '\u2014', '$2,204.18', 'UNMATCHED', 'Bank deposit with no remittance yet — agent polling the clearinghouse; typical lag 4h', null)
+        ]
+      },
+      {
+        label: 'Sun, Jul 12', status: '1 OPEN ITEM', stBg: '#FEF3DF', stFg: '#B45309', total: '3 deposits · $6,939.25', defaultOpen: true,
+        rows: [
+          D('Anthem MA', 'CHK #48812', '$4,210.40', '$4,110.40', 'PARTIAL', 'Check is $100.00 short of the remittance — agent drafted payer inquiry INQ-0450 citing both totals', ['R-0712-A', 'Jul 12 · 6:06 AM', '32 / 38', '$4,210.40', '$1,502.35', '$188.20', 97, 1]),
+          D('Humana MA PPO', 'EFT-9931205', '$1,882.75', '$1,882.75', 'MATCHED', 'Auto-matched · includes the $212.40 takeback (in Paid vs expected)', ['R-0712-B', 'Jul 12 · 6:11 AM', '14 / 16', '$1,882.75', '$710.90', '$96.40', 94, 1]),
+          D('Aetna MA HMO', 'EFT-5521904', '$946.10', '$946.10', 'MATCHED', 'Auto-matched · posted clean', ['R-0712-C', 'Jul 12 · 6:14 AM', '9 / 11', '$946.10', '$402.88', '$0.00', 100, 0])
+        ]
+      },
+      {
+        label: 'Sat, Jul 11', status: 'RECONCILED', stBg: '#E7F5EF', stFg: '#1B7F5E', total: '2 deposits · $9,123.21', defaultOpen: false,
+        rows: [
+          D('Medicare of Indiana', 'EFT-4478990', '$7,918.55', '$7,918.55', 'MATCHED', 'Auto-matched · posted clean', ['R-0711-A', 'Jul 11 · 6:03 AM', '58 / 69', '$7,918.55', '$2,904.18', '$377.60', 100, 0]),
+          D('Indiana Medicaid', 'EFT-1108824', '$1,204.66', '$1,204.66', 'MATCHED', 'Auto-matched · posted clean', ['R-0711-B', 'Jul 11 · 6:08 AM', '11 / 12', '$1,204.66', '$488.24', '$0.00', 100, 0])
+        ]
+      }
+    ];
+    const days = dayDefs.map(day => {
+      const open = this.state.dayOpen[day.label] !== undefined ? this.state.dayOpen[day.label] : day.defaultOpen;
+      return Object.assign({}, day, {
+        open,
+        chev: open ? '180deg' : '0deg',
+        collapsedNote: !open,
+        onToggle: () => this.setState(s2 => ({ dayOpen: Object.assign({}, s2.dayOpen, { [day.label]: !open }) }))
+      });
+    });
+
+    // ---- variance queue ----
+    const variances = vAll.map(v => {
+      const done = v.autoPosted || this.state.approved[v.id];
+      const st = v.autoPosted ? 'AUTO-POSTED' : this.state.approved[v.id] ? 'APPROVED' : 'NEEDS APPROVAL';
+      const stC = v.autoPosted ? ['#F1F5F9', '#64748B'] : this.state.approved[v.id] ? ['#E7F5EF', '#1B7F5E'] : ['#FEF3DF', '#B45309'];
+      const proposedOpt = v.options.find(o => o.proposed);
+      return Object.assign({}, v, {
+        st, stBg: stC[0], stFg: stC[1],
+        varFg: v.variance.startsWith('+') ? '#1B7F5E' : '#DC2626',
+        proposal: proposedOpt ? proposedOpt.label : '\u2014',
+        bg: this.state.selId === v.id ? '#F8F7FF' : '#FFFFFF',
+        onClick: () => this.setState({ selId: v.id })
+      });
+    });
+    const varOpenSum = openVar.reduce((s, v) => {
+      const n = parseFloat(v.variance.replace(/[^0-9.]/g, ''));
+      return s + (isNaN(n) ? 0 : n);
+    }, 0);
+
+    // ---- selection ----
+    const selV = variances.find(v => v.id === this.state.selId) || variances[0];
+    const isDone = selV.autoPosted || !!this.state.approved[selV.id];
+    const chosenKey = this.state.chosen[selV.id] || (selV.options.find(o => o.proposed) || {}).key;
+    const options = selV.options.map(o => {
+      const on = o.key === chosenKey;
+      return {
+        label: o.label, note: o.note, isProposed: !!o.proposed,
+        border: on ? '#7B61FF' : '#E5E7EB', bg: on ? '#F8F7FF' : '#FFFFFF',
+        dotBorder: on ? '#7B61FF' : '#CBD5E1', dotBg: on ? '#7B61FF' : '#FFFFFF',
+        onClick: () => this.setState(s => ({ chosen: Object.assign({}, s.chosen, { [selV.id]: o.key }) }))
+      };
+    });
+    const chosenOpt = selV.options.find(o => o.key === chosenKey) || selV.options[0];
+
+    return {
+      practiceLabel,
+      varChipText: openVar.length + ' variances need review · $' + varOpenSum.toFixed(2),
+      varTotal: '$' + varOpenSum.toFixed(2),
+      tabs, tabSummary,
+      showDeposits: this.state.tab === 'deposits',
+      showVariance: this.state.tab === 'variance',
+      showStatements: this.state.tab === 'statements',
+      ...this.statementVals(),
+      days, variances,
+      goDeposits: () => this.setState({ tab: 'deposits', selId: null }),
+      goVarianceTab: () => this.setState({ tab: 'variance', selId: null }),
+      goStatements: () => this.setState({ tab: 'statements', selId: null }),
+      openVarCount: String(openVar.length),
+      hasSelection: !!this.state.selId,
+      sel: Object.assign({}, selV, {
+        options,
+        isOpen: !isDone, isDone,
+        hasClaims: selV.claims.length > 0,
+        approveLabel: chosenOpt.proposed ? selV.approveLabel : 'Approve: ' + chosenOpt.label,
+        thresholdNote: selV.threshold, thresholdFg: selV.thresholdFg
+      }),
+      closePanel: () => this.setState({ selId: null }),
+      approveSel: () => this.setState(s => ({ approved: Object.assign({}, s.approved, { [selV.id]: true }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

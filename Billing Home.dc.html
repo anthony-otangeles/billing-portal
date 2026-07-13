@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button, select, input, textarea { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+<script src="./claims-store.js"></script>
+<script src="./team-store.js"></script>
+<script src="./glossary.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="Billing Home (Bell Medics)">
+
+  <x-import component-from-global-scope="ops-banner" from="./ops-banner.js" hint-size="100%,0px"></x-import>
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Billing Portal</span>
+    <x-import component-from-global-scope="search-bar" from="./search-bar.js" hint-size="480px,40px"></x-import>
+    <div style="flex: 1;"></div>
+    <x-import component-from-global-scope="practice-switcher" from="./practice-switcher.js" hint-size="260px,40px"></x-import>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <x-import component-from-global-scope="role-switcher" from="./role-switcher.js" hint-size="210px,44px"></x-import>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav — collapsed icon rail ===== -->
+    <sc-if value="{{ navClosed }}" hint-placeholder-val="{{ true }}">
+      <div style="width: 64px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 12px 10px; display: flex; flex-direction: column; gap: 6px; align-items: center; flex-shrink: 0;">
+        <button onClick="{{ toggleNav }}" title="Expand navigation" style="width: 40px; height: 36px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 5 5-5 5"></path><path d="m13 7 5 5-5 5"></path></svg>
+        </button>
+        <div style="height: 1px; width: 36px; background: #EEEEEE; margin: 4px 0;"></div>
+        <a href="Billing Home.dc.html" title="Dashboard" style="width: 40px; height: 40px; border-radius: 4px; background: #7B61FF; display: flex; align-items: center; justify-content: center; text-decoration: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg></a>
+        <a href="Agent Inbox v3.dc.html" title="Agent Inbox" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></a>
+        <a href="Coverage.dc.html" title="Coverage" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg></a>
+        <a href="AR Worklist.dc.html" title="AR Worklist" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+        <a href="Claims Register.dc.html" title="Claims" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg></a>
+        <a href="Payments.dc.html" title="Payments" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg></a>
+        <a href="Rulebook.dc.html" title="Rulebook" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></a>
+        <a href="Contracts.dc.html" title="Contracts" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></a>
+        <a href="Analytics.dc.html" title="Analytics" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg></a>
+        <a href="Settings.dc.html" title="Settings" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
+      </div>
+    </sc-if>
+
+    <!-- ===== Side nav — expanded ===== -->
+    <sc-if value="{{ navOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+        <div style="display: flex; justify-content: flex-end;">
+          <button onClick="{{ toggleNav }}" title="Collapse navigation" style="width: 32px; height: 28px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 17-5-5 5-5"></path><path d="m11 17-5-5 5-5"></path></svg>
+          </button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg>
+          Dashboard
+        </div>
+        <a href="Agent Inbox v3.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+          Agent Inbox
+        </a>
+        <a href="Coverage.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+          Coverage
+        </a>
+        <a href="AR Worklist.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          AR Worklist
+        </a>
+        <a href="Claims Register.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+          Claims
+        </a>
+        <a href="Payments.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Payments
+          <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">NEW</span>
+        </a>
+        <a href="Rulebook.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+          Rulebook
+        </a>
+        <a href="Contracts.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+          Contracts
+                  </a>
+        <a href="Analytics.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+          Analytics
+        </a>
+        <a href="Settings.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Settings
+        </a>
+        <div style="flex: 1;"></div>
+        <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+          <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+          Reach the billing support desk 24/7.
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ===== Main content ===== -->
+    <div style="flex: 1; width: 100%; padding: 24px 32px; display: flex; flex-direction: column; gap: 20px; min-width: 0;">
+
+      <!-- Title -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <h1 style="font-size: 24px; font-weight: 700; margin: 0;">Billing</h1>
+        <span style="font-size: 13px; color: #6B7280;">Bell Medics · {{ practiceLabel }} · Tue, Jul 7 2026 · synced from Prognosis EHR hourly</span>
+      </div>
+
+      <!-- How this portal thinks (first-run, Phase 10.4) -->
+      <sc-if value="{{ showFirstRun }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #F1EEFF; border: 1px solid #C9BCF5; border-radius: 12px; padding: 18px 22px; display: flex; gap: 16px; align-items: flex-start;">
+          <span style="width: 38px; height: 38px; border-radius: 9999px; background: #7B61FF; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16v-4"></path><path d="M12 8h.01"></path><circle cx="12" cy="12" r="10"></circle></svg>
+          </span>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0;">
+            <span style="font-size: 14.5px; font-weight: 700; color: #0F1B2E;">New here? This is how the portal thinks.</span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; font-size: 12.5px; line-height: 19px; color: #5B46D6;">
+              <span><strong>1 · The agents do the work.</strong> Claims generate, validate, submit, and post on their own — you supervise.</span>
+              <span><strong>2 · You make the decisions.</strong> Anything ambiguous, financial, or clinical stops and asks in the <a href="Agent Inbox v3.dc.html" style="font-weight: 700;">Agent Inbox</a> — that's your day.</span>
+              <span><strong>3 · Everything actionable lands in the Inbox.</strong> Other queues are working views of the same decisions.</span>
+              <span><strong>4 · A balance is owned until it's zero.</strong> Primary → secondary → patient — every hand-off is on the claim's ledger.</span>
+              <span><strong>5 · Autonomy is governed.</strong> Thresholds, tiers, and audit logs decide what the agent may do alone — set in Settings, capped by Operations.</span>
+              <span style="color: #6B7280;">Dotted-underlined terms anywhere in the portal (like <gloss-t term="835">the 835</gloss-t>) explain themselves on hover.</span>
+            </div>
+          </div>
+          <button onClick="{{ dismissFirstRun }}" style="padding: 7px 14px; border-radius: 5px; border: 1px solid #C9BCF5; background: #FFFFFF; color: #5B46D6; font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0;" style-hover="background: #F8F6FF;">Got it</button>
+        </div>
+      </sc-if>
+
+      <!-- Today's numbers -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px;">
+        <a href="Agent Inbox v3.dc.html" style="display: flex; flex-direction: column; gap: 3px; background: #FFF7ED; border: 1px solid #F5D9A8; border-radius: 12px; padding: 16px 18px; text-decoration: none; transition: border-color 150ms ease-out;" style-hover="border-color: #B45309;">
+          <span style="font-size: 11px; font-weight: 700; color: #B45309; text-transform: uppercase; letter-spacing: 0.06em;">Decisions waiting</span>
+          <span style="font-size: 26px; font-weight: 700; color: #0F1B2E;">{{ decisionsWaiting }}</span>
+          <span style="font-size: 11px; color: #6B7280;">{{ decisionsSub }}</span>
+        </a>
+        <a href="AR Worklist.dc.html" style="display: flex; flex-direction: column; gap: 3px; background: #F1EEFF; border: 1px solid #C9BCF5; border-radius: 12px; padding: 16px 18px; text-decoration: none; transition: border-color 150ms ease-out;" style-hover="border-color: #7B61FF;">
+          <span style="font-size: 11px; font-weight: 700; color: #5B46D6; text-transform: uppercase; letter-spacing: 0.06em;">Follow-ups due today</span>
+          <span style="font-size: 26px; font-weight: 700; color: #0F1B2E;">{{ followupsDue }}</span>
+          <span style="font-size: 11px; color: #6B7280;">{{ followupsSub }}</span>
+        </a>
+        <a href="Claims Register.dc.html" style="display: flex; flex-direction: column; gap: 3px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 18px; text-decoration: none; transition: border-color 150ms ease-out;" style-hover="border-color: #7B61FF;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Claims in flight</span>
+          <span style="font-size: 26px; font-weight: 700; color: #0F1B2E;">{{ claimsInFlight }}</span>
+          <span style="font-size: 11px; color: #6B7280;">{{ claimsInFlightSub }}</span>
+        </a>
+        <a href="Analytics.dc.html" style="display: flex; flex-direction: column; gap: 3px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 18px; text-decoration: none; transition: border-color 150ms ease-out;" style-hover="border-color: #7B61FF;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Collected MTD</span>
+          <span style="font-size: 26px; font-weight: 700; color: #109680;">{{ collectedMTD }}</span>
+          <span style="font-size: 11px; color: #6B7280;">{{ collectedSub }}</span>
+        </a>
+      </div>
+
+      <!-- Team workload (manager only) -->
+      <sc-if value="{{ showRepStrip }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 14px 20px; border-bottom: 1px solid #EEEEEE; display: flex; align-items: baseline; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">Team workload</span>
+            <span style="font-size: 11px; color: #94A3B8;">due-today follow-ups per rep for {{ practiceLabel }} · manage the roster in <a href="Settings.dc.html" style="color: #7B61FF; font-weight: 700;">Settings</a></span>
+          </div>
+          <div style="display: flex; gap: 10px; padding: 14px 20px; flex-wrap: wrap;">
+            <sc-for list="{{ repStrip }}" as="r" hint-placeholder-count="4">
+              <a href="AR Worklist.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 10px 16px 10px 10px; border: 1px solid #E5E7EB; border-radius: 10px; text-decoration: none; transition: border-color 150ms ease-out; min-width: 180px;" style-hover="border-color: #7B61FF;">
+                <span style="width: 32px; height: 32px; border-radius: 9999px; background: linear-gradient(#7B61FF, #22C5A7); color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; flex-shrink: 0;">{{ r.initials }}</span>
+                <span style="display: flex; flex-direction: column; gap: 1px;">
+                  <span style="font-size: 13px; font-weight: 700; color: #0F1B2E; white-space: nowrap;">{{ r.name }}</span>
+                  <span style="font-size: 11px; color: #6B7280; white-space: nowrap;"><strong style="color: {{ r.dueColor }};">{{ r.due }} due today</strong> · {{ r.share }} of queue</span>
+                </span>
+              </a>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- Needs you now -->
+      <sc-if value="{{ showNeedsYou }}" hint-placeholder-val="{{ true }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 14px 20px; border-bottom: 1px solid #EEEEEE; display: flex; align-items: baseline; gap: 8px;">
+            <span style="font-size: 13px; font-weight: 700; color: #0F1B2E;">Needs you now</span>
+            <span style="font-size: 11px; color: #94A3B8;">the agents keep everything else moving — these are waiting on a human</span>
+          </div>
+          <sc-for list="{{ needsList }}" as="item" hint-placeholder-count="5">
+            <a href="{{ item.href }}" style="display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #EEEEEE; text-decoration: none; transition: background 120ms ease-out;" style-hover="background: #F8F6FF;">
+              <span style="width: 8px; height: 8px; border-radius: 9999px; background: {{ item.dot }}; flex-shrink: 0;"></span>
+              <span style="font-size: 13px; color: #0F1B2E; flex: 1;"><strong>{{ item.title }}</strong> {{ item.desc }}</span>
+              <span style="font-size: 11px; font-weight: 700; color: {{ item.tagColor }}; white-space: nowrap;">{{ item.tag }}</span>
+              <span style="font-size: 12px; font-weight: 700; color: #7B61FF; white-space: nowrap;">{{ item.cta }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- Workspaces -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <a href="Agent Inbox v3.dc.html" style="display: flex; flex-direction: column; gap: 8px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; text-decoration: none; transition: border-color 150ms ease-out;" style-hover="border-color: #7B61FF;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 34px; height: 34px; border-radius: 8px; background: #F1EEFF; display: inline-flex; align-items: center; justify-content: center;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+            </span>
+            <span style="font-size: 15px; font-weight: 700; color: #0F1B2E;">Agent Inbox</span>
+            <div style="flex: 1;"></div>
+            <span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 11px; font-weight: 700;">{{ agentBadge }}</span>
+          </div>
+          <span style="font-size: 12px; color: #6B7280; line-height: 18px;">Decisions the agents can't make alone — coding picks, validation fixes, variance reviews. Everything else flows through automatically.</span>
+        </a>
+        <a href="AR Worklist.dc.html" style="display: flex; flex-direction: column; gap: 8px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; text-decoration: none; transition: border-color 150ms ease-out;" style-hover="border-color: #7B61FF;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 34px; height: 34px; border-radius: 8px; background: #F1EEFF; display: inline-flex; align-items: center; justify-content: center;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </span>
+            <span style="font-size: 15px; font-weight: 700; color: #0F1B2E;">AR Worklist</span>
+            <div style="flex: 1;"></div>
+            <span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">{{ worklistBadge }}</span>
+          </div>
+          <span style="font-size: 12px; color: #6B7280; line-height: 18px;">Work payer calls in a queue — call prep, one-note touch logging, and practice requests in a focused view.</span>
+        </a>
+        <a href="Claims Register.dc.html" style="display: flex; flex-direction: column; gap: 8px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; text-decoration: none; transition: border-color 150ms ease-out;" style-hover="border-color: #7B61FF;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 34px; height: 34px; border-radius: 8px; background: #F1EEFF; display: inline-flex; align-items: center; justify-content: center;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+            </span>
+            <span style="font-size: 15px; font-weight: 700; color: #0F1B2E;">Claims</span>
+            <div style="flex: 1;"></div>
+            <span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: #F1F5F9; color: #6B7280; font-size: 11px; font-weight: 700;">{{ claimsBadge }}</span>
+          </div>
+          <span style="font-size: 12px; color: #6B7280; line-height: 18px;">Every claim's full story — the source note, each agent action, versions, payer responses, and payments on one timeline.</span>
+        </a>
+        <a href="Analytics.dc.html" style="display: flex; flex-direction: column; gap: 8px; background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; text-decoration: none; transition: border-color 150ms ease-out;" style-hover="border-color: #7B61FF;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 34px; height: 34px; border-radius: 8px; background: #F1EEFF; display: inline-flex; align-items: center; justify-content: center;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+            </span>
+            <span style="font-size: 15px; font-weight: 700; color: #0F1B2E;">Analytics</span>
+            <div style="flex: 1;"></div>
+            <span style="display: inline-flex; padding: 2px 9px; border-radius: 9999px; background: #E6F7F2; color: #0B7D6C; font-size: 11px; font-weight: 700;">shared with practice</span>
+          </div>
+          <span style="font-size: 12px; color: #6B7280; line-height: 18px;">Collections, aging, denial reasons, and appeal outcomes — compiled live, replacing the emailed Excel report.</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;showNeedsYou&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot; }
+}">
+class Component extends DCLogic {
+  state = {
+    navExpanded: (() => { try { return localStorage.getItem('onb-nav-expanded') === '1'; } catch (e) { return false; } })(),
+    firstRunDismissed: (() => { try { return localStorage.getItem('onb-firstrun-dismissed') === '1'; } catch (e) { return false; } })(),
+  };
+  componentDidMount() {
+    const check = () => {
+      if (window.TeamStore && window.ClaimsStore && window.RoleStore) this.forceUpdate();
+      else setTimeout(check, 60);
+    };
+    check();
+  }
+  renderVals() {
+    const st = this.state;
+    let practice = 'ifc';
+    try { const v = localStorage.getItem('onb-practice'); if (v === 'wfm') practice = 'wfm'; } catch (e) {}
+    const isWFM = practice === 'wfm';
+
+    const data = isWFM ? {
+      practiceLabel: 'Westbrook Family Medicine',
+      decisionsWaiting: '2', decisionsSub: 'in the Agent Inbox · none nearing SLA',
+      followupsDue: '8', followupsSub: 'on the AR Worklist · 7 near or past filing deadline',
+      claimsInFlight: '12', claimsInFlightSub: 'submitted, awaiting payer response',
+      collectedMTD: '$6,120', collectedSub: 'PC ratio 0.88 · details in Analytics',
+      agentBadge: '2 waiting', worklistBadge: '8 due today', claimsBadge: '12 in flight',
+      needsList: [
+        { href: 'AR Worklist.dc.html', dot: '#DC2626', title: '8 claims at timely-filing risk', desc: "— within 30 days of the payer's deadline · the priority queue works these first (P1)", tag: 'file first', tagColor: '#DC2626', cta: 'Open queue →' },
+        { href: 'AR Worklist.dc.html', dot: '#7B61FF', title: 'Appeal drafted, awaiting your approval', desc: '— Aetna medical-necessity denial with chart notes attached', tag: 'ready Jul 6', tagColor: '#94A3B8', cta: 'Review & file →' },
+        { href: 'AR Worklist.dc.html', dot: '#0081CF', title: 'Practice request unanswered 2 days', desc: '— secondary insurance for HOLT, MARCUS', tag: 'sent Jul 5', tagColor: '#94A3B8', cta: 'Open account →' },
+      ],
+    } : {
+      practiceLabel: 'Ibekie Foundation Clinics',
+      decisionsWaiting: '6', decisionsSub: 'in the Agent Inbox · 1 nearing its SLA',
+      followupsDue: '26', followupsSub: 'on the AR Worklist · 29 near or past filing deadline',
+      claimsInFlight: '38', claimsInFlightSub: 'submitted, awaiting payer response',
+      collectedMTD: '$18,288', collectedSub: 'PC ratio 0.86 · details in Analytics',
+      agentBadge: '6 waiting', worklistBadge: '21 due today', claimsBadge: '38 in flight',
+      needsList: [
+        { href: 'AR Worklist.dc.html', dot: '#DC2626', title: '29 claims at timely-filing risk', desc: "— within 30 days of the payer's deadline or past it · the priority queue works these first (P1)", tag: 'file first', tagColor: '#DC2626', cta: 'Open queue →' },
+        { href: 'Agent Inbox v3.dc.html', dot: '#FF6E6C', title: 'Coding decision nearing SLA', desc: '— ambiguous dx candidates on WEBBS, LEON · Coding & Validation Agent needs a pick', tag: '2h left', tagColor: '#DC2626', cta: 'Go to decision →' },
+        { href: 'Claim Detail.dc.html', dot: '#E9C05F', title: 'Underpayment variance', desc: '— RILEY, DIERDRE W. paid at 40% of expected · reconciliation flagged for review', tag: 'flagged Jul 6', tagColor: '#94A3B8', cta: 'Open claim →' },
+        { href: 'AR Worklist.dc.html', dot: '#7B61FF', title: 'Appeal drafted, awaiting your approval', desc: '— timely-filing denial with clearinghouse acceptance proof attached', tag: 'ready Jul 5', tagColor: '#94A3B8', cta: 'Review & file →' },
+        { href: 'AR Worklist.dc.html', dot: '#0081CF', title: 'Practice request unanswered 4 days', desc: '— updated insurance info for GILLESPY, CARMEN · consider a nudge', tag: 'sent Jul 3', tagColor: '#94A3B8', cta: 'Open account →' },
+      ],
+    };
+
+    const isMgr = window.RoleStore ? window.RoleStore.isManager() : false;
+    let repStrip = [];
+    if (isMgr && window.TeamStore && window.ClaimsStore) {
+      // Scaled to the stat card's due-today total (shared helper) so the strip
+      // and the "Follow-ups due today" card agree on one screen.
+      const due = window.TeamStore.dueTodayScaled(practice);
+      const target = parseInt(data.followupsDue, 10) || 0;
+      const reps = window.TeamStore.getRoster()
+        .filter(m => m.role === 'AR Rep' && m.status === 'Active' && !m.pending && m.practices.indexOf(practice) >= 0);
+      repStrip = reps.map(m => {
+        const d = due[m.initials] || 0;
+        const pct = target ? Math.round(d / target * 100) : 0;
+        return { key: m.id, initials: m.initials, name: m.name, due: String(d), dueColor: d > 0 ? '#B45309' : '#0B7D6C', share: pct + '%' };
+      });
+    }
+
+    return {
+      showRepStrip: isMgr && repStrip.length > 0,
+      repStrip,
+      navClosed: !st.navExpanded,
+      navOpen: st.navExpanded,
+      toggleNav: () => this.setState(prev => { const v = !prev.navExpanded; try { localStorage.setItem('onb-nav-expanded', v ? '1' : '0'); } catch (e) {} return { navExpanded: v }; }),
+      showNeedsYou: this.props.showNeedsYou ?? true,
+      showFirstRun: !st.firstRunDismissed,
+      dismissFirstRun: () => {
+        try { localStorage.setItem('onb-firstrun-dismissed', '1'); } catch (e) {}
+        this.setState({ firstRunDismissed: true });
+      },
+      ...data,
+    };
+  }
+}
+</script>
+</body>
+</html>

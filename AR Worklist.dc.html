@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button, select, input, textarea { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+  @keyframes onb-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.35); } 50% { box-shadow: 0 0 0 9px rgba(220,38,38,0); } }
+</style>
+<script src="./claims-store.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="AR Worklist (Bell Medics)">
+
+  <x-import component-from-global-scope="ops-banner" from="./ops-banner.js" hint-size="100%,0px"></x-import>
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Billing Portal</span>
+    <x-import component-from-global-scope="search-bar" from="./search-bar.js" hint-size="480px,40px"></x-import>
+    <div style="flex: 1;"></div>
+    <x-import component-from-global-scope="practice-switcher" from="./practice-switcher.js" hint-size="260px,40px"></x-import>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <x-import component-from-global-scope="role-switcher" from="./role-switcher.js" hint-size="210px,44px"></x-import>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav — collapsed icon rail ===== -->
+    <sc-if value="{{ navClosed }}" hint-placeholder-val="{{ true }}">
+      <div style="width: 64px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 12px 10px; display: flex; flex-direction: column; gap: 6px; align-items: center; flex-shrink: 0;">
+        <button onClick="{{ toggleNav }}" title="Expand navigation" style="width: 40px; height: 36px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 5 5-5 5"></path><path d="m13 7 5 5-5 5"></path></svg>
+        </button>
+        <div style="height: 1px; width: 36px; background: #EEEEEE; margin: 4px 0;"></div>
+        <a href="Billing Home.dc.html" title="Dashboard" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg></a>
+        <a href="Agent Inbox v3.dc.html" title="Agent Inbox" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></a>
+        <a href="Coverage.dc.html" title="Coverage" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg></a>
+        <a href="AR Worklist.dc.html" title="AR Worklist" style="width: 40px; height: 40px; border-radius: 4px; background: #7B61FF; display: flex; align-items: center; justify-content: center; text-decoration: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+        <a href="Claims Register.dc.html" title="Claims" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg></a>
+        <a href="Payments.dc.html" title="Payments" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg></a>
+        <a href="Rulebook.dc.html" title="Rulebook" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></a>
+        <a href="Contracts.dc.html" title="Contracts" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></a>
+        <a href="Analytics.dc.html" title="Analytics" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg></a>
+        <a href="Settings.dc.html" title="Settings" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
+      </div>
+    </sc-if>
+
+    <!-- ===== Side nav — expanded ===== -->
+    <sc-if value="{{ navOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+        <div style="display: flex; justify-content: flex-end;">
+          <button onClick="{{ toggleNav }}" title="Collapse navigation" style="width: 32px; height: 28px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 17-5-5 5-5"></path><path d="m11 17-5-5 5-5"></path></svg>
+          </button>
+        </div>
+        <a href="Billing Home.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg>
+          Dashboard
+        </a>
+        <a href="Agent Inbox v3.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+          Agent Inbox
+        </a>
+        <a href="Coverage.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+          Coverage
+        </a>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          AR Worklist
+        </div>
+        <a href="Claims Register.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+          Claims
+        </a>
+        <a href="Payments.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Payments
+          <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">NEW</span>
+        </a>
+        <a href="Rulebook.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+          Rulebook
+        </a>
+        <a href="Contracts.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+          Contracts
+                  </a>
+        <a href="Analytics.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+          Analytics
+        </a>
+        <a href="Settings.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Settings
+        </a>
+        <div style="flex: 1;"></div>
+        <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+          <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+          Reach the billing support desk 24/7.
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============================================================ -->
+    <!-- ===== LIST MODE ===== -->
+    <!-- ============================================================ -->
+    <sc-if value="{{ listMode }}" hint-placeholder-val="{{ true }}">
+      <div style="flex: 1; padding: 24px 32px; display: flex; flex-direction: column; gap: 16px; min-width: 0;" data-screen-label="Worklist — queue view">
+
+        <!-- Title -->
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <h1 style="font-size: 24px; font-weight: 700; margin: 0;">AR Worklist</h1>
+          <span style="font-size: 13px; color: #6B7280;">AR assigned to Bell Medics · {{ practiceLabel }} · synced from Prognosis EHR, updated hourly · Tue, Jul 7 2026</span>
+          <div style="flex: 1;"></div>
+          <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 600;">{{ dueChipText }}</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 12px; font-weight: 600;">{{ totalArChipText }}</span>
+        </div>
+
+        <!-- Weekly report strip -->
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; gap: 28px;">
+          <div style="display: flex; flex-direction: column; gap: 2px; min-width: 150px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Weekly report to the practice</span>
+            <span style="font-size: 12px; color: #6B7280;">Compiled automatically from logged touches — replaces the Excel report</span>
+          </div>
+          <div style="width: 1px; align-self: stretch; background: #EEEEEE;"></div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="font-size: 20px; font-weight: 700; color: #0F1B2E;">{{ touchesWeekText }}</span>
+            <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Touches this week</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="font-size: 20px; font-weight: 700; color: #0F1B2E;">{{ accountsWorkedText }}</span>
+            <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Claims worked</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="font-size: 20px; font-weight: 700; color: #109680;">{{ collectedText }}</span>
+            <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Collected MTD</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 1px;">
+            <span style="font-size: 20px; font-weight: 700; color: #DC2626;">{{ oldestText }}</span>
+            <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Oldest open AR</span>
+          </div>
+          <div style="flex: 1;"></div>
+          <a href="Analytics.dc.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 5px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: background 150ms ease-out;" style-hover="background: #F1EEFF;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+            View Analytics
+          </a>
+        </div>
+
+        <!-- Group tiles -->
+        <div style="display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap;">
+          <sc-for list="{{ buckets }}" as="bk" hint-placeholder-count="5">
+            <button onClick="{{ bk.onClick }}" style="flex: 1 1 120px; min-width: 120px; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; background: {{ bk.bg }}; border: 1px solid {{ bk.border }}; border-radius: 12px; padding: 12px 16px; cursor: pointer; text-align: left; transition: border-color 150ms ease-out;">
+            <span style="font-size: 11px; font-weight: 700; color: {{ bk.labelFg }}; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">{{ bk.label }}</span>
+            <span style="font-size: 20px; font-weight: 700; color: {{ bk.countFg }};">{{ bk.count }}</span>
+            <span style="font-size: 11px; font-weight: 600; color: #6B7280; font-variant-numeric: tabular-nums;">{{ bk.total }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <!-- Secondary & crossover strip (Phase 8) -->
+        <div style="display: flex; align-items: center; gap: 12px; background: #EAF3FF; border: 1px solid #BFDBFE; border-radius: 12px; padding: 12px 18px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>
+          <span style="font-size: 13px; color: #1E40AF; line-height: 19px; flex: 1;"><strong>Secondary balances are in this queue now.</strong> 409 claims ($17.0K) sit with secondary payers or patients — secondary denials and stalled crossovers carry COB-specific call prep, and crossovers quiet past 10 days surface as decisions in the <a href="Agent Inbox v3.dc.html" style="font-weight: 700;">Agent Inbox</a>.</span>
+          <a href="Claims Register.dc.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 5px; border: 1px solid #1D4ED8; background: #FFFFFF; color: #1D4ED8; font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap;" style-hover="background: #EAF3FF;">Filter by Balance Owner</a>
+        </div>
+
+        <!-- Payer rulebook strip -->
+        <div style="display: flex; align-items: center; gap: 12px; background: #F1EEFF; border: 1px solid #D6CCFF; border-radius: 12px; padding: 12px 18px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+          <span style="font-size: 13px; color: #4C3AB8; line-height: 19px; flex: 1;"><strong>5 payer rules are active on this AR.</strong> Largest: the MHS HIP coding rule — 84 denials, $11.8K of this report traced to it before adoption. 2 proposed rules await manager review.</span>
+          <a href="Rulebook.dc.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 5px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; transition: background 150ms ease-out;" style-hover="background: #E4DDFF;">Open Rulebook</a>
+        </div>
+
+        <!-- Group-by + scope chips + start queue -->
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Group by</span>
+          <div style="display: flex; align-items: center; gap: 0; border: 1px solid #E5E7EB; border-radius: 5px; overflow: hidden;">
+            <sc-for list="{{ groupTabs }}" as="g" hint-placeholder-count="3">
+              <button onClick="{{ g.onClick }}" style="padding: 7px 14px; border: none; background: {{ g.bg }}; color: {{ g.fg }}; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;">{{ g.label }}</button>
+            </sc-for>
+          </div>
+          <div style="width: 1px; height: 22px; background: #E5E7EB; margin: 0 4px;"></div>
+          <sc-for list="{{ scopeChips }}" as="chip" hint-placeholder-count="3">
+            <button onClick="{{ chip.onClick }}" style="padding: 6px 14px; border-radius: 9999px; border: 1px solid {{ chip.border }}; background: {{ chip.bg }}; color: {{ chip.fg }}; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 150ms ease-out;">{{ chip.label }}</button>
+          </sc-for>
+          <button onClick="{{ toggleFiling }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; border: 1px solid {{ filingBorder }}; background: {{ filingBg }}; color: {{ filingFg }}; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 150ms ease-out;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+            {{ filingChipText }}
+          </button>
+          <div style="flex: 1;"></div>
+          <span style="font-size: 12px; color: #94A3B8;">{{ listSummary }}</span>
+          <button onClick="{{ startQueue }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+            {{ startQueueLabel }}
+          </button>
+        </div>
+
+        <!-- Low-balance write-off recommendation -->
+        <sc-if value="{{ showWob }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; align-items: center; gap: 12px; background: #FEF3DF; border: 1px solid #F5D9A8; border-radius: 12px; padding: 12px 18px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
+            <span style="font-size: 13px; color: #92400E; line-height: 19px; flex: 1;"><strong>{{ wobText }}</strong> Working these costs more than they recover — recommend a practice-approved small-balance write-off. They sit at the bottom of the queue (P4) either way.</span>
+            <button onClick="{{ requestWob }}" style="padding: 9px 16px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">Request write-off approval</button>
+            <button onClick="{{ dismissWob }}" style="padding: 9px 14px; border-radius: 5px; border: 1px solid #F5D9A8; background: #FFFFFF; color: #92400E; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;">Dismiss</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ showWobPending }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; align-items: center; gap: 12px; background: #EAF3FF; border-radius: 12px; padding: 12px 18px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+            <span style="font-size: 13px; color: #1D4ED8; font-weight: 600; flex: 1;">{{ wobPendingText }}</span>
+          </div>
+        </sc-if>
+
+        <!-- Full-width worklist table -->
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: minmax(165px, 1.1fr) minmax(118px, 0.85fr) 84px 58px 82px minmax(140px, 0.95fr) minmax(200px, 1.35fr) 78px 38px; gap: 11px; align-items: center; padding: 10px 18px; background: #7B61FF;">
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Patient / Claim</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Payer</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em; text-align: right;">Balance</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Age</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Deadline</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Status</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Next action</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Next FU</span>
+            <span style="font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.08em;">Rep</span>
+          </div>
+          <div style="max-height: 640px; overflow-y: auto;">
+            <sc-for list="{{ rows }}" as="row" hint-placeholder-count="8">
+              <div onClick="{{ row.onClick }}" style="display: grid; grid-template-columns: minmax(165px, 1.1fr) minmax(118px, 0.85fr) 84px 58px 82px minmax(140px, 0.95fr) minmax(200px, 1.35fr) 78px 38px; gap: 11px; align-items: center; padding: 9px 18px 9px 15px; border-bottom: 1px solid #EEEEEE; border-left: 3px solid transparent; background: #FFFFFF; cursor: pointer; transition: background 120ms ease-out;" style-hover="background: #F8F6FF;">
+                <span style="display: flex; flex-direction: column; gap: 1px; min-width: 0;">
+                  <span style="font-size: 13px; font-weight: 600; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.patient }}</span>
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #6B7280;">{{ row.claim }} · DOS {{ row.dos }}</span>
+                </span>
+                <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.payer }}</span>
+                <span style="font-size: 13px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums; text-align: right;">{{ row.balanceStr }}</span>
+                <span><span style="display: inline-flex; padding: 2px 7px; border-radius: 9999px; background: {{ row.ageBg }}; color: {{ row.ageFg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ row.ageText }}</span></span>
+                <span><span style="display: inline-flex; padding: 2px 7px; border-radius: 9999px; background: {{ row.dlBg }}; color: {{ row.dlFg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ row.dlText }}</span></span>
+                <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.status }}</span>
+                <span style="font-size: 12px; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.askPreview }}</span>
+                <span style="font-size: 11px; font-weight: 700; color: {{ row.fuFg }}; white-space: nowrap;">{{ row.nextFu }}</span>
+                <span style="width: 24px; height: 24px; border-radius: 9999px; background: #F1EEFF; color: #7B61FF; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700;">{{ row.repInitials }}</span>
+              </div>
+            </sc-for>
+            <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 28px; text-align: center; font-size: 13px; color: #94A3B8;">No accounts match the current filters.</div>
+            </sc-if>
+            <sc-if value="{{ listMore }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 12px 20px; text-align: center; font-size: 12px; color: #6B7280; background: #F8FAFC; border-top: 1px solid #EEEEEE;">{{ listMoreText }}</div>
+            </sc-if>
+          </div>
+        </div>
+
+      </div>
+    </sc-if>
+
+    <!-- ============================================================ -->
+    <!-- ===== WORK MODE (focused claim workspace) ===== -->
+    <!-- ============================================================ -->
+    <sc-if value="{{ workMode }}" hint-placeholder-val="{{ false }}">
+      <div style="flex: 1; padding: 20px 32px 32px; display: flex; flex-direction: column; gap: 16px; min-width: 0;" data-screen-label="Worklist — focused work view">
+
+        <!-- Queue bar -->
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <button onClick="{{ backToList }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #F1F5F9;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+            Worklist
+          </button>
+          <span style="font-size: 13px; font-weight: 700; color: #5B46D6; background: #F1EEFF; padding: 6px 14px; border-radius: 9999px;">{{ queuePos }}</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: {{ prioFg }}; background: {{ prioBg }}; padding: 6px 14px; border-radius: 9999px;">{{ prioText }}</span>
+          <span style="font-size: 12px; color: #94A3B8;">{{ queueScopeNote }}</span>
+          <span style="font-size: 11px; color: #C4CBD6; white-space: nowrap;">N next · P prev · 1–5 quick log · Ctrl+Enter save</span>
+          <div style="flex: 1;"></div>
+          <span style="font-size: 12px; color: #6B7280;">Next up: <span style="font-weight: 700; color: #0F1B2E;">{{ nextUpName }}</span></span>
+          <div style="display: flex; align-items: center; gap: 0; border: 1px solid #E5E7EB; border-radius: 5px; overflow: hidden;">
+            <button onClick="{{ prevClaim }}" style="padding: 8px 12px; border: none; background: #FFFFFF; color: #6B7280; cursor: pointer; display: flex; align-items: center;" style-hover="background: #F1F5F9;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+            </button>
+            <div style="width: 1px; align-self: stretch; background: #E5E7EB;"></div>
+            <button onClick="{{ nextClaim }}" style="padding: 8px 14px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">
+              Next claim
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Claim header -->
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 24px; display: flex; align-items: center; gap: 16px;">
+          <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 20px; font-weight: 700; color: #0F1B2E;">{{ acc.patient }}</span>
+              <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: {{ acc.ageBg }}; color: {{ acc.ageFg }}; font-size: 11px; font-weight: 700;">{{ acc.bucketLabel }}</span>
+              <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: #F1F5F9; color: #6B7280; font-size: 11px; font-weight: 700;">{{ acc.status }}</span>
+              <sc-if value="{{ acc.showDl }}" hint-placeholder-val="{{ false }}">
+                <span style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: {{ acc.dlBg }}; color: {{ acc.dlFg }}; font-size: 11px; font-weight: 700;">{{ acc.dlChip }}</span>
+              </sc-if>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: #6B7280;">
+              <a href="Claim Detail.dc.html" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: #7B61FF;">{{ acc.claim }}</a>
+              <span>{{ acc.payer }}</span>
+              <span>DOS {{ acc.dos }}</span>
+              <span style="display: inline-flex; align-items: center; gap: 5px;" title="Facility where the patient was seen"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path></svg>{{ acc.facility }}</span>
+              <span style="display: inline-flex; align-items: center; gap: 5px;"><span style="width: 20px; height: 20px; border-radius: 9999px; background: #F1EEFF; color: #7B61FF; display: inline-flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700;">{{ acc.repInitials }}</span>{{ acc.rep }}</span>
+            </div>
+          </div>
+          <div style="flex: 1;"></div>
+          <div style="display: flex; align-items: center; gap: 28px;">
+            <div style="display: flex; flex-direction: column; gap: 1px; align-items: flex-end;">
+              <span style="font-size: 11px; font-weight: 600; color: #94A3B8;">Billed</span>
+              <span style="font-size: 15px; font-weight: 700; color: #6B7280; font-variant-numeric: tabular-nums;">{{ acc.billedStr }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1px; align-items: flex-end;">
+              <span style="font-size: 11px; font-weight: 600; color: #94A3B8;">Paid to date</span>
+              <span style="font-size: 15px; font-weight: 700; color: #6B7280; font-variant-numeric: tabular-nums;">{{ acc.paidStr }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1px; align-items: flex-end;">
+              <span style="font-size: 11px; font-weight: 600; color: #94A3B8;">Open balance</span>
+              <span style="font-size: 22px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums;">{{ acc.balanceStr }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two-column workspace -->
+        <div style="display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 16px; align-items: start;">
+
+          <!-- LEFT: call prep + timeline -->
+          <div style="display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+
+            <!-- Call prep -->
+            <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path></svg>
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Call prep — assembled by A/R Follow-up Agent</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+                <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 700; color: #0F1B2E;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                  <span style="font-family: 'JetBrains Mono', monospace;">{{ acc.payerPhone }}</span>
+                </span>
+                <span style="font-size: 12px; color: #6B7280;">{{ acc.payerHours }}</span>
+                <span style="font-size: 12px; color: #6B7280;">{{ acc.ivr }}</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; font-size: 13px; color: #0F1B2E; padding: 10px 12px; background: #F8FAFC; border-radius: 8px;">
+                <span><span style="color: #6B7280;">Payer claim #</span> <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700;">{{ acc.payerRef }}</span></span>
+                <span><span style="color: #6B7280;">DOS</span> <span style="font-family: 'JetBrains Mono', monospace;">{{ acc.dos }}</span></span>
+                <span><span style="color: #6B7280;">Billed</span> <span style="font-family: 'JetBrains Mono', monospace;">{{ acc.billedStr }}</span></span>
+                <span><span style="color: #6B7280;">Paid to date</span> <span style="font-family: 'JetBrains Mono', monospace;">{{ acc.paidStr }}</span></span>
+              </div>
+              <div style="background: #F1EEFF; border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px;">
+                <span style="font-size: 11px; font-weight: 700; color: #5B46D6; text-transform: uppercase; letter-spacing: 0.06em;">Your ask for this call</span>
+                <span style="font-size: 14px; line-height: 21px; color: #0F1B2E;">{{ acc.ask }}</span>
+                <span style="font-size: 11px; color: #94A3B8;">Derived from the denial code and claim history — updates automatically as the claim changes.</span>
+              </div>
+            </div>
+
+            <!-- Activity timeline -->
+            <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Account activity</span>
+                <span style="font-size: 11px; color: #94A3B8;">agent actions + your touches, newest first</span>
+              </div>
+              <div style="border: 1px solid #E5E7EB; border-radius: 8px; max-height: 420px; overflow-y: auto;">
+                <sc-for list="{{ timeline }}" as="tl" hint-placeholder-count="3">
+                  <div style="display: flex; gap: 10px; padding: 11px 14px; border-bottom: 1px solid #EEEEEE;">
+                    <span style="width: 8px; height: 8px; border-radius: 9999px; background: {{ tl.dot }}; margin-top: 5px; flex-shrink: 0;"></span>
+                    <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 12px; font-weight: 700; color: #0F1B2E;">{{ tl.who }}</span>
+                        <span style="display: inline-flex; padding: 1px 7px; border-radius: 9999px; background: {{ tl.tagBg }}; color: {{ tl.tagFg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ tl.tag }}</span>
+                        <div style="flex: 1;"></div>
+                        <span style="font-size: 11px; color: #94A3B8; white-space: nowrap;">{{ tl.when }}</span>
+                      </div>
+                      <span style="font-size: 12px; color: #0F1B2E; line-height: 18px;">{{ tl.text }}</span>
+                      <sc-if value="{{ tl.hasOrig }}" hint-placeholder-val="{{ false }}">
+                        <span style="font-size: 10px; color: #94A3B8; line-height: 15px;"><span style="color: #7B61FF; font-weight: 700;">Polished by the agent</span> · your original: “{{ tl.orig }}”</span>
+                      </sc-if>
+                      <sc-if value="{{ tl.hasMeta }}" hint-placeholder-val="{{ false }}">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #6B7280;">{{ tl.meta }}</span>
+                      </sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: actions -->
+          <div style="display: flex; flex-direction: column; gap: 16px; min-width: 0;">
+
+            <!-- Appeal draft -->
+            <sc-if value="{{ showDraft }}" hint-placeholder-val="{{ false }}">
+              <div style="border: 1px solid #7B61FF; background: #F8F6FF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 11px; font-weight: 700; color: #5B46D6; text-transform: uppercase; letter-spacing: 0.06em;">Appeal drafted by Denial Triage Agent</span>
+                  <span style="display: inline-flex; padding: 2px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 10px; font-weight: 700;">Ready to file</span>
+                </div>
+                <div style="font-size: 13px; line-height: 19px; color: #0F1B2E;">{{ draftText }}</div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <button onClick="{{ fileAppeal }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                    Approve &amp; file appeal
+                  </button>
+                  <span style="font-size: 11px; color: #94A3B8;">You file directly — logged to the claim timeline.</span>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ showFiled }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; align-items: center; gap: 10px; background: #E6F7F2; border-radius: 12px; padding: 12px 16px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0B7D6C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                <span style="font-size: 12px; color: #0B7D6C; font-weight: 600;">Appeal filed — the Denial Triage Agent is tracking the payer's response.</span>
+              </div>
+            </sc-if>
+
+            <!-- Log a touch -->
+            <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Log a touch</span>
+                <span style="font-size: 11px; color: #94A3B8;">speak it, tap it, or type it — details are captured for you</span>
+              </div>
+              <sc-if value="{{ quickVisible }}" hint-placeholder-val="{{ true }}">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <span style="font-size: 10px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Quick log — one tap saves and moves to the next claim</span>
+                  <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <sc-for list="{{ quickChips }}" as="q" hint-placeholder-count="5">
+                      <button onClick="{{ q.onClick }}" title="{{ q.hint }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 13px; border-radius: 9999px; border: 1px solid #C9BCF5; background: #F8F6FF; color: #5B46D6; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 150ms ease-out;" style-hover="background: #F1EEFF; border-color: #7B61FF;">
+                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #94A3B8;">{{ q.num }}</span>{{ q.label }}
+                      </button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <sc-for list="{{ methodChips }}" as="mc" hint-placeholder-count="4">
+                  <button onClick="{{ mc.onClick }}" style="padding: 5px 12px; border-radius: 9999px; border: 1px solid {{ mc.border }}; background: {{ mc.bg }}; color: {{ mc.fg }}; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 150ms ease-out;">{{ mc.label }}</button>
+                </sc-for>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: stretch;">
+                <textarea value="{{ fNote }}" onChange="{{ onFNote }}" placeholder="What happened? e.g. Spoke to Jacqueline, ref C-4471820 — payer acknowledged processing error, reprocessing initiated, quoted 10 business days. Follow up Jul 21." style="flex: 1; min-height: 110px; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px 14px; font-size: 13px; line-height: 20px; color: #0F1B2E; resize: vertical; outline: none; min-width: 0;"></textarea>
+                <sc-if value="{{ micVisible }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ toggleMic }}" title="{{ micTitle }}" style="width: 52px; flex-shrink: 0; border-radius: 8px; border: 1px solid {{ micBorder }}; background: {{ micBg }}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; transition: all 150ms ease-out; animation: {{ micAnim }};">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ micFg }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><path d="M12 19v3"></path></svg>
+                    <span style="font-size: 9px; font-weight: 700; color: {{ micFg }};">{{ micLabel }}</span>
+                  </button>
+                </sc-if>
+              </div>
+              <sc-if value="{{ listening }}" hint-placeholder-val="{{ false }}">
+                <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: #DC2626; font-weight: 600;">
+                  <span style="width: 7px; height: 7px; border-radius: 9999px; background: #DC2626;"></span>
+                  Listening — speak your note; it appears above with details captured live. Transcript only, audio is not recorded. Tap the mic to stop.
+                </span>
+              </sc-if>
+              <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-height: 28px;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em; margin-right: 2px;">Captured</span>
+                <select value="{{ capOutcome }}" onChange="{{ onCapOutcome }}" style="height: 28px; border: 1px solid #C9BCF5; border-radius: 9999px; padding: 0 10px; font-size: 11px; font-weight: 700; color: #5B46D6; background: #F1EEFF; outline: none; cursor: pointer; max-width: 240px;">
+                  <sc-for list="{{ outcomeOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for>
+                </select>
+                <sc-for list="{{ capChips }}" as="c" hint-placeholder-count="0">
+                  <sc-if value="{{ c.editing }}" hint-placeholder-val="{{ false }}">
+                    <input value="{{ c.value }}" onChange="{{ c.onChange }}" onBlur="{{ c.onDone }}" autoFocus="{{ true }}" style="height: 28px; width: 150px; border: 1px solid #7B61FF; border-radius: 9999px; padding: 0 12px; font-size: 11px; font-weight: 600; color: #0F1B2E; outline: none;">
+                  </sc-if>
+                  <sc-if value="{{ c.notEditing }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ c.onEdit }}" title="Tap to correct" style="display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 12px; border-radius: 9999px; border: 1px solid #E5E7EB; background: #F8FAFC; color: #0F1B2E; font-size: 11px; font-weight: 600; cursor: pointer; transition: border-color 150ms ease-out;" style-hover="border-color: #7B61FF;">
+                      <span style="color: #94A3B8; font-weight: 700;">{{ c.label }}</span>{{ c.value }}
+                    </button>
+                  </sc-if>
+                </sc-for>
+                <sc-if value="{{ noCaptures }}" hint-placeholder-val="{{ true }}">
+                  <span style="font-size: 11px; color: #94A3B8;">rep names, ref #, case # and follow-up dates appear here as you type — tap any to correct</span>
+                </sc-if>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button onClick="{{ saveTouch }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">Save touch</button>
+                <span style="font-size: 11px; color: #94A3B8;">{{ formHint }}</span>
+              </div>
+            </div>
+
+            <!-- Request info from the practice -->
+            <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Request info from the practice</span>
+                <span style="font-size: 11px; color: #94A3B8;">lands in the practice's inbox on this platform — no outside tools</span>
+              </div>
+              <sc-if value="{{ hasReqSuggest }}" hint-placeholder-val="{{ false }}">
+                <div style="border: 1px solid #C9BCF5; background: #F8F6FF; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <button onClick="{{ sendSuggested }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #5B46D6;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+                      {{ reqSuggestLabel }}
+                    </button>
+                    <span style="font-size: 11px; color: #94A3B8;">one click — pre-filled with the patient, DOS and denial code</span>
+                  </div>
+                  <span style="font-size: 11px; color: #5B46D6;">Suggested because {{ reqSuggestWhy }}.</span>
+                </div>
+                <button onClick="{{ toggleReqMore }}" style="align-self: flex-start; border: none; background: transparent; padding: 0; font-size: 11px; font-weight: 700; color: #7B61FF; cursor: pointer;">{{ reqMoreLabel }}</button>
+              </sc-if>
+              <sc-if value="{{ reqManualVisible }}" hint-placeholder-val="{{ true }}">
+                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                  <sc-for list="{{ reqChips }}" as="rc" hint-placeholder-count="4">
+                    <button onClick="{{ rc.onClick }}" style="padding: 6px 12px; border-radius: 9999px; border: 1px solid {{ rc.border }}; background: {{ rc.bg }}; color: {{ rc.fg }}; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 150ms ease-out;">{{ rc.label }}</button>
+                  </sc-for>
+                </div>
+                <input value="{{ reqDetail }}" onChange="{{ onReqDetail }}" placeholder="{{ reqDetailPlaceholder }}" style="height: 36px; border: 1px solid #E5E7EB; border-radius: 5px; padding: 0 12px; font-size: 12px; color: #0F1B2E; outline: none;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <button onClick="{{ sendRequest }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 5px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #F1EEFF;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+                    Send request
+                  </button>
+                  <span style="font-size: 11px; color: #94A3B8;">The claim stays in your queue until the practice answers.</span>
+                </div>
+              </sc-if>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </sc-if>
+
+  </div>
+
+  <sc-if value="{{ toastVisible }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 6px -4px rgba(0,0,0,0.1), 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50; display: flex; align-items: center; gap: 14px; max-width: 720px;">{{ toast }}
+      <sc-if value="{{ toastHasAction }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ onToastAction }}" style="border: none; background: transparent; color: #B7A8F7; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0; text-decoration: underline; white-space: nowrap;">{{ toastActionLabel }}</button>
+      </sc-if>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;arVolume&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 120, &quot;min&quot;: 40, &quot;max&quot;: 200, &quot;step&quot;: 10, &quot;unit&quot;: &quot; accounts&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Stress test&quot; },
+  &quot;startingScope&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;due&quot;, &quot;options&quot;: [&quot;due&quot;, &quot;mine&quot;, &quot;all&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;View&quot; }
+}">
+class Component extends DCLogic {
+  state = {
+    view: 'list',
+    navExpanded: (() => { try { return localStorage.getItem('onb-nav-expanded') === '1'; } catch (e) { return false; } })(),
+    selected: null,
+    queue: [],
+    groupBy: 'aging',
+    groupKey: 'all',
+    scope: null,
+    filingOnly: false,
+    wob: null,
+    wobDismissed: false,
+    touches: {},
+    overrides: {},
+    sessionTouches: 0,
+    fMethod: 'Phone call',
+    fNote: '',
+    fOv: {},
+    chipEdit: null,
+    reqCat: null,
+    reqDetail: '',
+    toast: '',
+    toastActionLabel: '',
+    toastFn: null,
+    micState: 'idle',
+  };
+
+  componentDidMount() {
+    this._srOk = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+    this._onKey = (e) => {
+      if (this.state.view !== 'work') return;
+      const tag = ((e.target && e.target.tagName) || '').toUpperCase();
+      const typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); this.doSaveTouch(); return; }
+      if (typing) return;
+      const k = (e.key || '').toLowerCase();
+      if (k === 'n') this.goToIndex(this.qIdx() + 1);
+      else if (k === 'p') this.goToIndex(this.qIdx() - 1);
+      else if (k >= '1' && k <= '5') this.doQuickLog(parseInt(k, 10) - 1);
+    };
+    window.addEventListener('keydown', this._onKey);
+    if (!window.ClaimsStore) {
+      let tries = 0;
+      this._pollStore = setInterval(() => { tries++; if (window.ClaimsStore || tries > 30) { clearInterval(this._pollStore); this.forceUpdate(); } }, 50);
+    }
+  }
+
+  // Open-AR accounts built from the shared claims store (single source of truth).
+  storeData() {
+    const S = window.ClaimsStore;
+    const practice = S ? S.currentPractice() : 'ifc';
+    if (this._sd && this._sdPractice === practice) return this._sd;
+    if (!S) return { vol: 0, accounts: [], totalAr: 0, oldest: 0, isWFM: false, practiceLabel: '' };
+    const m = S.meta(practice);
+    const ago = (dn) => { const day = 7 - dn; return day > 0 ? 'Jul ' + day : 'Jun ' + (30 + day); };
+    const accounts = S.openAR(practice).map(c => {
+      const arch = S.ARCH[c.archKey] || {};
+      const vaHold = !!arch.vaHold;
+      let ask = arch.ask || '';
+      if (!vaHold) {
+        if (c.balance < 25) ask = 'Below the cost to work \u2014 no payer call needed. Hold for the practice\u2019s small-balance write-off approval.';
+        else if (c.dlTier === 'breached') ask = 'Timely filing passed ' + c.dlDate + ' \u2014 do not call for routine status. File an appeal with the clearinghouse acceptance report proving on-time submission.';
+        else if (c.daysLeft <= 30) ask = 'File/refile today \u2014 timely filing closes ' + c.dlDate + ' (' + c.daysLeft + ' days left). Then: ' + (arch.ask || '');
+      }
+      const pTier = (vaHold || c.balance < 25) ? 4 : (c.daysLeft <= 30) ? 1 : (c.dueToday || (c.age > 90 && c.balance >= 100)) ? 2 : 3;
+      const pReason = pTier === 1 ? (c.daysLeft < 0 ? 'filing breached ' + c.dlDate : 'files in ' + c.daysLeft + 'd')
+        : pTier === 2 ? (c.dueToday ? 'due today' : '$' + Math.round(c.balance) + ' at ' + c.age + 'd')
+        : pTier === 4 ? (vaHold ? 'on hold' : 'low balance') : 'routine follow-up';
+      return {
+        filingLimit: c.filingLimit, daysLeft: c.daysLeft, dlTier: c.dlTier, dlDate: c.dlDate,
+        pTier, pReason, facility: c.facility, lowBal: pTier === 4 && !vaHold,
+        id: c.id, claim: c.claim, patient: c.patient,
+        payer: c.payer, payerPhone: c.payerPhone, ivr: c.ivr, payerHours: c.payerHours, payerCat: c.payerCat, payerRef: c.payerRef,
+        billed: c.billed, paid: c.paid, balance: c.balance,
+        billedStr: c.billedStr, paidStr: c.paidStr, balanceStr: c.balanceStr,
+        age: c.age, bucket: c.bucket, dos: c.dos,
+        status: arch.wStatus || c.status, reason: c.reason, ask,
+        hasDraft: !!arch.hasDraft, draft: arch.draft || '',
+        rep: c.rep, repInitials: c.repInitials, mine: c.mine,
+        dueToday: c.dueToday, nextFu: c.nextFu, ago,
+        seedTimeline: arch.tl ? arch.tl({ id: c.id, ago }) : [],
+      };
+    });
+    accounts.sort((a, b) => a.pTier - b.pTier || (a.pTier === 1 ? a.daysLeft - b.daysLeft : 0) || b.balance - a.balance || b.age - a.age);
+    const totalAr = accounts.reduce((s, a) => s + a.balance, 0);
+    const oldest = accounts.reduce((mx, a) => Math.max(mx, a.age), 0);
+    this._sdPractice = practice;
+    this._sd = { vol: accounts.length, accounts, totalAr, oldest, isWFM: m.isWFM, practiceLabel: m.practiceLabel };
+    return this._sd;
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this._toastTimer);
+    window.removeEventListener('keydown', this._onKey);
+    this.stopMic();
+  }
+
+  selectedAcc() {
+    const d = this.storeData();
+    return d.accounts.find(a => a.id === this.state.selected) || d.accounts[0];
+  }
+
+  qIdx() { return this.state.queue.indexOf(this.selectedAcc().id); }
+
+  effCapture() {
+    const st = this.state;
+    const parsed = this.parseTouch(st.fNote);
+    return {
+      outcome: st.fOv.outcome ?? parsed.outcome ?? 'No resolution — call back',
+      rep: st.fOv.rep ?? parsed.rep ?? '',
+      ref: st.fOv.ref ?? parsed.ref ?? '',
+      caseNo: st.fOv.caseNo ?? parsed.caseNo ?? '',
+      next: st.fOv.next ?? parsed.next ?? '',
+    };
+  }
+
+  fuDate(days) { const d = 7 + days; return d > 31 ? 'Aug ' + (d - 31) : 'Jul ' + d; }
+
+  // Template-based composition from extracted fields — stands in for an LLM call in production
+  polishNote(raw, eff, selAcc, method) {
+    const OUT_SENT = {
+      'Reprocessing initiated': 'Payer initiated reprocessing',
+      'Resubmitted for review': 'Claim was resubmitted for review per the payer',
+      'Payment promised': 'Payer states payment is approved and scheduled',
+      'Paid — billed to patient': 'Claim paid; remaining balance billed to the patient',
+      'Deductible — patient responsibility': 'Balance applied to the patient\u2019s deductible',
+      'Billed to secondary': 'Balance billed to the secondary payer',
+      'Escalated to supervisor': 'Escalated to a payer supervisor',
+      'Info needed from practice': 'Additional information is needed from the practice',
+      'Appeal discussed': 'Appeal requirements were discussed with the payer',
+      'No answer — call back': 'No answer at the payer provider line',
+      'No resolution — call back': 'No resolution on this contact',
+    };
+    const parts = [];
+    parts.push(method + ' to ' + selAcc.payer + (eff.rep ? ' — spoke with ' + eff.rep : '') + '.');
+    let body = OUT_SENT[eff.outcome] || eff.outcome;
+    const dm = raw.match(/(\d{1,2})\s*(business\s*)?days/i);
+    if (dm) body += '; quoted ' + dm[1] + (dm[2] ? ' business' : '') + ' days';
+    parts.push(body + '.');
+    if (eff.next) parts.push('Next follow-up ' + eff.next + '.');
+    return parts.join(' ');
+  }
+
+  quickDefs() {
+    return [
+      { label: 'No answer', outcome: 'No answer — call back', note: 'No answer at the payer provider line; no voicemail option. Will retry.', fu: 2 },
+      { label: 'In process — call back 2 wks', outcome: 'No resolution — call back', note: 'Payer confirmed the claim is in process; no adjudication date given. Call back in two weeks.', fu: 14 },
+      { label: 'Reprocessing promised — 10 days', outcome: 'Reprocessing initiated', note: 'Payer initiated reprocessing; quoted 10 business days.', fu: 14 },
+      { label: 'Resubmitted for review', outcome: 'Resubmitted for review', note: 'Claim resubmitted for review per payer instruction.', fu: 14 },
+      { label: 'Payment promised', outcome: 'Payment promised', note: 'Payer states payment approved and scheduled; allow 7–10 days for the EFT.', fu: 10 },
+    ];
+  }
+
+  saveEntry(selAcc, entry, outcome, nextFu) {
+    const S = window.ClaimsStore;
+    if (S) S.saveOverride(S.currentPractice(), selAcc.id, { lastAction: outcome + ' \u00b7 today', nextFu: nextFu || '\u2014' });
+    this.setState(prev => ({
+      touches: Object.assign({}, prev.touches, { [selAcc.id]: [entry].concat(prev.touches[selAcc.id] || []) }),
+      overrides: Object.assign({}, prev.overrides, { [selAcc.id]: Object.assign({}, prev.overrides[selAcc.id], { status: outcome, nextFu: nextFu || '—' }) }),
+      sessionTouches: prev.sessionTouches + 1,
+    }));
+  }
+
+  advance(prevId, msg) {
+    const q = this.state.queue;
+    const idx = q.indexOf(prevId);
+    const nextId = idx >= 0 && idx + 1 < q.length ? q[idx + 1] : null;
+    if (nextId) {
+      this.setState(Object.assign({ selected: nextId }, this.resetForm()));
+      this.showToast(msg + ' · moved to next claim', 'Stay on this claim', () => this.setState({ selected: prevId, view: 'work' }));
+    } else {
+      this.setState(Object.assign({ view: 'list' }, this.resetForm()));
+      this.showToast(msg + ' · end of queue — nice work');
+    }
+  }
+
+  doSaveTouch() {
+    const st = this.state;
+    if (st.view !== 'work') return;
+    if (st.fNote.trim().length < 10) { this.showToast('Write or dictate a quick note first — it\u2019s the practice\u2019s proof of effort'); return; }
+    this.stopMic();
+    const selAcc = this.selectedAcc();
+    const eff = this.effCapture();
+    const metaParts = [];
+    if (eff.rep) metaParts.push('Rep: ' + eff.rep);
+    if (eff.ref) metaParts.push('Ref #' + eff.ref);
+    if (eff.caseNo) metaParts.push('Case #' + eff.caseNo);
+    const raw = st.fNote.trim();
+    const shorthand = raw.length < 80 || !/[.!?]/.test(raw);
+    const entry = {
+      who: 'Angela Mensah (you)', tag: eff.outcome,
+      tagBg: '#E6F7F2', tagFg: '#0B7D6C', dot: '#22C5A7', when: 'Today',
+      text: shorthand ? this.polishNote(raw, eff, selAcc, st.fMethod) : st.fMethod + ' — ' + raw,
+      orig: shorthand ? raw : '',
+      meta: metaParts.join(' · '),
+    };
+    this.saveEntry(selAcc, entry, eff.outcome, eff.next);
+    this.advance(selAcc.id, 'Touch logged' + (eff.next ? ' — follow-up ' + eff.next : ''));
+  }
+
+  doQuickLog(i) {
+    const st = this.state;
+    if (st.view !== 'work' || st.fNote.trim()) return;
+    const q = this.quickDefs()[i];
+    if (!q) return;
+    const selAcc = this.selectedAcc();
+    const fu = this.fuDate(q.fu);
+    const entry = {
+      who: 'Angela Mensah (you)', tag: q.outcome,
+      tagBg: '#E6F7F2', tagFg: '#0B7D6C', dot: '#22C5A7', when: 'Today',
+      text: st.fMethod + ' — ' + q.note,
+      meta: 'Quick log',
+    };
+    this.saveEntry(selAcc, entry, q.outcome, fu);
+    this.advance(selAcc.id, 'Logged \u201c' + q.label + '\u201d — follow-up ' + fu);
+  }
+
+  toggleMic() {
+    if (this.state.micState === 'listening') { this.stopMic(); return; }
+    if (this.state.micState === 'denied') { this.showToast('Microphone blocked — type your note instead'); return; }
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) return;
+    const rec = new SR();
+    rec.continuous = true;
+    rec.interimResults = true;
+    rec.lang = 'en-US';
+    this._micBase = this.state.fNote.trim();
+    rec.onresult = (ev) => {
+      let txt = '';
+      for (let i = 0; i < ev.results.length; i++) txt += ev.results[i][0].transcript;
+      txt = txt.trim();
+      const base = this._micBase;
+      this.setState({ fNote: base ? base + ' ' + txt : txt });
+    };
+    rec.onerror = (ev) => {
+      if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') {
+        this.setState({ micState: 'denied' });
+        this.showToast('Microphone blocked — type your note instead');
+      } else {
+        this.setState({ micState: 'idle' });
+      }
+    };
+    rec.onend = () => { if (this.state.micState === 'listening') this.setState({ micState: 'idle' }); };
+    this._rec = rec;
+    try { rec.start(); this.setState({ micState: 'listening' }); } catch (e) {}
+  }
+
+  stopMic() {
+    if (this._rec) { try { this._rec.stop(); } catch (e) {} this._rec = null; }
+    if (this.state.micState === 'listening') this.setState({ micState: 'idle' });
+  }
+
+  money(n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  moneyK(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+
+  data() {
+    let practice = 'ifc';
+    try { const v = localStorage.getItem('onb-practice'); if (v === 'wfm') practice = 'wfm'; } catch (e) {}
+    const isWFM = practice === 'wfm';
+    const vol = isWFM ? 8 : (this.props.arVolume ?? 120);
+    if (this._data && this._vol === vol && this._practice === practice) return this._data;
+    const FAC = isWFM
+      ? ['Westbrook Main Office']
+      : ['Niles Care Center', 'Maplewood Skilled Nursing', 'Cedar Ridge Post-Acute', 'Harborview Rehab'];
+    let seed = isWFM ? 91234 : 5678;
+    const rnd = () => {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+    const pick = a => a[Math.floor(rnd() * a.length)];
+    const LAST = ['OWENS','STRYCKER','STOREY','JOHNSON','SCHULER','HUTTON','WARNER','WILLIAMS','VOREIS','SAUNDERS','GILLESPY','MARQUEZ','ALLEN','DUNCAN','MORGAN','GLOVER','LORD','PARE','RAMIREZ','WEDER','SCHEERINGA','USMANMANGA','FOLEY','HOWARD','FOX','CRIPE','BURKS','CORLEY','HOYT','WARD','MOORE','MASON','HARPER','BREAUX','WEATHERSPOON','WEBBS','BROCKWAY'];
+    const FIRST = ['STEVE','JAMES','DAVID','DEBRA','CAROLYN','BOSHIRLE','ANN','CARMEN','KENT','KAREN','DENISE','ERNEST','ED','MITCHELL','JACK','TERRI','HUGO','VINCENZA','DOREEN','CARLI','BRIDGET','LEON','KELLEY','SCOTT','JEFFREY','CRAIG','WALTER','ERIC','CHARLES','RHONDA','ELMA','NANNIE','JACQUELINE','MARVIN','JOHN'];
+    // 6th element: timely filing limit in days from DOS (payer-specific)
+    const PAYERS = [
+      ['Medicare of Indiana', '1-866-518-3285', 'IVR: 1 → 3 → claim status', '8 AM – 4 PM CT', 'Medicare', 365],
+      ['Medicare of Indiana', '1-866-518-3285', 'IVR: 1 → 3 → claim status', '8 AM – 4 PM CT', 'Medicare', 365],
+      ['Medicare of Indiana', '1-866-518-3285', 'IVR: 1 → 3 → claim status', '8 AM – 4 PM CT', 'Medicare', 365],
+      ['Medicare of Michigan', '1-866-234-7331', 'IVR: 1 → 3 → claim status', '8 AM – 4 PM CT', 'Medicare', 365],
+      ['Provider Partners Health Plan of Indiana', '1-800-405-9681', 'IVR: 2 → claim inquiry', '8 AM – 5 PM ET', 'Provider Partners', 180],
+      ['Provider Partners Health Plan of Indiana', '1-800-405-9681', 'IVR: 2 → claim inquiry', '8 AM – 5 PM ET', 'Provider Partners', 180],
+      ['Provider Partners Health Plan of Indiana', '1-800-405-9681', 'IVR: 2 → claim inquiry', '8 AM – 5 PM ET', 'Provider Partners', 180],
+      ['Anthem Blue Cross Blue Shield Indiana', '1-800-676-2583', 'IVR: 3 → 1 → status', '8 AM – 6 PM ET', 'Anthem BCBS', 90],
+      ['Anthem HIP', '1-844-533-1995', 'IVR: provider → claims', '8 AM – 6 PM ET', 'Anthem BCBS', 90],
+      ['MHS (Managed Health Services)', '1-877-647-4848', 'IVR: provider → 2 → claims', '8 AM – 8 PM ET', 'MHS', 90],
+      ['UHC Medicare Complete', '1-877-842-3210', 'Say \u201cclaims\u201d twice', '7 AM – 7 PM CT', 'UHC', 90],
+      ['Humana MA PPO', '1-800-457-4708', 'IVR: provider → claim inquiry', '8 AM – 8 PM ET', 'Humana', 180],
+      ['Indiana Medicaid', '1-800-457-4584', 'IVR: 2 → provider → claims', '8 AM – 6 PM ET', 'Medicaid', 90],
+      ['Aetna MA HMO', '1-800-624-0756', 'IVR: 2 → claim status', '8 AM – 5 PM ET', 'Aetna', 120],
+      ['Veterans Administration', '1-877-881-7618', 'IVR: 1 → claim status', '8 AM – 6 PM ET', 'Veterans Administration', 180],
+    ];
+    const REPS = [['Angela Mensah', 'AM'], ['Rob Tanaka', 'RT'], ['Priya Kapoor', 'PK'], ['Sam Osei', 'SO']];
+
+    const ARCH = [
+      {
+        status: 'No payer response', reason: 'In Process',
+        ask: 'Claim status and why no 835 after 45+ days. Get a reference number and a specific adjudication date before ending the call.',
+        seedTl: (c) => [
+          { who: 'A/R Follow-up Agent', tag: 'Status check', tagBg: '#F1EEFF', tagFg: '#5B46D6', dot: '#7B61FF', when: c.ago(4), text: 'Ran automated claim status (276/277) — payer returned "in process," no adjudication date. Flagged for a live call since it exceeds the payer\u2019s 30-day norm.', meta: '' },
+          { who: 'Submission Agent', tag: 'Submitted', tagBg: '#F1F5F9', tagFg: '#6B7280', dot: '#94A3B8', when: c.ago(0), text: 'Claim accepted by clearinghouse; 277CA clean. No payer response since.', meta: '' },
+        ],
+      },
+      {
+        status: 'Denied — COB', reason: 'Coordination of Benefits',
+        ask: 'Denied per COB — verify which coverage was active on the DOS and confirm the other policy termed. Ask the rep to resubmit for review and get a case number.',
+        seedTl: (c) => [
+          { who: 'Denial Triage Agent', tag: 'COB denial', tagBg: '#FEF3DF', tagFg: '#B45309', dot: '#E9C05F', when: c.ago(3), text: 'Denied CO-22 — \u201cmay be covered by another payer per coordination of benefits.\u201d Eligibility cross-check suggests the other policy termed before the DOS. Needs a live call to sort primacy.', meta: '' },
+        ],
+      },
+      {
+        status: 'Denied — appeal drafted', reason: 'Timely Filing', hasDraft: true,
+        ask: 'If calling before filing: confirm the appeal address/fax and the review turnaround for timely-filing appeals with proof of submission.',
+        draft: 'Denied CO-29 (timely filing), but the clearinghouse acceptance report shows the original submission was accepted inside the 90-day window. Appeal letter + acceptance report are bundled and ready to send.',
+        seedTl: (c) => [
+          { who: 'Denial Triage Agent', tag: 'Appeal drafted', tagBg: '#F1EEFF', tagFg: '#5B46D6', dot: '#7B61FF', when: c.ago(2), text: 'Denied CO-29 (timely filing). Located clearinghouse acceptance proving on-time filing — appeal packet drafted with the acceptance report attached. Ready for your approval.', meta: '' },
+        ],
+      },
+      {
+        status: 'Underpaid — dispute open', reason: 'Underpayment',
+        ask: 'Why the allowed amount is below the contracted fee schedule for this CPT. Request reprocessing; get the adjustment reference and completion date.',
+        seedTl: (c) => [
+          { who: 'Payment Reconciliation Agent', tag: 'Variance flagged', tagBg: '#FEF3DF', tagFg: '#B45309', dot: '#E9C05F', when: c.ago(3), text: 'Payment posted below the contracted rate. Variance does not match any standard adjustment code pattern — dispute recommended.', meta: '' },
+        ],
+      },
+      {
+        status: 'Prior auth required', reason: 'Prior Authorization',
+        ask: 'Ask whether retro-authorization is accepted for this service and the submission window. Get the auth request fax/portal and reference number.',
+        seedTl: (c) => [
+          { who: 'Denial Triage Agent', tag: 'Auth denial', tagBg: '#FEF3DF', tagFg: '#B45309', dot: '#E9C05F', when: c.ago(2), text: 'Denied CO-197 — no prior authorization on file. The practice must request retro-auth; recommend requesting the payer\u2019s auth requirements from the practice Front Office.', meta: '' },
+        ],
+      },
+      {
+        status: 'Coverage terminated', reason: 'Coverage Terminated',
+        ask: 'Confirm the exact term date and whether the payer shows any other active coverage on file for the DOS.',
+        seedTl: (c) => [
+          { who: 'A/R Follow-up Agent', tag: 'Eligibility', tagBg: '#FEF3DF', tagFg: '#B45309', dot: '#E9C05F', when: c.ago(5), text: 'Eligibility (271) shows coverage terminated before the DOS. No replacement coverage in the chart — updated insurance needed from the practice.', meta: '' },
+        ],
+      },
+      {
+        status: 'Reprocessing promised', reason: 'In Process',
+        ask: 'Confirm reprocessing completed as promised on the last call. If not finished, escalate to a supervisor and get a firm date.',
+        seedTl: (c) => [
+          { who: 'Priya Kapoor', tag: 'Phone call', tagBg: '#E6F7F2', tagFg: '#0B7D6C', dot: '#22C5A7', when: c.ago(10), text: 'Payer acknowledged processing error on their end. Rep initiated reprocessing, quoted 10 business days. Follow up if no payment by then.', meta: 'Rep: Marcus · Ref #C-88' + (20000 + c.id) },
+          { who: 'Payment Reconciliation Agent', tag: 'Underpayment', tagBg: '#FEF3DF', tagFg: '#B45309', dot: '#E9C05F', when: c.ago(14), text: 'Remittance posted at 40% of expected. No matching adjustment codes — flagged for payer contact.', meta: '' },
+        ],
+      },
+      {
+        status: 'Claim not on file', reason: 'Claim Not on File',
+        ask: 'Confirm whether the claim is on file. If not, get the correct EDI payer ID or fax, and a name for the receipt confirmation.',
+        seedTl: (c) => [
+          { who: 'A/R Follow-up Agent', tag: 'Status check', tagBg: '#F1EEFF', tagFg: '#5B46D6', dot: '#7B61FF', when: c.ago(2), text: 'Automated status inquiry returned "claim not found" despite a clean clearinghouse acceptance. Possible payer intake issue — needs a live call.', meta: '' },
+        ],
+      },
+      {
+        status: 'VA claim — on hold', reason: 'VA Claims (On Hold)', vaHold: true,
+        ask: 'On hold per practice guidance — do not call. Awaiting VA credentialing to complete.',
+        seedTl: (c) => [
+          { who: 'A/R Follow-up Agent', tag: 'On hold', tagBg: '#F1F5F9', tagFg: '#6B7280', dot: '#94A3B8', when: c.ago(8), text: 'VA claims remain on hold per practice guidance until credentialing completes. Excluded from the calling queue; will resume automatically.', meta: '' },
+        ],
+      },
+    ];
+
+    const BALS = [12.97, 18.79, 21.76, 75.06, 90.54, 97.35, 100, 108.82, 135.13];
+    const BILLED = [100, 120, 125, 140, 240];
+    const accounts = [];
+    for (let i = 0; i < vol; i++) {
+      const r = rnd();
+      const age = r < 0.35 ? Math.floor(5 + rnd() * 25) : r < 0.65 ? Math.floor(31 + rnd() * 29) : r < 0.85 ? Math.floor(61 + rnd() * 29) : Math.floor(91 + rnd() * 120);
+      const billed = pick(BILLED);
+      const partial = rnd() < 0.45;
+      const balance = partial ? pick(BALS.filter(b => b < billed)) : billed;
+      const paid = partial ? Math.round((billed - balance) * 100) / 100 : 0;
+      const arch = ARCH[i % ARCH.length];
+      const pi = arch.vaHold ? PAYERS[14] : pick(PAYERS.slice(0, 14));
+      const rep = i % 3 === 0 ? REPS[0] : pick(REPS);
+      const dueToday = !arch.vaHold && rnd() < 0.18;
+      const fuDay = Math.floor(8 + rnd() * 20);
+      const id = i + 1;
+      const ago = (d) => { const day = 7 - d; return day > 0 ? 'Jul ' + day : 'Jun ' + (30 + day); };
+
+      // Timely filing: deadline = DOS + payer limit; DOS is `age` days before Jul 7 2026
+      const filingLimit = pi[5];
+      const daysLeft = filingLimit - age;
+      const dlTier = daysLeft < 0 ? 'breached' : daysLeft <= 14 ? 'critical' : daysLeft <= 30 ? 'warning' : 'ok';
+      const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const dlD = new Date(2026, 6, 7 + daysLeft);
+      const dlDate = M[dlD.getMonth()] + ' ' + dlD.getDate() + (dlD.getFullYear() !== 2026 ? ' \u201927' : '');
+
+      // Effective ask: deadline urgency overrides the routine script
+      let ask = arch.ask;
+      if (!arch.vaHold) {
+        if (balance < 25) ask = 'Below the cost to work \u2014 no payer call needed. Hold for the practice\u2019s small-balance write-off approval.';
+        else if (dlTier === 'breached') ask = 'Timely filing passed ' + dlDate + ' \u2014 do not call for routine status. File an appeal with the clearinghouse acceptance report proving on-time submission.';
+        else if (daysLeft <= 30) ask = 'File/refile today \u2014 timely filing closes ' + dlDate + ' (' + daysLeft + ' days left). Then: ' + arch.ask;
+      }
+
+      // Priority tier: deadline dominates, then due-today / high-value aged, then routine; low balance + holds last
+      // Low balance trumps everything (write-off candidate — not worth an appeal); then deadline, then value/age
+      const pTier = (arch.vaHold || balance < 25) ? 4 : (daysLeft <= 30) ? 1 : (dueToday || (age > 90 && balance >= 100)) ? 2 : 3;
+      const pReason = pTier === 1 ? (daysLeft < 0 ? 'filing breached ' + dlDate : 'files in ' + daysLeft + 'd')
+        : pTier === 2 ? (dueToday ? 'due today' : '$' + Math.round(balance) + ' at ' + age + 'd')
+        : pTier === 4 ? (arch.vaHold ? 'on hold' : 'low balance') : 'routine follow-up';
+
+      accounts.push({
+        filingLimit, daysLeft, dlTier, dlDate, pTier, pReason,
+        facility: FAC[id % FAC.length],
+        lowBal: pTier === 4 && !arch.vaHold,
+        id,
+        claim: String(60000 + id * 37 + Math.floor(rnd() * 30)),
+        patient: pick(LAST) + ', ' + pick(FIRST),
+        payer: pi[0], payerPhone: pi[1], ivr: pi[2], payerHours: pi[3], payerCat: pi[4],
+        payerRef: (pi[4] === 'Medicare' ? '2126MC' : '2126PR') + (40000 + id * 7),
+        billed, paid, balance,
+        billedStr: this.money(billed), paidStr: paid > 0 ? this.money(paid) : '$0.00',
+        balanceStr: this.money(balance),
+        age,
+        bucket: age <= 30 ? '0-30' : age <= 60 ? '31-60' : age <= 90 ? '61-90' : '90+',
+        dos: (() => { const dd = new Date(2026, 6, 7 - age); return (dd.getMonth() + 1) + '/' + dd.getDate() + '/' + String(dd.getFullYear()).slice(-2); })(),
+        status: arch.status, reason: arch.reason, ask,
+        hasDraft: !!arch.hasDraft, draft: arch.draft || '',
+        rep: rep[0], repInitials: rep[1],
+        mine: rep[1] === 'AM',
+        dueToday,
+        nextFu: arch.vaHold ? '—' : (dueToday ? 'Today' : 'Jul ' + fuDay),
+        ago,
+        seedTimeline: arch.seedTl({ id, ago }),
+      });
+    }
+    // Priority order: P1 (filing risk, most urgent deadline first) → P2 → P3 → P4; within tier by balance, then age
+    accounts.sort((a, b) => a.pTier - b.pTier || (a.pTier === 1 ? a.daysLeft - b.daysLeft : 0) || b.balance - a.balance || b.age - a.age);
+
+    const totalAr = accounts.reduce((s, a) => s + a.balance, 0);
+    const oldest = accounts.reduce((m, a) => Math.max(m, a.age), 0);
+
+    this._vol = vol;
+    this._practice = practice;
+    this._data = { vol, accounts, totalAr, oldest, isWFM, practiceLabel: isWFM ? 'Westbrook Family Medicine' : 'Ibekie Foundation Clinics' };
+    return this._data;
+  }
+
+  scope() { return this.state.scope ?? (this.props.startingScope ?? 'due'); }
+
+  matchGroup(a) {
+    const st = this.state;
+    if (st.groupKey === 'all') return true;
+    if (st.groupBy === 'aging') return a.bucket === st.groupKey;
+    if (st.groupBy === 'payer') return a.payerCat === st.groupKey;
+    return a.reason === st.groupKey;
+  }
+
+  visible() {
+    const d = this.storeData();
+    const scope = this.scope();
+    return d.accounts.filter(a =>
+      this.matchGroup(a) &&
+      (!this.state.filingOnly || a.pTier === 1) &&
+      (this.state.filingOnly || scope === 'all' || (scope === 'mine' ? a.mine : a.dueToday)));
+  }
+
+  showToast(msg, actionLabel, actionFn) {
+    clearTimeout(this._toastTimer);
+    this.setState({ toast: msg, toastActionLabel: actionLabel || '', toastFn: actionFn || null });
+    this._toastTimer = setTimeout(() => this.setState({ toast: '', toastActionLabel: '', toastFn: null }), actionLabel ? 5000 : 2800);
+  }
+
+  ageColors(bucket) {
+    if (bucket === '0-30') return ['#F1F5F9', '#6B7280'];
+    if (bucket === '31-60') return ['#FEF3DF', '#B45309'];
+    if (bucket === '61-90') return ['#FFE9E0', '#C2410C'];
+    return ['#FEECEC', '#DC2626'];
+  }
+
+  groupDefs() {
+    const d = this.storeData();
+    const gb = this.state.groupBy;
+    if (gb === 'aging') {
+      return [
+        { key: 'all', label: 'All open' },
+        { key: '0-30', label: '0–30 days' },
+        { key: '31-60', label: '31–60 days' },
+        { key: '61-90', label: '61–90 days' },
+        { key: '90+', label: '90+ days' },
+      ];
+    }
+    const field = gb === 'payer' ? 'payerCat' : 'reason';
+    const totals = {};
+    d.accounts.forEach(a => { totals[a[field]] = (totals[a[field]] || 0) + a.balance; });
+    const keys = Object.keys(totals).sort((x, y) => totals[y] - totals[x]);
+    return [{ key: 'all', label: 'All open' }].concat(keys.map(k => ({ key: k, label: k })));
+  }
+
+  // ---- touch note extraction ----
+  parseTouch(note) {
+    const out = {};
+    let m = note.match(/(?:spoke\s+(?:to|with)|talked\s+(?:to|with)|rep\s+(?:was\s+|name\s*[:=]?\s*)?)\s*/i);
+    if (m) {
+      const after = note.slice(m.index + m[0].length);
+      const nm = after.match(/^([A-Z][a-zA-Z.]+(?:\s+[A-Z][a-zA-Z.]*)?)/);
+      if (nm) out.rep = nm[1].replace(/[,.]$/, '');
+    }
+    m = note.match(/ref(?:erence)?\s*#?\s*:?\s*([A-Za-z]{0,4}-?\d[\w-]*)/i);
+    if (m) out.ref = m[1];
+    else { m = note.match(/\b([A-Z]{1,4}-\d{4,})\b/); if (m) out.ref = m[1]; }
+    m = note.match(/case\s*#?\s*:?\s*([A-Za-z]*-?\d[\w-]*)/i);
+    if (m) out.caseNo = m[1];
+    m = note.match(/(?:follow[\s-]?up|call\s+back|check\s+back)\s*(?:on|by)?\s*((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2})/i);
+    if (m) out.next = m[1];
+    else {
+      m = note.match(/(?:quoted|in|within)\s+(\d{1,2})\s*(?:business\s*)?days/i);
+      if (m) {
+        const d = 7 + Math.ceil(parseInt(m[1], 10) * (note.match(/business/i) ? 1.4 : 1));
+        out.next = d > 31 ? 'Aug ' + (d - 31) : 'Jul ' + d;
+      }
+    }
+    const low = note.toLowerCase();
+    const OUT = [
+      [/reprocess/, 'Reprocessing initiated'],
+      [/resubmit/, 'Resubmitted for review'],
+      [/no answer|voicemail|vm|hung up|disconnect/, 'No answer — call back'],
+      [/escalat|supervisor/, 'Escalated to supervisor'],
+      [/deductible/, 'Deductible — patient responsibility'],
+      [/secondary/, 'Billed to secondary'],
+      [/paid|payment (?:promised|expected)|check (?:mailed|sent)/, 'Payment promised'],
+      [/appeal/, 'Appeal discussed'],
+      [/need .{0,30}(?:from|info)|missing|records|documentation/, 'Info needed from practice'],
+    ];
+    for (const [re, label] of OUT) { if (re.test(low)) { out.outcome = label; break; } }
+    return out;
+  }
+
+  resetForm() { return { fNote: '', fOv: {}, chipEdit: null, fMethod: 'Phone call', reqCat: null, reqDetail: '', reqMore: false }; }
+
+  goToIndex(idx) {
+    const q = this.state.queue;
+    if (idx < 0 || idx >= q.length) { this.showToast(idx < 0 ? 'Start of queue' : 'End of queue — nice work'); return; }
+    this.setState(Object.assign({ selected: q[idx] }, this.resetForm()));
+  }
+
+  renderVals() {
+    const st = this.state;
+    const d = this.storeData();
+    const visible = this.visible();
+    const selAcc = d.accounts.find(a => a.id === st.selected) || d.accounts[0];
+    const selOv = st.overrides[selAcc.id] || {};
+
+    const dueCount = d.accounts.filter(a => a.dueToday).length;
+
+    const buckets = this.groupDefs().map(b => {
+      const set = b.key === 'all' ? d.accounts : d.accounts.filter(a => (st.groupBy === 'aging' ? a.bucket : st.groupBy === 'payer' ? a.payerCat : a.reason) === b.key);
+      const active = st.groupKey === b.key;
+      const hot = st.groupBy === 'aging' && (b.key === '90+' || b.key === '61-90');
+      return {
+        label: b.label,
+        labelFg: active ? '#5B46D6' : (hot ? '#DC2626' : '#94A3B8'),
+        count: String(set.length),
+        countFg: '#0F1B2E',
+        total: this.moneyK(set.reduce((s, a) => s + a.balance, 0)),
+        bg: active ? '#F1EEFF' : '#FFFFFF',
+        border: active ? '#7B61FF' : '#E5E7EB',
+        onClick: () => this.setState({ groupKey: b.key }),
+      };
+    });
+
+    const groupTabs = [
+      { key: 'aging', label: 'Aging' },
+      { key: 'payer', label: 'Payer' },
+      { key: 'reason', label: 'Denial reason' },
+    ].map(g => ({
+      label: g.label,
+      bg: st.groupBy === g.key ? '#7B61FF' : '#FFFFFF',
+      fg: st.groupBy === g.key ? '#FFFFFF' : '#6B7280',
+      onClick: () => this.setState({ groupBy: g.key, groupKey: 'all' }),
+    }));
+
+    const curScope = this.scope();
+    const scopeChips = [
+      { key: 'due', label: 'Due today (' + dueCount + ')' },
+      { key: 'mine', label: 'My accounts' },
+      { key: 'all', label: 'All accounts' },
+    ].map(s => ({
+      label: s.label,
+      bg: curScope === s.key ? '#7B61FF' : '#FFFFFF',
+      fg: curScope === s.key ? '#FFFFFF' : '#6B7280',
+      border: curScope === s.key ? '#7B61FF' : '#E5E7EB',
+      onClick: () => this.setState({ scope: s.key }),
+    }));
+
+    const enterWork = (id) => {
+      const q = this.visible().map(a => a.id);
+      this.setState(Object.assign({ view: 'work', selected: id, queue: q.length ? q : [id] }, this.resetForm()));
+    };
+
+    const rows = visible.slice(0, 250).map(a => {
+      const ov = st.overrides[a.id] || {};
+      const [ageBg, ageFg] = this.ageColors(a.bucket);
+      const nextFu = ov.nextFu || a.nextFu;
+      const ask = ov.status ? 'Touched today — ' + (ov.status) : a.ask;
+      const dlStyle = a.dlTier === 'breached' ? ['#FEECEC', '#DC2626', 'breached']
+        : a.dlTier === 'critical' ? ['#FEECEC', '#DC2626', a.daysLeft + 'd left']
+        : a.dlTier === 'warning' ? ['#FEF3DF', '#B45309', a.daysLeft + 'd left']
+        : ['transparent', '#94A3B8', a.daysLeft + 'd left'];
+      return {
+        dlBg: dlStyle[0], dlFg: dlStyle[1], dlText: dlStyle[2],
+        patient: a.patient, claim: a.claim, dos: a.dos, payer: a.payer, balanceStr: a.balanceStr,
+        ageText: a.age + 'd', ageBg, ageFg,
+        status: ov.status || a.status,
+        askPreview: ask.length > 64 ? ask.slice(0, 61) + '…' : ask,
+        nextFu,
+        fuFg: nextFu === 'Today' ? '#B45309' : '#6B7280',
+        repInitials: a.repInitials,
+        onClick: () => enterWork(a.id),
+      };
+    });
+
+    // ---- work mode ----
+    const qIdx = st.queue.indexOf(selAcc.id);
+    const nextAcc = qIdx >= 0 && qIdx + 1 < st.queue.length ? d.accounts.find(a => a.id === st.queue[qIdx + 1]) : null;
+    const scopeLabels = { due: 'due today', mine: 'my accounts', all: 'all accounts' };
+
+    const [selAgeBg, selAgeFg] = this.ageColors(selAcc.bucket);
+    const acc = {
+      patient: selAcc.patient, claim: 'Claim ' + selAcc.claim, payer: selAcc.payer,
+      facility: selAcc.facility,
+      balanceStr: selAcc.balanceStr,
+      bucketLabel: selAcc.age + ' days · ' + selAcc.bucket,
+      ageBg: selAgeBg, ageFg: selAgeFg,
+      status: selOv.status || selAcc.status,
+      rep: selAcc.rep, repInitials: selAcc.repInitials,
+      payerPhone: selAcc.payerPhone, payerHours: selAcc.payerHours, ivr: selAcc.ivr,
+      payerRef: selAcc.payerRef, dos: selAcc.dos,
+      billedStr: selAcc.billedStr, paidStr: selAcc.paidStr,
+      ask: selAcc.ask,
+      showDl: selAcc.dlTier !== 'ok',
+      dlChip: selAcc.dlTier === 'breached' ? 'Filing breached ' + selAcc.dlDate : 'Filing closes ' + selAcc.dlDate + ' · ' + selAcc.daysLeft + 'd',
+      dlBg: selAcc.dlTier === 'warning' ? '#FEF3DF' : '#FEECEC',
+      dlFg: selAcc.dlTier === 'warning' ? '#B45309' : '#DC2626',
+    };
+
+    const logged = st.touches[selAcc.id] || [];
+    const timeline = logged.concat(selAcc.seedTimeline).map(t => Object.assign({}, t, { hasMeta: !!t.meta, hasOrig: !!t.orig, orig: t.orig || '' }));
+
+    const REQ_SUGG = {
+      'Coordination of Benefits': ['COB confirmation', 'the payer denied CO-22 — coordination of benefits'],
+      'Coverage Terminated': ['updated insurance info', 'eligibility (271) shows coverage terminated before the DOS'],
+      'Prior Authorization': ['retro-auth documentation', 'the payer denied CO-197 — no prior authorization on file'],
+    };
+    const reqSuggest = REQ_SUGG[selAcc.reason] || null;
+
+    // ---- touch capture ----
+    const eff = this.effCapture();
+
+    const chipDefs = [
+      { key: 'rep', label: 'Rep' },
+      { key: 'ref', label: 'Ref #' },
+      { key: 'caseNo', label: 'Case #' },
+      { key: 'next', label: 'Follow up' },
+    ];
+    const capChips = chipDefs.filter(c => eff[c.key]).map(c => ({
+      label: c.label + ':',
+      value: eff[c.key],
+      editing: st.chipEdit === c.key,
+      notEditing: st.chipEdit !== c.key,
+      onEdit: () => this.setState(prev => ({ chipEdit: c.key, fOv: Object.assign({}, prev.fOv, { [c.key]: eff[c.key] }) })),
+      onChange: (e) => { const v = e.target.value; this.setState(prev => ({ fOv: Object.assign({}, prev.fOv, { [c.key]: v }) })); },
+      onDone: () => this.setState({ chipEdit: null }),
+    }));
+
+    const methodChips = ['Phone call', 'Payer portal', 'Fax', 'Email'].map(mth => ({
+      label: mth,
+      bg: st.fMethod === mth ? '#7B61FF' : '#FFFFFF',
+      fg: st.fMethod === mth ? '#FFFFFF' : '#6B7280',
+      border: st.fMethod === mth ? '#7B61FF' : '#E5E7EB',
+      onClick: () => this.setState({ fMethod: mth }),
+    }));
+
+    const noteOk = st.fNote.trim().length >= 10;
+
+    // ---- practice request ----
+    const reqCats = [
+      'Updated insurance info',
+      'COB confirmation',
+      'Prior authorization',
+      'Medical records',
+      'SSN / date of injury',
+      'Provider info correction',
+      'Other',
+    ];
+    const reqChips = reqCats.map(cat => ({
+      label: cat,
+      bg: st.reqCat === cat ? '#F1EEFF' : '#FFFFFF',
+      fg: st.reqCat === cat ? '#5B46D6' : '#6B7280',
+      border: st.reqCat === cat ? '#7B61FF' : '#E5E7EB',
+      onClick: () => this.setState({ reqCat: cat }),
+    }));
+
+    return {
+      navClosed: !st.navExpanded,
+      navOpen: st.navExpanded,
+      toggleNav: () => this.setState(prev => { const v = !prev.navExpanded; try { localStorage.setItem('onb-nav-expanded', v ? '1' : '0'); } catch (e) {} return { navExpanded: v }; }),
+
+      listMode: st.view === 'list',
+      workMode: st.view === 'work',
+
+      practiceLabel: d.practiceLabel,
+      touchesWeekText: String((d.isWFM ? 46 : 214) + st.sessionTouches),
+
+      dueChipText: dueCount + ' Follow-ups Due Today',
+      totalArChipText: this.moneyK(d.totalAr) + ' Open AR · ' + d.accounts.length + ' claims',
+
+      accountsWorkedText: String(d.isWFM ? 14 : 66),
+
+      collectedText: this.moneyK(d.isWFM ? 6120 : 18288),
+      oldestText: d.oldest + ' days',
+
+      buckets, groupTabs, scopeChips,
+
+      filingChipText: (st.filingOnly ? 'Showing filing risk (' : 'Filing risk (') + d.accounts.filter(a => a.pTier === 1).length + ')',
+      filingBg: st.filingOnly ? '#DC2626' : '#FFF7F7',
+      filingFg: st.filingOnly ? '#FFFFFF' : '#DC2626',
+      filingBorder: st.filingOnly ? '#DC2626' : '#F5C2C2',
+      toggleFiling: () => this.setState(prev => ({ filingOnly: !prev.filingOnly })),
+
+      showWob: (() => { const lows = d.accounts.filter(a => a.lowBal); return lows.length > 0 && !st.wob && !st.wobDismissed; })(),
+      showWobPending: st.wob === 'pending',
+      wobText: (() => { const lows = d.accounts.filter(a => a.lowBal); return lows.length + ' claims (' + this.moneyK(lows.reduce((s, a) => s + a.balance, 0)) + ' total) are below the ~$25 cost of a touch.'; })(),
+      wobPendingText: 'Small-balance write-off request WOB-2261 pending practice approval — ' + d.accounts.filter(a => a.lowBal).length + ' claims stay in the queue (P4) until Bell Medics approves.',
+      requestWob: () => {
+        this.setState({ wob: 'pending' });
+        const SW = window.ClaimsStore;
+        if (SW) { const p = SW.currentPractice(); d.accounts.filter(a => a.lowBal).forEach(a => SW.saveOverride(p, a.id, { lastAction: 'Write-off requested \u00b7 today' })); }
+        this.showToast('Write-off request WOB-2261 sent to the practice for approval');
+      },
+      dismissWob: () => {
+        this.setState({ wobDismissed: true });
+        this.showToast('Dismissed — low-balance claims stay at the bottom of the queue');
+      },
+
+      listSummary: visible.length + ' claims · worked in priority order — filing deadlines first, then value and age',
+      startQueueLabel: 'Work this list (' + visible.length + ')',
+      startQueue: () => { if (visible.length) enterWork(visible[0].id); else this.showToast('Nothing to work — adjust the filters'); },
+      rows,
+      noRows: rows.length === 0,
+      listMore: visible.length > 250,
+      listMoreText: Math.max(0, visible.length - 250) + ' more not shown \u2014 narrow with the filters above, or use \u201cWork this list\u201d to step through all ' + visible.length + '.',
+
+      // work mode
+      backToList: () => this.setState({ view: 'list' }),
+      queuePos: (qIdx >= 0 ? qIdx + 1 : 1) + ' of ' + Math.max(st.queue.length, 1),
+      prioText: 'P' + selAcc.pTier + ' · ' + (selAcc.lowBal ? (st.wob === 'pending' ? 'low balance — write-off pending' : 'low balance — write-off recommended') : selAcc.pReason),
+      prioBg: selAcc.pTier === 1 ? '#FEECEC' : selAcc.pTier === 2 ? '#FEF3DF' : '#F1F5F9',
+      prioFg: selAcc.pTier === 1 ? '#DC2626' : selAcc.pTier === 2 ? '#B45309' : '#6B7280',
+      queueScopeNote: 'working: ' + (st.filingOnly ? 'filing risk' : (scopeLabels[curScope] || curScope)) + (st.groupKey !== 'all' ? ' · ' + st.groupKey : ''),
+      nextUpName: nextAcc ? nextAcc.patient : 'end of queue',
+      prevClaim: () => this.goToIndex(qIdx - 1),
+      nextClaim: () => this.goToIndex(qIdx + 1),
+
+      acc,
+      timeline,
+
+      showDraft: selAcc.hasDraft && !selOv.appealFiled,
+      showFiled: selAcc.hasDraft && !!selOv.appealFiled,
+      draftText: selAcc.draft,
+      fileAppeal: () => {
+        const entry = {
+          who: 'Angela Mensah (you)', tag: 'Appeal filed', tagBg: '#F1EEFF', tagFg: '#5B46D6', dot: '#7B61FF',
+          when: 'Today', text: 'Approved and filed the agent-drafted timely-filing appeal with the clearinghouse acceptance report attached.', meta: '',
+        };
+        this.setState(prev => ({
+          touches: Object.assign({}, prev.touches, { [selAcc.id]: [entry].concat(prev.touches[selAcc.id] || []) }),
+          overrides: Object.assign({}, prev.overrides, { [selAcc.id]: Object.assign({}, prev.overrides[selAcc.id], { appealFiled: true, status: 'Appeal sent — in review' }) }),
+        }));
+        const SA = window.ClaimsStore;
+        if (SA) SA.saveOverride(SA.currentPractice(), selAcc.id, { status: 'Appealed', lastAction: 'Appeal filed \u00b7 today' });
+        this.showToast('Appeal filed — logged to the claim timeline');
+      },
+
+      // touch log
+      methodChips,
+      fNote: st.fNote,
+      onFNote: (e) => this.setState({ fNote: e.target.value }),
+      capOutcome: eff.outcome,
+      onCapOutcome: (e) => { const v = e.target.value; this.setState(prev => ({ fOv: Object.assign({}, prev.fOv, { outcome: v }) })); },
+      outcomeOpts: ['No resolution — call back', 'Resubmitted for review', 'Reprocessing initiated', 'Payment promised', 'Paid — billed to patient', 'Deductible — patient responsibility', 'Billed to secondary', 'Escalated to supervisor', 'Info needed from practice', 'Appeal discussed', 'No answer — call back'],
+      capChips,
+      noCaptures: capChips.length === 0,
+      formHint: noteOk ? 'Saved to the timeline and this week\u2019s report — captured details included.' : 'Just write what happened — details are extracted automatically. 10+ characters required.',
+      saveTouch: () => this.doSaveTouch(),
+
+      quickVisible: st.fNote.trim() === '',
+      quickChips: this.quickDefs().map((q, i) => ({
+        num: String(i + 1),
+        label: q.label,
+        hint: 'Saves: \u201c' + q.note + '\u201d · follow-up ' + this.fuDate(q.fu),
+        onClick: () => this.doQuickLog(i),
+      })),
+
+      micVisible: !!this._srOk,
+      listening: st.micState === 'listening',
+      micTitle: st.micState === 'denied' ? 'Microphone blocked — type instead' : st.micState === 'listening' ? 'Stop dictating' : 'Dictate your note',
+      micLabel: st.micState === 'listening' ? 'Stop' : 'Dictate',
+      micBg: st.micState === 'listening' ? '#DC2626' : st.micState === 'denied' ? '#F1F5F9' : '#F8F6FF',
+      micFg: st.micState === 'listening' ? '#FFFFFF' : st.micState === 'denied' ? '#94A3B8' : '#7B61FF',
+      micBorder: st.micState === 'listening' ? '#DC2626' : st.micState === 'denied' ? '#E5E7EB' : '#C9BCF5',
+      micAnim: st.micState === 'listening' ? 'onb-pulse 1.4s ease-out infinite' : 'none',
+      toggleMic: () => this.toggleMic(),
+
+      // practice request — agent suggestion from the denial reason
+      hasReqSuggest: !!reqSuggest,
+      reqManualVisible: !reqSuggest || st.reqMore,
+      reqSuggestLabel: reqSuggest ? 'Request ' + reqSuggest[0] : '',
+      reqSuggestWhy: reqSuggest ? reqSuggest[1] : '',
+      reqMoreLabel: st.reqMore ? 'Hide other request types' : 'Or request something else…',
+      toggleReqMore: () => this.setState(prev => ({ reqMore: !prev.reqMore })),
+      sendSuggested: () => {
+        const reqId = 'REQ-' + String(10000 + selAcc.id * 13).slice(-5);
+        const entry = {
+          who: 'Angela Mensah (you)', tag: 'Practice request', tagBg: '#EAF3FF', tagFg: '#1D4ED8', dot: '#0081CF',
+          when: 'Today',
+          text: 'Requested from the practice: ' + reqSuggest[0] + ' for ' + selAcc.patient + ' (DOS ' + selAcc.dos + ') — pre-filled by the agent from the denial reason (' + selAcc.reason + '). The claim stays in your queue until answered.',
+          meta: reqId,
+        };
+        this.setState(prev => ({
+          touches: Object.assign({}, prev.touches, { [selAcc.id]: [entry].concat(prev.touches[selAcc.id] || []) }),
+        }));
+        this.showToast('Request ' + reqId + ' sent — ' + reqSuggest[0].toLowerCase() + ' requested from the practice');
+      },
+
+      reqChips,
+      reqDetail: st.reqDetail,
+      onReqDetail: (e) => this.setState({ reqDetail: e.target.value }),
+      reqDetailPlaceholder: st.reqCat === 'Other' ? 'Describe what you need — required for Other' : 'Add detail (optional)',
+      sendRequest: () => {
+        if (!st.reqCat) { this.showToast('Pick a category — or choose Other and describe it'); return; }
+        if (st.reqCat === 'Other' && !st.reqDetail.trim()) { this.showToast('Describe what you need from the practice'); return; }
+        const what = st.reqCat === 'Other' ? st.reqDetail.trim() : st.reqCat + (st.reqDetail.trim() ? ' — ' + st.reqDetail.trim() : '');
+        const reqId = 'REQ-' + String(10000 + selAcc.id * 13).slice(-5);
+        const entry = {
+          who: 'Angela Mensah (you)', tag: 'Practice request', tagBg: '#EAF3FF', tagFg: '#1D4ED8', dot: '#0081CF',
+          when: 'Today', text: 'Requested from the practice: ' + what + '. The practice sees it in their inbox here; the claim stays in your queue until answered.', meta: reqId,
+        };
+        this.setState(prev => ({
+          touches: Object.assign({}, prev.touches, { [selAcc.id]: [entry].concat(prev.touches[selAcc.id] || []) }),
+          reqCat: null, reqDetail: '',
+        }));
+        this.showToast('Request ' + reqId + ' sent to the practice');
+      },
+
+      toast: st.toast,
+      toastVisible: !!st.toast,
+      toastHasAction: !!st.toast && !!st.toastFn,
+      toastActionLabel: st.toastActionLabel,
+      onToastAction: () => {
+        const fn = st.toastFn;
+        clearTimeout(this._toastTimer);
+        this.setState({ toast: '', toastActionLabel: '', toastFn: null });
+        if (fn) fn();
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

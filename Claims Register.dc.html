@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button, select, input, textarea { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+<script src="./claims-store.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="Claims Register (Bell Medics)">
+
+  <x-import component-from-global-scope="ops-banner" from="./ops-banner.js" hint-size="100%,0px"></x-import>
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Billing Portal</span>
+    <x-import component-from-global-scope="search-bar" from="./search-bar.js" hint-size="480px,40px"></x-import>
+    <div style="flex: 1;"></div>
+    <x-import component-from-global-scope="practice-switcher" from="./practice-switcher.js" hint-size="260px,40px"></x-import>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <x-import component-from-global-scope="role-switcher" from="./role-switcher.js" hint-size="210px,44px"></x-import>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav — collapsed icon rail ===== -->
+    <sc-if value="{{ navClosed }}" hint-placeholder-val="{{ true }}">
+      <div style="width: 64px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 12px 10px; display: flex; flex-direction: column; gap: 6px; align-items: center; flex-shrink: 0;">
+        <button onClick="{{ toggleNav }}" title="Expand navigation" style="width: 40px; height: 36px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 5 5-5 5"></path><path d="m13 7 5 5-5 5"></path></svg>
+        </button>
+        <div style="height: 1px; width: 36px; background: #EEEEEE; margin: 4px 0;"></div>
+        <a href="Billing Home.dc.html" title="Dashboard" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg></a>
+        <a href="Agent Inbox v3.dc.html" title="Agent Inbox" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></a>
+        <a href="Coverage.dc.html" title="Coverage" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg></a>
+        <a href="AR Worklist.dc.html" title="AR Worklist" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+        <a href="Claims Register.dc.html" title="Claims" style="width: 40px; height: 40px; border-radius: 4px; background: #7B61FF; display: flex; align-items: center; justify-content: center; text-decoration: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg></a>
+        <a href="Payments.dc.html" title="Payments" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg></a>
+        <a href="Rulebook.dc.html" title="Rulebook" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></a>
+        <a href="Contracts.dc.html" title="Contracts" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg></a>
+        <a href="Analytics.dc.html" title="Analytics" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg></a>
+        <a href="Settings.dc.html" title="Settings" style="width: 40px; height: 40px; border-radius: 4px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
+      </div>
+    </sc-if>
+
+    <!-- ===== Side nav — expanded ===== -->
+    <sc-if value="{{ navOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+        <div style="display: flex; justify-content: flex-end;">
+          <button onClick="{{ toggleNav }}" title="Collapse navigation" style="width: 32px; height: 28px; border-radius: 4px; border: none; background: #FFFFFF; color: #6B7280; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F1F5F9;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 17-5-5 5-5"></path><path d="m11 17-5-5 5-5"></path></svg>
+          </button>
+        </div>
+        <a href="Billing Home.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg>
+          Dashboard
+        </a>
+        <a href="Agent Inbox v3.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+          Agent Inbox
+        </a>
+        <a href="Coverage.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+          Coverage
+        </a>
+        <a href="AR Worklist.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          AR Worklist
+        </a>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+          Claims
+        </div>
+        <a href="Payments.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Payments
+          <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">NEW</span>
+        </a>
+        <a href="Rulebook.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+          Rulebook
+        </a>
+        <a href="Contracts.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+          Contracts
+                  </a>
+        <a href="Analytics.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+          Analytics
+        </a>
+        <a href="Settings.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          Settings
+        </a>
+        <div style="flex: 1;"></div>
+        <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+          <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+          Reach the billing support desk 24/7.
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ===== Main content ===== -->
+    <div style="flex: 1; padding: 24px 32px; display: flex; flex-direction: column; gap: 18px; min-width: 0;">
+
+      <!-- Title -->
+      <div style="display: flex; align-items: baseline; gap: 12px;">
+        <h1 style="font-size: 24px; font-weight: 700; margin: 0;">Claims</h1>
+        <span style="font-size: 13px; color: #6B7280;">Every claim on file for {{ practiceLabel }} · synced from Prognosis EHR · Tue, Jul 7 2026</span>
+      </div>
+
+      <!-- Summary strip -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; gap: 32px;">
+        <div style="display: flex; flex-direction: column; gap: 1px;">
+          <span style="font-size: 22px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums;">{{ sumCount }}</span>
+          <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Claims in view</span>
+        </div>
+        <div style="width: 1px; height: 34px; background: #EEEEEE;"></div>
+        <div style="display: flex; flex-direction: column; gap: 1px;">
+          <span style="font-size: 22px; font-weight: 700; color: #0F1B2E; font-variant-numeric: tabular-nums;">{{ sumBilled }}</span>
+          <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Total billed</span>
+        </div>
+        <div style="width: 1px; height: 34px; background: #EEEEEE;"></div>
+        <div style="display: flex; flex-direction: column; gap: 1px;">
+          <span style="font-size: 22px; font-weight: 700; color: #109680; font-variant-numeric: tabular-nums;">{{ sumPaid }}</span>
+          <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Total paid</span>
+        </div>
+        <div style="width: 1px; height: 34px; background: #EEEEEE;"></div>
+        <div style="display: flex; flex-direction: column; gap: 1px;">
+          <span style="font-size: 22px; font-weight: 700; color: #B45309; font-variant-numeric: tabular-nums;">{{ sumOpen }}</span>
+          <span style="font-size: 11px; font-weight: 600; color: #6B7280;">Open AR in view</span>
+        </div>
+        <div style="flex: 1;"></div>
+        <button onClick="{{ exportCsv }}" style="display: inline-flex; align-items: center; gap: 7px; padding: 9px 15px; border-radius: 5px; border: 1px solid #7B61FF; background: #FFFFFF; color: #7B61FF; font-size: 12px; font-weight: 700; cursor: pointer;" style-hover="background: #F1EEFF;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>
+          Export CSV
+        </button>
+      </div>
+
+      <!-- Saved views (Phase 10.3) -->
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Views</span>
+        <sc-for list="{{ views }}" as="v" hint-placeholder-count="3">
+          <span style="display: inline-flex; align-items: center; border: 1px solid {{ v.border }}; background: {{ v.bg }}; border-radius: 9999px; overflow: hidden;">
+            <button onClick="{{ v.onApply }}" style="padding: 6px 12px; border: none; background: transparent; color: {{ v.fg }}; font-size: 12px; font-weight: 700; cursor: pointer;">{{ v.name }}</button>
+            <sc-if value="{{ v.removable }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ v.onRemove }}" title="Delete this view" style="padding: 6px 8px 6px 0; border: none; background: transparent; color: #94A3B8; font-size: 12px; font-weight: 700; cursor: pointer;">×</button>
+            </sc-if>
+          </span>
+        </sc-for>
+        <sc-if value="{{ notSavingView }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ startSaveView }}" style="padding: 6px 12px; border-radius: 9999px; border: 1px dashed #C9BCF5; background: #FBFAFF; color: #5B46D6; font-size: 12px; font-weight: 700; cursor: pointer;">+ Save current view</button>
+        </sc-if>
+        <sc-if value="{{ savingView }}" hint-placeholder-val="{{ false }}">
+          <span style="display: inline-flex; align-items: center; gap: 6px;">
+            <input value="{{ viewName }}" onInput="{{ onViewName }}" placeholder="Name this view…" style="height: 32px; border: 1px solid #C9BCF5; border-radius: 9999px; padding: 0 14px; font-size: 12px; outline: none; width: 180px;">
+            <button onClick="{{ confirmSaveView }}" style="height: 32px; padding: 0 14px; border-radius: 9999px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 12px; font-weight: 700; cursor: pointer;">Save</button>
+            <button onClick="{{ cancelSaveView }}" style="height: 32px; padding: 0 12px; border-radius: 9999px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 700; cursor: pointer;">Cancel</button>
+          </span>
+        </sc-if>
+        <span style="font-size: 11.5px; color: #94A3B8;">saved per person · a view is a filter set, not a copy of the data</span>
+      </div>
+
+      <!-- Toolbar: search + filters -->
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <div style="flex: 0 1 320px; display: flex; align-items: center; gap: 9px; background: #FFFFFF; border: 1px solid #D1D5DC; border-radius: 6px; height: 38px; padding: 0 12px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+          <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Search patient, claim #, or payer ref…" style="border: none; outline: none; background: transparent; font-size: 13px; color: #0F1B2E; width: 100%;">
+        </div>
+        <select value="{{ statusFilter }}" onChange="{{ onStatus }}" style="height: 38px; border: 1px solid #D1D5DC; border-radius: 6px; background: #FFFFFF; font-size: 13px; color: #0F1B2E; padding: 0 10px; cursor: pointer;">
+          <option value="all">All statuses</option>
+          <sc-for list="{{ statusOptions }}" as="o" hint-placeholder-count="6">
+            <option value="{{ o }}">{{ o }}</option>
+          </sc-for>
+        </select>
+        <select value="{{ payerFilter }}" onChange="{{ onPayer }}" style="height: 38px; border: 1px solid #D1D5DC; border-radius: 6px; background: #FFFFFF; font-size: 13px; color: #0F1B2E; padding: 0 10px; cursor: pointer;">
+          <option value="all">All payers</option>
+          <sc-for list="{{ payerOptions }}" as="o" hint-placeholder-count="6">
+            <option value="{{ o }}">{{ o }}</option>
+          </sc-for>
+        </select>
+        <select value="{{ facilityFilter }}" onChange="{{ onFacility }}" style="height: 38px; border: 1px solid #D1D5DC; border-radius: 6px; background: #FFFFFF; font-size: 13px; color: #0F1B2E; padding: 0 10px; cursor: pointer;">
+          <option value="all">All facilities</option>
+          <sc-for list="{{ facilityOptions }}" as="o" hint-placeholder-count="4">
+            <option value="{{ o }}">{{ o }}</option>
+          </sc-for>
+        </select>
+        <select value="{{ agingFilter }}" onChange="{{ onAging }}" style="height: 38px; border: 1px solid #D1D5DC; border-radius: 6px; background: #FFFFFF; font-size: 13px; color: #0F1B2E; padding: 0 10px; cursor: pointer;">
+          <option value="all">All ages</option>
+          <option value="0-30">0–30 days</option>
+          <option value="31-60">31–60 days</option>
+          <option value="61-90">61–90 days</option>
+          <option value="90+">90+ days</option>
+        </select>
+        <select value="{{ ownerFilter }}" onChange="{{ onOwner }}" style="height: 38px; border: 1px solid #D1D5DC; border-radius: 6px; background: #FFFFFF; font-size: 13px; color: #0F1B2E; padding: 0 10px;">
+          <option value="all">Balance owner: all</option>
+          <option value="PRIMARY">Primary payer</option>
+          <option value="SECONDARY">Secondary payer</option>
+          <option value="TERTIARY">Tertiary payer</option>
+          <option value="PATIENT">Patient</option>
+          <option value="ZERO">Zero — resolved</option>
+        </select>
+        <sc-if value="{{ filtersActive }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ resetFilters }}" style="height: 38px; padding: 0 14px; border-radius: 6px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 12px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Clear filters</button>
+        </sc-if>
+      </div>
+
+      <!-- Bulk action bar (Phase 10.3) -->
+      <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; align-items: center; gap: 10px; background: #F1EEFF; border: 1px solid #C9BCF5; border-radius: 10px; padding: 10px 16px; flex-wrap: wrap;">
+          <span style="font-size: 13px; font-weight: 700; color: #5B46D6;">{{ selectionLabel }}</span>
+          <div style="flex: 1;"></div>
+          <select onChange="{{ onAssign }}" value="" style="height: 34px; border: 1px solid #C9BCF5; border-radius: 5px; background: #FFFFFF; font-size: 12px; font-weight: 600; color: #5B46D6; padding: 0 10px; cursor: pointer;">
+            <option value="" disabled>Assign to rep…</option>
+            <option value="Angela Mensah">Angela Mensah</option>
+            <option value="Derek Okafor">Derek Okafor</option>
+          </select>
+          <button onClick="{{ bulkWorklist }}" style="height: 34px; padding: 0 14px; border-radius: 5px; border: 1px solid #C9BCF5; background: #FFFFFF; color: #5B46D6; font-size: 12px; font-weight: 700; cursor: pointer;">Add to Worklist</button>
+          <button onClick="{{ bulkExport }}" style="height: 34px; padding: 0 14px; border-radius: 5px; border: 1px solid #C9BCF5; background: #FFFFFF; color: #5B46D6; font-size: 12px; font-weight: 700; cursor: pointer;">Export CSV</button>
+          <button onClick="{{ bulkWriteoff }}" title="Routes through the Agent Inbox — write-offs stay governed" style="height: 34px; padding: 0 14px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 12px; font-weight: 700; cursor: pointer;" style-hover="background: #5B46D6;">Request Write-off Batch</button>
+          <button onClick="{{ clearSelection }}" style="height: 34px; padding: 0 12px; border-radius: 5px; border: none; background: transparent; color: #6B7280; font-size: 12px; font-weight: 700; cursor: pointer;">Clear</button>
+        </div>
+      </sc-if>
+
+      <!-- Table -->
+      <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+        <!-- header -->
+        <div style="display: grid; grid-template-columns: 30px 120px minmax(150px, 1.3fr) 92px minmax(150px, 1fr) minmax(150px, 1.1fr) 92px 92px 104px 108px 132px minmax(150px, 1.1fr); gap: 12px; align-items: center; padding: 11px 20px; background: #7B61FF;">
+          <input type="checkbox" checked="{{ allPageSelected }}" onChange="{{ toggleSelectPage }}" title="Select everything on this page" style="width: 15px; height: 15px; accent-color: #FFFFFF; cursor: pointer;">
+          <sc-for list="{{ columns }}" as="c" hint-placeholder-count="10">
+            <button onClick="{{ c.onSort }}" style="display: inline-flex; align-items: center; gap: 4px; border: none; background: transparent; cursor: pointer; padding: 0; font-size: 10px; font-weight: 700; color: #FFFFFF; text-transform: uppercase; letter-spacing: 0.07em; justify-content: {{ c.justify }};">{{ c.label }}{{ c.arrow }}</button>
+          </sc-for>
+        </div>
+        <!-- rows -->
+        <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <sc-for list="{{ rows }}" as="r" hint-placeholder-count="12">
+              <a href="Claim Detail.dc.html" style="display: grid; grid-template-columns: 30px 120px minmax(150px, 1.3fr) 92px minmax(150px, 1fr) minmax(150px, 1.1fr) 92px 92px 104px 108px 132px minmax(150px, 1.1fr); gap: 12px; align-items: center; padding: 10px 20px; border-bottom: 1px solid #EEEEEE; text-decoration: none; background: {{ r.rowBg }}; transition: background 120ms ease-out;" style-hover="background: #F8F6FF;">
+                <input type="checkbox" checked="{{ r.selected }}" onClick="{{ r.onToggle }}" onChange="{{ r.noop }}" style="width: 15px; height: 15px; accent-color: #7B61FF; cursor: pointer;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5B46D6; font-weight: 700;">{{ r.claim }}</span>
+                <span style="font-size: 13px; font-weight: 600; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ r.patient }}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7280;">{{ r.dos }}</span>
+                <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ r.facility }}</span>
+                <span style="font-size: 12px; color: #6B7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ r.payer }}</span>
+                <span style="font-size: 12px; color: #0F1B2E; font-variant-numeric: tabular-nums; text-align: right;">{{ r.billedStr }}</span>
+                <span style="font-size: 12px; color: #109680; font-variant-numeric: tabular-nums; text-align: right;">{{ r.paidStr }}</span>
+                <span style="font-size: 13px; font-weight: 700; color: {{ r.balFg }}; font-variant-numeric: tabular-nums; text-align: right;">{{ r.balanceStr }}</span>
+                <span><span title="{{ r.ownerDetail }}" style="display: inline-flex; padding: 3px 9px; border-radius: 9999px; background: {{ r.ownerBg }}; color: {{ r.ownerFg }}; font-size: 10px; font-weight: 700; white-space: nowrap;">{{ r.owner }}</span></span>
+                <span><span style="display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 9999px; background: {{ r.statusBg }}; color: {{ r.statusFg }}; font-size: 11px; font-weight: 700; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 9999px; background: {{ r.statusFg }};"></span>{{ r.status }}</span></span>
+                <span style="font-size: 11px; color: #94A3B8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ r.lastAction }}</span>
+              </a>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 56px 32px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#C9BCF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+            <span style="font-size: 15px; font-weight: 700; color: #0F1B2E;">No claims match your filters</span>
+            <span style="font-size: 13px; color: #6B7280;">Try a different search or clear the filters to see the full register.</span>
+          </div>
+        </sc-if>
+      </div>
+
+      <!-- Pagination -->
+      <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-size: 12px; color: #6B7280;">{{ pageInfo }}</span>
+          <div style="flex: 1;"></div>
+          <button onClick="{{ prevPage }}" style="height: 34px; padding: 0 14px; border-radius: 5px; border: 1px solid #E5E7EB; background: {{ prevBg }}; color: {{ prevFg }}; font-size: 12px; font-weight: 600; cursor: {{ prevCursor }};">Previous</button>
+          <span style="font-size: 12px; font-weight: 700; color: #0F1B2E;">{{ pageLabel }}</span>
+          <button onClick="{{ nextPage }}" style="height: 34px; padding: 0 14px; border-radius: 5px; border: 1px solid #E5E7EB; background: {{ nextBg }}; color: {{ nextFg }}; font-size: 12px; font-weight: 600; cursor: {{ nextCursor }};">Next</button>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <sc-if value="{{ toastVisible }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 6px -4px rgba(0,0,0,0.1), 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 50;">{{ toast }}</div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    navExpanded: (() => { try { return localStorage.getItem('onb-nav-expanded') === '1'; } catch (e) { return false; } })(),
+    statusFilter: 'all',
+    payerFilter: 'all',
+    facilityFilter: 'all',
+    agingFilter: 'all',
+    ownerFilter: 'all',
+    search: (() => { try { return new URLSearchParams(location.search).get('q') || ''; } catch (e) { return ''; } })(),
+    sortKey: 'age',
+    sortDir: 'asc',
+    savedViews: (() => { try { return JSON.parse(localStorage.getItem('onb-register-views') || 'null'); } catch (e) { return null; } })(),
+    savingView: false,
+    viewName: '',
+    selected: {},
+    page: 1,
+    toast: '',
+  };
+
+  componentWillUnmount() { clearTimeout(this._toastTimer); }
+
+  money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+
+  showToast(msg) {
+    clearTimeout(this._toastTimer);
+    this.setState({ toast: msg });
+    this._toastTimer = setTimeout(() => this.setState({ toast: '' }), 3200);
+  }
+
+  componentDidMount() {
+    if (!window.ClaimsStore) {
+      let tries = 0;
+      this._pollStore = setInterval(() => { tries++; if (window.ClaimsStore || tries > 30) { clearInterval(this._pollStore); this.forceUpdate(); } }, 50);
+    }
+  }
+
+  storeData() {
+    const S = window.ClaimsStore;
+    const practice = S ? S.currentPractice() : 'ifc';
+    if (this._sd && this._sdPractice === practice) return this._sd;
+    if (!S) return { claims: [], isWFM: false, practiceLabel: '', payers: [], facilities: [] };
+    const m = S.meta(practice);
+    const claims = S.getAllClaims(practice).map(c => ({
+      id: c.id, claim: c.claim, patient: c.patient, dos: c.dos, age: c.age, bucket: c.bucket,
+      facility: c.facility, payer: c.payer, payerRef: c.payerRef,
+      billed: c.billed, paid: c.paid, balance: c.balance,
+      billedStr: c.billedStr,
+      paidStr: c.paid > 0 ? this.money(c.paid) : '\u2014',
+      balanceStr: c.balance > 0 ? this.money(c.balance) : '\u2014',
+      status: c.status, statusCat: c.statusCat, statusBg: c.statusBg, statusFg: c.statusFg,
+      lastAction: c.lastAction,
+    }));
+    const payers = [...new Set(claims.map(c => c.payer))].sort();
+    const facilities = [...new Set(claims.map(c => c.facility))];
+    this._sdPractice = practice;
+    this._sd = { claims, isWFM: m.isWFM, practiceLabel: m.practiceLabel, payers, facilities };
+    return this._sd;
+  }
+
+  data() {
+    let practice = 'ifc';
+    try { const v = localStorage.getItem('onb-practice'); if (v === 'wfm') practice = 'wfm'; } catch (e) {}
+    const isWFM = practice === 'wfm';
+    const vol = isWFM ? 480 : 2400;
+    if (this._data && this._practice === practice) return this._data;
+    let seed = isWFM ? 55123 : 20260707;
+    const rnd = () => {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+    const pick = a => a[Math.floor(rnd() * a.length)];
+    const LAST = ['OWENS','STRYCKER','STOREY','JOHNSON','SCHULER','HUTTON','WARNER','WILLIAMS','VOREIS','SAUNDERS','GILLESPY','MARQUEZ','ALLEN','DUNCAN','MORGAN','GLOVER','LORD','PARE','RAMIREZ','WEDER','SCHEERINGA','FOLEY','HOWARD','FOX','CRIPE','BURKS','CORLEY','HOYT','WARD','MOORE','MASON','HARPER','BREAUX','WEBBS','BROCKWAY','RILEY','WILSON','HOLLOWAY','OKONKWO','ADEYEMI','VASQUEZ','KOWALSKI','TRAN','PETERSEN','GALLAGHER','NAKAMURA','OSEI','MORALES','ABERNATHY','DUBOIS'];
+    const FIRST = ['STEVE','JAMES','DAVID','DEBRA','CAROLYN','ANN','CARMEN','KENT','KAREN','DENISE','ERNEST','ED','MITCHELL','JACK','TERRI','HUGO','DOREEN','BRIDGET','LEON','KELLEY','SCOTT','JEFFREY','CRAIG','WALTER','ERIC','CHARLES','RHONDA','NANNIE','JACQUELINE','MARVIN','JOHN','DIERDRE','MARCY','DANNY','GRACE','HAROLD','IRENE','JOSEPH','MARGARET','NORMAN'];
+
+    const PAYERS_IFC = ['Medicare of Indiana','Provider Partners Health Plan','Anthem Blue Cross Blue Shield','MHS (Managed Health Services)','UHC Medicare Complete','Humana MA PPO','Indiana Medicaid','Aetna MA HMO','Veterans Administration'];
+    const PAYERS_WFM = ['Medicare of Indiana','Anthem Blue Cross Blue Shield','Aetna MA HMO','UHC Medicare Complete','Humana MA PPO','Indiana Medicaid'];
+    const PAYERS = isWFM ? PAYERS_WFM : PAYERS_IFC;
+    const FAC = isWFM ? ['Westbrook Main Office'] : ['Niles Care Center', 'Maplewood Skilled Nursing', 'Cedar Ridge Post-Acute', 'Harborview Rehab'];
+
+    // status: [name, category(open|paid|void), weight, bg, fg, actionText]
+    const STATUS = [
+      ['Paid', 'paid', 40, '#E6F7F2', '#0B7D6C', 'EFT posted'],
+      ['Closed', 'void', 9, '#F1F5F9', '#6B7280', 'Reconciled & closed'],
+      ['Submitted', 'open', 12, '#EBF2FE', '#1D4ED8', 'Sent to clearinghouse'],
+      ['Accepted (277CA)', 'open', 7, '#F1EEFF', '#5B46D6', 'Clearinghouse accepted'],
+      ['Denied', 'open', 10, '#FEECEC', '#DC2626', 'Denial received'],
+      ['Partially paid', 'open', 6, '#FEF3DF', '#B45309', 'Partial remit posted'],
+      ['Appealed', 'open', 4, '#FFF3EF', '#C2410C', 'Appeal filed'],
+      ['On hold', 'open', 3, '#F1F5F9', '#6B7280', 'Held — practice guidance'],
+      ['Voided', 'void', 2, '#F1F5F9', '#94A3B8', 'Voided — duplicate'],
+      ['Draft', 'open', 3, '#F8FAFC', '#6B7280', 'Awaiting coding review'],
+      ['Ready to submit', 'open', 4, '#F1EEFF', '#5B46D6', 'Queued for submission'],
+    ];
+    const weightTotal = STATUS.reduce((s, x) => s + x[2], 0);
+    const pickStatus = () => {
+      let r = rnd() * weightTotal;
+      for (const s of STATUS) { r -= s[2]; if (r <= 0) return s; }
+      return STATUS[0];
+    };
+    const BILLED = [100, 108.43, 120, 125, 140, 168, 185, 210, 240, 96.5];
+    const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+
+    const claims = [];
+    for (let i = 0; i < vol; i++) {
+      const id = i + 1;
+      const st = pickStatus();
+      const age = Math.floor(2 + rnd() * 220);
+      const billed = pick(BILLED);
+      let paid = 0, balance = 0;
+      if (st[1] === 'paid') { paid = billed; balance = 0; }
+      else if (st[1] === 'void') { paid = 0; balance = 0; }
+      else if (st[0] === 'Partially paid') { paid = Math.round(billed * (0.3 + rnd() * 0.4) * 100) / 100; balance = Math.round((billed - paid) * 100) / 100; }
+      else { paid = 0; balance = billed; }
+      const dd = new Date(2026, 6, 7 - age);
+      const dos = (dd.getMonth() + 1) + '/' + dd.getDate() + '/' + String(dd.getFullYear()).slice(-2);
+      const actAgo = Math.max(0, age - Math.floor(rnd() * age));
+      claims.push({
+        id,
+        claim: 'ENCT' + String(600 + id).padStart(7, '0') + '-01',
+        patient: pick(LAST) + ', ' + pick(FIRST),
+        dos, age,
+        bucket: age <= 30 ? '0-30' : age <= 60 ? '31-60' : age <= 90 ? '61-90' : '90+',
+        facility: FAC[id % FAC.length],
+        payer: pick(PAYERS),
+        payerRef: (rnd() < 0.5 ? '2126MC' : '2126PR') + (40000 + id * 7),
+        billed, paid, balance,
+        billedStr: this.money(billed),
+        paidStr: paid > 0 ? this.money(paid) : '—',
+        balanceStr: balance > 0 ? this.money(balance) : '—',
+        status: st[0], statusCat: st[1], statusBg: st[3], statusFg: st[4],
+        lastAction: st[5] + ' · ' + (actAgo === 0 ? 'today' : actAgo + 'd ago'),
+      });
+    }
+
+    this._practice = practice;
+    this._data = { claims, isWFM, practiceLabel: isWFM ? 'Westbrook Family Medicine' : 'Ibekie Foundation Clinics', payers: PAYERS.slice(), facilities: FAC.slice() };
+    return this._data;
+  }
+
+  setFilter(patch) { this.setState(Object.assign({ page: 1, selected: {} }, patch)); }
+
+  static STARTER_VIEWS = [
+    { name: 'Secondary balances', builtin: true, filters: { ownerFilter: 'SECONDARY' } },
+    { name: 'Patient balances', builtin: true, filters: { ownerFilter: 'PATIENT' } },
+    { name: 'Aged 90+', builtin: true, filters: { agingFilter: '90+' } },
+  ];
+  static FILTER_KEYS = ['search', 'statusFilter', 'payerFilter', 'facilityFilter', 'agingFilter', 'ownerFilter'];
+  static FILTER_DEFAULTS = { search: '', statusFilter: 'all', payerFilter: 'all', facilityFilter: 'all', agingFilter: 'all', ownerFilter: 'all' };
+
+  allViews() { return (this.state.savedViews || []).concat ? Component.STARTER_VIEWS.concat(this.state.savedViews || []) : Component.STARTER_VIEWS; }
+  persistViews(v) { try { localStorage.setItem('onb-register-views', JSON.stringify(v)); } catch (e) {} }
+
+  renderVals() {
+    const st = this.state;
+    const d = this.storeData();
+    const PER = 50;
+
+    const statusOptions = ['Paid', 'Partially paid', 'Submitted', 'Accepted (277CA)', 'Denied', 'Appealed', 'On hold', 'Ready to submit', 'Draft', 'Voided', 'Closed'];
+
+    // filter
+    const q = st.search.trim().toLowerCase();
+    let filtered = d.claims.filter(c => {
+      if (q && !(c.patient.toLowerCase().includes(q) || c.claim.toLowerCase().includes(q) || c.payerRef.toLowerCase().includes(q))) return false;
+      if (st.statusFilter !== 'all' && c.status !== st.statusFilter) return false;
+      if (st.payerFilter !== 'all' && c.payer !== st.payerFilter) return false;
+      if (st.facilityFilter !== 'all' && c.facility !== st.facilityFilter) return false;
+      if (st.agingFilter !== 'all' && c.bucket !== st.agingFilter) return false;
+      if (st.ownerFilter !== 'all' && (window.ClaimsStore ? window.ClaimsStore.balanceOwner(c).owner : 'PRIMARY') !== st.ownerFilter) return false;
+      return true;
+    });
+
+    // sort
+    const dir = st.sortDir === 'asc' ? 1 : -1;
+    const key = st.sortKey;
+    filtered = filtered.slice().sort((a, b) => {
+      let av, bv;
+      if (key === 'owner') { av = window.ClaimsStore ? window.ClaimsStore.balanceOwner(a).owner : ''; bv = window.ClaimsStore ? window.ClaimsStore.balanceOwner(b).owner : ''; }
+      else if (key === 'billed' || key === 'paid' || key === 'balance' || key === 'age') { av = a[key]; bv = b[key]; }
+      else { av = String(a[key]).toLowerCase(); bv = String(b[key]).toLowerCase(); }
+      if (av < bv) return -1 * dir;
+      if (av > bv) return 1 * dir;
+      return a.id - b.id;
+    });
+
+    const total = filtered.length;
+    const pages = Math.max(1, Math.ceil(total / PER));
+    const page = Math.min(st.page, pages);
+    const start = (page - 1) * PER;
+    const pageRows = filtered.slice(start, start + PER);
+
+    const sumBilled = filtered.reduce((s, c) => s + c.billed, 0);
+    const sumPaid = filtered.reduce((s, c) => s + c.paid, 0);
+    const sumOpen = filtered.reduce((s, c) => s + c.balance, 0);
+
+    const OWNER_STYLE = {
+      PRIMARY: ['#EAF3FF', '#1D4ED8'], SECONDARY: ['#F1EEFF', '#5B46D6'], TERTIARY: ['#FDEEF5', '#C34A7D'],
+      PATIENT: ['#FEF3DF', '#B45309'], ZERO: ['#F1F5F9', '#94A3B8'],
+    };
+    const rows = pageRows.map(c => {
+      const own = window.ClaimsStore ? window.ClaimsStore.balanceOwner(c) : { owner: 'PRIMARY', detail: '' };
+      const isCollections = own.statement === 'collections';
+      const os = isCollections ? ['#FDEEF5', '#C34A7D'] : (OWNER_STYLE[own.owner] || OWNER_STYLE.PRIMARY);
+      return {
+        claim: c.claim, patient: c.patient, dos: c.dos, facility: c.facility, payer: c.payer,
+        billedStr: c.billedStr, paidStr: c.paidStr, balanceStr: c.balanceStr,
+        balFg: c.balance > 0 ? '#B45309' : '#94A3B8',
+        selected: !!st.selected[c.id],
+        noop: () => {},
+        onToggle: (e) => {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          this.setState(prev => {
+            const sel = Object.assign({}, prev.selected);
+            if (sel[c.id]) delete sel[c.id]; else sel[c.id] = true;
+            return { selected: sel };
+          });
+        },
+        owner: isCollections ? 'UNCOLLECTIBLE-REQ' : own.owner, ownerBg: os[0], ownerFg: os[1],
+        ownerDetail: isCollections ? own.detail : own.detail + (own.statement ? ' \u00b7 statement ' + own.statement : ''),
+        status: c.status, statusBg: c.statusBg, statusFg: c.statusFg,
+        lastAction: c.lastAction,
+        rowBg: '#FFFFFF',
+      };
+    });
+
+    // columns (sortable)
+    const colDefs = [
+      ['claim', 'Claim #', 'flex-start'], ['patient', 'Patient', 'flex-start'], ['dos', 'DOS', 'flex-start'],
+      ['facility', 'Facility', 'flex-start'], ['payer', 'Payer', 'flex-start'],
+      ['billed', 'Billed', 'flex-end'], ['paid', 'Paid', 'flex-end'], ['balance', 'Balance', 'flex-end'],
+      ['owner', 'Owner', 'flex-start'],
+      ['status', 'Status', 'flex-start'], ['age', 'Last action', 'flex-start'],
+    ];
+    const columns = colDefs.map(c => ({
+      label: c[1],
+      justify: c[2],
+      arrow: st.sortKey === c[0] ? (st.sortDir === 'asc' ? ' ↑' : ' ↓') : '',
+      onSort: () => this.setState(prev => ({ sortKey: c[0], sortDir: prev.sortKey === c[0] && prev.sortDir === 'asc' ? 'desc' : 'asc' })),
+    }));
+
+    const filtersActive = st.search || st.statusFilter !== 'all' || st.payerFilter !== 'all' || st.facilityFilter !== 'all' || st.agingFilter !== 'all' || st.ownerFilter !== 'all';
+
+    // ---- saved views (10.3) ----
+    const matchesView = (v) => Component.FILTER_KEYS.every(k => (v.filters[k] ?? Component.FILTER_DEFAULTS[k]) === st[k]);
+    const views = this.allViews().map((v, vi) => {
+      const on = matchesView(v);
+      return {
+        name: v.name,
+        border: on ? '#7B61FF' : '#E5E7EB', bg: on ? '#F1EEFF' : '#FFFFFF', fg: on ? '#5B46D6' : '#6B7280',
+        removable: !v.builtin,
+        onApply: () => this.setFilter(Object.assign({}, Component.FILTER_DEFAULTS, v.filters)),
+        onRemove: () => {
+          const custom = (this.state.savedViews || []).filter(x => x.name !== v.name);
+          this.persistViews(custom);
+          this.setState({ savedViews: custom });
+        },
+      };
+    });
+
+    // ---- bulk selection (10.3) ----
+    const selIds = Object.keys(st.selected);
+    const selClaims = filtered.filter(c => st.selected[c.id]);
+    const selSum = selClaims.reduce((s, c) => s + c.balance, 0);
+    const allPageSelected = pageRows.length > 0 && pageRows.every(c => st.selected[c.id]);
+    const overrideSel = (note) => {
+      const S = window.ClaimsStore;
+      if (S && S.saveOverride) { const p = S.currentPractice(); selClaims.forEach(c => S.saveOverride(p, c.id, { lastAction: note })); this._sd = null; }
+    };
+
+    return {
+      views,
+      savingView: st.savingView, notSavingView: !st.savingView,
+      viewName: st.viewName,
+      onViewName: (e) => this.setState({ viewName: e.target.value }),
+      startSaveView: () => this.setState({ savingView: true, viewName: '' }),
+      cancelSaveView: () => this.setState({ savingView: false, viewName: '' }),
+      confirmSaveView: () => {
+        const name = st.viewName.trim() || 'My view';
+        const filters = {};
+        Component.FILTER_KEYS.forEach(k => { if (st[k] !== Component.FILTER_DEFAULTS[k]) filters[k] = st[k]; });
+        const custom = (this.state.savedViews || []).filter(x => x.name !== name).concat([{ name, filters }]);
+        this.persistViews(custom);
+        this.setState({ savedViews: custom, savingView: false, viewName: '' });
+        this.showToast('View saved — "' + name + '"');
+      },
+      hasSelection: selIds.length > 0,
+      selectionLabel: selIds.length + ' claims selected \u00b7 ' + this.money(selSum) + ' open',
+      allPageSelected,
+      toggleSelectPage: () => this.setState(prev => {
+        const sel = Object.assign({}, prev.selected);
+        if (allPageSelected) pageRows.forEach(c => delete sel[c.id]);
+        else pageRows.forEach(c => { sel[c.id] = true; });
+        return { selected: sel };
+      }),
+      clearSelection: () => this.setState({ selected: {} }),
+      onAssign: (e) => {
+        const who = e.target.value;
+        if (!who) return;
+        overrideSel('Assigned to ' + who + ' \u00b7 today');
+        this.setState({ selected: {} });
+        this.showToast(selIds.length + ' claims assigned to ' + who + ' — logged on each claim');
+      },
+      bulkWorklist: () => {
+        overrideSel('Added to worklist \u00b7 today');
+        this.setState({ selected: {} });
+        this.showToast(selIds.length + ' claims added to the AR Worklist queue');
+      },
+      bulkExport: () => {
+        const header = 'claim,patient,dos,facility,payer,billed,paid,balance,status\n';
+        const csv = header + selClaims.map(c => [c.claim, '"' + c.patient + '"', c.dos, '"' + c.facility + '"', '"' + c.payer + '"', c.billed, c.paid, c.balance, '"' + c.status + '"'].join(',')).join('\n');
+        const a = document.createElement('a');
+        a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+        a.download = 'claims-export.csv';
+        a.click();
+        this.showToast(selClaims.length + ' claims exported to CSV');
+      },
+      bulkWriteoff: () => {
+        this.setState({ selected: {} });
+        this.showToast('Write-off request for ' + selIds.length + ' claims sent to the Agent Inbox — approvals stay governed by your thresholds');
+      },
+      navClosed: !st.navExpanded,
+      navOpen: st.navExpanded,
+      toggleNav: () => this.setState(prev => { const v = !prev.navExpanded; try { localStorage.setItem('onb-nav-expanded', v ? '1' : '0'); } catch (e) {} return { navExpanded: v }; }),
+
+      practiceLabel: d.practiceLabel,
+      sumCount: total.toLocaleString('en-US'),
+      sumBilled: this.money(sumBilled),
+      sumPaid: this.money(sumPaid),
+      sumOpen: this.money(sumOpen),
+
+      search: st.search,
+      onSearch: (e) => this.setFilter({ search: e.target.value }),
+      statusFilter: st.statusFilter, onStatus: (e) => this.setFilter({ statusFilter: e.target.value }),
+      payerFilter: st.payerFilter, onPayer: (e) => this.setFilter({ payerFilter: e.target.value }),
+      facilityFilter: st.facilityFilter, onFacility: (e) => this.setFilter({ facilityFilter: e.target.value }),
+      agingFilter: st.agingFilter, onAging: (e) => this.setFilter({ agingFilter: e.target.value }),
+      ownerFilter: st.ownerFilter, onOwner: (e) => this.setFilter({ ownerFilter: e.target.value }),
+      statusOptions, payerOptions: d.payers, facilityOptions: d.facilities,
+      filtersActive: !!filtersActive,
+      resetFilters: () => this.setState({ search: '', statusFilter: 'all', payerFilter: 'all', facilityFilter: 'all', agingFilter: 'all', ownerFilter: 'all', page: 1 }),
+
+      columns,
+      rows,
+      hasRows: rows.length > 0,
+      noRows: rows.length === 0,
+
+      pageInfo: total === 0 ? 'No claims' : 'Showing ' + (start + 1).toLocaleString('en-US') + '–' + Math.min(start + PER, total).toLocaleString('en-US') + ' of ' + total.toLocaleString('en-US'),
+      pageLabel: 'Page ' + page + ' of ' + pages,
+      prevPage: () => { if (page > 1) this.setState({ page: page - 1 }); },
+      nextPage: () => { if (page < pages) this.setState({ page: page + 1 }); },
+      prevBg: page > 1 ? '#FFFFFF' : '#F8FAFC', prevFg: page > 1 ? '#0F1B2E' : '#C9CDD4', prevCursor: page > 1 ? 'pointer' : 'default',
+      nextBg: page < pages ? '#FFFFFF' : '#F8FAFC', nextFg: page < pages ? '#0F1B2E' : '#C9CDD4', nextCursor: page < pages ? 'pointer' : 'default',
+
+      exportCsv: () => this.showToast('Preparing CSV export of ' + total.toLocaleString('en-US') + ' claims — you\u2019ll get a download link by email.'),
+
+      toast: st.toast,
+      toastVisible: !!st.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

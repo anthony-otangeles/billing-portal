@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F7F7; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button { font-family: 'Inter', sans-serif; }
+</style>
+</helmet>
+
+<div style="max-width: 900px; margin: 0 auto; padding: 48px 40px 90px; display: flex; flex-direction: column; gap: 30px;" data-screen-label="Demo Script">
+
+  <!-- Header -->
+  <div style="display: flex; flex-direction: column; gap: 12px; border-bottom: 2px solid #7B61FF; padding-bottom: 22px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <img src="assets/brand-mark.png" alt="" style="width: 34px; height: 34px;">
+      <span style="font-family: 'Poppins', 'Inter', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: -0.01em;"><span style="color: #0F1B2E;">Otangeles</span> <span style="color: #22C5A7;">Notes+</span></span>
+    </div>
+    <h1 style="font-size: 30px; font-weight: 700; margin: 0;">Billing Agent Supervision — Demo Script</h1>
+    <p style="font-size: 14.5px; line-height: 23px; color: #6B7280; margin: 0;">A guided path through the prototype in 10 acts, ~15 minutes — the full revenue cycle, contracts to collections, at volume. Short on time? Acts 1, 5, and 10 make a 5-minute cut. Each stop links straight to the right screen and tells you what to click and what to say. The through-line: <strong>AI agents do the billing work; humans supervise it — at three altitudes</strong> (rep, manager, platform operations).</p>
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <button onClick="{{ resetDemo }}" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 5px; border: 1px solid #D1D5DC; background: #FFFFFF; color: #6B7280; font-size: 13px; font-weight: 600; cursor: pointer;" style-hover="background: #F8F8F8;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+        Reset demo state
+      </button>
+      <span style="font-size: 12px; color: #94A3B8;">Clears escalations, invites, config changes, and role selection so the story starts clean. Run this before every presentation.</span>
+    </div>
+  </div>
+
+  <!-- Before you present -->
+  <div style="background: #F1EEFF; border: 1px solid #C9BCF5; border-radius: 12px; padding: 18px 22px; display: flex; flex-direction: column; gap: 8px;">
+    <span style="font-size: 14px; font-weight: 700; color: #5B46D6;">Before you present</span>
+    <ul style="margin: 0; padding-left: 20px; font-size: 13.5px; line-height: 21px; color: #0F1B2E; display: flex; flex-direction: column; gap: 3px;">
+      <li>Click <strong>Reset demo state</strong> above, then open <a href="Agent Inbox v3.dc.html">Agent Inbox</a> in a tab to warm it up.</li>
+      <li>Practice should read <strong>Ibekie Foundation Clinics</strong> in the top-bar switcher; persona should be <strong>Angela Mensah</strong> (avatar menu).</li>
+      <li>Keep this script open in a second window if presenting live.</li>
+    </ul>
+  </div>
+
+  <!-- Acts -->
+  <sc-for list="{{ acts }}" as="act" hint-placeholder-count="5">
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: baseline; gap: 12px;">
+        <span style="width: 34px; height: 34px; border-radius: 9999px; background: linear-gradient(#7B61FF, #22C5A7); color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; flex-shrink: 0;">{{ act.n }}</span>
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+          <h2 style="font-size: 19px; font-weight: 700; margin: 0;">{{ act.title }}</h2>
+          <span style="font-size: 13px; color: #6B7280;">{{ act.sub }}</span>
+        </div>
+      </div>
+
+      <sc-for list="{{ act.stops }}" as="s" hint-placeholder-count="3">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; gap: 16px; margin-left: 46px;">
+          <div style="display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <a href="{{ s.href }}" style="display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px; border-radius: 5px; background: #7B61FF; color: #FFFFFF; font-size: 12.5px; font-weight: 700; text-decoration: none;" style-hover="background: #5B46D6; color: #FFFFFF;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+                {{ s.screen }}
+              </a>
+              <span style="display: inline-flex; padding: 2px 10px; border-radius: 9999px; background: {{ s.personaBg }}; color: {{ s.personaFg }}; font-size: 11px; font-weight: 700;">{{ s.persona }}</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px; font-size: 13.5px; line-height: 21px;">
+              <span><strong style="color: #7B61FF;">Do:</strong> {{ s.do }}</span>
+              <span><strong style="color: #0B7D6C;">Say:</strong> "{{ s.say }}"</span>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </sc-for>
+
+  <!-- Q&A ammo -->
+  <div style="display: flex; flex-direction: column; gap: 14px;">
+    <h2 style="font-size: 19px; font-weight: 700; margin: 0;">If they ask…</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+      <sc-for list="{{ qa }}" as="q" hint-placeholder-count="4">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 15px 18px; display: flex; flex-direction: column; gap: 5px;">
+          <span style="font-size: 13.5px; font-weight: 700; color: #0F1B2E;">{{ q.q }}</span>
+          <span style="font-size: 13px; line-height: 20px; color: #6B7280;">{{ q.a }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="border-top: 1px solid #E5E7EB; padding-top: 16px; font-size: 12px; color: #94A3B8; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+    <span>Otangeles Note+ · Demo script · covers Phases 1–9 (full revenue cycle)</span>
+    <span>Full test coverage: <a href="QA Checklist.dc.html">QA Checklist</a> · Product spec: <a href="Billing Portal PRD.dc.html">PRD</a></span>
+  </div>
+
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 900;">{{ toastText }}</div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { toast: '' };
+
+  renderVals() {
+    const P = {
+      angela: ['#F1EEFF', '#5B46D6', 'Angela \u00b7 AR Rep'],
+      derek: ['#FFF3EF', '#C2410C', 'Derek \u00b7 Billing Manager'],
+      michael: ['#E6F7F2', '#0B7D6C', 'Michael \u00b7 Operations Admin'],
+      practice: ['#EBF2FE', '#1D4ED8', 'Practice \u00b7 Ibekie Foundation'],
+    };
+    const stop = (screen, href, persona, doTxt, say) => ({
+      key: screen + href, screen, href,
+      persona: P[persona][2], personaBg: P[persona][0], personaFg: P[persona][1],
+      do: doTxt, say,
+    });
+
+    const acts = [
+      {
+        n: '1', title: 'The agent worked overnight', sub: 'Angela supervises, not types \u00b7 ~2 min',
+        stops: [
+          stop('Billing Home', 'Billing Home.dc.html', 'angela',
+            'Point at the stat cards and the "Needs you now" list. Don\u2019t click anything yet.',
+            'Angela is an AR rep at Bell Medics, a billing company serving two medical practices. Overnight, AI agents generated claims from signed notes, checked eligibility, and posted remittances. Her dashboard is what\u2019s left: only the things that need a human.'),
+          stop('Agent Inbox', 'Agent Inbox v3.dc.html', 'angela',
+            'Open the first decision card. Walk the narrative, evidence rows, and affected claims. Approve it — watch the queue advance and the claims update.',
+            'This is the core of the product. The agent explains what it found, shows its evidence, and proposes one action. Angela approves 26 claims\u2019 worth of work in one click — every approval logged under her name.'),
+          stop('AR Worklist', 'AR Worklist.dc.html', 'angela',
+            'Show the prioritized queue and open one claim\u2019s follow-up panel.',
+            'For work that isn\u2019t a one-click decision, the agent has already drafted the follow-up — Angela reviews and sends.'),
+        ],
+      },
+      {
+        n: '2', title: 'When the rep isn\u2019t sure', sub: 'The escalation loop \u00b7 ~1.5 min',
+        stops: [
+          stop('Agent Inbox', 'Agent Inbox v3.dc.html', 'angela',
+            'On an open decision, click Escalate, type a reason, confirm. The card pins amber, "Escalated \u00b7 Derek Okafor".',
+            'Angela isn\u2019t confident about this coding pick — so she escalates to her manager with one line of context. She stays accountable for the rest of her queue.'),
+          stop('Agent Inbox (as Derek)', 'Agent Inbox v3.dc.html', 'derek',
+            'Avatar menu \u2192 Sign in as Derek Okafor. The escalated card is pinned "Escalated to you" with Angela\u2019s reason. Approve it.',
+            'Same inbox, manager\u2019s view. Derek sees why Angela punted, decides, and closes the loop she started — no email thread, no lost context.'),
+        ],
+      },
+      {
+        n: '3', title: 'The manager runs the company', sub: 'Team, roles, boundaries \u00b7 ~1.5 min',
+        stops: [
+          stop('Dashboard (as Derek)', 'Billing Home.dc.html', 'derek',
+            'Point at the Team workload strip — per-rep due-today counts.',
+            'As a manager Derek gets one extra layer: who\u2019s carrying what today.'),
+          stop('Settings \u2192 Team', 'Settings.dc.html', 'derek',
+            'Show the roster; invite a rep; optionally mark it accepted. Then switch to Angela and show the same tab locked.',
+            'Derek manages his own team — invites, practice assignments, deactivation. Angela sees a locked panel: role boundaries are enforced in the product, not in policy docs.'),
+        ],
+      },
+      {
+        n: '4', title: 'The platform operator\u2019s view', sub: 'Otangeles-internal \u00b7 ~2 min',
+        stops: [
+          stop('Ops Billing Companies', 'Ops Billing Companies.dc.html', 'michael',
+            'Show the Bell Medics card (live AR figures) and Meridian mid-onboarding. Open View Info \u2192 walk the 4 tabs briefly.',
+            'Flip to Otangeles\u2019 own Operations portal. Billing companies are tenants here, managed exactly like medical practices — onboarded, monitored, suspended if needed. Note: aggregates and masked emails only. Operations never sees a patient name.'),
+          stop('Ops Medical Practices', 'Ops Medical Practices.dc.html', 'michael',
+            'Open View Info on IFC, show the Billing section, click Change billing company — read the isolation warning aloud, then cancel.',
+            'Practices can change billing companies. In-flight claims settle with the outgoing company; the new company sees nothing historical. No cross-contamination — patient side or company side.'),
+          stop('Enter Portal (audited)', 'Billing Home.dc.html?ops=1', 'michael',
+            'Click through — the purple "Viewing as Operations" banner rides every page. End ops view to dismiss.',
+            'When Operations needs to see what a tenant sees, the access itself is visible and audited.'),
+        ],
+      },
+      {
+        n: '5', title: 'The contract is the yardstick', sub: 'Rate drift \u2192 reprocess batch \u00b7 ~1.5 min',
+        stops: [
+          stop('Contracts', 'Contracts.dc.html', 'angela',
+            'Type 99309 in the rate lookup. Point at the MHS row glowing amber, then open the MHS HIP contract.',
+            'Every payer promised a rate — this screen is where the promise lives. MHS has been paying 89% of its contracted rate on this code for a month. The agent noticed because every payment is checked against the exhibit.'),
+          stop('Payments — variance queue', 'Payments.dc.html', 'angela',
+            'Switch to the Variance queue tab; open the MHS underpayment (12 claims); approve the reprocess.',
+            'The posting run held all 12 short-paid lines instead of posting them silently. One approval files the reprocess batch — $186 recovered because the contract is loaded, not remembered.'),
+        ],
+      },
+      {
+        n: '6', title: 'Follow one deposit to the cent', sub: 'Reconciliation \u00b7 ~1 min',
+        stops: [
+          stop('Payments — deposits', 'Payments.dc.html', 'angela',
+            'Show Jul 11 (reconciled), then Jul 12: the Anthem check $100 short, and the UHC deposit with no ERA yet.',
+            'Every bank deposit ties to its remittance on the trace number. When a check is $100 short, that\u2019s a worklist row with a drafted payer inquiry — nothing sits silently unreconciled.'),
+        ],
+      },
+      {
+        n: '7', title: 'After the primary pays', sub: 'Secondary \u2192 statement \u2192 collections, all owned \u00b7 ~2 min',
+        stops: [
+          stop('Agent Inbox', 'Agent Inbox v3.dc.html', 'angela',
+            'Expand the secondary-claim review and the stalled-crossover card.',
+            'The balance moves to the secondary payer on the ledger, and the agent generates that claim from the primary remittance. When a crossover goes quiet for 14 days, it intervenes instead of waiting.'),
+          stop('Payments — statements', 'Payments.dc.html', 'angela',
+            'Open the Statements tab; approve the weekly batch; point at the payment-plan and returned-mail rows.',
+            'Patient balances follow a 3-statement cycle through a mail + text-to-pay vendor. Exceptions — returned mail, plan requests — come back as decisions, not dead ends.'),
+          stop('Practice window', 'Practice Billing View.dc.html', 'practice',
+            'Show "Before collections — your review"; click Keep With Us on one resident.',
+            'Before anyone goes to a collections agency, the practice sees the list and can pull a resident off it. This is post-acute care — the practice owns that relationship, and the system respects it.'),
+        ],
+      },
+      {
+        n: '8', title: 'Denials that never happened', sub: 'Enrollment prevention \u00b7 ~1 min',
+        stops: [
+          stop('Contracts — enrollment', 'Contracts.dc.html', 'angela',
+            'Switch to the Provider Enrollment tab; point at the VA column and the held-claims card.',
+            'Dr. Ibekie\u2019s VA enrollment is still pending, so nine claims are held at validation instead of being submitted to deny. A denial prevented is two weeks of rework that never existed.'),
+        ],
+      },
+      {
+        n: '9', title: 'Built for volume, learnable in a day', sub: 'Scale and intuitiveness \u00b7 ~2 min',
+        stops: [
+          stop('Billing Home', 'Billing Home.dc.html', 'angela',
+            'Show the "How this portal thinks" card, then press / and type "stor", then "99213", then "4881".',
+            'A new rep learns the mental model in five sentences — and search works from every screen: patients, claims, CPT rates, even a bank trace number. At a hundred thousand claims, this box is the front door.'),
+          stop('Agent Inbox (busy)', 'Agent Inbox v3.dc.html', 'angela',
+            'Click "Simulate a busy morning". Point at the grouped rows; approve a batchable group; open a non-batchable one.',
+            'Sixty decisions collapse into a handful of groups. Where every member passes the identical policy check, one click approves them all — each logged individually. Where they differ, the system says why and makes you look. Turn it off before moving on.'),
+          stop('Claims Register', 'Claims Register.dc.html', 'angela',
+            'Click the "Secondary balances" saved view, select a few rows, show the bulk bar; then Contracts → type "discharge" in the rate lookup.',
+            'Saved views are how a rep owns a slice of the book. Bulk actions route through the Inbox, so governance survives volume. And Contracts is search-first — built for a catalog of thousands of codes and hundreds of payers, not eight rows.'),
+        ],
+      },
+      {
+        n: '10', title: 'Governance is a dial, not a promise', sub: 'The capstone \u00b7 ~1 min',
+        stops: [
+          stop('Ops Portal Config', 'Ops Portal Config.dc.html', 'michael',
+            'Set Agent autonomy to Draft-only.',
+            'How much may the agent do on its own? That\u2019s a platform-level setting, per portal.'),
+          stop('Agent Inbox (locked)', 'Agent Inbox v3.dc.html', 'angela',
+            'Show the purple notice; click an Approve button — it refuses with a toast. Then check the Audit Log, and set autonomy back.',
+            'The whole billing portal just dropped to draft-only. Approvals are disabled, the change is audited, and flipping it back restores them. Supervision isn\u2019t a slide in a deck — it\u2019s a switch.'),
+        ],
+      },
+    ];
+
+    const qa = [
+      { key: 'q1', q: '"What does the agent actually do autonomously?"', a: 'Claim generation from signed notes, eligibility checks, validation fixes it can prove, payer status calls, remittance posting. Anything ambiguous, financial, or clinical becomes a decision card for a human.' },
+      { key: 'q2', q: '"Who sees patient data?"', a: 'Billing users see billing-relevant PHI only for practices their company serves. Operations sees none — aggregates and masked identifiers. Show Ops Roles \u2192 Patient Data group.' },
+      { key: 'q3', q: '"What if the agent is wrong?"', a: 'Approve with edits (the human\u2019s correction is logged), escalate, or reject. Every action is attributed. And autonomy can be dialed down portal-wide in Portal Configuration.' },
+      { key: 'q4', q: '"How does a new billing company get on?"', a: 'Run the onboarding wizard live from Ops Billing Companies — 4 steps, ends with a pending tenant and an audited manager invitation. Takes 40 seconds.' },
+      { key: 'q5', q: '"Multiple billing companies serving one practice?"', a: 'One company bills per practice at a time; transitions have an effective date, and in-flight claims settle with the outgoing company. The reassignment flow shows this.' },
+      { key: 'q6', q: '"Is this real data?"', a: 'A shared simulated claims ledger drives every screen — the same 50 claims reconcile across the rep, manager, and operations views. That consistency is deliberate.' },
+      { key: 'q7', q: '"Can the agent appeal from any rate it thinks is right?"', a: 'No. Only CONTRACTED rates (exhibit or public schedule) can ground an appeal or reprocess. Rates inferred from payment history are flag-only — the Contracts screen shows the basis on every rate.' },
+      { key: 'q8', q: '"Who approves write-offs and collections?"', a: 'Thresholds set in Settings (rep $50, manager $500, dual sign-off above), capped by a platform ceiling in Ops Portal Config. Collections need manager approval AND survive a practice veto window. Every one carries a reason code.' },
+    ];
+
+    return {
+      acts,
+      qa,
+      resetDemo: () => {
+        try {
+          const keys = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.indexOf('onb-') === 0) keys.push(k);
+          }
+          keys.forEach(k => localStorage.removeItem(k));
+          sessionStorage.removeItem('onb-ops-view');
+        } catch (e) {}
+        clearTimeout(this._tt);
+        this.setState({ toast: 'Demo state reset — Angela, IFC, clean queues' });
+        this._tt = setTimeout(() => this.setState({ toast: '' }), 2800);
+      },
+      hasToast: !!this.state.toast,
+      toastText: this.state.toast,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

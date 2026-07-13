@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@600;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #FFFFFF; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #22C5A7; }
+  a:hover { color: #0B7D6C; }
+  * { box-sizing: border-box; }
+  button, input, select { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+<script src="./claims-store.js"></script>
+<script src="./team-store.js"></script>
+<script src="./companies-store.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #FFFFFF; display: flex; flex-direction: column;" data-screen-label="Ops Admin — Users">
+
+  <x-import component-from-global-scope="ops-header" from="./ops-shell.js" hint-size="100%,76px"></x-import>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+    <x-import component-from-global-scope="ops-nav" from="./ops-shell.js" active="users" hint-size="300px,900px"></x-import>
+
+    <div style="flex: 1; padding: 34px 44px 60px; display: flex; flex-direction: column; gap: 24px; min-width: 0;">
+
+      <!-- Title row -->
+      <div style="display: flex; align-items: flex-start; gap: 16px;">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <h1 style="font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: 700; color: #7B61FF; margin: 0;">Users</h1>
+          <span style="font-size: 15px; color: #6B7280;">Manage Practice Admins and billing-company users across the Otangeles platform.</span>
+        </div>
+        <div style="flex: 1;"></div>
+        <button style="display: inline-flex; align-items: center; gap: 9px; height: 48px; padding: 0 20px; border-radius: 10px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #334155; font-size: 14.5px; font-weight: 600; cursor: pointer;" style-hover="background: #F8FAFC;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Bulk Invite
+        </button>
+        <button onClick="{{ openInvite }}" style="display: inline-flex; align-items: center; gap: 9px; height: 48px; padding: 0 22px; border-radius: 10px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 14.5px; font-weight: 600; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #0B7D6C;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+          Invite User
+        </button>
+      </div>
+
+      <!-- Stat cards -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 18px;">
+        <sc-for list="{{ statCards }}" as="s" hint-placeholder-count="4">
+          <div style="border: 1px solid #E5E7EB; border-radius: 14px; padding: 20px 22px; display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 13.5px; font-weight: 600; color: #334155;">{{ s.label }}</span>
+            <span style="font-size: 26px; font-weight: 700;">{{ s.value }}</span>
+            <span style="font-size: 12px; font-weight: 600; color: {{ s.subColor }};">{{ s.sub }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- Search + filter -->
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="flex: 1; display: flex; align-items: center; gap: 14px; border: 1px solid #E5E7EB; border-radius: 12px; padding: 13px 18px;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+          <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search users, roles, or organizations" style="flex: 1; border: none; outline: none; font-size: 15px; background: transparent;">
+        </div>
+        <div style="display: flex; gap: 6px; border: 1px solid #E5E7EB; border-radius: 12px; padding: 6px;">
+          <sc-for list="{{ orgFilters }}" as="f" hint-placeholder-count="3">
+            <button onClick="{{ f.onClick }}" style="height: 38px; padding: 0 16px; border-radius: 8px; border: none; background: {{ f.bg }}; color: {{ f.fg }}; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;">{{ f.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- Users table -->
+      <div style="border: 1px solid #E5E7EB; border-radius: 14px; overflow: hidden;">
+        <div style="display: grid; grid-template-columns: 2.2fr 1.5fr 2fr 1fr 0.9fr 1.2fr; gap: 12px; padding: 12px 22px; border-bottom: 1px solid #EEF2F7; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.07em;">
+          <span>User</span><span>Role</span><span>Organization</span><span>Status</span><span>2FA</span><span>Last Active</span>
+        </div>
+        <sc-for list="{{ users }}" as="u" hint-placeholder-count="8">
+          <div style="display: grid; grid-template-columns: 2.2fr 1.5fr 2fr 1fr 0.9fr 1.2fr; gap: 12px; padding: 14px 22px; border-bottom: 1px solid #EEF2F7; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+              <span style="width: 34px; height: 34px; border-radius: 9999px; background: {{ u.avBg }}; color: {{ u.avFg }}; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; flex-shrink: 0;">{{ u.initials }}</span>
+              <div style="display: flex; flex-direction: column; min-width: 0;">
+                <span style="font-size: 14px; font-weight: 700; color: #0F1B2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ u.name }}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #94A3B8;">{{ u.email }}</span>
+              </div>
+            </div>
+            <span style="display: inline-flex; width: fit-content; padding: 3px 11px; border-radius: 9999px; background: {{ u.roleBg }}; color: {{ u.roleFg }}; font-size: 11.5px; font-weight: 700; white-space: nowrap;">{{ u.role }}</span>
+            <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+              <span style="display: inline-flex; flex-shrink: 0;">{{ u.orgIcon }}</span>
+              <span style="font-size: 13px; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ u.org }}</span>
+            </div>
+            <span style="display: inline-flex; width: fit-content; padding: 2px 10px; border-radius: 9999px; background: {{ u.statusBg }}; color: {{ u.statusFg }}; font-size: 11.5px; font-weight: 700;">{{ u.status }}</span>
+            <sc-if value="{{ u.mfaOn }}" hint-placeholder-val="{{ true }}">
+              <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 700; color: #0B7D6C;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0B7D6C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>On</span>
+            </sc-if>
+            <sc-if value="{{ u.mfaOff }}" hint-placeholder-val="{{ false }}">
+              <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 700; color: #DC2626;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>Off</span>
+            </sc-if>
+            <span style="font-size: 13px; color: #6B7280;">{{ u.lastActive }}</span>
+          </div>
+        </sc-for>
+        <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 40px; text-align: center; font-size: 14px; color: #94A3B8;">No users match your search.</div>
+        </sc-if>
+      </div>
+      <span style="font-size: 12.5px; color: #94A3B8;">Billing-company users are live from the shared team store — invites sent from Bell Medics Settings appear here. Emails are masked; no patient data is ever shown in Operations.</span>
+
+    </div>
+  </div>
+
+  <!-- ===== Invite User modal ===== -->
+  <sc-if value="{{ inviteOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 800; display: flex; align-items: flex-start; justify-content: center; padding: 60px 24px;">
+      <div style="background: #FFFFFF; border-radius: 16px; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1); width: 760px; max-height: 82vh; overflow: auto; display: flex; flex-direction: column;">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 22px 28px 0;">
+          <span style="font-size: 19px; font-weight: 700; color: #0F1B2E;">Invite user</span>
+          <button onClick="{{ closeInvite }}" style="width: 38px; height: 38px; border-radius: 9px; border: 1px solid #E5E7EB; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: #F8FAFC;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          </button>
+        </div>
+        <div style="padding: 20px 28px 28px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 13px; font-weight: 600; color: #334155;">Role <span style="color: #DC2626;">*</span></span>
+              <div style="display: flex; gap: 6px;">
+                <sc-for list="{{ roleOptions }}" as="r" hint-placeholder-count="2">
+                  <button onClick="{{ r.onClick }}" style="flex: 1; height: 44px; border-radius: 10px; border: 1.5px solid {{ r.border }}; background: {{ r.bg }}; color: {{ r.fg }}; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; padding: 0 10px;">{{ r.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 13px; font-weight: 600; color: #334155;">Full name <span style="color: #DC2626;">*</span></span>
+              <input value="{{ invName }}" onChange="{{ onInvName }}" placeholder="e.g. Avery Stone" style="height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #E5E7EB; font-size: 14px;">
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 13px; font-weight: 600; color: #334155;">Email <span style="color: #DC2626;">*</span></span>
+              <input value="{{ invEmail }}" onChange="{{ onInvEmail }}" placeholder="name@company.com" style="height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #E5E7EB; font-size: 14px;">
+            </div>
+          </div>
+
+          <!-- Practice Admin variant -->
+          <sc-if value="{{ invIsPractice }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 13px; font-weight: 600; color: #334155;">Medical Practice <span style="color: #DC2626;">*</span></span>
+              <input value="Ibekie Foundation Clinics" style="height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #E5E7EB; font-size: 14px; background: #F8FAFC;">
+              <span style="font-size: 12.5px; color: #6B7280;">This Practice Admin will finish the medical practice setup during onboarding.</span>
+            </div>
+          </sc-if>
+
+          <!-- Billing Manager variant -->
+          <sc-if value="{{ invIsBilling }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 13px; font-weight: 600; color: #334155;">Billing Company <span style="color: #DC2626;">*</span></span>
+              <div style="display: flex; gap: 8px;">
+                <sc-for list="{{ invCompanies }}" as="c" hint-placeholder-count="2">
+                  <button onClick="{{ c.onClick }}" style="flex: 1; display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 10px; border: 1.5px solid {{ c.border }}; background: {{ c.bg }}; cursor: pointer; text-align: left;">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                    <span style="display: flex; flex-direction: column; gap: 1px;">
+                      <span style="font-size: 13.5px; font-weight: 700; color: #0F1B2E;">{{ c.name }}</span>
+                      <span style="font-size: 11.5px; color: #6B7280;">{{ c.sub }}</span>
+                    </span>
+                  </button>
+                </sc-for>
+              </div>
+              <span style="font-size: 12.5px; color: #6B7280;">Practices served follow the company's contract — the new user only ever sees their own company's claims and patients.</span>
+            </div>
+          </sc-if>
+
+          <div style="display: flex; align-items: center; gap: 10px; background: #F1EEFF; border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #5B46D6;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1 1 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+            Invitations are audited. The user sets up 2FA during onboarding.
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <sc-if value="{{ invHasError }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size: 13px; font-weight: 600; color: #DC2626;">{{ invError }}</span>
+            </sc-if>
+            <div style="flex: 1;"></div>
+            <button onClick="{{ closeInvite }}" style="height: 46px; padding: 0 20px; border-radius: 10px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #334155; font-size: 14px; font-weight: 600; cursor: pointer;" style-hover="background: #F8FAFC;">Cancel</button>
+            <button onClick="{{ sendInvite }}" style="display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 22px; border-radius: 10px; border: none; background: #22C5A7; color: #FFFFFF; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 150ms ease-out;" style-hover="background: #0B7D6C;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+              Send Invitation
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Toast -->
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: #0F1B2E; color: #FFFFFF; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1); z-index: 900; display: flex; align-items: center; gap: 10px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22C5A7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+      {{ toastText }}
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    query: '', orgFilter: 'all', ready: false,
+    inviteOpen: false, invRole: 'Practice Admin', invName: '', invEmail: '', invCompany: 'bell', invError: '',
+    toast: '',
+  };
+
+  componentDidMount() {
+    const check = () => {
+      if (window.TeamStore && window.CompaniesStore) this.setState({ ready: true });
+      else setTimeout(check, 60);
+    };
+    check();
+  }
+
+  showToast(msg) {
+    clearTimeout(this._tt);
+    this.setState({ toast: msg });
+    this._tt = setTimeout(() => this.setState({ toast: '' }), 2800);
+  }
+
+  renderVals() {
+    const st = this.state;
+    const ready = st.ready;
+    const mask = (u, d) => u.slice(0, 2) + '******@' + d;
+
+    // Assemble the platform user list
+    const PRACTICE_ICON = React.createElement('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: '#22C5A7', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', dangerouslySetInnerHTML: { __html: '<path d="M11 2v2"></path><path d="M5 2v2"></path><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path><path d="M8 15a6 6 0 0 0 12 0v-3"></path><circle cx="20" cy="10" r="2"></circle>' } });
+    const BILLING_ICON = React.createElement('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: '#7B61FF', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', dangerouslySetInnerHTML: { __html: '<rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line>' } });
+    const OPS_ICON = React.createElement('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: '#6B7280', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', dangerouslySetInnerHTML: { __html: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1 1 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>' } });
+
+    const ROLE_STYLE = {
+      'Operations Admin': ['#F1F5F9', '#334155'],
+      'Practice Admin': ['#FDF2F8', '#BE185D'],
+      'Billing Manager': ['#F1EEFF', '#5B46D6'],
+      'AR Rep': ['#E6F7F2', '#0B7D6C'],
+    };
+
+    let users = [];
+    if (ready) {
+      const staticUsers = [
+        { name: 'Michael Ops Admin', initials: 'MO', email: mask('michael', 'o********.com'), role: 'Operations Admin', org: 'Otangeles', orgType: 'ops', status: 'Active', mfa: true, lastActive: 'Now' },
+        { name: 'IFC Admin', initials: 'IA', email: mask('ifcadmin', 'o********.com'), role: 'Practice Admin', org: 'Ibekie Foundation Clinics', orgType: 'practice', status: 'Active', mfa: true, lastActive: '2 days ago' },
+      ];
+      const billingUsers = window.TeamStore.getRoster().map(m => ({
+        name: m.pending ? (m.email || m.name) : m.name,
+        initials: m.initials,
+        email: m.pending ? 'invitation pending' : mask(m.name.split(' ')[0].toLowerCase(), 'b********.com'),
+        role: m.role, org: 'Bell Medics', orgType: 'billing',
+        status: m.status, mfa: !m.pending && m.status === 'Active', lastActive: m.lastActive,
+        pending: m.pending,
+      }));
+      users = staticUsers.concat(billingUsers);
+    }
+
+    const q = st.query.trim().toLowerCase();
+    const filtered = users.filter(u => {
+      if (st.orgFilter !== 'all' && u.orgType !== st.orgFilter) return false;
+      return !q || (u.name + ' ' + u.role + ' ' + u.org).toLowerCase().includes(q);
+    });
+
+    const rows = filtered.map((u, i) => {
+      const rs = ROLE_STYLE[u.role] || ROLE_STYLE['Operations Admin'];
+      return {
+        key: 'u' + i,
+        name: u.name, initials: u.initials, email: u.email,
+        avBg: u.pending ? '#F1F5F9' : (u.orgType === 'billing' ? 'linear-gradient(#7B61FF, #22C5A7)' : u.orgType === 'practice' ? '#FDF2F8' : '#F1F5F9'),
+        avFg: u.pending ? '#94A3B8' : (u.orgType === 'billing' ? '#FFFFFF' : u.orgType === 'practice' ? '#BE185D' : '#334155'),
+        role: u.role, roleBg: rs[0], roleFg: rs[1],
+        org: u.org,
+        orgIcon: u.orgType === 'billing' ? BILLING_ICON : u.orgType === 'practice' ? PRACTICE_ICON : OPS_ICON,
+        status: u.status,
+        statusBg: u.status === 'Active' ? '#E6F7F2' : u.status === 'Pending' ? '#FFFBEB' : '#F1F5F9',
+        statusFg: u.status === 'Active' ? '#0B7D6C' : u.status === 'Pending' ? '#B45309' : '#6B7280',
+        mfaOn: u.mfa, mfaOff: !u.mfa,
+        lastActive: u.lastActive,
+      };
+    });
+
+    const nBilling = users.filter(u => u.orgType === 'billing').length;
+    const nMfaOff = users.filter(u => !u.mfa).length;
+    const statCards = [
+      { key: 's1', label: 'Total Users', value: ready ? String(users.length) : '\u2014', sub: 'Across all organizations', subColor: '#0B7D6C' },
+      { key: 's2', label: 'Practice Users', value: ready ? '1' : '\u2014', sub: 'Practice Admins', subColor: '#0B7D6C' },
+      { key: 's3', label: 'Billing Users', value: ready ? String(nBilling) : '\u2014', sub: 'Managers + AR Reps \u00b7 NEW', subColor: '#5B46D6' },
+      { key: 's4', label: 'Missing 2FA', value: ready ? String(nMfaOff) : '\u2014', sub: nMfaOff > 0 ? 'Review required' : 'All users covered', subColor: nMfaOff > 0 ? '#DC2626' : '#0B7D6C' },
+    ];
+
+    const orgFilters = [
+      { id: 'all', label: 'All' },
+      { id: 'practice', label: 'Medical Practices' },
+      { id: 'billing', label: 'Billing Companies' },
+    ].map(f => ({
+      key: f.id, label: f.label,
+      bg: st.orgFilter === f.id ? '#E6F7F2' : 'transparent',
+      fg: st.orgFilter === f.id ? '#0B7D6C' : '#6B7280',
+      onClick: () => this.setState({ orgFilter: f.id }),
+    }));
+
+    // Invite modal
+    const isBillingRole = st.invRole === 'Billing Manager' || st.invRole === 'AR Rep';
+    const roleOptions = ['Practice Admin', 'Billing Manager', 'AR Rep'].map(r => ({
+      key: r, label: r,
+      border: st.invRole === r ? '#7B61FF' : '#E5E7EB',
+      bg: st.invRole === r ? '#F1EEFF' : '#FFFFFF',
+      fg: st.invRole === r ? '#5B46D6' : '#6B7280',
+      onClick: () => this.setState({ invRole: r, invError: '' }),
+    }));
+    const invCompanies = ready ? window.CompaniesStore.getCompanies().filter(c => c.status !== 'Suspended').map(c => ({
+      key: c.id, name: c.name,
+      sub: c.id === 'bell' ? '2 practices served' : 'onboarding',
+      border: st.invCompany === c.id ? '#7B61FF' : '#E5E7EB',
+      bg: st.invCompany === c.id ? '#F1EEFF' : '#FFFFFF',
+      onClick: () => this.setState({ invCompany: c.id }),
+    })) : [];
+
+    return {
+      statCards,
+      users: rows,
+      noResults: ready && rows.length === 0,
+      query: st.query,
+      onQuery: (e) => this.setState({ query: e.target.value }),
+      orgFilters,
+
+      inviteOpen: st.inviteOpen,
+      openInvite: () => this.setState({ inviteOpen: true, invError: '' }),
+      closeInvite: () => this.setState({ inviteOpen: false }),
+      roleOptions,
+      invIsPractice: st.invRole === 'Practice Admin',
+      invIsBilling: isBillingRole,
+      invCompanies,
+      invName: st.invName, onInvName: (e) => this.setState({ invName: e.target.value, invError: '' }),
+      invEmail: st.invEmail, onInvEmail: (e) => this.setState({ invEmail: e.target.value, invError: '' }),
+      invHasError: !!st.invError, invError: st.invError,
+      sendInvite: () => {
+        if (st.invName.trim().length < 2) { this.setState({ invError: 'Full name is required' }); return; }
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(st.invEmail.trim())) { this.setState({ invError: 'Enter a valid email address' }); return; }
+        if (isBillingRole && st.invCompany === 'bell') {
+          window.TeamStore.invite(st.invEmail.trim(), st.invRole, ['ifc']);
+          window.CompaniesStore.addAudit({ ts: 'Jul 10', type: 'user', who: 'Michael Ops Admin', what: 'Invited ' + st.invRole, detail: 'Bell Medics \u00b7 ' + st.invEmail.trim() + ' \u00b7 pending acceptance' });
+          this.showToast('Invitation sent — appears in Bell Medics Settings too');
+        } else {
+          this.showToast('Invitation sent to ' + st.invEmail.trim());
+        }
+        this.setState({ inviteOpen: false, invName: '', invEmail: '' });
+      },
+
+      hasToast: !!st.toast,
+      toastText: st.toast,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

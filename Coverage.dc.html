@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Montserrat:wght@700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #F8FAFC; font-family: 'Inter', -apple-system, sans-serif; color: #0F1B2E; }
+  a { color: #7B61FF; }
+  a:hover { color: #5B46D6; }
+  * { box-sizing: border-box; }
+  button, select, input, textarea { font-family: 'Inter', sans-serif; }
+  ::placeholder { color: #94A3B8; }
+</style>
+<script src="./documents-store.js"></script>
+<script src="./contracts-store.js"></script>
+</helmet>
+
+<div style="min-width: 1440px; min-height: 100vh; background: #F8FAFC; display: flex; flex-direction: column;" data-screen-label="Coverage (Bell Medics)">
+
+  <x-import component-from-global-scope="ops-banner" from="./ops-banner.js" hint-size="100%,0px"></x-import>
+
+  <!-- ===== Top header bar ===== -->
+  <div style="height: 64px; background: #FFFFFF; border-bottom: 1px solid #E5E7EB; display: flex; align-items: center; padding: 0 24px; gap: 16px; flex-shrink: 0;">
+    <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
+    <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Billing Portal</span>
+    <x-import component-from-global-scope="search-bar" from="./search-bar.js" hint-size="480px,40px"></x-import>
+    <div style="flex: 1;"></div>
+    <x-import component-from-global-scope="practice-switcher" from="./practice-switcher.js" hint-size="260px,40px"></x-import>
+    <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 9999px; background: #FF6E6C; border: 2px solid #FFFFFF;"></span>
+    </button>
+    <x-import component-from-global-scope="role-switcher" from="./role-switcher.js" hint-size="210px,44px"></x-import>
+  </div>
+
+  <div style="display: flex; flex: 1; align-items: stretch;">
+
+    <!-- ===== Side nav ===== -->
+    <div style="width: 280px; background: #FFFFFF; border-right: 1px solid #E5E7EB; padding: 16px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
+      <a href="Billing Home.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M14 14h7v7h-7z"></path><path d="M3 14h7v7H3z"></path></svg>
+        Dashboard
+      </a>
+      <a href="Agent Inbox v3.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+        Agent Inbox
+      </a>
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #7B61FF; color: #FFFFFF; cursor: pointer; font-size: 14px; font-weight: 700;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        Coverage
+        <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: rgba(255,255,255,0.22); font-size: 11px; font-weight: 700;">NEW</span>
+      </div>
+      <a href="AR Worklist.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        AR Worklist
+      </a>
+      <a href="Claims Register.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>
+        Claims
+      </a>
+        <a href="Payments.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+          Payments
+          <span style="margin-left: auto; display: inline-flex; padding: 1px 8px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 11px; font-weight: 700;">NEW</span>
+        </a>
+      <a href="Rulebook.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+          Rulebook
+        </a>
+        <a href="Contracts.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+          Contracts
+                  </a>
+        <a href="Analytics.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+        Analytics
+      </a>
+      <a href="Settings.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 4px; background: #FFFFFF; color: #6B7280; cursor: pointer; font-size: 14px; font-weight: 700; text-decoration: none;" style-hover="background: #F1F5F9;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        Settings
+      </a>
+      <div style="flex: 1;"></div>
+      <div style="padding: 12px; border-radius: 8px; background: #F1EEFF; font-size: 12px; color: #5B46D6; line-height: 18px;">
+        <div style="font-weight: 700; margin-bottom: 4px;">Need help?</div>
+        Reach the billing support desk 24/7.
+      </div>
+    </div>
+
+    <!-- ===== Main ===== -->
+    <div style="flex: 1; padding: 24px 32px 48px; display: flex; flex-direction: column; gap: 16px; min-width: 0;" data-screen-label="Coverage — pre-visit verification">
+
+      <!-- Title -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <h1 style="font-size: 24px; font-weight: 700; margin: 0;">Coverage</h1>
+        <span style="font-size: 13px; color: #6B7280;">Pre-visit payer verification · agent checks every scheduled patient · {{ practiceLabel }} · Sat, Jul 11 2026</span>
+        <div style="flex: 1;"></div>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #E7F5EF; color: #1B7F5E; font-size: 12px; font-weight: 600;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1B7F5E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"></path><path d="M21 3v6h-6"></path></svg>
+          Last run 6:00 AM · next 6:00 PM
+        </span>
+        <a href="Rulebook.dc.html" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #F1EEFF; color: #5B46D6; font-size: 12px; font-weight: 600; text-decoration: none; transition: background 150ms ease-out;" style-hover="background: #E4DDFF;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5B46D6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+          5 rules applied · Rulebook
+        </a>
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #FEF3DF; color: #B45309; font-size: 12px; font-weight: 600;">{{ heldChipText }}</span>
+      </div>
+
+      <!-- Stat strip -->
+      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Scheduled · next {{ lookaheadDays }} days</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace;">{{ scheduledCount }}</span>
+          <span style="font-size: 12px; color: #6B7280;">patients across 5 facilities</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #D6CCFF; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #5B46D6; text-transform: uppercase; letter-spacing: 0.06em;">Expected revenue</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #5B46D6;">{{ expectedRevText }}</span>
+          <span style="font-size: 12px; color: #6B7280;">{{ expectedRevNote }} · <a href="Contracts.dc.html" style="color: #7B61FF; text-decoration: none; font-weight: 600;">from Contracts</a></span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Verified clean</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #1B7F5E;">{{ cleanCount }}</span>
+          <span style="font-size: 12px; color: #6B7280;">all six checks passed — bill with confidence</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #FFD3D2; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #C2410C; text-transform: uppercase; letter-spacing: 0.06em;">Exceptions — need a person</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #DC2626;">{{ needsYouCount }}</span>
+          <span style="font-size: 12px; color: #6B7280;">agent exhausted what it can do alone</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Agent re-checking</span>
+          <span style="font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #B45309;">{{ watchingCount }}</span>
+          <span style="font-size: 12px; color: #6B7280;">pending payer responses — no action needed</span>
+        </div>
+      </div>
+
+      <!-- Practice-wide flags -->
+      <div style="background: #FFF3EF; border: 1px solid #FFD3C7; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C2410C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+          <span style="font-size: 13px; font-weight: 700; color: #C2410C;">Practice-wide flags — fix once, clear many claims</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div style="background: #FFFFFF; border: 1px solid #FFD3C7; border-radius: 8px; padding: 12px 16px; display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 13px; font-weight: 700;">Medicare taxonomy setup — Oranu Ibekie MD <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #DC2626; font-weight: 700;">35 denials · $689</span></span>
+            <span style="font-size: 12.5px; line-height: 19px; color: #6B7280;">Medicare has a missing/invalid provider taxonomy on file. Agent drafted the enrollment correction and pre-filled the CMS-855 change — <strong style="color: #0F1B2E;">needs provider signature.</strong></span>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #FFD3C7; border-radius: 8px; padding: 12px 16px; display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 13px; font-weight: 700;">MHS HIP primary-DX rule <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #DC2626; font-weight: 700;">84 denials · $11,760</span></span>
+            <span style="font-size: 12.5px; line-height: 19px; color: #6B7280;">MHS HIP rejects claims missing its primary DX / POS combination. Agent learned the rule from the denial pattern and added it to the pre-submission gate — <strong style="color: #0F1B2E;">no new claim can go out without it.</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter chips -->
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button onClick="{{ showExceptions }}" style="padding: 7px 16px; border-radius: 9999px; border: 1px solid {{ excChipBorder }}; background: {{ excChipBg }}; color: {{ excChipFg }}; font-size: 13px; font-weight: 600; cursor: pointer;">Exceptions · {{ exceptionCount }}</button>
+        <button onClick="{{ showClean }}" style="padding: 7px 16px; border-radius: 9999px; border: 1px solid {{ cleanChipBorder }}; background: {{ cleanChipBg }}; color: {{ cleanChipFg }}; font-size: 13px; font-weight: 600; cursor: pointer;">Verified clean · {{ cleanCount }}</button>
+        <button onClick="{{ showCensus }}" style="padding: 7px 16px; border-radius: 9999px; border: 1px solid {{ censusChipBorder }}; background: {{ censusChipBg }}; color: {{ censusChipFg }}; font-size: 13px; font-weight: 600; cursor: pointer;">Panel census · 214</button>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 12px; color: #94A3B8;">Every check result is logged to the patient's coverage profile</span>
+      </div>
+
+      <!-- ===== Exceptions table ===== -->
+      <sc-if value="{{ exceptionsMode }}" hint-placeholder-val="{{ true }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: 190px 110px 210px 1.1fr 1.2fr 1fr 80px 80px; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #E5E7EB; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">
+            <span>Patient</span><span>Next visit</span><span>Payer stack</span><span>Issue found</span><span>What the agent did</span><span>Needs from you</span><span style="text-align: right;">Expected</span><span style="text-align: right;">Held</span>
+          </div>
+          <sc-for list="{{ rows }}" as="row" hint-placeholder-count="6">
+            <div onClick="{{ row.select }}" style="display: grid; grid-template-columns: 190px 110px 210px 1.1fr 1.2fr 1fr 80px 80px; gap: 12px; padding: 14px 20px; border-bottom: 1px solid #F1F5F9; align-items: center; cursor: pointer; background: {{ row.rowBg }};" style-hover="background: #F8FAFC;">
+              <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0;">
+                <span style="font-size: 13.5px; font-weight: 700;">{{ row.name }}</span>
+                <span style="font-size: 11.5px; color: #94A3B8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ row.facility }}</span>
+              </div>
+              <span style="font-size: 12.5px; color: #6B7280; font-weight: 600;">{{ row.visitLabel }}</span>
+              <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                <sc-for list="{{ row.payers }}" as="p" hint-placeholder-count="2">
+                  <span style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; background: {{ p.bg }}; color: {{ p.fg }}; font-size: 11px; font-weight: 600; white-space: nowrap;">{{ p.short }}</span>
+                </sc-for>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 12.5px; font-weight: 700; color: {{ row.issueColor }};">{{ row.issue }}</span>
+                <span style="font-size: 11.5px; color: #6B7280; line-height: 16px;">{{ row.issueDetail }}</span>
+              </div>
+              <span style="font-size: 12px; color: #6B7280; line-height: 17px;">{{ row.agentAction }}</span>
+              <span style="font-size: 12px; font-weight: 600; color: {{ row.needsColor }}; line-height: 17px;">{{ row.needs }}</span>
+              <span style="font-size: 12.5px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-align: right; color: #1B7F5E;">{{ row.expLabel }}</span>
+              <span style="font-size: 12.5px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-align: right; color: #B45309;">{{ row.heldLabel }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ===== Verified clean grid ===== -->
+      <sc-if value="{{ cleanMode }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px;">
+          <p style="margin: 0 0 14px; font-size: 13px; color: #6B7280;">All six checks passed for these patients — eligibility, COB order, prior auth, benefits, status flags, provider enrollment. Their visits can be billed first-pass.</p>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+            <sc-for list="{{ cleanPatients }}" as="cp" hint-placeholder-count="8">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid #D2F0E3; background: #F5FBF8; border-radius: 8px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#29BB89" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+                <div style="display: flex; flex-direction: column; min-width: 0;">
+                  <span style="font-size: 12.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ cp.name }}</span>
+                  <span style="font-size: 11px; color: #94A3B8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ cp.payer }} · {{ cp.visit }} · {{ cp.exp }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== Panel census ===== -->
+      <sc-if value="{{ censusMode }}" hint-placeholder-val="{{ false }}">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 20px; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Panel size</span>
+            <span style="font-size: 20px; font-weight: 700; font-family: 'JetBrains Mono', monospace;">214</span>
+            <span style="font-size: 12px; color: #6B7280;">every active patient — not just scheduled</span>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 20px; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Profiles complete</span>
+            <span style="font-size: 20px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #1B7F5E;">178 · 83%</span>
+            <span style="font-size: 12px; color: #6B7280;">payer stack, benefits + rules all on file</span>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; padding: 14px 20px; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.06em;">Stale · &gt;30 days</span>
+            <span style="font-size: 20px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #B45309;">22</span>
+            <span style="font-size: 12px; color: #6B7280;">re-verification queued by the agent</span>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #FFD3D2; border-radius: 12px; padding: 14px 20px; display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 11px; font-weight: 700; color: #C2410C; text-transform: uppercase; letter-spacing: 0.06em;">Never verified</span>
+            <span style="font-size: 20px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #DC2626;">14</span>
+            <span style="font-size: 12px; color: #6B7280;">mostly recent admissions — first-pass tonight</span>
+          </div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 12px; overflow: hidden;">
+          <div style="display: grid; grid-template-columns: 170px 1.2fr 1fr 150px 110px 110px 120px; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #E5E7EB; font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">
+            <span>Patient</span><span>Facility</span><span>Primary payer</span><span>Profile</span><span>Last verified</span><span>Next visit</span><span style="text-align: right;">Annualized</span>
+          </div>
+          <sc-for list="{{ censusRows }}" as="cr" hint-placeholder-count="8">
+            <div style="display: grid; grid-template-columns: 170px 1.2fr 1fr 150px 110px 110px 120px; gap: 12px; padding: 13px 20px; border-bottom: 1px solid #F1F5F9; align-items: center;">
+              <span style="font-size: 13px; font-weight: 700;">{{ cr.name }}</span>
+              <span style="font-size: 12px; color: #6B7280;">{{ cr.facility }}</span>
+              <span style="font-size: 12px; color: #6B7280;">{{ cr.payer }}</span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="flex: 1; height: 6px; border-radius: 9999px; background: #F1F5F9; overflow: hidden;">
+                  <div style="height: 100%; width: {{ cr.pct }}%; border-radius: 9999px; background: {{ cr.barColor }};"></div>
+                </div>
+                <span style="font-size: 11.5px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: {{ cr.pctColor }}; width: 34px; text-align: right;">{{ cr.pct }}%</span>
+              </div>
+              <span style="font-size: 12px; font-weight: 600; color: {{ cr.verifiedColor }};">{{ cr.lastVerified }}</span>
+              <span style="font-size: 12px; color: #6B7280;">{{ cr.nextVisit }}</span>
+              <span style="font-size: 12.5px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-align: right; color: #1B7F5E;">{{ cr.annual }}</span>
+            </div>
+          </sc-for>
+          <div style="padding: 12px 20px; font-size: 12px; color: #94A3B8;">Showing 8 of 214 — sorted by profile risk. Patients with no upcoming visit still get re-verified monthly; annualized expected revenue is blank until the payer stack is confirmed.</div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- ===== Coverage profile slide-over ===== -->
+  <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePanel }}" style="position: fixed; inset: 0; background: rgba(15,27,46,0.4); z-index: 50;"></div>
+    <div style="position: fixed; top: 0; right: 0; bottom: 0; width: 560px; background: #FFFFFF; z-index: 51; box-shadow: -12px 0 40px rgba(15,27,46,0.18); display: flex; flex-direction: column; overflow-y: auto;" data-screen-label="Coverage profile panel">
+
+      <!-- Panel header -->
+      <div style="padding: 20px 24px; border-bottom: 1px solid #E5E7EB; display: flex; align-items: flex-start; gap: 12px; position: sticky; top: 0; background: #FFFFFF; z-index: 2;">
+        <div style="display: flex; flex-direction: column; gap: 3px; flex: 1;">
+          <span style="font-size: 11px; font-weight: 700; color: #7B61FF; text-transform: uppercase; letter-spacing: 0.06em;">Patient coverage profile</span>
+          <span style="font-size: 19px; font-weight: 700;">{{ sel.name }}</span>
+          <span style="font-size: 12px; color: #6B7280;">{{ sel.facility }} · MRN <span style="font-family: 'JetBrains Mono', monospace;">{{ sel.mrn }}</span> · next visit {{ sel.visitLabel }}</span>
+        </div>
+        <button onClick="{{ closePanel }}" style="width: 32px; height: 32px; border-radius: 4px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; cursor: pointer; display: flex; align-items: center; justify-content: center;" style-hover="background: #F1F5F9;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+
+      <div style="padding: 20px 24px; display: flex; flex-direction: column; gap: 20px;">
+
+        <!-- Payer stack -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 12px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">Payer stack</span>
+          <sc-for list="{{ sel.payerCards }}" as="pc" hint-placeholder-count="2">
+            <div style="border: 1px solid #E5E7EB; border-radius: 10px; padding: 12px 16px; display: flex; flex-direction: column; gap: 4px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; font-weight: 700; color: #7B61FF; text-transform: uppercase; letter-spacing: 0.05em; width: 76px;">{{ pc.order }}</span>
+                <span style="font-size: 13.5px; font-weight: 700; flex: 1;">{{ pc.name }}</span>
+                <span style="display: inline-flex; padding: 2px 10px; border-radius: 9999px; background: {{ pc.bg }}; color: {{ pc.fg }}; font-size: 11px; font-weight: 700;">{{ pc.status }}</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 14px; padding-left: 84px;">
+                <span style="font-size: 12px; color: #6B7280;">Member ID <span style="font-family: 'JetBrains Mono', monospace; color: #0F1B2E;">{{ pc.memberId }}</span></span>
+                <span style="font-size: 12px; color: #6B7280;">{{ pc.dates }}</span>
+              </div>
+              <p style="margin: 0; padding-left: 84px; font-size: 12px; line-height: 18px; color: #6B7280;">{{ pc.note }}</p>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- Six checks -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 12px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">Pre-visit checks · last run 6:00 AM</span>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <sc-for list="{{ sel.checks }}" as="ck" hint-placeholder-count="6">
+              <div style="border: 1px solid {{ ck.border }}; background: {{ ck.bg }}; border-radius: 8px; padding: 10px 12px; display: flex; gap: 8px; align-items: flex-start;">
+                <span style="width: 18px; height: 18px; border-radius: 9999px; background: {{ ck.dotBg }}; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px;">{{ ck.glyph }}</span>
+                <div style="display: flex; flex-direction: column; gap: 1px;">
+                  <span style="font-size: 12.5px; font-weight: 700;">{{ ck.name }}</span>
+                  <span style="font-size: 11.5px; line-height: 16px; color: #6B7280;">{{ ck.note }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Benefits snapshot -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 12px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">Benefits snapshot · {{ sel.benefitPayer }}</span>
+          <div style="border: 1px solid #E5E7EB; border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                <span style="font-weight: 600;">Visits used this benefit period</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700;">{{ sel.visitsLabel }}</span>
+              </div>
+              <div style="height: 8px; border-radius: 9999px; background: #F1F5F9; overflow: hidden;">
+                <div style="height: 100%; width: {{ sel.visitsPct }}%; border-radius: 9999px; background: {{ sel.visitsBarColor }};"></div>
+              </div>
+              <span style="font-size: 11.5px; color: #6B7280;">{{ sel.visitsNote }}</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; border-top: 1px solid #F1F5F9; padding-top: 12px;">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 11px; color: #94A3B8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Deductible</span>
+                <span style="font-size: 13px; font-weight: 700; font-family: 'JetBrains Mono', monospace;">{{ sel.deductible }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 11px; color: #94A3B8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Copay / visit</span>
+                <span style="font-size: 13px; font-weight: 700; font-family: 'JetBrains Mono', monospace;">{{ sel.copay }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-size: 11px; color: #94A3B8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">Auth on file</span>
+                <span style="font-size: 13px; font-weight: 700; font-family: 'JetBrains Mono', monospace;">{{ sel.authStatus }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reimbursement -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 12px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">Reimbursement · {{ sel.benefitPayer }}</span>
+          <sc-if value="{{ sel.hasFees }}" hint-placeholder-val="{{ true }}">
+            <div style="border: 1px solid #E5E7EB; border-radius: 10px; overflow: hidden;">
+              <sc-for list="{{ sel.fees }}" as="fee" hint-placeholder-count="3">
+                <div style="display: grid; grid-template-columns: 70px 1fr 80px; gap: 12px; padding: 9px 16px; border-bottom: 1px solid #F1F5F9; align-items: center;">
+                  <span style="font-size: 12px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #5B46D6;">{{ fee.code }}</span>
+                  <span style="font-size: 12px; color: #6B7280;">{{ fee.desc }}</span>
+                  <span style="font-size: 12.5px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-align: right;">{{ fee.amt }}</span>
+                </div>
+              </sc-for>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: #F5FBF8;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #1B7F5E;">Expected value of next visit</span>
+                <span style="font-size: 13px; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #1B7F5E;">{{ sel.nextVal }}</span>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sel.noFees }}" hint-placeholder-val="{{ false }}">
+            <div style="border: 1px dashed #D1D5DC; border-radius: 10px; padding: 12px 16px; font-size: 12.5px; line-height: 19px; color: #6B7280;">{{ sel.feeNote }}</div>
+          </sc-if>
+        </div>
+
+        <!-- Agent activity -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-size: 12px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em;">Agent activity</span>
+          <div style="border: 1px solid #E5E7EB; border-radius: 10px; padding: 4px 16px;">
+            <sc-for list="{{ sel.log }}" as="lg" hint-placeholder-count="3">
+              <div style="display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #F1F5F9;">
+                <span style="font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #94A3B8; width: 92px; flex-shrink: 0; padding-top: 1px;">{{ lg.time }}</span>
+                <span style="font-size: 12.5px; line-height: 18px; color: #0F1B2E;">{{ lg.text }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display: flex; gap: 10px; padding-bottom: 8px;">
+          <button style="flex: 1; height: 40px; border-radius: 5px; border: none; background: #7B61FF; color: #FFFFFF; font-size: 13.5px; font-weight: 700; cursor: pointer;" style-hover="background: #5B46D6;">{{ sel.primaryAction }}</button>
+          <button style="height: 40px; padding: 0 18px; border-radius: 5px; border: 1px solid #E5E7EB; background: #FFFFFF; color: #6B7280; font-size: 13.5px; font-weight: 600; cursor: pointer;" style-hover="background: #F1F5F9;">Assign to Bell Medics</button>
+        </div>
+
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1600, &quot;height&quot;: 1000},
+  &quot;lookaheadDays&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;3&quot;, &quot;7&quot;, &quot;14&quot;], &quot;default&quot;: &quot;7&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Verification&quot;},
+  &quot;autoHoldClaims&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Verification&quot;}
+}">
+class Component extends DCLogic {
+  state = { mode: 'exceptions', selectedId: null };
+
+  data() {
+    const T = {
+      active:     { bg: '#E7F5EF', fg: '#1B7F5E' },
+      warn:       { bg: '#FEF3DF', fg: '#B45309' },
+      bad:        { bg: '#FFE4E1', fg: '#DC2626' },
+      neutral:    { bg: '#F1F5F9', fg: '#6B7280' },
+      purple:     { bg: '#F1EEFF', fg: '#5B46D6' }
+    };
+    const CK = {
+      pass: { border: '#D2F0E3', bg: '#F5FBF8', dotBg: '#29BB89', glyph: '\u2713' },
+      fail: { border: '#FFD3D2', bg: '#FFF6F5', dotBg: '#DC2626', glyph: '\u2715' },
+      warn: { border: '#F5D9A8', bg: '#FFFBF2', dotBg: '#E9A23B', glyph: '!' },
+      pend: { border: '#E5E7EB', bg: '#FFFFFF', dotBg: '#94A3B8', glyph: '\u2026' }
+    };
+    const mk = (status, name, note) => ({ name, note, ...CK[status] });
+
+    return [
+      {
+        id: 'fox', name: 'Fox Kelley', facility: 'IFC MERR & CL-IFC Morocco', mrn: 'OT-40213', visitLabel: 'Mon, Jul 13', daysOut: 2, held: 1320, status: 'needs',
+        issue: 'COB conflict', issueColor: '#DC2626',
+        issueDetail: 'MHS HIP denying: "investigating existence of other coverage" — COB form not returned',
+        agentAction: 'Called MHS HIP (rep Mary B), confirmed denial reason; re-sent COB annual form to patient; set follow-up',
+        needs: 'Have facility get COB form signed at Monday\u2019s visit', needsColor: '#DC2626',
+        payers: [
+          { short: 'MHS HIP · Primary', ...T.warn },
+          { short: 'IN Medicaid · Secondary', ...T.neutral }
+        ],
+        payerCards: [
+          { order: 'Primary', name: 'MHS Healthy Indiana Plan', status: 'COB HOLD', ...T.warn, memberId: 'HIP-2210834-01', dates: 'Effective Jan 1, 2026', note: 'Payer is investigating other coverage. Annual COB form sent May 1 and again Jul 9 — not yet returned. 10 claims held behind this.' },
+          { order: 'Secondary', name: 'Indiana Medicaid', status: 'ACTIVE', ...T.active, memberId: '100482236199', dates: 'Verified Jul 11, 6:00 AM', note: 'Confirmed active via 271. Will pick up patient responsibility once primary adjudicates.' }
+        ],
+        checks: [
+          mk('pass', 'Eligibility', 'Both payers active on visit date'),
+          mk('fail', 'Payer stack / COB', 'COB form outstanding since May 1 — primary is holding claims'),
+          mk('pass', 'Prior authorization', 'Not required for planned E/M service'),
+          mk('pass', 'Benefits', '9 of 24 visits used; no exhaustion risk'),
+          mk('pass', 'Status flags', 'No hospice or capitation on file'),
+          mk('pass', 'Provider enrollment', 'Ibekie MD in-network with both payers')
+        ],
+        benefitPayer: 'MHS HIP', visitsLabel: '9 / 24', visitsPct: 37, visitsBarColor: '#29BB89', visitsNote: 'Benefit period resets Jan 1, 2027', deductible: '$0 (met)', copay: '$4', authStatus: 'N/A',
+        log: [
+          { time: 'Jul 11 06:02', text: 'Ran 271 on both payers — MHS HIP returned COB investigation flag; 10 held claims linked to this profile' },
+          { time: 'Jul 09 14:10', text: 'Called MHS HIP, rep Mary B: denial confirmed as COB investigation; form never received' },
+          { time: 'Jul 09 14:32', text: 'Re-sent COB annual form to patient + flagged facility social worker for assist' },
+          { time: 'May 01 09:00', text: 'COB annual form first mailed to patient by Bell Medics' }
+        ],
+        primaryAction: 'Notify facility — collect COB form'
+      },
+      {
+        id: 'allen', name: 'Allen Gene', facility: 'CASA of Hobart', mrn: 'OT-38771', visitLabel: 'Tue, Jul 14', daysOut: 3, held: 1725, status: 'needs',
+        issue: 'Prior auth missing', issueColor: '#DC2626',
+        issueDetail: 'Anthem BCBS requires precertification for this service — 17 past claims denied for absent auth',
+        agentAction: 'Learned the auth rule from the denial pattern; drafted auth request with clinicals; submitted via Availity',
+        needs: 'Provider co-sign on medical-necessity note', needsColor: '#DC2626',
+        payers: [ { short: 'Anthem BCBS IN · Primary', ...T.bad } ],
+        payerCards: [
+          { order: 'Primary', name: 'Anthem Blue Cross Blue Shield Indiana', status: 'AUTH REQUIRED', ...T.bad, memberId: 'YRK882140335', dates: 'Verified Jul 11, 6:00 AM', note: 'Plan requires precertification for recurring behavioral E/M. Auth request 26-88342 submitted, pending payer decision + provider co-sign.' }
+        ],
+        checks: [
+          mk('pass', 'Eligibility', 'Active, PPO plan confirmed'),
+          mk('pass', 'Payer stack / COB', 'Single payer, no COB exposure'),
+          mk('fail', 'Prior authorization', 'No auth on file for Jul 14 visit — request pending'),
+          mk('pass', 'Benefits', 'No visit-limit risk this period'),
+          mk('pass', 'Status flags', 'None'),
+          mk('pass', 'Provider enrollment', 'In-network, taxonomy verified')
+        ],
+        benefitPayer: 'Anthem BCBS', visitsLabel: '17 / \u2014', visitsPct: 40, visitsBarColor: '#29BB89', visitsNote: 'No hard visit cap; auth governs frequency', deductible: '$310 of $500', copay: '$20', authStatus: 'Pending',
+        log: [
+          { time: 'Jul 11 06:04', text: 'Auth 26-88342 still pending with Anthem — visit in 3 days; escalation queued for Jul 13 if silent' },
+          { time: 'Jul 10 11:20', text: 'Submitted precert request with clinicals via Availity; awaiting provider co-sign on medical-necessity note' },
+          { time: 'Jul 10 10:55', text: 'Pattern detected: 17 Allen Gene claims denied "precertification absent" — rule added to Anthem payer rulebook' }
+        ],
+        primaryAction: 'Send co-sign request to provider'
+      },
+      {
+        id: 'ward', name: 'Ward Eric', facility: 'Niles Care Center', mrn: 'OT-41530', visitLabel: 'Mon, Jul 13', daysOut: 2, held: 750, status: 'needs',
+        issue: 'Not our insured', issueColor: '#DC2626',
+        issueDetail: 'Michigan Medicaid rejects all claims — patient appears to have changed plans; no active plan found',
+        agentAction: 'Ran 271 against MI Medicaid + 4 likely MCOs — no active match; resubmission already failed once',
+        needs: 'Updated insurance card / plan info from facility', needsColor: '#DC2626',
+        payers: [ { short: 'MI Medicaid · Primary?', ...T.bad } ],
+        payerCards: [
+          { order: 'Primary', name: 'Michigan Medicaid', status: 'NOT ON FILE', ...T.bad, memberId: 'MI-77103428', dates: 'Last verified May 2026', note: '"Patient Not Our Insured" on every claim since Jan 22. Patient likely moved to an MCO — no candidate plan returned eligibility.' }
+        ],
+        checks: [
+          mk('fail', 'Eligibility', 'No active coverage found across 5 payers checked'),
+          mk('fail', 'Payer stack / COB', 'True payer unknown — stack cannot be built'),
+          mk('pend', 'Prior authorization', 'Blocked until payer identified'),
+          mk('pend', 'Benefits', 'Blocked until payer identified'),
+          mk('pass', 'Status flags', 'No hospice election found'),
+          mk('pend', 'Provider enrollment', 'Depends on actual payer')
+        ],
+        benefitPayer: 'Unknown payer', visitsLabel: '\u2014', visitsPct: 0, visitsBarColor: '#94A3B8', visitsNote: 'No benefits data until active plan identified', deductible: '\u2014', copay: '\u2014', authStatus: '\u2014',
+        log: [
+          { time: 'Jul 11 06:03', text: 'Re-ran eligibility across MI Medicaid + Meridian, Molina, UHC Community, Aetna Better Health — no match' },
+          { time: 'Jul 08 09:40', text: 'Resubmitted with updated demographics — denied again "Patient Not Our Insured"' },
+          { time: 'Jul 07 16:12', text: 'Flagged Niles Care Center admissions for a copy of the current insurance card' }
+        ],
+        primaryAction: 'Request card from facility'
+      },
+      {
+        id: 'moore', name: 'Moore Charles', facility: 'Ibekie Foundation Inc Merrillville', mrn: 'OT-39984', visitLabel: 'Wed, Jul 15', daysOut: 4, held: 640, status: 'needs',
+        issue: 'Coverage terminated', issueColor: '#DC2626',
+        issueDetail: 'Indiana Health Coverage ended before recent dates of service; no other insurance found',
+        agentAction: 'Verified termination via 271; searched for successor coverage — none; drafted redetermination packet',
+        needs: 'Facility social worker to assist patient with Medicaid redetermination', needsColor: '#DC2626',
+        payers: [ { short: 'IN Medicaid · TERMED', ...T.bad } ],
+        payerCards: [
+          { order: 'Primary', name: 'Indiana Health Coverage Program', status: 'TERMINATED', ...T.bad, memberId: '100550912844', dates: 'Termed May 31, 2026', note: '"Member not eligible for benefits for dates of service." Likely missed redetermination. Visits after May 31 currently have no payer.' }
+        ],
+        checks: [
+          mk('fail', 'Eligibility', 'Terminated May 31 — visit on Jul 15 is uncovered'),
+          mk('warn', 'Payer stack / COB', 'No secondary to fall back on'),
+          mk('pend', 'Prior authorization', 'No active payer'),
+          mk('fail', 'Benefits', 'Zero coverage as of today'),
+          mk('pass', 'Status flags', 'None'),
+          mk('pass', 'Provider enrollment', 'Was in-network before termination')
+        ],
+        benefitPayer: 'IN Medicaid (termed)', visitsLabel: '0 remaining', visitsPct: 100, visitsBarColor: '#DC2626', visitsNote: 'Redetermination can restore coverage retroactively up to 90 days', deductible: '\u2014', copay: '\u2014', authStatus: '\u2014',
+        log: [
+          { time: 'Jul 11 06:05', text: '271 confirms termination stands; retro window open until Aug 29 — redetermination packet drafted' },
+          { time: 'Jul 09 13:25', text: 'Escalated to provider: patient has no active insurance for future visits' }
+        ],
+        primaryAction: 'Send redetermination packet to facility'
+      },
+      {
+        id: 'rivera', name: 'Rivera Bernardo', facility: 'Ibekie Foundation Inc Merrillville', mrn: 'OT-40887', visitLabel: 'Thu, Jul 16', daysOut: 5, held: 240, status: 'needs',
+        issue: 'Invalid member ID', issueColor: '#DC2626',
+        issueDetail: 'ID on file belongs to a vision plan (per payer rep Tasha, ref 5033905mov7x3) — medical plan unknown',
+        agentAction: 'Searched eligibility by demographics — found 2 candidate medical plans; needs confirmation',
+        needs: 'Confirm correct medical member ID (2 candidates found)', needsColor: '#DC2626',
+        payers: [ { short: 'Plan unknown · ID invalid', ...T.bad } ],
+        payerCards: [
+          { order: 'Primary', name: 'Unknown — ID is a vision plan', status: 'INVALID ID', ...T.bad, memberId: 'VSP-4420187 (vision)', dates: 'Flagged Jul 8', note: 'Demographic search returned 2 candidate medical plans: Anthem HIP and CareSource Marketplace. One confirmation unblocks 2 held claims and Thursday\u2019s visit.' }
+        ],
+        checks: [
+          mk('fail', 'Eligibility', 'Member ID on file is not a medical plan'),
+          mk('warn', 'Payer stack / COB', '2 candidate plans — unconfirmed'),
+          mk('pend', 'Prior authorization', 'Blocked until plan confirmed'),
+          mk('pend', 'Benefits', 'Blocked until plan confirmed'),
+          mk('pass', 'Status flags', 'None'),
+          mk('warn', 'Provider enrollment', 'In-network with 1 of 2 candidates')
+        ],
+        benefitPayer: 'Unconfirmed plan', visitsLabel: '\u2014', visitsPct: 0, visitsBarColor: '#94A3B8', visitsNote: 'Candidates: Anthem HIP · CareSource Marketplace', deductible: '\u2014', copay: '\u2014', authStatus: '\u2014',
+        log: [
+          { time: 'Jul 11 06:05', text: 'Demographic eligibility sweep: 2 candidate plans returned; confirmation task created' },
+          { time: 'Jul 08 15:44', text: 'Called payer, rep Tasha (ref 5033905mov7x3): ID on file is a vision plan — correct medical ID needed' }
+        ],
+        primaryAction: 'Review candidate plans'
+      },
+      {
+        id: 'pare', name: 'Pare Terri', facility: 'Brickyard Healthcare', mrn: 'OT-38119', visitLabel: 'Tue, Jul 14', daysOut: 3, held: 1000, status: 'needs',
+        issue: 'Hospice election', issueColor: '#B45309',
+        issueDetail: 'Medicare shows hospice enrollment since Jun 12 — visits must carry GW/GV modifier or bill to hospice',
+        agentAction: 'Applied hospice billing rule to upcoming claims; holding pending attending-physician determination',
+        needs: 'Confirm attending vs. hospice-related care for Jul 14 visit', needsColor: '#B45309',
+        payers: [
+          { short: 'Medicare · HOSPICE', ...T.warn },
+          { short: 'Provider Partners MA', ...T.neutral }
+        ],
+        payerCards: [
+          { order: 'Primary', name: 'Medicare Part B', status: 'HOSPICE', ...T.warn, memberId: '4KH2-M77-QA10', dates: 'Hospice elected Jun 12, 2026', note: 'Services related to the terminal condition bill to the hospice; unrelated care bills Medicare with GW modifier. Attending physician: pending confirmation.' },
+          { order: 'Prior', name: 'Provider Partners Health Plan', status: 'SUPERSEDED', ...T.neutral, memberId: 'PP-6120945', dates: 'Through Jun 11, 2026', note: 'MA enrollment ended at hospice election; fee-for-service Medicare governs.' }
+        ],
+        checks: [
+          mk('pass', 'Eligibility', 'Medicare FFS active'),
+          mk('pass', 'Payer stack / COB', 'Order confirmed post-hospice election'),
+          mk('pass', 'Prior authorization', 'Not required'),
+          mk('pass', 'Benefits', 'Hospice benefit governs related care'),
+          mk('warn', 'Status flags', 'Hospice since Jun 12 — modifier rule active'),
+          mk('pass', 'Provider enrollment', 'Verified with Medicare')
+        ],
+        benefitPayer: 'Medicare', visitsLabel: 'n/a', visitsPct: 10, visitsBarColor: '#29BB89', visitsNote: 'GW/GV modifier rule applied automatically to this patient\u2019s claims', deductible: '$0 (met)', copay: '20% coins.', authStatus: 'N/A',
+        log: [
+          { time: 'Jul 11 06:02', text: 'Hospice election still active; 8 held claims re-coded with GW modifier, pending confirmation' },
+          { time: 'Jul 06 10:15', text: 'Detected hospice denial pattern; hospice rule added to this patient\u2019s profile' }
+        ],
+        primaryAction: 'Confirm care relation with provider'
+      },
+      {
+        id: 'gentry', name: 'Gentry Melody', facility: 'Brickyard Healthcare - Elkhart', mrn: 'OT-41102', visitLabel: 'Fri, Jul 17', daysOut: 6, held: 51, status: 'needs',
+        issue: 'Coverage terminated', issueColor: '#DC2626',
+        issueDetail: 'MA plan disenrollment effective Jun 30 — successor plan unknown',
+        agentAction: 'Confirmed disenrollment via 271; checked Medicare FFS — active, but MA history suggests a new plan exists',
+        needs: 'New insurance card at Friday\u2019s visit', needsColor: '#DC2626',
+        payers: [
+          { short: 'Anthem MA · TERMED', ...T.bad },
+          { short: 'Medicare FFS · fallback', ...T.active }
+        ],
+        payerCards: [
+          { order: 'Primary', name: 'Anthem Medicare Advantage', status: 'TERMINATED', ...T.bad, memberId: 'YRA110748821', dates: 'Termed Jun 30, 2026', note: 'Disenrolled — likely switched plans. Billing FFS while a new MA plan exists causes takebacks; confirm before billing.' },
+          { order: 'Fallback', name: 'Medicare Part B (FFS)', status: 'ACTIVE', ...T.active, memberId: '7QT4-E19-KV62', dates: 'Verified Jul 11, 6:00 AM', note: 'Active — but only correct if no successor MA plan enrolled.' }
+        ],
+        checks: [
+          mk('fail', 'Eligibility', 'Primary MA plan termed Jun 30'),
+          mk('warn', 'Payer stack / COB', 'Successor plan unknown — FFS fallback unconfirmed'),
+          mk('pass', 'Prior authorization', 'Not required under FFS'),
+          mk('pend', 'Benefits', 'Depends on actual plan'),
+          mk('pass', 'Status flags', 'None'),
+          mk('pass', 'Provider enrollment', 'Verified with Medicare')
+        ],
+        benefitPayer: 'Pending plan confirmation', visitsLabel: '\u2014', visitsPct: 0, visitsBarColor: '#94A3B8', visitsNote: 'Card capture at Friday\u2019s visit resolves the stack', deductible: '\u2014', copay: '\u2014', authStatus: '\u2014',
+        log: [
+          { time: 'Jul 11 06:06', text: 'MBI lookup: FFS active, no MA crossover record yet — new-plan window means record may lag' },
+          { time: 'Jul 03 11:30', text: 'Claim denied "coverage terminated"; disenrollment confirmed with Anthem' }
+        ],
+        primaryAction: 'Notify facility — capture new card'
+      },
+      {
+        id: 'storey', name: 'Storey David', facility: 'Ibekie Foundation Inc Merrillville', mrn: 'OT-40672', visitLabel: 'Tue, Jul 14', daysOut: 3, held: 0, status: 'needs',
+        issue: 'Benefit runway', issueColor: '#B45309',
+        issueDetail: '21 of 24 covered visits used — at weekly cadence, benefits exhaust Aug 4, mid-care-plan',
+        agentAction: 'Projected exhaustion from visit cadence; confirmed remaining count with MHS HIP; drafted benefit-extension request',
+        needs: 'Provider decision — spread remaining visits or request extension', needsColor: '#B45309',
+        payers: [
+          { short: 'MHS HIP · Primary', ...T.active },
+          { short: '21/24 visits used', ...T.warn }
+        ],
+        payerCards: [
+          { order: 'Primary', name: 'MHS Healthy Indiana Plan', status: 'ACTIVE', ...T.active, memberId: 'HIP-1980412-02', dates: 'Verified Jul 11, 6:00 AM', note: 'Coverage active and clean — the risk is benefit depletion, not eligibility. 3 covered visits remain this benefit period.' }
+        ],
+        checks: [
+          mk('pass', 'Eligibility', 'Active, confirmed today'),
+          mk('pass', 'Payer stack / COB', 'Single payer, order confirmed'),
+          mk('pass', 'Prior authorization', 'Not required'),
+          mk('fail', 'Benefits', '21/24 visits used — exhausts Aug 4 at current cadence'),
+          mk('pass', 'Status flags', 'None'),
+          mk('pass', 'Provider enrollment', 'Verified')
+        ],
+        benefitPayer: 'MHS HIP', visitsLabel: '21 / 24', visitsPct: 88, visitsBarColor: '#E9A23B', visitsNote: 'Projected exhaustion Aug 4 at weekly cadence — benefit period resets Jan 1, 2027', deductible: '$0 (met)', copay: '$4', authStatus: 'N/A',
+        log: [
+          { time: 'Jul 11 06:04', text: 'Runway projection updated: 3 visits left, exhaustion Aug 4; extension request drafted for provider review' },
+          { time: 'Jul 04 06:03', text: 'Runway alert created at 20/24 visits — threshold rule: flag at 85% of benefit' }
+        ],
+        primaryAction: 'Review extension request'
+      },
+      {
+        id: 'hendrix', name: 'Hendrix Steven', facility: 'Brickyard Healthcare - Elkhart', mrn: 'OT-40455', visitLabel: 'Wed, Jul 15', daysOut: 4, held: 1025, status: 'watching',
+        issue: 'COB order unconfirmed', issueColor: '#B45309',
+        issueDetail: 'Two active coverages (Anthem MA + IN Medicaid) — primacy not yet confirmed by CMS COB contractor',
+        agentAction: 'Ran 271 on both; queued Benefits Coordination Center inquiry — response expected within 48h',
+        needs: 'None — agent re-checking', needsColor: '#1B7F5E',
+        payers: [
+          { short: 'Anthem MA · order?', ...T.warn },
+          { short: 'IN Medicaid · order?', ...T.warn }
+        ],
+        payerCards: [
+          { order: 'Payer A', name: 'Anthem Medicare Advantage', status: 'ACTIVE', ...T.active, memberId: 'YRA220986113', dates: 'Verified Jul 11, 6:00 AM', note: 'Active. Expected primary as MA plan — pending BCC confirmation.' },
+          { order: 'Payer B', name: 'Indiana Medicaid', status: 'ACTIVE', ...T.active, memberId: '100519274801', dates: 'Verified Jul 11, 6:00 AM', note: 'Active. Expected secondary (dual-eligible crossover).' }
+        ],
+        checks: [
+          mk('pass', 'Eligibility', 'Both payers active'),
+          mk('warn', 'Payer stack / COB', 'Primacy pending BCC response (~48h)'),
+          mk('pass', 'Prior authorization', 'Not required'),
+          mk('pass', 'Benefits', 'Dual-eligible — minimal patient responsibility'),
+          mk('pass', 'Status flags', 'None'),
+          mk('pass', 'Provider enrollment', 'Verified with both')
+        ],
+        benefitPayer: 'Anthem MA (expected primary)', visitsLabel: '11 / \u2014', visitsPct: 25, visitsBarColor: '#29BB89', visitsNote: 'Crossover to Medicaid handles balance automatically once order confirmed', deductible: '$0', copay: '$0', authStatus: 'N/A',
+        log: [
+          { time: 'Jul 11 06:03', text: 'BCC inquiry still open; 9 claims held rather than risk a COB denial' },
+          { time: 'Jul 09 09:12', text: 'Detected dual coverage; primacy inquiry filed with Benefits Coordination Center' }
+        ],
+        primaryAction: 'View held claims'
+      }
+    ];
+  }
+
+  feeBook() {
+    // Rates come from the expected-payment engine (contracts-store.js); the
+    // literals below are only the fallback while the store script loads.
+    const CS = window.ContractsStore;
+    const DESC = { '99307': 'Subsequent NF care, 10 min', '99308': 'Subsequent NF care, 15 min', '99309': 'Subsequent NF care, 25 min' };
+    const build = (name, fallback) => {
+      if (!CS) return fallback;
+      const fees = ['99307', '99308', '99309'].map(code => {
+        const r = CS.expected(name, code);
+        return r ? [code, DESC[code], '$' + r.amount.toFixed(2)] : null;
+      }).filter(Boolean);
+      const nx = CS.expected(name, '99308');
+      return fees.length && nx ? { fees, next: Math.round(nx.amount) } : fallback;
+    };
+    return {
+      'MHS HIP': build('MHS HIP', { fees: [['99307', DESC['99307'], '$45'], ['99308', DESC['99308'], '$72'], ['99309', DESC['99309'], '$98']], next: 72 }),
+      'Anthem BCBS': build('Anthem BCBS', { fees: [['99307', DESC['99307'], '$52'], ['99308', DESC['99308'], '$87'], ['99309', DESC['99309'], '$118']], next: 87 }),
+      'Medicare': build('Medicare', { fees: [['99307', DESC['99307'], '$44'], ['99308', DESC['99308'], '$78'], ['99309', DESC['99309'], '$106']], next: 78 }),
+      'Anthem MA (expected primary)': build('Anthem MA', { fees: [['99307', DESC['99307'], '$49'], ['99308', DESC['99308'], '$84'], ['99309', DESC['99309'], '$112']], next: 84 })
+    };
+  }
+
+  expFor(p) {
+    const b = this.feeBook()[p.benefitPayer];
+    return b ? b.next : null;
+  }
+
+  feeVals(sel) {
+    const b = this.feeBook()[sel.benefitPayer];
+    if (b) return {
+      hasFees: true, noFees: false,
+      fees: b.fees.map(f => ({ code: f[0], desc: f[1], amt: f[2] })),
+      nextVal: '$' + b.next
+    };
+    return {
+      hasFees: false, noFees: true, fees: [], nextVal: '\u2014',
+      feeNote: 'No fee schedule until the payer is confirmed — resolving the exception above unlocks expected-reimbursement math for this patient.'
+    };
+  }
+
+  censusData() {
+    const ok = { barColor: '#29BB89', pctColor: '#1B7F5E' };
+    const mid = { barColor: '#E9A23B', pctColor: '#B45309' };
+    const bad = { barColor: '#DC2626', pctColor: '#DC2626' };
+    return [
+      { name: 'Ibarra Luz', facility: 'IFC MERR & CL-IFC Morocco', payer: 'Humana MA', pct: 54, ...bad, lastVerified: 'Never', verifiedColor: '#DC2626', nextVisit: 'Jul 22', annual: '\u2014' },
+      { name: 'Chalmers Roy', facility: 'Brickyard Healthcare - Elkhart', payer: 'IN Medicaid', pct: 47, ...bad, lastVerified: 'Apr 12', verifiedColor: '#DC2626', nextVisit: 'None sched.', annual: '\u2014' },
+      { name: 'Duval Marc', facility: 'Niles Care Center', payer: 'UHC Medicare Adv.', pct: 61, ...mid, lastVerified: 'May 30', verifiedColor: '#B45309', nextVisit: 'None sched.', annual: '\u2014' },
+      { name: 'Kowalski Jean', facility: 'CASA OF HOBART', payer: 'Anthem Medicare Adv.', pct: 88, ...mid, lastVerified: 'Jun 28', verifiedColor: '#B45309', nextVisit: 'None sched.', annual: '$2,900' },
+      { name: 'Pare Terri', facility: 'Brickyard Healthcare', payer: 'Medicare (hospice)', pct: 92, ...ok, lastVerified: 'Jul 11', verifiedColor: '#1B7F5E', nextVisit: 'Jul 14', annual: '$2,050' },
+      { name: 'Storey David', facility: 'Ibekie Foundation Inc Merrillville', payer: 'MHS HIP', pct: 100, ...ok, lastVerified: 'Jul 11', verifiedColor: '#1B7F5E', nextVisit: 'Jul 14', annual: '$3,740' },
+      { name: 'Howard Leon', facility: 'Niles Care Center', payer: 'Medicare + Supp.', pct: 100, ...ok, lastVerified: 'Jul 11', verifiedColor: '#1B7F5E', nextVisit: 'Jul 13', annual: '$3,910' },
+      { name: 'Nguyen Bao', facility: 'Ibekie Foundation Inc Merrillville', payer: 'Aetna MA', pct: 100, ...ok, lastVerified: 'Jul 11', verifiedColor: '#1B7F5E', nextVisit: 'Jul 20', annual: '$3,120' }
+    ];
+  }
+
+  cleanList() {
+    const payers = ['Medicare', 'Provider Partners', 'Anthem BCBS', 'Humana', 'UHC', 'Aetna', 'MHS HIP', 'IN Medicaid', 'CareSource'];
+    const names = ['Howard Leon','Cripe Scott','Weder Vincenza','Scheeringa Doreen','Storey David','Foley Bridget','Usmanmanga Carli','Hoyt Walter','Burks Jeffrey','Carrillo Hugo','Ramirez Anna','Delgado Pete','Kowalski Jean','Nowak Marie','Ostrowski Carl','Bauer Helen','Lindqvist Nora','Okafor Sam','Whitfield Rose','Duval Marc','Petrov Lena','Haas Victor','Ibarra Luz','Chalmers Roy','Nguyen Bao','Silva Rita','Adeyemi Tola','Krause Ed','Mercer Joy','Toledo Ray','Fontaine Iva'];
+    const visits = ['Jul 13','Jul 13','Jul 14','Jul 14','Jul 14','Jul 15','Jul 15','Jul 15','Jul 15','Jul 16','Jul 16','Jul 16','Jul 16','Jul 16','Jul 17','Jul 17','Jul 17','Jul 13','Jul 14','Jul 15','Jul 16','Jul 17','Jul 13','Jul 14','Jul 15','Jul 16','Jul 17','Jul 13','Jul 14','Jul 15','Jul 16'];
+    const expMap = { 'Medicare': 78, 'Provider Partners': 81, 'Anthem BCBS': 87, 'Humana': 79, 'UHC': 76, 'Aetna': 82, 'MHS HIP': 72, 'IN Medicaid': 58, 'CareSource': 69 };
+    const CS = window.ContractsStore;
+    if (CS) Object.keys(expMap).forEach(k => { const r = CS.expected(k, '99308'); if (r) expMap[k] = Math.round(r.amount); });
+    return names.map((name, i) => {
+      const payer = payers[i % payers.length];
+      return { name, payer, visit: visits[i], exp: '$' + expMap[payer], expNum: expMap[payer] };
+    });
+  }
+
+  renderVals() {
+    const lookahead = parseInt(this.props.lookaheadDays ?? '7', 10);
+    const autoHold = this.props.autoHoldClaims ?? true;
+    const all = this.data().filter(p => p.daysOut <= lookahead);
+    // Phase 6c: reflect practice replies from the Practice Billing View queue
+    const needStatuses = window.DocumentsStore ? DocumentsStore.allNeedStatuses() : {};
+    all.forEach(p => {
+      const nst = needStatuses[p.id];
+      if (!nst || nst.status === 'open') return;
+      if (nst.status === 'sent') { p.needs = 'Practice replied \u2014 document uploaded, agent processing'; p.needsColor = '#1B7F5E'; }
+      else if (nst.status === 'done') { p.needs = 'Practice marked handled at the facility \u2014 agent confirming'; p.needsColor = '#1B7F5E'; }
+      else if (nst.status === 'cant') { p.needs = 'Practice can\u2019t provide' + (nst.note ? ': \u201c' + nst.note + '\u201d' : '') + ' \u2014 agent finding another path'; p.needsColor = '#B45309'; }
+    });
+    const mode = this.state.mode;
+    const sel = all.find(p => p.id === this.state.selectedId) || null;
+
+    const rows = all.map(p => {
+      const e = this.expFor(p);
+      return {
+        ...p,
+        heldLabel: (autoHold && p.held) ? ('$' + p.held.toLocaleString()) : '\u2014',
+        expLabel: e ? ('$' + e) : '\u2014',
+        rowBg: p.id === this.state.selectedId ? '#F1EEFF' : '#FFFFFF',
+        select: () => this.setState({ selectedId: p.id })
+      };
+    });
+
+    const needsYou = all.filter(p => p.status === 'needs');
+    const watching = all.filter(p => p.status === 'watching');
+    const clean = this.cleanList();
+    const heldTotal = autoHold ? all.reduce((a, p) => a + p.held, 0) : 0;
+
+    const chip = (active) => ({
+      bg: active ? '#7B61FF' : '#FFFFFF',
+      fg: active ? '#FFFFFF' : '#6B7280',
+      border: active ? '#7B61FF' : '#E5E7EB'
+    });
+    const ex = chip(mode === 'exceptions'), cl = chip(mode === 'clean'), ce = chip(mode === 'census');
+    const expectedTotal = clean.reduce((a, c) => a + c.expNum, 0) + all.reduce((a, p) => a + (this.expFor(p) || 0), 0);
+
+    return {
+      practiceLabel: 'Ibekie Foundation & partner facilities',
+      lookaheadDays: String(lookahead),
+      scheduledCount: clean.length + all.length + 3,
+      cleanCount: clean.length,
+      needsYouCount: needsYou.length,
+      watchingCount: watching.length + 2,
+      exceptionCount: all.length,
+      heldChipText: autoHold
+        ? '$' + heldTotal.toLocaleString() + ' held safely until resolved'
+        : 'Auto-hold off — flagged claims may submit',
+      exceptionsMode: mode === 'exceptions',
+      cleanMode: mode === 'clean',
+      censusMode: mode === 'census',
+      showExceptions: () => this.setState({ mode: 'exceptions' }),
+      showClean: () => this.setState({ mode: 'clean' }),
+      showCensus: () => this.setState({ mode: 'census' }),
+      excChipBg: ex.bg, excChipFg: ex.fg, excChipBorder: ex.border,
+      cleanChipBg: cl.bg, cleanChipFg: cl.fg, cleanChipBorder: cl.border,
+      censusChipBg: ce.bg, censusChipFg: ce.fg, censusChipBorder: ce.border,
+      expectedRevText: '$' + expectedTotal.toLocaleString(),
+      expectedRevNote: 'next ' + lookahead + ' days, at contracted rates',
+      rows,
+      cleanPatients: clean,
+      censusRows: this.censusData(),
+      hasSelection: !!sel,
+      sel: sel ? { ...sel, ...this.feeVals(sel) } : {},
+      closePanel: () => this.setState({ selectedId: null })
+    };
+  }
+}
+</script>
+</body>
+</html>
