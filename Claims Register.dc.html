@@ -30,6 +30,7 @@
     <img src="assets/brand-logo.png" alt="Otangeles Notes+" style="height: 40px; width: auto; display: block;">
     <span style="font-size: 15px; font-weight: 600; color: #0F1B2E; border-left: 1px solid #E5E7EB; padding-left: 16px; white-space: nowrap;">Billing Portal</span>
     <x-import component-from-global-scope="search-bar" from="./search-bar.js" hint-size="480px,40px"></x-import>
+    <x-import component-from-global-scope="sage-panel" from="./sage-panel.js" screen="register" hint-size="124px,40px"></x-import>
     <div style="flex: 1;"></div>
     <x-import component-from-global-scope="practice-switcher" from="./practice-switcher.js" hint-size="260px,40px"></x-import>
     <button style="width: 40px; height: 40px; border-radius: 9999px; background: #FFFFFF; border: 1px solid #E5E7EB; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;">
@@ -293,11 +294,11 @@
 class Component extends DCLogic {
   state = {
     navExpanded: (() => { try { return localStorage.getItem('onb-nav-expanded') === '1'; } catch (e) { return false; } })(),
-    statusFilter: 'all',
-    payerFilter: 'all',
-    facilityFilter: 'all',
-    agingFilter: 'all',
-    ownerFilter: 'all',
+    statusFilter: (() => { try { return new URLSearchParams(location.search).get('status') || 'all'; } catch (e) { return 'all'; } })(),
+    payerFilter: (() => { try { return new URLSearchParams(location.search).get('payer') || 'all'; } catch (e) { return 'all'; } })(),
+    facilityFilter: (() => { try { return new URLSearchParams(location.search).get('facility') || 'all'; } catch (e) { return 'all'; } })(),
+    agingFilter: (() => { try { return new URLSearchParams(location.search).get('aging') || 'all'; } catch (e) { return 'all'; } })(),
+    ownerFilter: (() => { try { return new URLSearchParams(location.search).get('owner') || 'all'; } catch (e) { return 'all'; } })(),
     search: (() => { try { return new URLSearchParams(location.search).get('q') || ''; } catch (e) { return ''; } })(),
     sortKey: 'age',
     sortDir: 'asc',

@@ -28,7 +28,7 @@
       <span style="font-family: 'Poppins', 'Inter', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: -0.01em;"><span style="color: #0F1B2E;">Otangeles</span> <span style="color: #22C5A7;">Notes+</span></span>
     </div>
     <h1 style="font-size: 30px; font-weight: 700; margin: 0;">Billing Agent Supervision — Demo Script</h1>
-    <p style="font-size: 14.5px; line-height: 23px; color: #6B7280; margin: 0;">A guided path through the prototype in 10 acts, ~15 minutes — the full revenue cycle, contracts to collections, at volume. Short on time? Acts 1, 5, and 10 make a 5-minute cut. Each stop links straight to the right screen and tells you what to click and what to say. The through-line: <strong>AI agents do the billing work; humans supervise it — at three altitudes</strong> (rep, manager, platform operations).</p>
+    <p style="font-size: 14.5px; line-height: 23px; color: #6B7280; margin: 0;">A guided path through the prototype in 11 acts, ~16 minutes — the full revenue cycle, contracts to collections, at volume. Short on time? Acts 1, 5, and 10 make a 5-minute cut. Each stop links straight to the right screen and tells you what to click and what to say. The through-line: <strong>AI agents do the billing work; humans supervise it — at three altitudes</strong> (rep, manager, platform operations).</p>
     <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
       <button onClick="{{ resetDemo }}" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 5px; border: 1px solid #D1D5DC; background: #FFFFFF; color: #6B7280; font-size: 13px; font-weight: 600; cursor: pointer;" style-hover="background: #F8F8F8;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
@@ -236,6 +236,20 @@ class Component extends DCLogic {
           stop('Agent Inbox (locked)', 'Agent Inbox v3.dc.html', 'angela',
             'Show the purple notice; click an Approve button — it refuses with a toast. Then check the Audit Log, and set autonomy back.',
             'The whole billing portal just dropped to draft-only. Approvals are disabled, the change is audited, and flipping it back restores them. Supervision isn\u2019t a slide in a deck — it\u2019s a switch.'),
+        ],
+      },
+      {
+        n: '11', title: 'Sage — a colleague who has read everything', sub: 'The assistant \u00b7 ~1.5 min',
+        stops: [
+          stop('Any billing screen', 'Billing Home.dc.html', 'angela',
+            'Press \u2318K (or click Ask Sage). Read the charter line, then ask "Show denied claims over $100" and follow up with "just Humana".',
+            'Sage finds, explains, and navigates \u2014 never processes. Follow-ups refine instead of restarting: the working set shows as removable chips, count and dollars updating each turn. Every citation is a live link into the data the screens already share.'),
+          stop('Exit ramps', 'Claims Register.dc.html', 'angela',
+            'Click "Open these in the Register" \u2014 it lands pre-filtered. Then "Save as a Register view".',
+            'The assistant carves a population; the real surfaces do the work. Search finds a thing \u2014 Sage carves a slice of the book and hands it to the Register.'),
+          stop('The refusal', 'Billing Home.dc.html', 'angela',
+            'Ask Sage to "write off these claims". It declines and links to the Agent Inbox. Flip the LIVE AI toggle to show the two modes.',
+            'The decline is the trust story: Sage has no approve, edit, or submit verbs by construction. Anything that changes a claim goes through the governed queues \u2014 and every Sage session is logged, a question trail, not a black box.'),
         ],
       },
     ];

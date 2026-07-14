@@ -1,0 +1,106 @@
+/* Otangeles Notes+ Design System — core tokens
+ * Source of truth: brand sheet v1.0 (assets/brand/brand-sheet.jpeg, May 13 2026).
+ * Font: Inter for everything.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  /* ===== Color — Primary brand ===== */
+  --on-primary:        #7B61FF;   /* Primary Purple */
+  --on-primary-dark:   #6A52E5;   /* hover / pressed */
+  --on-primary-tint:   #F0EDFF;   /* light surface */
+  --on-accent:         #22C5A7;   /* Accent Teal */
+  --on-accent-dark:    #1CA88F;
+  --on-accent-tint:    #E6F8F4;
+  --on-navy:           #0F1B2E;   /* Deep Navy */
+  --on-slate:          #6B7280;   /* Slate Gray */
+  --on-surface-bright: #F8FAFC;   /* Surface */
+
+  /* ===== Color — Semantic ===== */
+  --on-success:       #22C5A7;
+  --on-info:          #3B82F6;
+  --on-warning:       #F59E0B;
+  --on-error:         #EF4444;
+  --on-neutral:       #94A3B8;
+
+  --on-success-tint:  #E6F8F4;
+  --on-info-tint:     #EAF2FE;
+  --on-warning-tint:  #FEF5E7;
+  --on-error-tint:    #FDECEC;
+  --on-neutral-tint:  #F1F5F9;
+
+  /* ===== Color — Text + surfaces ===== */
+  --on-fg-1:          #0F1B2E;   /* primary text (Deep Navy) */
+  --on-fg-2:          #6B7280;   /* secondary text (Slate) */
+  --on-fg-3:          #94A3B8;   /* tertiary / metadata */
+  --on-bg:            #F8FAFC;   /* app canvas */
+  --on-surface:       #FFFFFF;   /* cards, inputs */
+  --on-border:        #E5E7EB;
+  --on-border-soft:   #EEF1F4;
+
+  /* ===== Typography (brand sheet type scale) ===== */
+  --on-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --on-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* style: size/line-height (weight) */
+  --on-display-1: 600 40px/48px var(--on-font-sans);  /* Page titles */
+  --on-display-2: 600 32px/40px var(--on-font-sans);  /* Section titles */
+  --on-heading-1: 600 24px/32px var(--on-font-sans);  /* Card titles */
+  --on-heading-2: 600 20px/28px var(--on-font-sans);  /* Subsection */
+  --on-heading-3: 500 16px/24px var(--on-font-sans);  /* Table / modal titles */
+  --on-body-lg:   400 16px/24px var(--on-font-sans);  /* Primary body */
+  --on-body:      400 14px/20px var(--on-font-sans);  /* Standard body */
+  --on-body-sm:   400 12px/16px var(--on-font-sans);  /* Supporting text / captions */
+  --on-caption:   400 11px/16px var(--on-font-sans);  /* Micro text / labels */
+
+  /* ===== Spacing (base unit 4px) ===== */
+  --on-space-1:  4px;
+  --on-space-2:  8px;
+  --on-space-3:  12px;
+  --on-space-4:  16px;
+  --on-space-5:  20px;
+  --on-space-6:  24px;
+  --on-space-8:  32px;
+  --on-space-10: 40px;
+  --on-space-12: 48px;
+  --on-space-16: 64px;
+
+  /* ===== Border radius ===== */
+  --on-radius-sm:   4px;
+  --on-radius-md:   8px;
+  --on-radius-lg:   12px;
+  --on-radius-xl:   16px;
+  --on-radius-2xl:  20px;
+  --on-radius-full: 9999px;
+
+  /* ===== Shadows (navy-tinted) ===== */
+  --on-shadow-sm: 0 1px 2px 0 rgba(15, 27, 46, 0.06);
+  --on-shadow-md: 0 4px 12px 0 rgba(15, 27, 46, 0.08);
+  --on-shadow-lg: 0 12px 24px 0 rgba(15, 27, 46, 0.12);
+
+  /* ===== Motion ===== */
+  --on-ease: cubic-bezier(0.4, 0, 0.2, 1); /* @kind other */
+  --on-dur-fast: 175ms;      /* @kind other */ /* hover / press (150–200ms) */
+  --on-dur-standard: 250ms;  /* @kind other */ /* panels (200–300ms) */
+  --on-dur-slow: 400ms;      /* @kind other */ /* modals (300–500ms) */
+}
+
+html, body { font-family: var(--on-font-sans); color: var(--on-fg-1); background: var(--on-bg); }
+h1 { font: var(--on-heading-1); margin: 0; }
+h2 { font: var(--on-heading-2); margin: 0; }
+h3 { font: var(--on-heading-3); margin: 0; }
+p  { font: var(--on-body); color: var(--on-fg-1); }
+a        { color: var(--on-primary); text-decoration: none; }
+a:hover  { color: var(--on-primary-dark); text-decoration: underline; }
+.on-muted { color: var(--on-fg-2); }
+.on-code, code { font-family: var(--on-font-mono); font-size: 12px; color: var(--on-fg-2); }
+
+/* ===== Legacy aliases (pre-rebrand var names still referenced by older previews) ===== */
+:root {
+  --km-font-sans: var(--on-font-sans);
+  --km-font-mono: var(--on-font-mono);
+  --km-fg-1: var(--on-fg-1);
+  --km-fg-2: var(--on-fg-2);
+  --km-border: var(--on-border);
+}
