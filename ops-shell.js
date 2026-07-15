@@ -37,11 +37,7 @@
         this.innerHTML =
           '<div style="height:76px;background:#FFFFFF;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;padding:0 28px;gap:18px;font-family:Inter,-apple-system,sans-serif;">' +
             '<div style="display:flex;align-items:center;gap:10px;">' +
-              '<img src="assets/brand-mark.png" alt="" style="width:38px;height:38px;display:block;">' +
-              '<span style="font-family:Poppins,Inter,sans-serif;font-size:19px;font-weight:700;line-height:1.05;display:flex;flex-direction:column;">' +
-                '<span style="color:#0F1B2E;">Otangeles</span>' +
-                '<span style="color:' + TEAL + ';font-size:13px;font-weight:600;">Notes+</span>' +
-              '</span>' +
+              '<img src="assets/otangeles-notes.png" alt="Otangeles Notes+" style="width:145px;height:36px;display:block;">' +
             '</div>' +
             '<div style="width:1px;height:34px;background:#E5E7EB;"></div>' +
             '<span style="font-size:16px;color:#334155;font-weight:500;white-space:nowrap;">Operations Admin Portal</span>' +
